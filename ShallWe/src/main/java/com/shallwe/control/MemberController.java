@@ -30,7 +30,7 @@ public class MemberController {
 			
 			service.memberLogin(member_id, member_pwd);
 			session.setAttribute("loginInfo", member_id);
-			modelAndView.setViewName("/index");
+			modelAndView.setViewName("/success");
 			modelAndView.addObject("status","success");
 			
 		} catch (FindException e) {

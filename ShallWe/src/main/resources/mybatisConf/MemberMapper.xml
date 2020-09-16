@@ -11,8 +11,8 @@
 	</select>
 	
 	<select id="memberLogin" resultType="com.shallwe.vo.Member">
-		SELECT * FROM MEMBER M
-		WHERE MEMBER_ID = #{M.MEMBER_ID} AND MEMBER_PWD = #{M.MEMBER_PWD}
+		SELECT * FROM MEMBER 
+		WHERE MEMBER_ID = #{MEMBER_ID}
 	</select>
 	
 	
