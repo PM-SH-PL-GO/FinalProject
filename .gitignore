@@ -1,0 +1,27 @@
+README.md
+#.gitignore
+
+### Eclipse를 사용함으로써 생기지만 프로젝트 등록에 필요없는 파일들 ###
+.metadata
+#.settings/
+bin/
+target/
+
+#Tomcat
+servers/
+
+# STS (Spring Tool Suite)이기에 생기는 것들
+.springBeans
+
+### Eclipse Patch ###
+# Eclipse Core
+.project
+
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+
+### Java ###
+# Compiled class file
+*.class
+# Log file
+*.log

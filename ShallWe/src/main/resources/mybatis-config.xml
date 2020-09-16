@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+ <settings>
+  	<setting name="jdbcTypeForNull" value="NULL"/>
+  </settings>
+  
+  <typeAliases>	<!-- 자바 클래스에 대한 별칭주기 -->
+  	<typeAlias  type="com.shallwe.vo.Faq" alias="Faq"/>
+  	<typeAlias  type="com.shallwe.vo.Member" alias="Member"/>
+  	<typeAlias  type="com.shallwe.vo.Tutor" alias="Tutor"/>
+  	<typeAlias  type="com.shallwe.vo.MemberLectureHistory" alias="MemberLectureHistory"/>
+  	<typeAlias  type="com.shallwe.vo.Lecture" alias="Lecture"/>
+  	<typeAlias  type="com.shallwe.vo.LectureDetail" alias="LectureDetail"/>
+  	<typeAlias  type="com.shallwe.vo.LectureCategory" alias="LectureCategory"/>
+  	<typeAlias  type="com.shallwe.vo.Review" alias="Review"/>
+  	<typeAlias  type="com.shallwe.vo.WishList" alias="WishList"/>
+  	<typeAlias  type="com.shallwe.vo.FreeBoard" alias="FreeBoard"/>
+  	<typeAlias  type="com.shallwe.vo.FreeReply" alias="FreeReply"/>
+  	<typeAlias  type="com.shallwe.vo.StudyBoard" alias="StudyBoard"/>
+  	<typeAlias  type="com.shallwe.vo.StudyReply" alias="StudyReply"/>
+  	<typeAlias  type="com.shallwe.model.MemberInfoBean" alias="MemberInfoBean"/>
+  </typeAliases>
+  
+  <mappers>
+    <mapper resource="mybatisConf/FaqMapper.xml"/>
+    <mapper resource="mybatisConf/MemberMapper.xml"/>
+    <mapper resource="mybatisConf/TutorMapper.xml"/>
+    <mapper resource="mybatisConf/MemberLectureHistoryMapper.xml"/>
+    <mapper resource="mybatisConf/LectureMapper.xml"/>
+    <mapper resource="mybatisConf/LectureDetailMapper.xml"/>
+    <mapper resource="mybatisConf/ReviewMapper.xml"/>
+    <mapper resource="mybatisConf/WishListMapper.xml"/>
+    <mapper resource="mybatisConf/StudyBoardMapper.xml"/>
+	<mapper resource="mybatisConf/StudyReplyMapper.xml"/>
+    <mapper resource="mybatisConf/FreeBoardMapper.xml"/>
+    <mapper resource="mybatisConf/FreeReplyMapper.xml"/>
+  </mappers>
+</configuration>

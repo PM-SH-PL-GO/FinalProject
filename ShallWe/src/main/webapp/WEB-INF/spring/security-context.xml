@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<security:http>
+		<security:form-login/>
+ 			<!-- 로그인하지 않는 사용자도 접근 가능 -->
+<!-- 		<security:intercept-url pattern="/shallwe/admin" access="permitAll"/> -->
+		
+			<!-- 에러페이지를 위한 핸들러 : 에러페이지를 커스텀 페이지로 지정해줄 수 있다 -->
+<!-- 		<security:access-denied-handler error-page="/accessError"/> -->
+	</security:http>
+	
+	<security:authentication-manager>
+	
+	</security:authentication-manager>
+
+</beans>

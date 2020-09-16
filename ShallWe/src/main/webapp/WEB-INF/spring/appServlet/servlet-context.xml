@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	<!-- view단과 같은 front-end작업에서 필요한 기본 세팅을 넣는 곳 입니다 -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven>
+		<message-converters>
+			<!-- @ResponseBody로 String 처리할때 한글처리 -->
+			<beans:bean class="org.springframework.http.converter.StringHttpMessageConverter">
+			    <beans:property name="supportedMediaTypes">
+                	<beans:list>
+                    	<beans:value>text/html;charset=UTF-8</beans:value>
+                	</beans:list>
+            	</beans:property> 
+            </beans:bean>
+		</message-converters>
+	</annotation-driven>
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<!-- mapping으로 들어오면 location으로 접근시켜준다 -->
+	<resources mapping="/assets/**" location="/files/assets/" />
+	<resources mapping="/common/**" location="/common/" />
+	<resources mapping="/smartEditor/**" location="/files/smartEditor/" />
+	
+	<!-- 강의 사진(/shallwe/resources/lecture/~) -->
+	<resources mapping="/lecture/**" location="/files/lecture/" />
+	<!-- 강의 첨부파일(/shallwe/resources/lectureDetail/~) -->
+	<resources mapping="/lectureDetail/**" location="/files/lectureDetail/" />
+	<!-- 강사 사진(/shallwe/resources/tutorImages/~) -->
+	<resources mapping="/tutorImages/**" location="/files/tutorImages/" />
+	<!-- 강사 이력(/shallwe/resources/tutorCareer/~) -->
+	<resources mapping="/tutorCareer/**" location="/files/tutorCareer/" />
+	<!-- 자유게시판 첨부파일(/shallwe/resources/freeBoard/~) -->
+	<resources mapping="/freeBoard/**" location="/files/freeBoard/" />
+	<!-- 강의 사진(/shallwe/resources/studyBoard/~) -->
+	<resources mapping="/studyBoard/**" location="/files/studyBoard/" />
+
+	<!-- html이 필요할땐 여기로(/shallwe/resources/~.html)-->
+	<resources mapping="/resources/**" location="/html/" />
+
+	<!-- admin 입장 시 -->
+	<resources mapping="/admin" location="/WEB-INF/views/admin.jsp" />
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<!-- 뷰 리졸버의 전두사 접미사 붙여주기 (컨트롤러에서 반환되는 view정보 혹은 void에서  -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+<!-- spring context(engine, container) 내에 선언한 component류 @들 검색해주는 친구 -->		
+	<context:component-scan base-package="com.shallwe.control" />
+	<context:component-scan base-package="com.shallwe.service" />
+	
+</beans:beans>
