@@ -3,9 +3,18 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="MemberMapper">
+
 	<select id="selectById" parameterType="String" resultType="MemberInfoBean">
 	select select member_id, member_name, member_sex, member_email, member_phone, member_favorite1, member_favorite2, member_favorite3, tutor_yn
 	from member
 	where member_id='member1'; <!-- #{id} -->
 	</select>
+	
+	<select id="memberLogin" resultType="com.shallwe.vo.Member">
+		SELECT * FROM MEMBER M
+		WHERE MEMBER_ID = #{M.MEMBER_ID} AND MEMBER_PWD = #{M.MEMBER_PWD}
+	</select>
+	
+	
+	
 </mapper>

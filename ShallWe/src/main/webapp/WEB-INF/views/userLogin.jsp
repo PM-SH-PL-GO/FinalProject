@@ -342,15 +342,22 @@ input.submit {
 				$.ajax({
 					url:"/shallwe/memberLogin"
 				   ,method:"POST"
-				   ,data:{member_id:idVal, member_pwd:pwdVal}
+				   ,data:{member_id:$idVal,member_pwd:$pwdVal}
 				   ,success:function(data){
-					   if(data.success == "success"){
+					   var responseObj = JSON.parse(data);
+					   console.log(responseObj.status);
+					   if(responseObj.status=="success"){
+						   alert('로그인성공');
+							
+						   let $url = "http://localhost/shallwe/?member_id="+$idVal+"&member_pwd="+$pwdVal;
+						   location.href= $url;
 						   
-						   location.href="/shallwe/index.jsp"
 						   } else{
-							   alert("로그인실패")
+							   
+							   alert("로그인실패");
 							   location.reload();
-							   }
+							   
+						   }
 					   }
 					});
 				}
