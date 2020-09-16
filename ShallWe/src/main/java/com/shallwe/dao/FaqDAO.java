@@ -18,7 +18,6 @@ public class FaqDAO {
 	
 	// FAQ 조회 (전부) : 성운
 	public List<Faq> selectAll() throws FindException {
-		System.out.println(1);
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
 		 List<Faq> list = session.selectList("FaqMapper.selectAll");
