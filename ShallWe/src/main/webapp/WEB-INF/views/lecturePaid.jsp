@@ -27,6 +27,19 @@
 	<link rel="stylesheet" href="assets/css/style.css">
 
 	<style>
+	
+	.left_menu {
+		float: left;
+		width: 35%
+	}
+	
+	.left_menu_result {
+		text-align: center;
+	}
+	.right_menu { 
+		float : right;
+	}
+	
 	/* div 테이블 스타일 영역, 추후 css 분리 예정 */
 	.divTable{
 		display: table;
@@ -75,14 +88,58 @@
 
 <!-- 상단top include 영역 -->
 <div class="topMenu">
-	<jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
 </div>
+	<header>
+		<!-- Header Start -->
+		<div class="header-area header-transparent">
+			<div class="main-header header-sticky">
+				<div class="container-fluid">
+					<div
+						class="menu-wrapper d-flex align-items-center justify-content-between">
+						<!-- Logo -->
+						<div class="logo">
+							<a href="index.html"><img src="assets/img/logo/logo.png"
+								alt=""></a>
+						</div>
+						<!-- Main-menu -->
+						<div class="main-menu f-right d-none d-lg-block">
+							<nav>
+								<ul id="navigation">
+									<li><a href="index.html">Home</a></li>
+									<li><a href="listing.html">Catagories</a></li>
+									<li><a href="#">Pages</a>
+										<ul class="submenu">
+											<li><a href="directory_details.html">listing Details</a></li>
+											<li><a href="listing.html">Catagories</a></li>
+										</ul></li>
+									<li><a href="blog.html">Blog</a>
+										<ul class="submenu">
+											<li><a href="blog.html">Blog</a></li>
+											<li><a href="blog_details.html">Blog Details</a></li>
+											<li><a href="elements.html">Elements</a></li>
+										</ul></li>
+									<li><a href="contact.html">Contact</a></li>
+								</ul>
+							</nav>
+						</div>
+						<!-- Header-btn -->
+						<div class="header-btns d-none d-lg-block f-right">
+							<a href="#" class="mr-40"><i class="ti-user"></i> Log in</a> <a
+								href="#" class="btn">Add Listing</a>
+						</div>
+						<!-- Mobile Menu -->
+						<div class="col-12">
+							<div class="mobile_menu d-block d-lg-none"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Header End -->
+	</header>
+
 <main>
-<!-- leftbar -->
-<div class="leftSideBar">
-	<jsp:include page="/WEB-INF/views/leftSideBar.jsp"/>
-</div>
-<!--카테고리 내 검색된 결과-->
+<!-- <section class="right_menu section-padding"> -->
 <section class="blog_area single-post-area section-padding">
 <div class="container">
 	<div class="row">
