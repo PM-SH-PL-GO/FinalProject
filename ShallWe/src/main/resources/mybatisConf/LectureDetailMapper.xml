@@ -3,9 +3,57 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="LectureDetailMapper">
-  <select id="selectAllLectures" resultType="LectureDetail">
-  	SELECT * 
-  	FROM lecture lec 
-  		JOIN lecture_detail lec_d On (lec.lecture_id = lec_d.lecture_id)
-  </select>
+	<resultMap type="Lecture" id="LectureResultMap"
+		autoMapping="true">
+		<id property="lecture_id" column="lecture_id" />
+		<result property="lecture_img" column="lecture_img" />
+		<result property="lecture_title" column="lecture_title" />
+		<result property="lecture_price" column="lecture_price" />
+		<result property="lecture_state" column="lecture_state" />
+		<result property="lecture_start_dt" column="lecture_start_dt" />
+		<result property="lecture_end_dt" column="lecture_end_dt" />
+		<result property="lecture_max" column="lecture_max" />
+		<result property="lecture_min" column="lecture_min" />
+		<result property="lecture_current" column="lecture_current" />
+		<association property="lectureCategory"
+			javaType="LectureCategory" autoMapping="true">
+			<id property="lecture_category_id" column="lecture_category_id" />
+			<result property="lecture_category_name"
+				column="lecture_category_name" />
+		</association>
+		<association property="tutor" javaType="Tutor"
+			autoMapping="true">
+		</association>
+		<association property="member" javaType="Member"
+			autoMapping="true">
+			<id property="member_id" column="member_id" />
+		</association>
+	</resultMap>
+	<select id="selectAllLectures" resultType="LectureDetail">
+		SELECT *
+		FROM lecture
+		lec
+		JOIN lecture_detail lec_d On (lec.lecture_id = lec_d.lecture_id)
+	</select>
+	<insert id="insert" parameterType="Lecture">
+		INSERT INTO
+		lecture(LECTURE_ID, LECTURE_CATEGORY_ID, LECTURE_TUTOR_ID,
+		LECTURE_IMG, LECTURE_TITLE, LECTURE_PRICE, LECTURE_STATE,
+		LECTURE_START_DT, LECTURE_END_DT, LECTURE_MAX, LECTURE_MIN)
+		VALUES(lecture_seq.nextVal, #{lectureCategory.lecture_category_id},
+		#{tutor.member.member_id}, #{lecture_img}, #{lecture_title},
+		#{lecture_price}, #{lecture_state}, #{lecture_start_dt},
+		#{lecture_end_dt},
+		#{lecture_max}, #{lecture_min})
+	</insert>
+	<insert id="insertDetail" parameterType="LectureDetail">
+		INSERT
+		INTO lecture_detail(LECTURE_ID, LECTURE_CATEGORY_ID, LECTURE_INTRODUCE,
+		LECTURE_CURRICULUM, LECTURE_PREPARED, LECTURE_CAUTION,
+		LECTURE_FILENAME, LECTURE_LOCATION)
+		VALUES(lecture_seq.currval, #{lecture.lecture_id}, #{lecture_introduce},
+		#{lecture_curriculum}, #{lecture_prepared}, #{lecture_caution},
+		#{lecture_fileName}, #{lecture_location})
+	</insert>
+
 </mapper>
