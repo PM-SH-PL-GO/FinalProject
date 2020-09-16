@@ -44,7 +44,7 @@ public class MemberDAO {
 		
 	}
 	
-	// 회원 목록 보기(admin) : 영민
+	// 회원 목록 보기(admin) : 영민	
 	
 	
 	//멤버로그인 : 경찬
