@@ -20,7 +20,9 @@ public class MemberController {
 	@Autowired
 	MemberSerivce service;
 	
-	@RequestMapping(value="/memberLogin")
+	
+	//멤버로그인:경찬
+	@RequestMapping(value="/memberLogin" )
 	public ModelAndView memberLogin(HttpSession session, @RequestParam(value="member_id")String member_id,
 														 @RequestParam(value="member_pwd")String member_pwd
 												   ) {
@@ -36,14 +38,14 @@ public class MemberController {
 			
 		} catch (FindException e) {
 			
-			modelAndView.setViewName("/userLogin");
+			modelAndView.setViewName("/fail");
 			modelAndView.addObject("errMsg",e.getMessage());
 			e.printStackTrace();
 		}
 		return modelAndView;
 	}
 	
-	//멤버로그아웃
+	//멤버로그아웃:경찬
 	@RequestMapping(value="/memberLogout")
 	public ModelAndView memberLogout(HttpSession session,@RequestParam(value="member_id")String member_id) {
 		
@@ -51,12 +53,11 @@ public class MemberController {
 		
 		session.removeAttribute("loginInfo");
 		modelAndView.addObject("status","success");
-		modelAndView.setViewName("/userLogin");
+		modelAndView.setViewName("/success");
 		
 		return modelAndView;
 	
 		
 	}
-	
 	
 }

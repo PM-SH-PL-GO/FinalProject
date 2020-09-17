@@ -4,8 +4,10 @@ public class Email {
 
 	
 		 private String subject;
-		    private String content;
-		    private String receiver;
+
+		    private String content; // 이메일 내용
+		    private String receiver; //이메일 보냄
+
 
 		     
 		    public String getReceiver() {

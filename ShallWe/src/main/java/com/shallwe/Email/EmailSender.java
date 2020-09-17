@@ -10,6 +10,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 public class EmailSender {
+
 	@Autowired
     protected JavaMailSender  mailSender;
 	 
@@ -36,6 +37,7 @@ public class EmailSender {
 	        e.printStackTrace();
 	
 	    }
+
     }
 
 }
