@@ -36,7 +36,27 @@ public class StudyBoardDAO {
 		
 	}
 	// 게시글 조건 검색(+페이징) : 성운
+	public List<StudyBoard> selectByTitleAndContent(StudyBoard board) throws FindException{
+		SqlSession session = sqlSessionFactory.openSession();
+		try {
+		List<StudyBoard> list = session.selectList("StudyBoardMapper.selectByTitleAndContent",board);
+		return list;
+		}catch (DataAccessException e) {
+			throw new FindException(e.getMessage());
+		}finally {
+			session.close();
+		}
+		
+	}
+	
 	// 게시글 작성 : 성운
+	public void insert(StudyBoard board) throws AddException {
+		SqlSession session = sqlSessionFactory.openSession();
+		session.selectOne("StudyBoardMapper.insert", board);
+		if(board.getStudy_m().getMember_id()==null) {
+			throw new AddException("해당하는 주문이 없습니다.");
+		}
+	}
 	// 게시글 수정 : 성운
 	public void update(StudyBoard board) throws ModifyException {
 		SqlSession session = sqlSessionFactory.openSession();	
