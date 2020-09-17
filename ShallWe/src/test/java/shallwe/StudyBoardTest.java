@@ -1,6 +1,8 @@
 package shallwe;
 
 import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,19 +30,24 @@ public class StudyBoardTest {
 	@Autowired
 	StudyBoardDAO dao;
 		
-//	@Test
-	void selectAllPageing() throws FindException {
-		BoardPageBean<StudyBoard> board = new BoardPageBean<StudyBoard>(1);
-		dao.selectAll(board);
+	@Test
+	@DisplayName("게시글 호출")
+	void selectAll() throws FindException {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("startRow", 1);
+		map.put("endRow", 10);
+		dao.selectAll(map);
 	}
 	
 //	@Test
 	@DisplayName("제목+내용 검색")
 	void selectByTitleAndContent() throws FindException {
-		StudyBoard studyboard = new StudyBoard();
-		studyboard.setStudyBoard_title("%제목1%");
-		studyboard.setStudyBoard_content("%%");
-		dao.selectByTitleAndContent(studyboard);
+		Map<String, Object> map = new HashMap<String, Object>();
+		String toc = "%다시%";
+		map.put("titleOrContent", toc);
+		map.put("startRow", 1);
+		map.put("endRow", 10);
+		dao.selectByTitleAndContent(map);
 	}
 	
 //	@Test
@@ -86,7 +93,7 @@ public class StudyBoardTest {
 	System.out.println("게시글 수는??"+int1);
 	}
 	
-	@Test
+//	@Test
 	@DisplayName("조회수 증가")
 	void insertViews() {
 		dao.insertViews(3);

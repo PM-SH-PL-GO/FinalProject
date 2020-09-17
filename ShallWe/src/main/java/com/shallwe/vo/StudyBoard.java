@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class StudyBoard {
 	private int studyBoard_id;
+	private int studyBoard_rowNum;
 //	private String studyBoard_memeber_id;
 	private Member Study_m;
 	private String studyBoard_title;
