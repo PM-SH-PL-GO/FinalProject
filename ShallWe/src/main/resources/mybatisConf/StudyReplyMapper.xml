@@ -3,5 +3,18 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="StudyReplyMapper">
-
+	<select id="selectAll" resultType="StudyReply">
+	select *
+	from STUDYREPLY
+	where STUDYREPLY_PARENT_BOARD=#{studyreply_b.studyBoard_id}
+	</select>
+	<insert id="insert" parameterType="StudyReply">
+	INSERT INTO STUDYREPLY VALUES(STUDYREPLY_SEQ.NEXTVAL, #{studyreply_b.studyBoard_id}, #{studyreply_m.member_id}, #{studyreply_content}, sysdate)
+	</insert>
+	<update id="update" parameterType="StudyReply">
+	update STUDYREPLY set STUDYREPLY_CONTENT=#{studyreply_content},STUDYREPLY_DT=sysdate where STUDYREPLY_ID=#{studyreply_id}
+	</update>
+	<delete id="delete" parameterType="StudyReply">
+	delete STUDYREPLY where STUDYREPLY_ID=#{studyreply_id}
+	</delete>
 </mapper>
