@@ -2,6 +2,13 @@ package com.shallwe.vo;
 
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class StudyReply {
 	private int studyreply_id;
 	private StudyBoard studyreply_b;
