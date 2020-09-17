@@ -6,7 +6,9 @@ import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.model.MemberInfoBean;
 import com.shallwe.vo.LectureCategory;
+import com.shallwe.vo.Member;
 
+import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -43,4 +45,26 @@ public class MemberDAO {
 	}
 	
 	// 회원 목록 보기(admin) : 영민
+	
+	
+	//멤버로그인 : 경찬
+	public Member memberLogin(String member_id)throws FindException{
+		
+    	SqlSession session = null;
+		
+    	try {
+    		session =sqlSessionFactory.openSession();
+    		Member member = session.selectOne("MemberMapper.memberLogin",member_id);
+			if (member == null) {
+				
+				throw new FindException("예외처리:찾는아이디없음");
+			}
+			return member;
+		} catch (Exception e) {
+			throw new FindException("예외처리: 찾는아이디없음");
+		}finally {
+			session.close();
+		}
+    	
+	}
 }

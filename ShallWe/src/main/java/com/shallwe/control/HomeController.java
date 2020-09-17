@@ -17,10 +17,10 @@ import lombok.extern.log4j.Log4j;
 @Controller
 public class HomeController {
 
-	@RequestMapping("/admin")
-	public void admin() {
-		System.out.println("admin 입장");
-	}
+//	@RequestMapping("/admin")
+//	public void admin() {
+//		System.out.println("admin 입장");
+//	}
 	
 	@RequestMapping(value = "/studyBoard", method = RequestMethod.GET)
 	public void studyBoard(Locale locale, Model model) {

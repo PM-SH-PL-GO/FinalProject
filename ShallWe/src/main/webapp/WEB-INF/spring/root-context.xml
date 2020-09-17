@@ -57,5 +57,26 @@
 	<context:component-scan base-package="com.shallwe.dao"/>
 	
 <!-- db연결을 위한 정보를 저장한 properties 파일을 spring container가 찾을 수 있도록 경로 지정 -->
-	<context:property-placeholder location="/config/*.properties"/>	
+	<context:property-placeholder location="/config/*.properties"/>
+	
+<!-- email -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+      <property name="host" value="smtp.gmail.com" />
+      <property name="port" value="587" />
+      <property name="defaultEncoding" value="utf-8"/>
+      <property name="username" value="your id@gmail.com" />
+      <property name="password" value="your password" />
+  <!-- email 요청시는 SMTP -->
+      <property name="javaMailProperties">
+         <props>
+            <prop key="mail.transport.protocol">smtp</prop>
+            <prop key="mail.smtp.auth">true</prop>
+            <prop key="mail.smtp.starttls.enable">true</prop>
+            <prop key="mail.debug">true</prop>
+         </props>
+      </property>
+   </bean>
+<!-- 	<bean id="email" class="com.shallwe.Email.Email"></bean> -->
+<!-- 	<bean id="emailSender" class="com.shallwe.Email.EmailSender"></bean> -->
+	
 </beans>
