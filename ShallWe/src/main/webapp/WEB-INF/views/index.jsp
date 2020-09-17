@@ -27,30 +27,32 @@
 	<link rel="stylesheet" href="/shallwe/assets/css/nice-select.css">
 	<link rel="stylesheet" href="/shallwe/assets/css/style.css">
 <style>
-.menu-wrapper
-{float:left;}
-/* .header-btns */
-/* {margin-left: 410px} */
-.mr-40
-{margin-left: 20px}
-.mr-40
-{text-align: center;}
-.header-btns a i
-{vertical-align: bottom;}
-.header-area .menu-wrapper .main-menu ul li a i
-{font-size: 50px}
-.header-area{
-    box-shadow: 0 2px 4px 0 hsla(0,0%,80.8%,.5);
-    min-height: unset;
-    background-color: white;
-}
-.btn{
-background : #00dbd5;
-}
-.btn::before {
-	background: #009994;
-}
-
+	.menu-wrapper {
+		float:left;
+	}
+	.mr-40 {
+		margin-left: 20px
+	}
+	.mr-40 {
+		text-align: center;
+	}
+	.header-btns a i {
+		vertical-align: bottom;
+	}
+	.header-area .menu-wrapper .main-menu ul li a i {
+		font-size: 50px
+	}
+	.header-area{
+	    box-shadow: 0 2px 4px 0 hsla(0,0%,80.8%,.5);
+	    min-height: unset;
+	    background-color: white;
+	}
+	.btn{
+		background : #00dbd5;
+	}
+	.btn::before {
+		background: #009994;
+	}
 </style>
 <script type="text/javascript">
 

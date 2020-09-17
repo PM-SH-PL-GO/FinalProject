@@ -3,5 +3,13 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ReviewMapper">
-
+	
+	<!--강의후기 추가 프로시저 -->
+	<insert id="insertReivew" parameterType="ReviewBean" statementType="CALLABLE">
+		{ call 	Insert_Review (
+			#{lecture_category_id} , #{member_id} , #{lecture_id}, #{review_score}
+		)}
+	</insert>
+	
 </mapper>
+
