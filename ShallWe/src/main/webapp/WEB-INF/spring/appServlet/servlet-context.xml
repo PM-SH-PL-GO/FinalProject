@@ -46,8 +46,6 @@
 	<!-- html이 필요할땐 여기로(/shallwe/resources/~.html)-->
 	<resources mapping="/resources/**" location="/html/" />
 
-	<!-- admin 입장 시 -->
-	<resources mapping="/admin" location="/WEB-INF/views/admin.jsp" />
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<!-- 뷰 리졸버의 전두사 접미사 붙여주기 (컨트롤러에서 반환되는 view정보 혹은 void에서  -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

@@ -15,7 +15,6 @@ import com.shallwe.dao.StudyBoardDAO;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
-import com.shallwe.model.BoardPageBean;
 import com.shallwe.vo.Member;
 import com.shallwe.vo.StudyBoard;
 

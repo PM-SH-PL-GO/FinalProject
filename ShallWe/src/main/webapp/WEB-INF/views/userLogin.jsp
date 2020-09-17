@@ -312,8 +312,8 @@ input.submit {
 			
 		 $('input#signin').click(function(){
 			 
-			 let idVal = $("input#userName").val();
-			 let pwdVal = $("input#userPassword").val();
+			 let $idVal = $("input#userName").val();
+			 let $pwdVal = $("input#userPassword").val();
 			 
 			if($("input#userName").val() == "") {
 				$("span#one_help").slideDown(2000); //0.1초 동안 슬라이드로 내려오면서 보이기
@@ -321,7 +321,7 @@ input.submit {
 				$("span#one_help").css("color","red"); 
 				return false;
 				
-			} else if(idR.test(idVal) == false){
+			} else if(idR.test($idVal) == false){
 			//아이디 [영어/숫자/언더바 사용가능/4~16자] 맞지 않으면 에러메세지
 				$("input#userName").select();
 				$msgId.show();
@@ -342,15 +342,21 @@ input.submit {
 				$.ajax({
 					url:"/shallwe/memberLogin"
 				   ,method:"POST"
-				   ,data:{member_id:idVal, member_pwd:pwdVal}
+				   ,data:{member_id:$idVal,member_pwd:$pwdVal}
 				   ,success:function(data){
-					   if(data.success == "success"){
+					   let responseObj = JSON.parse(data);
+					   if(responseObj.status == "success"){
 						   
-						   location.href="/shallwe/index.jsp"
+						   alert('로그인성공');
+						   let $url = "http://localhost/shallwe/?member_id="+$idVal+"&member_pwd="+$pwdVal;
+						   location.href= $url;
+						   
 						   } else{
-							   alert("로그인실패")
+							   
+							   alert("로그인실패");
 							   location.reload();
-							   }
+							   
+						   }
 					   }
 					});
 				}
