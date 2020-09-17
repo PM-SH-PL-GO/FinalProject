@@ -9,20 +9,22 @@
 	from member
 	where member_id='member1'; <!-- #{id} -->
 	</select>
-	
+
 	<select id="memberLogin" resultType="com.shallwe.vo.Member">
-		SELECT * FROM MEMBER 
+		SELECT * FROM MEMBER
 		WHERE MEMBER_ID = #{MEMBER_ID}
+
 	</select>
-	
+
 	 <select id="IdCheck" parameterType="java.util.HashMap" resultType="String">
-	
+
 		SELECT MEMBER_ID
 		FROM MEMBER
 		WHERE MEMBER_NAME = #{member_name} AND MEMBER_EMAIL = #{member_email}
-			
+
+
 	</select>
-	
-	
-	
+
+
+
 </mapper>

@@ -219,6 +219,7 @@
 			  <version>4.1.0.Final</version>
 			</dependency>
 
+	<!-- 파일 업로드 -->
 		<dependency>
 	        <groupId>commons-io</groupId>
 	        <artifactId>commons-io</artifactId>
@@ -236,6 +237,21 @@
              <artifactId>mail</artifactId>
              <version>1.4.7</version>
         </dependency>
+
+
+	<!-- main api -->
+		<dependency>
+             <groupId>javax.mail</groupId>
+             <artifactId>mail</artifactId>
+             <version>1.4.7</version>
+        </dependency>
+
+	<!-- https://mvnrepository.com/artifact/org.springframework/spring-context-support -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-context-support</artifactId>
+		    <version>5.1.5.RELEASE</version>
+		</dependency>
 
 
 	</dependencies>

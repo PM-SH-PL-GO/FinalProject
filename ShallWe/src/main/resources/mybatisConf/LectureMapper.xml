@@ -3,5 +3,9 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="LectureMapper">
-
+	<update id="cancelRequest" parameterType="Lecture">
+		UPDATE lecture
+		SET LECTURE_STATE = #{lecture_state}
+		WHERE LECTURE_ID = #{lecture_id}
+	</update>
 </mapper>

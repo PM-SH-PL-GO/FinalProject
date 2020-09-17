@@ -2,8 +2,13 @@ package com.shallwe.vo;
 
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class Lecture {
 	private int lecture_id;
