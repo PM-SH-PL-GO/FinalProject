@@ -10,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.shallwe.dao.LectureDAO;
+import com.shallwe.dao.LectureDetailDAO;
 import com.shallwe.exception.AddException;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureCategory;
@@ -25,8 +26,10 @@ import lombok.extern.log4j.Log4j;
 public class LectureDTest {
 	@Autowired
 	private LectureDAO dao;
+	@Autowired
+	private LectureDetailDAO ddao;
 	
-	@Test
+//	@Test
 	void testInsertD() {
 		Lecture lect = new Lecture();
 		LectureCategory lectCate = new LectureCategory();
@@ -35,9 +38,8 @@ public class LectureDTest {
 		Member member = new Member();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
-//		LectureDAO dao = new LectureDAO();
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		member.setMember_id("member9");
+		member.setMember_id("member2");
 		tutor.setMember(member);
 		lect.setTutor(tutor);
 		lectCate.setLecture_category_id("SP");
@@ -58,6 +60,31 @@ public class LectureDTest {
 		lect.setLecture_min(3);
 		try {
 			dao.insert(lect);
+		} catch (AddException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	@Test
+	void testInsertDetail() {
+		Lecture lect = new Lecture();
+		LectureCategory lectCate = new LectureCategory();
+		LectureDetail lectDe = new LectureDetail();
+		lectCate.setLecture_category_id("SP");
+		lect.setLectureCategory(lectCate);
+		lect.setLecture_id(5);
+		lectDe.setLecture(lect);
+		lectDe.setLecture_introduce("test_intro");
+		lectDe.setLecture_curriculum("test_curriculum");
+		lectDe.setLecture_prepared("test_pre");
+		lectDe.setLecture_caution("test_caution");
+		lectDe.setLecture_fileName("fileName");
+		lectDe.setLecture_location("location");
+		try {
+			ddao.insertDetail(lectDe);
 		} catch (AddException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

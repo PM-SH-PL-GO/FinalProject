@@ -15,12 +15,11 @@ public class LectureDAO {
 	SqlSessionFactory sqlSessionFactory;
 	// 강의 검색 (조건별, 전체) : 수정? 성운?
 	// 내 강의 목록 보기(강사) : 동일 
-	// 강의 등록(강사) : 동일
 	
+	// 강의 등록(강사) : 동일
 	public void insert(Lecture letc) throws AddException {
 		try {
 			SqlSession session = sqlSessionFactory.openSession();
-//			session.selectOne("LectureDetailMapper.insert", letc);
 			session.insert("LectureDetailMapper.insert", letc);
 		}catch(DataAccessException e){
 			throw new AddException(e.getMessage());

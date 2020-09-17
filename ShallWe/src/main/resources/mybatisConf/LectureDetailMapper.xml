@@ -51,7 +51,7 @@
 		INTO lecture_detail(LECTURE_ID, LECTURE_CATEGORY_ID, LECTURE_INTRODUCE,
 		LECTURE_CURRICULUM, LECTURE_PREPARED, LECTURE_CAUTION,
 		LECTURE_FILENAME, LECTURE_LOCATION)
-		VALUES(lecture_seq.currval, #{lecture.lecture_id}, #{lecture_introduce},
+		VALUES(#{lecture.lecture_id}, #{lecture.lectureCategory.lecture_category_id}, #{lecture_introduce},
 		#{lecture_curriculum}, #{lecture_prepared}, #{lecture_caution},
 		#{lecture_fileName}, #{lecture_location})
 	</insert>
