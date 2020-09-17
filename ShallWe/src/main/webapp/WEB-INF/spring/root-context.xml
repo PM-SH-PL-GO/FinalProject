@@ -17,10 +17,14 @@
 <!--  	  <property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@15.164.252.152:1521:XE"/> -->
 <!-- 	  <property name="username" value="shallwe"/>  -->
 <!-- 	  <property name="password" value="kosta"/> -->
- 	  <property name="driverClassName" value="${spring.datasource.driverClassName}"/>
- 	  <property name="jdbcUrl" value="${spring.datasource.url}"/>
-	  <property name="username" value="${spring.datasource.username}"/>
-	  <property name="password" value="${spring.datasource.password}"/>
+<!--  	  <property name="driverClassName" value="${spring.datasource.driverClassName}"/> -->
+<!--  	  <property name="jdbcUrl" value="${spring.datasource.url}"/> -->
+<!-- 	  <property name="username" value="${spring.datasource.username}"/> -->
+<!-- 	  <property name="password" value="${spring.datasource.password}"/> -->
+  <property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"/>
+ 	  <property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@127.0.0.1:1521:XE"/>
+	  <property name="username" value="shallwe"/> 
+	  <property name="password" value="kosta"/>
 	</bean>
 	
 	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close"> 
