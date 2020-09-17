@@ -1,4 +1,5 @@
 <%@page contentType="text/html; charset=UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="/shallwe/assets/css/admin_style.css">
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
     <script>
         $(function(){
             // 삼디다스 누르면 메뉴 나오게 하기
@@ -35,7 +37,7 @@
             // 회원목록 선택시
             $(".member").on("click", function(){
                 $.ajax({
-                    url: "/userList",
+                    url: "${contextPath}/admin/userList",
                     method: "GET",
                     success: function(views){
                         $cont.html(views);
@@ -49,7 +51,7 @@
             // 예비강사목록 선택시
             $(".pre-tutor").on("click", function(){
                 $.ajax({
-                    url: "/preTutor",
+                    url: "${contextPath}/admin/preTutor",
                     method: "GET",
                     success: function(views){
                         $cont.html(views);
@@ -65,7 +67,7 @@
             // 강사목록 선택시
             $(".tutor-list").on("click", function(){
                 $.ajax({
-                    url: "/tutorList",
+                    url: "${contextPath}/admin/tutorList",
                     method: "GET",
                     success: function(views){
                         $cont.html(views);
@@ -79,7 +81,7 @@
             // 강의목록 선택시
             $(".lecture").on("click", function(){
                 $.ajax({
-                    url: "/lectureList",
+                    url: "${contextPath}/admin/lectureList",
                     method: "GET",
                     success: function(views){
                         $cont.html(views);
@@ -89,7 +91,50 @@
 
                 return false;
             });
-
+			
+            
+            //FAQ
+            $(".faq").on("click", function(){
+            	$.ajax({
+            		url: "${contextPath}/admin/faq",
+            		method: "GET",
+            		success: function(views){
+            			$cont.html(views);
+            		}
+            	});
+            	
+	            $cont.html("");
+	            
+	            return false;
+            });
+            
+            // 예비강사 승인 버튼
+            $(".tutor_approve").on("click", function(){
+            	let approve = $(this).attr('value');
+            	
+            	$.ajax({
+            		url: "${contextPath}/admin/approve/" + approve,
+            		method: "PATCH",
+            		data: {status : 'approve'},
+            		success: function(data){
+            			
+            		}
+            	});
+            	return null;
+            });
+            
+            
+            // modal 보이기
+            $(".modal_show").on("click", function(){
+            	let $lot = $(this).parent().siblings(".modal_slot");
+            	$lot.attr("stlye", "display:block");
+            });
+            
+            // modal 숨기기
+            $(".modal_close").on("click", function(){
+            	let $lot = $(this).parent(".modal_slot");
+            	$lot.attr("style", "display:none");
+            });
         });
     </script>
   </head>
@@ -130,7 +175,14 @@
                 </ul>
               </li>
 
-              <li><a href="#" class="atag config"><i class="fas fa-cog"></i>설정</a></li>
+              <li>
+              	<a href="#" class="atag config"><i class="fas fa-cog"></i>설정
+              		<span class="fas fa-caret-down forth"></span>
+              	</a>
+              	<ul class="tog">
+              		<li><a href="#" class="faq">FAQ</a></li>
+              	</ul>
+         	  </li>
           </ul>
       </nav>
 
