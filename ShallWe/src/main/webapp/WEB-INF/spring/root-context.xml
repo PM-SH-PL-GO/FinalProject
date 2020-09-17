@@ -6,78 +6,87 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
-	
+
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<!-- DB연결과 같은 back-end작업에서 필요한 기본 세팅을 넣는 곳 입니다 -->
 
-	<!-- 히카리CP : db 연결을  많이 만들어 놓고 쓸 수 있게 해준다 -->
+	<!-- 히카리CP : db 연결을 많이 만들어 놓고 쓸 수 있게 해준다 -->
 	<!-- 보안을 위해 db연결과 관련된 정보를 /config/config.properties에 두고 그걸 EL로 적용 -->
-	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig"> 
- 	  <property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"/>
-<!-- 															15.164.252.152 -->
- 	  <property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@127.0.0.1:1521:XE"/>
-	  <property name="username" value="shallwe"/> 
-	  <property name="password" value="kosta"/>
-<!--  	  <property name="driverClassName" value="${spring.datasource.driverClassName}"/> -->
-<!--  	  <property name="jdbcUrl" value="${spring.datasource.url}"/> -->
-<!-- 	  <property name="username" value="${spring.datasource.username}"/> -->
-<!-- 	  <property name="password" value="${spring.datasource.password}"/> -->
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+		<property name="driverClassName"
+			value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" />
+		<!-- 15.164.252.152 -->
+		<property name="jdbcUrl"
+			value="jdbc:log4jdbc:oracle:thin:@127.0.0.1:1521:XE" />
+		<property name="username" value="shallwe" />
+		<property name="password" value="kosta" />
+		<!-- <property name="driverClassName" value="${spring.datasource.driverClassName}"/> -->
+		<!-- <property name="jdbcUrl" value="${spring.datasource.url}"/> -->
+		<!-- <property name="username" value="${spring.datasource.username}"/> -->
+		<!-- <property name="password" value="${spring.datasource.password}"/> -->
 	</bean>
-	
-	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close"> 
-	      <qualifier value="hikarids"/>
-	      <constructor-arg ref="hikariConfig" /> 
+
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"
+		destroy-method="close">
+		<qualifier value="hikarids" />
+		<constructor-arg ref="hikariConfig" />
 	</bean>
-<!-- 히카리 CP 끝 -->
-	
-	
-<!-- mybatis : sql문을 보다 쉽게? 할 수 있게 해준다(아마) -->
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" lazy-init="default">
-		<property name="dataSource" ref="dataSource"/>	<!-- 여기 ref를 히카리CP  id로 맞춰야 합니다 -->
-		<property name="configLocation"	value="classpath:mybatis-config.xml"/>
+	<!-- 히카리 CP 끝 -->
+
+
+	<!-- mybatis : sql문을 보다 쉽게? 할 수 있게 해준다(아마) -->
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean" lazy-init="default">
+		<property name="dataSource" ref="dataSource" />	<!-- 여기 ref를 히카리CP id로 맞춰야 합니다 -->
+		<property name="configLocation"
+			value="classpath:mybatis-config.xml" />
 	</bean>
-<!-- mybatis 끝 -->
-	
-	
-<!-- Transaction : 트랜잭션(작업단위)를 묶어줄때 사용 -->
-	<tx:annotation-driven/>
+	<!-- mybatis 끝 -->
+
+
+	<!-- Transaction : 트랜잭션(작업단위)를 묶어줄때 사용 -->
+	<tx:annotation-driven />
 	<bean
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
 		id="transactionManager">
-		<property name="dataSource" ref="dataSource"/>
+		<property name="dataSource" ref="dataSource" />
 	</bean>
-<!-- Transaction 끝 -->
+	<!-- Transaction 끝 -->
 
-<!-- 파일 업로드 용 -->
-	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-	    <property name="maxUploadSize" value="100000000"/>  <!-- 10MB-->
-	    <property name="maxInMemorySize" value="100000000"/> <!-- 10MB-->
+	<!-- 파일 업로드 용 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="100000000" />  <!-- 10MB -->
+		<property name="maxInMemorySize" value="100000000" /> <!-- 10MB -->
 	</bean>
-	
-<!-- spring context(engine, container) 내에 선언한 component류 @들 검색해주는 친구 -->	
-	<context:component-scan base-package="com.shallwe.dao"/>
-	
-<!-- db연결을 위한 정보를 저장한 properties 파일을 spring container가 찾을 수 있도록 경로 지정 -->
-	<context:property-placeholder location="/config/*.properties"/>
-	
-<!-- email -->
-	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-      <property name="host" value="smtp.gmail.com" />
-      <property name="port" value="587" />
-      <property name="defaultEncoding" value="utf-8"/>
-      <property name="username" value="your id@gmail.com" />
-      <property name="password" value="your password" />
-  <!-- email 요청시는 SMTP -->
-      <property name="javaMailProperties">
-         <props>
-            <prop key="mail.transport.protocol">smtp</prop>
-            <prop key="mail.smtp.auth">true</prop>
-            <prop key="mail.smtp.starttls.enable">true</prop>
-            <prop key="mail.debug">true</prop>
-         </props>
-      </property>
-   </bean>
-<!-- 	<bean id="email" class="com.shallwe.Email.Email"></bean> -->
-<!-- 	<bean id="emailSender" class="com.shallwe.Email.EmailSender"></bean> -->
-	
+
+	<!-- spring context(engine, container) 내에 선언한 component류 @들 검색해주는 친구 -->
+	<context:component-scan
+		base-package="com.shallwe.dao" />
+
+	<!-- db연결을 위한 정보를 저장한 properties 파일을 spring container가 찾을 수 있도록 경로 지정 -->
+	<context:property-placeholder
+		location="/config/*.properties" />
+
+	<!-- email -->
+	<bean id="mailSender"
+		class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" />
+		<property name="defaultEncoding" value="utf-8" />
+		<property name="username" value="your id@gmail.com" />
+		<property name="password" value="your password" />
+		<!-- email 요청시는 SMTP -->
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.transport.protocol">smtp</prop>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.debug">true</prop>
+			</props>
+		</property>
+	</bean>
+	<!-- <bean id="email" class="com.shallwe.Email.Email"></bean> -->
+	<!-- <bean id="emailSender" class="com.shallwe.Email.EmailSender"></bean> -->
+
 </beans>

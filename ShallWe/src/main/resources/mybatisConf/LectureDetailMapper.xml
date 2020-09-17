@@ -48,12 +48,38 @@
 	</insert>
 	<insert id="insertDetail" parameterType="LectureDetail">
 		INSERT
-		INTO lecture_detail(LECTURE_ID, LECTURE_CATEGORY_ID, LECTURE_INTRODUCE,
+		INTO
+		lecture_detail(LECTURE_ID, LECTURE_CATEGORY_ID, LECTURE_INTRODUCE,
 		LECTURE_CURRICULUM, LECTURE_PREPARED, LECTURE_CAUTION,
 		LECTURE_FILENAME, LECTURE_LOCATION)
-		VALUES(#{lecture.lecture_id}, #{lecture.lectureCategory.lecture_category_id}, #{lecture_introduce},
+		VALUES(#{lecture.lecture_id},
+		#{lecture.lectureCategory.lecture_category_id}, #{lecture_introduce},
 		#{lecture_curriculum}, #{lecture_prepared}, #{lecture_caution},
 		#{lecture_fileName}, #{lecture_location})
 	</insert>
-
+	<update id="update" parameterType="Lecture">
+		UPDATE lecture
+		SET
+		LECTURE_CATEGORY_ID = #{lectureCategory.lecture_category_id}
+		,
+		LECTURE_IMG = #{lecture_img}, LECTURE_TITLE = #{lecture_title},
+		LECTURE_PRICE = #{lecture_price}
+		, LECTURE_START_DT =
+		#{lecture_start_dt}, LECTURE_END_DT = #{lecture_end_dt},
+		LECTURE_MAX =
+		#{lecture_max}, LECTURE_MIN = #{lecture_min}
+		WHERE LECTURE_ID =
+		#{lecture_id}
+	</update>
+	<update id="updateDetail" parameterType="LectureDetail">
+		UPDATE lecture_detail
+		SET LECTURE_INTRODUCE = #{lecture_introduce}, LECTURE_CURRICULUM =
+		#{lecture_curriculum}, LECTURE_PREPARED
+		= #{lecture_prepared},
+		LECTURE_CAUTION = #{lecture_caution}, LECTURE_FILENAME =
+		#{lecture_fileName},
+		LECTURE_LOCATION = #{lecture_location}
+		WHERE
+		LECTURE_ID = #{lecture.lecture_id}
+	</update>
 </mapper>
