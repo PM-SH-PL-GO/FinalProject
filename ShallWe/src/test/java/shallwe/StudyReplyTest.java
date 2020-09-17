@@ -1,5 +1,11 @@
 package shallwe;
 
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,6 +14,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.shallwe.dao.StudyReplyDAO;
+import com.shallwe.exception.AddException;
+import com.shallwe.exception.ModifyException;
 import com.shallwe.vo.Member;
 import com.shallwe.vo.StudyBoard;
 import com.shallwe.vo.StudyReply;
@@ -22,15 +30,19 @@ public class StudyReplyTest {
 	@Autowired
 	StudyReplyDAO dao;
 	
-//	@Test
+	@Test
 	@DisplayName("댓글 전체조회")
 	void selectAll() {
-		dao.selectAll(2);
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("boardNo", 1);
+		map.put("startRow", 1);
+		map.put("endRow", 10);
+		dao.selectAll(map);
 	}
 	
 //	@Test
 	@DisplayName("댓글 작성")
-	void insert() {
+	void insert() throws AddException {
 		StudyReply reply = new StudyReply();
 		StudyBoard board = new StudyBoard();
 		Member member = new Member();
@@ -44,7 +56,7 @@ public class StudyReplyTest {
 	
 //	@Test
 	@DisplayName("댓글 수정")
-	void update() {
+	void update() throws ModifyException {
 		StudyReply reply = new StudyReply();
 		StudyBoard board = new StudyBoard();
 		Member member = new Member();
@@ -58,7 +70,7 @@ public class StudyReplyTest {
 	}
 //	@Test
 	@DisplayName("댓글 삭제")
-	void delete() {
+	void delete() throws RemoteException {
 		StudyReply reply = new StudyReply();
 		reply.setStudyreply_id(25);
 		dao.delete(reply);				

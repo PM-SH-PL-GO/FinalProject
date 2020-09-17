@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudyReply {
+	private int studyreply_rowNum;
 	private int studyreply_id;
 	private StudyBoard studyreply_b;
 	private Member studyreply_m;
