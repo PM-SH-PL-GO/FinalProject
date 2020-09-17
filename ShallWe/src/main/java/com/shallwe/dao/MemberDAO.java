@@ -1,6 +1,7 @@
 package com.shallwe.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository(value = "memberDAO")
 public class MemberDAO {
+	
 	@Autowired
 	SqlSessionFactory sqlSessionFactory;
 	// 회원가입, 로그인, 아이디 찾기, 비밀번호 찾기(비회원) : 경찬	-> 이거 메소드 1개도 아니고 생성, 조회, 수정, 삭제 아닌 애들은 다 서비스에 있어야 합니다 참고해주세요
@@ -65,6 +67,13 @@ public class MemberDAO {
 		}finally {
 			session.close();
 		}
-    	
+	}
+	
+	//멤버아이디 찾기: 경찬
+	public String IdCheck(Map<String,Object> member)throws FindException{
+		
+		SqlSession session = null;
+		session = sqlSessionFactory.openSession();
+		return session.selectOne("MemberMapper.IdCheck",member);
 	}
 }

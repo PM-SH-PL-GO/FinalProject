@@ -19,9 +19,9 @@ public class EmailSender {
      MimeMessage msg = mailSender.createMimeMessage();
        
         try {
-        		
+
         	
-			MimeMessageHelper messageHelper 
+		   MimeMessageHelper messageHelper 
 			= new MimeMessageHelper(msg, true, "UTF-8");
 			
             msg.setSubject(email.getSubject());
