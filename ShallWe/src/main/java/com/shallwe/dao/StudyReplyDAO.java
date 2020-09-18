@@ -29,7 +29,7 @@ public class StudyReplyDAO {
 	public void insert(StudyReply reply) throws AddException {
 		SqlSession session = sqlSessionFactory.openSession();	
 		try {
-		session.selectOne("StudyReplyMapper.insert", reply);
+		session.insert("StudyReplyMapper.insert", reply);
 		}catch (Exception e) {
 			throw new AddException("댓글 작성에 실패했습니다.");
 		}finally {
@@ -40,7 +40,7 @@ public class StudyReplyDAO {
 	public void update(StudyReply reply) throws ModifyException {
 		SqlSession session = sqlSessionFactory.openSession();	
 		try {
-		session.selectOne("StudyReplyMapper.update", reply);
+		session.update("StudyReplyMapper.update", reply);
 		}catch (Exception e) {
 			throw new ModifyException("댓글 수정에 실패했습니다.");
 		}
