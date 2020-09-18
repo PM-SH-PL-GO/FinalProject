@@ -144,43 +144,66 @@ $(function(){
 	   }, 2000);
 	});
 
-
-	let mailR= /^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/i;
-	let $msgMail = $("span.mailR");
+	
+	let $msgId = $("span.idR")
+	let idR = /^([a-z0-9_]){4,16}$/;
+	let phoneR = /^((01[1|6|7|8|9])[1-9]+[0-9]{6,7})|(010[1-9][0-9]{7})$/;
 
 	$("button#load2").click(function(){
-			let $nameVal = $("input#name").val();
-			let $emailVal = $("input#email").val();
-			
-			if(mailR.test($emailVal) == false){
-				 
-				 $("input#email").select();
-				 $msgMail.show();
-				 
-			 } else {
-					$.ajax({
-						
-						url:"/shallwe/email/idEmailCheck"
-					   ,method:'POST'
-					   ,data:{member_name:$nameVal,member_email:$emailVal}
-					   ,success:function(data){
-							let responseObj = JSON.parse(data)
-							console.log(data);
-							if(responseObj.status == 'success'){
-								 
-										alert("이메일이 전송되었습니다.");
-										location.href = "/shallwe/userLogin";
-									
-							}else{
 		
-								alert("정보를 다시 입력해주세요");
+			let $pwdVal = $("input#password").val();
+			let $idVal = $("input#insertId").val();
+			let $phoneVal = $("phoneNumber").val();
+			
+			if(idR.test($idVal) == false){
+				$("input#insertId").select();
+				$msgId.show();
+				
+			} else if(phoneR.test() == false) {
 
-						}
-				   }	   
+				
+			} else {
 
-				});
-			 }
+				let today = new Date(); 
+				let year = today.getFullYear(); // 년도
+				let month = today.getMonth() + 1;  // 월
+				let date = today.getDate();  // 날짜  
+				
+				$.ajax({
+
+					url:"/shallw/member/changePassword"
+				   ,method: 'POST'
+					   
+ 				   ,data:{member_id:$idVal,
+ 				   		  member_pwd:$pwdVal,
+ 				   		  member_phone:$phoneVal}
+		   		  
+				   ,success:function(data){
+					   
+					   let responseObj = JSON.parse(data);
+					   if(responseObj.status == 'success'){
+						   
+						   let pwdCheck = confirm("비밀번호를 변경하시겠습니까?");
+						   
+						   if(pwdCheck == true){
+
+							   document.write(year + '/' + month + '/' + date + " 비밀번호가 변경되었습니다");
+							   location.href = "/shallwe/userLogin";
+						   }
+						   else if(pwdCheck == false){
+							   alert("비밀번호가 변경되지 않았습니다");
+							   e.preventDefault();
+						   }
+						   
+						   }
+					   }
+
+					});
+
+				}
 		});
+
+	
 
 	
 });
@@ -191,17 +214,21 @@ $(function(){
     
     
     <body>
-      <form action="idEmailCheck" method="post">
-        <h1>ID CHECK</h1>
-        
-        <fieldset>	
-          <legend><span class="number">1</span> Your basic info</legend>
-          <label for="name">Name:</label>
-          <input type="text" id="name" name="user_name">
+      <form action="changePassword" method="post">
+        <h1>Password</h1>
+    
+        <fieldset>
+          <label for="name">ID:</label>
+           <span hidden="hidden" class="idR" style="color: red; font-size: 0.8em;"><i>아아디가올바르지 않습니다.</i></span>
+          <input type="text" id="insertId" name="idCheck" placeholder="ex)홍길동">
           
-          <label for="email">Email:</label>
-          <span hidden="hidden" class="mailR" style="color: red; font-size: 0.8em;"><i>이메일 형식이 맞지 않습니다</i></span>
-          <input type="email" id="email" name="user_email">
+           <label for="name">PHONE:</label>
+           <span hidden="hidden" class="phon" style="color: red; font-size: 0.8em;"><i>핸드폰번호를 올바르게 입력해주세요</i></span>
+          <input type="text" id="phoneNumber" name="phoneCheck"placeholder="'-'추가해서 입력해주세요">
+          
+          <label for="password">Password:</label>
+          <span hidden="hidden" class="mailR" style="color: red; font-size: 0.8em;"><i>비밀번호를 다시 입력해주세요</i></span>
+          <input type="password" id="password" name="changePasswrod">
         </fieldset>
           <div style="margin:3em;">
 			  <br>

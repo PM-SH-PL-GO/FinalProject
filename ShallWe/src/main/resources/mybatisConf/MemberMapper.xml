@@ -5,7 +5,7 @@
 <mapper namespace="MemberMapper">
 
 	<select id="memberLogin" resultType="com.shallwe.vo.Member">
-		SELECT * FROM MEMBER
+		SELECT MEMBER_ID,MEMBER_PWD FROM MEMBER
 		WHERE MEMBER_ID = #{MEMBER_ID}
 
 	</select>
@@ -16,8 +16,24 @@
 		FROM MEMBER
 		WHERE MEMBER_NAME = #{member_name} AND MEMBER_EMAIL = #{member_email}
 
-
 	</select>
+	
+	<select id="pwdCheck" parameterType="java.util.HashMap" resultType="String">
+	
+		SELECT MEMBER_PWD
+		FROM MEMBER
+		WHERE MEMBER_NAME = #{member_name} AND MEMBER_EMAIL = #{member_email}
+	
+	</select>
+	
+	<update id="pwdUpdate" parameterType="java.util.HashMap">
+	
+		UPDATE MEMBER
+		SET MEMBER_PWD = #{MEMBER_PWD}
+		WHERE MEMBER_ID = #{MEMBER_ID} AND MEMBER_PHONE = #{MEMBER_PHONE}
+	
+	</update>
+
 
 	<resultMap type="MemberInfoBean" id="MemberInfoMap">
 		<id column="member_id" property="memberId"/>

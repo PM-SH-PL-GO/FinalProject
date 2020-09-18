@@ -35,6 +35,11 @@ public class MemberSerivce {
 		return memberDao.IdCheck(member);
 	
 	}
+	//멤버비밀번호찾기:경찬
+	public String memberpwdCheck(Map<String,Object> member) throws FindException{
+		
+		return memberDao.pwdCheck(member);
+	}
 
 	private MemberDAO dao;
 	

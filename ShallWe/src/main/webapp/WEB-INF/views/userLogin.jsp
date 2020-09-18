@@ -340,7 +340,7 @@ input.submit {
 			} */ else {
 
 				$.ajax({
-					url:"/shallwe/memberLogin"
+					url:"/shallwe/member/memberLogin"
 				   ,method:"POST"
 				   ,data:{member_id:$idVal,member_pwd:$pwdVal}
 				   ,success:function(data){
@@ -367,8 +367,8 @@ input.submit {
 		 
 		 $("input#forPassword").click(function(){
 			 
-			 let idValCheck = $("input#idInsert").val();
-		     let mailCheck = $("input#emailInsert").val();
+			 let $idValCheck = $("input#idInsert").val();
+		     let $mailCheck = $("input#emailInsert").val();
 		     
 			 //아이디 유효성검사
 			 if($("input#idInsert").val()==""){
@@ -377,22 +377,46 @@ input.submit {
 				 $("span#one_id").slideUp(2000);
 				 $("span#one_id").css("color","red");
 				 
-			 } else if(idR.test(idValCheck) == false){
+			 } /* else if(idR.test($idValCheck) == false){
 				 
 				 $("input#idInsert").select();
 				 $msgIdFor.show();
+				 
 			//이메일 유효성검사	 
-			 } else if($("input#emailInsert").val()==""){
+			 }  */else if($("input#emailInsert").val()==""){
 		
 				 $("span#one_email").slideDown(2000);
 				 $("span#one_email").slideUp(2000);
 				 $("span#one_email").css("color","red");
 				 
-			 } else if(mailR.test(mailCheck) == false){
+			 } else if(mailR.test($mailCheck) == false){
 				 
 				 $("input#emailInsert").select();
 				 $msgMail.show();
-			 }
+			 } else {
+
+				 $.ajax({
+						
+						url:"/shallwe/email/pwdEmailCheck"
+					   ,method:'POST'
+					   ,data:{member_name:$idValCheck,member_email:$mailCheck}
+					   ,success:function(data){
+							let responseObj = JSON.parse(data)
+							console.log(data);
+							if(responseObj.status == 'success'){
+								 
+										alert("이메일이 전송되었습니다.");
+										location.href = "/shallwe/userLogin";
+									
+							}else{
+		
+								alert("정보를 다시 입력해주세요");
+						}
+				      }	   
+
+				   });
+ 
+				 }
 		 });
 
 
@@ -429,7 +453,7 @@ input.submit {
 					
 					<label>PASSWORD</label>
 					<span hidden="hidden" class="pwdChk" style="color: red; font-size: 0.8em;"><i>비밀번호가 일치하지 않습니다</i></span>
-					<input placeholder="password" name="member_pwd" type="text" id="userPassword">
+					<input placeholder="password" name="member_pwd" type="password" id="userPassword">
 					<span hidden="hidden" id="one_Password">Password must be filled out!</span>
 					
 					<div class="check">
@@ -465,14 +489,6 @@ input.submit {
 					<span hidden="hidden" class="mailR" style="color: red; font-size: 0.8em;"><i>이메일 형식이 맞지 않습니다</i></span>
 					<input placeholder="" type="text" id="emailInsert"><span hidden="hidden" id="one_email">Email must be filled out!</span>
 					<div class="check">
-						<!-- <label>				
-							<input id="check" type="checkbox" class="checkbox">
-								<svg xmlns="http://www.w3.org/2000/svg" width="26px" height="23px">
-									<path class="path-back"  d="M1.5,6.021V2.451C1.5,2.009,1.646,1.5,2.3,1.5h18.4c0.442,0,0.8,0.358,0.8,0.801v18.398c0,0.442-0.357,0.801-0.8,0.801H2.3c-0.442,0-0.8-0.358-0.8-0.801V6"/>
-									<path class="path-moving" d="M24.192,3.813L11.818,16.188L1.5,6.021V2.451C1.5,2.009,1.646,1.5,2.3,1.5h18.4c0.442,0,0.8,0.358,0.8,0.801v18.398c0,0.442-0.357,0.801-0.8,0.801H2.3c-0.442,0-0.8-0.358-0.8-0.801V6"/>
-								</svg>
-						</label>
-						<h3>I agree</h3> -->
 						
 					</div>
 					<input class="submit" value="Password Check" type="submit" id="forPassword">	
