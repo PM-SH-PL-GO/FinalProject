@@ -77,4 +77,12 @@
 	VALUES(#{memberId}, #{memberPwd}, #{memberName}, #{memberEmail}, #{memberPhone}, #{favorite1.lecture_category_id}, #{favorite2.lecture_category_id}, #{favorite3.lecture_category_id}, #{memberSex}, #{tutorYN})
 	</insert>
 	
+<!-- jun6 : 예비강사 승인/반려 -->
+	<update id="updateTutorState" parameterType="map">
+		UPDATE member
+	 	SET tutor_yn = #{status}
+ 		WHERE member_id = #{id}
+	</update>	
+	
+<!-- 	<insert id="joinMember" parameterType= -->
 </mapper>

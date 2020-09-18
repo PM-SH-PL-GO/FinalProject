@@ -17,9 +17,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
-import com.shallwe.model.AdminPreTutorBean;
 //import com.shallwe.model.FaqBean;
 import com.shallwe.service.AdminService;
+import com.shallwe.vo.Faq;
 import com.shallwe.vo.Tutor;
 
 @Controller
@@ -33,7 +33,6 @@ public class AdminController {
 		System.out.println("Admin Index");
 	}
 	
-
 	@RequestMapping(value = "/preTutor")
 	public ModelAndView preTutor() {
 		ModelAndView mnv = new ModelAndView();
@@ -97,11 +96,21 @@ public class AdminController {
 	
 	/**
 	 * FAQ 조회
-	 * @return ResponseEntity<List<Faq>>
+	 * @author jun6
+	 * @return faq 전체 목록
 	 */
-//	@RequestMapping(value = "/faq")
-//	public ResponseEntity<FaqBean> faq() {
-//		
-//		return null;
-//	}
+	@RequestMapping(value = "/faq")
+	public ModelAndView faq() {
+		ModelAndView mnv = new ModelAndView();
+		List<Faq> faqList = new ArrayList<>();
+		try {
+			faqList = adminService.showAllFaq();
+			mnv.addObject("faqList", faqList);
+			mnv.setViewName("/faq");
+		}catch(FindException e) {
+			e.printStackTrace();
+		}
+		
+		return mnv;
+	}
 }

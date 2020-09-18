@@ -128,6 +128,7 @@ public class MemberDAO {
 		session = sqlSessionFactory.openSession();
 		return session.selectOne("MemberMapper.IdCheck",member);
 	}
+	
 	//멤버비밀번호 찾기: 경찬
 	public String pwdCheck(Map<String,Object> member)throws FindException{
 		SqlSession session = null;
@@ -135,10 +136,21 @@ public class MemberDAO {
 		return session.selectOne("MemberMapper.pwdCheck",member);
 		
 	}
+	
 	public void changePwd(Map<String,Object> member)throws ModifyException{
 		SqlSession session = null;
 		session = sqlSessionFactory.openSession();
 		session.selectOne("MemberMapper.changePwd",member);
+	}
 	
+	// 강사 승인/반려(admin) : 준식
+	public void updateTutorState(Map<String, String> map) throws ModifyException{
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			session.update("MemberMapper.updateTutorState", map);
+		}catch(DataAccessException e) {
+			throw new ModifyException();
+		}
 	}
 }
