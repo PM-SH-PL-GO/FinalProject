@@ -27,7 +27,7 @@
 	<update id="update" parameterType="StudyReply">
 	update STUDYREPLY set STUDYREPLY_CONTENT=#{studyreply_content},STUDYREPLY_DT=sysdate where STUDYREPLY_ID=#{studyreply_id}
 	</update>
-	<delete id="delete" parameterType="StudyReply">
+	<delete id="delete" parameterType="int">
 	delete STUDYREPLY where STUDYREPLY_ID=#{studyreply_id}
 	</delete>
 </mapper>
