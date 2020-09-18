@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.shallwe.exception.FindException;
+import com.shallwe.exception.ModifyException;
 import com.shallwe.model.AdminPreTutorBean;
 //import com.shallwe.model.FaqBean;
 import com.shallwe.service.AdminService;
@@ -55,12 +57,17 @@ public class AdminController {
 		return mnv;
 	}
 	
-	@PatchMapping(value = "/approve/{tutorId}")
-	public ResponseEntity<String> approveTutor(@PathVariable(value = "tutorId")String id){
+	@PatchMapping(value = "/status/{tutorId}")
+	public ResponseEntity<String> statusChange(@PathVariable(value = "tutorId")String id, String status){
+		try{
+			adminService.approvePreTutor(id, status);
+			return (ResponseEntity<String>) ResponseEntity.status(HttpStatus.OK).body("정상적으로 설정되었습니다");
+		}catch(ModifyException e) {
+			e.printStackTrace();
+			return (ResponseEntity<String>) ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("설정에 실패하였습니다");
+		}
 		
-		return null;
 	}
-	
 	
 	@RequestMapping(value = "/userList", method = RequestMethod.GET)
 	public void userList(Locale locale, Model model) {

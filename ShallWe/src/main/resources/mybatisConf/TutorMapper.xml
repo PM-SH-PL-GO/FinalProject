@@ -31,4 +31,11 @@
 		WHERE me.tutor_YN = 'N'
 	</select>
 	
+<!-- jun6 : 예비강사 승인/반려 -->
+	<update id="updateTutorState" parameterType="map">
+		UPDATE member
+	 	SET tutor_yn = #{status}
+ 		WHERE member_id = #{id}
+	</update>
+	
 </mapper>

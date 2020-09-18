@@ -22,21 +22,25 @@ public class LectureDetailDAO {
 
 	// 강의 등록(강사) : 동일
 	public void insertDetail(LectureDetail lectDe) throws AddException {
+		SqlSession session = sqlSessionFactory.openSession();
 		try {
-			SqlSession session = sqlSessionFactory.openSession();
 			session.insert("LectureDetailMapper.insertDetail", lectDe);
 		} catch (DataAccessException e) {
 			throw new AddException(e.getMessage());
+		} finally {
+			session.close();
 		}
 	}
 
 	// 내 강의 수정 (강사) : 동일
 	public void updateDetail(LectureDetail lectDe) throws ModifyException {
+		SqlSession session = sqlSessionFactory.openSession();
 		try {
-			SqlSession session = sqlSessionFactory.openSession();
 			session.update("LectureDetailMapper.updateDetail", lectDe);
 		} catch (DataAccessException e) {
 			throw new ModifyException(e.getMessage());
+		} finally {
+			session.close();
 		}
 	}
 
