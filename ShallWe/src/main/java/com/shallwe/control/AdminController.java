@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.shallwe.exception.FindException;
@@ -69,7 +70,8 @@ public class AdminController {
 	 * @return
 	 */
 	@PatchMapping(value = "/status/{tutorId}")
-	public ResponseEntity<String> statusChange(@PathVariable(value = "tutorId")String id, String status){
+	public ResponseEntity<String> statusChange(@PathVariable(value = "tutorId")String id, @RequestParam(name="status") String status){
+		System.out.println("/////////////////////////////////"+ id + " : " + status + "/////////////////////////////////");
 		try{
 			adminService.approvePreTutor(id, status);
 			return (ResponseEntity<String>) ResponseEntity.status(HttpStatus.OK).body("정상적으로 설정되었습니다");
@@ -106,7 +108,7 @@ public class AdminController {
 		try {
 			faqList = adminService.showAllFaq();
 			mnv.addObject("faqList", faqList);
-			mnv.setViewName("/faq");
+			mnv.setViewName("/adminFaq");
 		}catch(FindException e) {
 			e.printStackTrace();
 		}
