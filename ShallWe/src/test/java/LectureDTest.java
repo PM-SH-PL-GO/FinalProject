@@ -135,7 +135,7 @@ public class LectureDTest {
 
 	}
 
-	@Test
+//	@Test
 	void testcancelRequestD() {
 		Lecture lect = new Lecture();
 		lect.setLecture_state("취소대기");
@@ -146,4 +146,7 @@ public class LectureDTest {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
 }
