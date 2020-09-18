@@ -57,8 +57,8 @@
 	</update>
 	
 	<insert id="joinMember" parameterType="MemberInfoBean">
-	INSERT INTO member(member_id, memberPwd, memberName, memberEmail, memberPhone, favorite1, favorite2, favorite3, memberSex, tutorYN)
-	VALUES(#{memberId}, #{memberPwd}, #{memberName}, #{memberEmail}, #{memberPhone}, #{favorite1}, #{favorite2}, #{favorite3}, #{memberSex}, #{tutorYN});
+	INSERT INTO member(member_id, member_pwd, member_name, member_email, member_phone, member_favorite1, member_favorite2, member_favorite3, member_sex, tutor_yn)
+	VALUES(#{memberId}, #{memberPwd}, #{memberName}, #{memberEmail}, #{memberPhone}, #{favorite1.lecture_category_id}, #{favorite2.lecture_category_id}, #{favorite3.lecture_category_id}, #{memberSex}, #{tutorYN})
 	</insert>
 	
 </mapper>

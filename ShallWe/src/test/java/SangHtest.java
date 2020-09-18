@@ -27,13 +27,14 @@ public class SangHtest {
 	
 	@Test
 	public void Join() {
-		String memberId ="멤바맘바";
+		String memberId ="dms";
 		String memberPwd ="22352";
 		String memberName ="점보맘보";
 		String memberEmail ="jbmb@gmail.com";
 		String memberPhone ="010-3030-0030";
 		LectureCategory favorite1 = new LectureCategory();
 		LectureCategory favorite2 = new LectureCategory();
+		LectureCategory favorite3 = new LectureCategory();
 		String memberSex ="M";
 		String tutorYN ="N";
 //		Map<String,String> mib = new HashMap<String, String>();
@@ -46,6 +47,10 @@ public class SangHtest {
 		mib.setMemberEmail(memberEmail);
 		favorite1.setLecture_category_id("BU");
 		favorite2.setLecture_category_id("HO");
+		favorite3.setLecture_category_id("");
+		mib.setFavorite1(favorite1);
+		mib.setFavorite2(favorite2);
+		mib.setFavorite3(favorite3);
 		mib.setMemberPhone(memberPhone);
 		mib.setMemberSex(memberSex);
 		mib.setTutorYN(tutorYN);
