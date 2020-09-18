@@ -30,14 +30,17 @@ public class StudyReplyTest {
 	@Autowired
 	StudyReplyDAO dao;
 	
-	@Test
+//	@Test
 	@DisplayName("댓글 전체조회")
 	void selectAll() {
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		map.put("boardNo", 1);
 		map.put("startRow", 1);
 		map.put("endRow", 10);
-		dao.selectAll(map);
+		List<StudyReply> list = dao.selectAll(map);
+		for(StudyReply r : list) {
+			System.out.println(r);
+		}
 	}
 	
 //	@Test
@@ -48,13 +51,13 @@ public class StudyReplyTest {
 		Member member = new Member();
 		board.setStudyBoard_id(9);
 		member.setMember_id("member1");
-		reply.setStudyreply_content("내용이에요11");
+		reply.setStudyreply_content("내용이에요22");
 		reply.setStudyreply_b(board);
 		reply.setStudyreply_m(member);
 		dao.insert(reply);
 	}
 	
-//	@Test
+	@Test
 	@DisplayName("댓글 수정")
 	void update() throws ModifyException {
 		StudyReply reply = new StudyReply();
@@ -62,17 +65,17 @@ public class StudyReplyTest {
 		Member member = new Member();
 		board.setStudyBoard_id(9);
 		member.setMember_id("member1");
-		reply.setStudyreply_id(23);
+		reply.setStudyreply_id(8);
 		reply.setStudyreply_content("수정222");
 		reply.setStudyreply_b(board);
 		reply.setStudyreply_m(member);
 		dao.update(reply);		
 	}
-//	@Test
+	@Test
 	@DisplayName("댓글 삭제")
 	void delete() throws RemoteException {
 		StudyReply reply = new StudyReply();
-		reply.setStudyreply_id(25);
+		reply.setStudyreply_id(8);
 		dao.delete(reply);				
 	}
 }

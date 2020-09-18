@@ -108,14 +108,17 @@
 	            return false;
             });
             
-            // 예비강사 승인 버튼
-            $(".tutor_approve").on("click", function(){
+            // 예비강사 승인/반려 버튼
+            $(".tutor_status").on("click", function(){
+            	alert("후회~ 하고 있어요~");
+            	
+            	let $tatus = $(this).html();
             	let approve = $(this).attr('value');
             	
             	$.ajax({
-            		url: "${contextPath}/admin/approve/" + approve,
+            		url: "${contextPath}/admin/status/" + approve,
             		method: "PATCH",
-            		data: {status : 'approve'},
+            		data: {status : $tatus},
             		success: function(data){
             			
             		}
