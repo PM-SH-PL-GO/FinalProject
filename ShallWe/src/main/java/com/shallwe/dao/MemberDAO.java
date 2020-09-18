@@ -30,12 +30,15 @@ public class MemberDAO {
 	
 
 	// 회원가입 : 상하
-//	public void joinMember(Map<String, Object>joinmem, MemberInfoBean mib) throws AddException{
-//		SqlSession session=null;
-//		session = sqlSessionFactory.openSession();
-//		mib = session.insert("MemberMapper.joinMember", parameter)
-		
-//	}
+	public void joinMember(MemberInfoBean mib) throws AddException{
+		SqlSession session=null;
+		try {
+			session = sqlSessionFactory.openSession();
+			session.insert("MemberMapper.joinMember", mib);
+		}catch(Exception e){
+			throw new AddException(e.getMessage());
+		}
+	}
 	// 내 정보 보기(수강생) : 상하
 	public MemberInfoBean selectById(String memberId) throws FindException
 	{

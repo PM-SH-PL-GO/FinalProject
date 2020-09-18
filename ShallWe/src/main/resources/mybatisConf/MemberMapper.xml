@@ -56,5 +56,9 @@
 	UPDATE member set member_pwd = #{memberPwd} where member_id = #{memberId}
 	</update>
 	
-<!-- 	<insert id="joinMember" parameterType= -->
+	<insert id="joinMember" parameterType="MemberInfoBean">
+	INSERT INTO member(member_id, memberPwd, memberName, memberEmail, memberPhone, favorite1, favorite2, favorite3, memberSex, tutorYN)
+	VALUES(#{memberId}, #{memberPwd}, #{memberName}, #{memberEmail}, #{memberPhone}, #{favorite1}, #{favorite2}, #{favorite3}, #{memberSex}, #{tutorYN});
+	</insert>
+	
 </mapper>
