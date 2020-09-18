@@ -166,7 +166,7 @@ public class LectureDTest {
 		}
 	}
 	
-	@Test
+//	@Test
 	void slecttutorTest() {
 		try {
 			Lecture lect = new Lecture();
@@ -176,6 +176,17 @@ public class LectureDTest {
 			tu.setMember(mem);
 			lect.setTutor(tu);
 			dao.tutorMyClassList(lect);
+		} catch (FindException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	void leDeview() {
+		Lecture lect = new Lecture();
+		lect.setLecture_id(2);
+		try {
+			ddao.lectureDetailView(lect);
 		} catch (FindException e) {
 			e.printStackTrace();
 		}
