@@ -3,5 +3,17 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="MemberLectureHistoryMapper">
-
+	<select id="studentMyClassList" parameterType="MemberLectureHistory">
+		SELECT
+		mlh.lecture_id, le.lecture_img, le.lecture_title, le.lecture_price,
+		le.lecture_state
+		, le.lecture_start_dt, le.lecture_end_dt, le.lecture_max,
+		le.lecture_current
+		, tu.tutor_nickname
+		FROM member_lecture_history mlh
+		JOIN lecture le ON (mlh.lecture_id = le.lecture_id AND
+		mlh.LECTURE_CATEGORY_ID = le.LECTURE_CATEGORY_ID)
+		JOIN tutor tu ON (le.LECTURE_CATEGORY_ID = tu.TUTOR_CATEGORY_ID)
+		WHERE mlh.MEMBER_ID = #{member.member_id}
+	</select>
 </mapper>

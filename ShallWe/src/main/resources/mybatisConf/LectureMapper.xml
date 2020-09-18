@@ -5,38 +5,62 @@
 <mapper namespace="LectureMapper">
 	<update id="cancelRequest" parameterType="Lecture">
 		UPDATE lecture
-		SET LECTURE_STATE = #{lecture_state}
+		SET
+		LECTURE_STATE = #{lecture_state}
 		WHERE LECTURE_ID = #{lecture_id}
 	</update>
 
-	<resultMap id = "searchLectureList" type="LectureSearchBean" autoMapping="true">
-		<id property="lecture_id" column="lecture_id"/> 
-		<id property="lecture_img" column="lecture_img"/> 
-		<id property="lecture_title" column="lecture_title"/> 
-		<id property="lecture_start_dt" column="lecture_start_dt"/> 
-		<id property="lecture_end_dt" column="lecture_end_dt"/> 
-		<id property="lecture_max" column="lecture_max"/> 
-		<id property="lecture_current" column="lecture_current"/> 
-		<association property="tutor" javaType="tutor" autoMapping="true">
-			<id property="tutor_score" column="tutor_score"/>
-			<id property="lecture_category_name" column="lecture_category_name"/>
+	<resultMap id="searchLectureList" type="LectureSearchBean"
+		autoMapping="true">
+		<id property="lecture_id" column="lecture_id" />
+		<id property="lecture_img" column="lecture_img" />
+		<id property="lecture_title" column="lecture_title" />
+		<id property="lecture_start_dt" column="lecture_start_dt" />
+		<id property="lecture_end_dt" column="lecture_end_dt" />
+		<id property="lecture_max" column="lecture_max" />
+		<id property="lecture_current" column="lecture_current" />
+		<association property="tutor" javaType="tutor"
+			autoMapping="true">
+			<id property="tutor_score" column="tutor_score" />
+			<id property="lecture_category_name"
+				column="lecture_category_name" />
 		</association>
-		<association property="lectureCategory" javaType="lectureCategory" autoMapping="true">
-			<id property="lecture_category_id" column="lecture_category_id"/>
-			<id property="lecture_category_name" column="lecture_category_name"/>
+		<association property="lectureCategory"
+			javaType="lectureCategory" autoMapping="true">
+			<id property="lecture_category_id" column="lecture_category_id" />
+			<id property="lecture_category_name"
+				column="lecture_category_name" />
 		</association>
 	</resultMap>
-	
+
 	<!-- lecture 검색 -->
-	<select id="selectLectureListBySearch" parameterType="java.util.HashMap" resultType="LectureSearchBean">
-		SELECT  lec.lecture_id lecture_id , lec.lecture_category_id lecture_category_id, lec.lecture_tutor_id lecture_tutor_id , lecture_title, lecture_price,  lec.lecture_start_dt lecture_start_dt, lec.lecture_end_dt lecture_end_dt,  tutor_score  FROM LECTURE lec            
-		JOIN TUTOR tut ON (lec.LECTURE_CATEGORY_ID = tut.TUTOR_CATEGORY_ID AND lec.LECTURE_TUTOR_ID = tut.TUTOR_ID)           
-		JOIN LECTURE_CATEGORY lecc ON (tut.TUTOR_CATEGORY_ID= lecc.CATEGORY_ID)           
-		JOIN LECTURE_DETAIL lecd ON (lec.lecture_id = lecd.LECTURE_ID AND lec.LECTURE_CATEGORY_ID = lecd.LECTURE_CATEGORY_ID)   
-		WHERE LECTURE_TUTOR_ID LIKE  '%#{lecture_tutor_id}%'  
-		<!-- 		  AND LECTURE_TITLE LIKE '%#{lecture_title}%'  -->
-		<!-- 		  AND CATEGORY_NAME LIKE '%#{category_name}%' -->
-			<!--  AND LECTURE_CURRICULUM LIKE '%%'  -->
+	<select id="selectLectureListBySearch"
+		parameterType="java.util.HashMap" resultType="LectureSearchBean">
+		SELECT lec.lecture_id lecture_id , lec.lecture_category_id
+		lecture_category_id, lec.lecture_tutor_id lecture_tutor_id ,
+		lecture_title, lecture_price, lec.lecture_start_dt lecture_start_dt,
+		lec.lecture_end_dt lecture_end_dt, tutor_score FROM LECTURE lec
+		JOIN TUTOR tut ON (lec.LECTURE_CATEGORY_ID = tut.TUTOR_CATEGORY_ID AND
+		lec.LECTURE_TUTOR_ID = tut.TUTOR_ID)
+		JOIN LECTURE_CATEGORY lecc ON (tut.TUTOR_CATEGORY_ID= lecc.CATEGORY_ID)
+		JOIN LECTURE_DETAIL lecd ON (lec.lecture_id = lecd.LECTURE_ID AND
+		lec.LECTURE_CATEGORY_ID = lecd.LECTURE_CATEGORY_ID)
+		WHERE LECTURE_TUTOR_ID LIKE '%#{lecture_tutor_id}%'
+		<!-- AND LECTURE_TITLE LIKE '%#{lecture_title}%' -->
+		<!-- AND CATEGORY_NAME LIKE '%#{category_name}%' -->
+		<!-- AND LECTURE_CURRICULUM LIKE '%%' -->
 	</select>
 
+	<select id="tutorMyClassList" parameterType="Lecture">
+		SELECT le.lecture_id, le.lecture_img, le.lecture_title, le.lecture_price,
+		le.lecture_state
+		, le.lecture_start_dt, le.lecture_end_dt, le.lecture_max,
+		le.lecture_current
+		, tu.tutor_nickname
+		FROM lecture le
+		JOIN tutor tu ON (tu.tutor_id = le.lecture_tutor_id AND
+		tu.TUTOR_CATEGORY_ID = le.LECTURE_CATEGORY_ID)
+		JOIN member m ON (m.member_id = tu.tutor_id)
+		WHERE le.LECTURE_TUTOR_ID = #{tutor.member.member_id} AND m.tutor_yn = 'Y'
+	</select>
 </mapper>
