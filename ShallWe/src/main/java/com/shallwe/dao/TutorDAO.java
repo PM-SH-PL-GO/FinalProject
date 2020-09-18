@@ -29,7 +29,7 @@ public class TutorDAO {
 		SqlSession session = null;
 		try {
 			session = sqlSessionFactory.openSession();
-			tutorList = session.selectList("TutorMapper.selectAllPreTutor", YN);
+			tutorList = session.selectList("TutorMapper.selectAllTutor", YN);
 		}catch(DataAccessException e) {
 			throw new FindException("검색 과정에 오류가 있습니다");
 		}

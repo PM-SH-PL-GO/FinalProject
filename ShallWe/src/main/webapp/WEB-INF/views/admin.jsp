@@ -33,7 +33,7 @@
             //---------------------------------------------------------------
 
             // 메인화면 변수 잡기
-            let $cont = $(".content");
+            let $cont = $(".contents");
             
             // 회원목록 선택시
             $(".member").on("click", function(){
@@ -90,29 +90,15 @@
 
                 return false;
             });
-			
-            
-            //FAQ
-            $(".faq").on("click", function(){
-            	$.ajax({
-            		url: "${contextPath}/admin/faq",
-            		method: "GET",
-            		success: function(views){
-            			$cont.html(views);
-            		}
-            	});
-            	
-	            $cont.html("");
-	            
-	            return false;
-            });
             
             // 예비강사 승인/반려 버튼
-            $(".tutor_status").on("click", function(){
+            $cont.on("click", ".tutor_status", function(){
             	alert("후회~ 하고 있어요~");
             	
             	let $tatus = $(this).html();
             	let approve = $(this).attr('value');
+            	
+            	console.log(approve + " : " + $tatus);
             	
             	$.ajax({
             		url: "${contextPath}/admin/status/" + approve,
@@ -127,16 +113,63 @@
             
             
             // modal 보이기
-            $("div.content").on("click", ".modal_show", function(){
+            $cont.on("click", ".modal_show", function(){
             	let $lot = $(this).parents(".table").siblings(".modal_slot");
             	$lot.attr("style", "display:block");
+            	
+            	return null;
             });
             
             // modal 숨기기
-            $("div.content").on("click", ".modal_close", function(){
+            $cont.on("click", ".modal_close", function(){
             	let $lot = $(this).parents(".modal_slot");
             	$lot.attr("style", "display:none");
+            	
+            	return null;
             });
+            
+			
+/***************************설정하기***************************/            
+            // FAQ 조회
+            $(".faq").on("click", function(){
+            	$.ajax({
+            		url: "${contextPath}/admin/faq",
+            		method: "GET",
+            		success: function(views){
+            			$cont.html(views);
+            		}
+            	});
+            	
+	            $cont.html("");
+	            
+	            return false;
+            });
+            
+            // FAQ 추가
+            $cont.on("click", ".faq_insert", function(){
+            	$.ajax({
+            		url:"",
+            		method:"POST",
+            		data: {},
+            		success: function(){
+            			
+            		}
+            	});
+            	
+            	return false;
+            });
+            
+            // FAQ 수정
+            $cont.on("click", ".faq_change", function(){
+            	
+            });
+            
+            // FAQ 삭제
+			$cont.on("click", ".faq_delete", function(){
+            	
+            });
+            
+            
         });
     </script>
   </head>
@@ -188,7 +221,7 @@
           </ul>
       </nav>
 
-      <div class="content">
+      <div class="contents">
       </div>
   </body>
 </html>

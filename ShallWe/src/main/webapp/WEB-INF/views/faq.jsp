@@ -87,7 +87,7 @@
 	<!-- Preloader Start -->
 	<header> </header>
 	<main>
-		<ul>
+		<ul class="faq_ul">
 			<li class="collapsible">
 				<h2 class="title">
 					<a href="#html5">[서비스 소개] shallwe는 어떻게 이용하나요?</a>

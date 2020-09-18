@@ -1,6 +1,6 @@
 @charset "UTF-8";
 /** 목록 스타일 초기화 및 중앙 배치, 가로 폭 지정 */
-ul {
+ul.faq_ul {
 	padding: 0;
 	margin: 50px auto;
 	list-style: none;
