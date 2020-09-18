@@ -19,7 +19,7 @@ public class StudyReplyDAO {
 	@Autowired
 	SqlSessionFactory sqlSessionFactory;
 	// 해당 게시글 댓글 전체조회 
-	public List<StudyReply> selectAll(Map<String, Integer> map) {
+	public List<StudyReply> selectAll(Map<String, Object> map) {
 		SqlSession session = sqlSessionFactory.openSession();
 		List<StudyReply> list = session.selectList("StudyReplyMapper.selectAll", map);
 		session.close();
@@ -46,10 +46,10 @@ public class StudyReplyDAO {
 		}
 	}
 	// 댓글 삭제
-	public void delete(StudyReply reply) throws RemoteException {
+	public void delete(int reply_id) throws RemoteException {
 		SqlSession session = sqlSessionFactory.openSession();	
 		try {
-		session.selectOne("StudyReplyMapper.delete", reply);
+		session.selectOne("StudyReplyMapper.delete", reply_id);
 		}catch (Exception e) {
 			throw new RemoteException("댓글 삭제에 실패했습니다.");
 		}
