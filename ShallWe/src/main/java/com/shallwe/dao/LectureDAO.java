@@ -23,11 +23,13 @@ public class LectureDAO {
 
 	// 강의 등록(강사) : 동일
 	public void insert(Lecture lect) throws AddException {
+		SqlSession session = sqlSessionFactory.openSession();
 		try {
-			SqlSession session = sqlSessionFactory.openSession();
 			session.insert("LectureDetailMapper.insert", lect);
 		} catch (DataAccessException e) {
 			throw new AddException(e.getMessage());
+		} finally {
+			session.close();
 		}
 	}
 
@@ -45,11 +47,13 @@ public class LectureDAO {
 
 	// 강의 취소 요청(강사) : 동일
 	public void cancelRequest(Lecture lect) throws ModifyException {
+		SqlSession session = sqlSessionFactory.openSession();
 		try {
-			SqlSession session = sqlSessionFactory.openSession();
 			session.update("LectureMapper.cancelRequest", lect);
 		} catch (DataAccessException e) {
 			throw new ModifyException(e.getMessage());
+		} finally {
+			session.close();
 		}
 	}
 	
