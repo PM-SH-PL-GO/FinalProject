@@ -62,8 +62,6 @@
                 return false;
             });
             
-            
-
             // 강사목록 선택시
             $(".tutor-list").on("click", function(){
                 $.ajax({
@@ -128,14 +126,14 @@
             
             
             // modal 보이기
-            $(".modal_show").on("click", function(){
-            	let $lot = $(this).parent().siblings(".modal_slot");
-            	$lot.attr("stlye", "display:block");
+            $("div.content").on("click", ".modal_show", function(){
+            	let $lot = $(this).parents(".table").siblings(".modal_slot");
+            	$lot.attr("style", "display:block");
             });
             
             // modal 숨기기
-            $(".modal_close").on("click", function(){
-            	let $lot = $(this).parent(".modal_slot");
+            $("div.content").on("click", ".modal_close", function(){
+            	let $lot = $(this).parents(".modal_slot");
             	$lot.attr("style", "display:none");
             });
         });

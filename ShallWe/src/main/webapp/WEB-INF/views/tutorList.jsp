@@ -2,23 +2,41 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <table class="table">
-    <tr><th>순서</th><th>강사 사진</th><th>강사 번호</th></th><th>강사 이름</th><th>전문 분야</th><th>강의목록</th><th>강사평점</th><th>관리하기</th></tr>
+    <tr>
+    	<th>순서</th>
+      	<th>강사 사진</th>
+      	<th>아이디</th>
+      	<th>회원 이름</th>
+     	<th>강사 별명</th>
+      	<th>전문 분야</th>
+      	<th>점수</th>
+      	<th>세부사항</th>
+    	<th>관리하기</th>
+    </tr>
         
-<%--         <c:forEach items="${tutor-list에 대한 세팅은 controller에서}" var="tutor" varStatus="stats"> --%>
-<!--             <tr> -->
-<%--                 <td>${stats.count}</td>                                              <!-- 순서 --> --%>
-<%--                 <td><img src="${contextPath}/tutorImages/${pt.tutor_img}"></td>      <!-- 강사 사진 --> --%>
-<!--                 <td>${pt.member.member_id}</td> 혹은 -->
-<%--                 <c:set var="mem" value="${tutor.member}"/> --%>
-<%--                 <td><input hidden>${mem.member_id}</td>                              <!-- 강사 번호 --> --%>
-<%--                 <td>${mem.member_name}</td>                                          <!-- 강사 이름 --> --%>
-<!--                 <td>${pt.lecture_category.lecture_category_name}</td> -->
-<%--                 <c:set var="cat" value="${pt.lecture_category}"/> --%>
-<%--                 <td>${cat.lecture_category_name}</td>                                <!-- 전문 분야 --> --%>
-<!--                 <td><button>강의목록</button></td>                                    해당 전문분야 강의목록 -->
-<%--                 <td>${tutor.tutor_score}</td>                                        <!-- 강사평점 --> --%>
-<!--                 <td><button>관리하기</button></td>                                    관라하기 -->
-<!--             </tr> -->
-<%--         </c:forEach> --%>
-        
+	  <c:forEach items="${preTutorList}" var="pt" varStatus="stats">
+	      <tr>
+	          <td>${stats.count}</td>                                              		<!-- 순서 -->
+	          <td><img src="${contextPath}/tutorImages/${pt.img}"></td>      		 	<!-- 강사 사진 -->
+	          <td>${pt.id}</td>													 		<!-- 강사의 회원 아이디 -->
+	          <td>${pt.name}</td>													 	<!-- 강사 이름 --> 
+	          <td>${pt.nickname }</td>											 		<!-- 강사 별명 -->
+	          <td>${pt.category}</td>													<!-- 전문 분야 -->		
+	          <td>${pt.score}</td>												 		<!-- 강사 점수 -->		
+	          <td><a class="modal_show">상세정보 보기</a></td>                   			<!-- 이력서, 자기소개, 소개link를 따로 보여주는 tutorDetail.jsp를 만들예정-->
+	          <td><button class="tutor_">관리하기</button></td>
+	      </tr>
+	      <div class="modal_slot">
+	      	<div class="modal_content">
+	      		<h3>${pt.nickname} 강사의 세부정보</h3>
+	      		<hr>
+	      		<p>자기소개 <br>${pt. introduce}</p><br>
+	      		<p>이력서 : <a href="${contextPath }/tutorCareer/${pt.career }"></a></p><br>
+	      		<p>SNS 링크: <a href="${pt.link }"></a></p><br>
+	      		<button class="modal_close">닫기</button>
+	      	</div>
+	      	<div class="modal_layer"></div>
+	      </div>
+	  </c:forEach>
+	          
 </table>
