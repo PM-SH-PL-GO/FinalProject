@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <title>ShallWe Admin</title>
     <link rel="stylesheet" href="/shallwe/assets/css/admin_style.css">
+    <link rel="stylesheet" href="/shallwe/assets/css/faq.css">
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
@@ -62,8 +63,6 @@
                 return false;
             });
             
-            
-
             // 강사목록 선택시
             $(".tutor-list").on("click", function(){
                 $.ajax({
@@ -79,7 +78,7 @@
             });
             
             // 강의목록 선택시
-            $(".lecture").on("click", function(){
+            $(".lecture-list").on("click", function(){
                 $.ajax({
                     url: "${contextPath}/admin/lectureList",
                     method: "GET",
@@ -128,14 +127,14 @@
             
             
             // modal 보이기
-            $(".modal_show").on("click", function(){
-            	let $lot = $(this).parent().siblings(".modal_slot");
-            	$lot.attr("stlye", "display:block");
+            $("div.content").on("click", ".modal_show", function(){
+            	let $lot = $(this).parents(".table").siblings(".modal_slot");
+            	$lot.attr("style", "display:block");
             });
             
             // modal 숨기기
-            $(".modal_close").on("click", function(){
-            	let $lot = $(this).parent(".modal_slot");
+            $("div.content").on("click", ".modal_close", function(){
+            	let $lot = $(this).parents(".modal_slot");
             	$lot.attr("style", "display:none");
             });
         });
@@ -174,12 +173,12 @@
                     <span class="fas fa-caret-down third"></span>
                 </a>
                 <ul class="tog">
-                    <li><a href="#" class="lecture">강의목록</a></li>
+                    <li><a href="#" class="lecture-list">강의목록</a></li>
                 </ul>
               </li>
 
               <li>
-              	<a href="#" class="atag config"><i class="fas fa-cog"></i>설정
+              	<a href="#" class="a-btn config"><i class="fas fa-cog"></i>설정
               		<span class="fas fa-caret-down forth"></span>
               	</a>
               	<ul class="tog">

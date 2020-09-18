@@ -77,4 +77,9 @@ public class HomeController {
 	public void wishlist(Locale locale, Model model) {
 		System.out.println("wishlist");
 	}
+	@RequestMapping(value = "/changePwd", method = RequestMethod.GET)
+	public void chagePwd(Locale locale, Model model) {
+		System.out.println("HOMECONTROL: changePwd");
+	}
+	
 }

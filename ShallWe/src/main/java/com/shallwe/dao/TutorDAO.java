@@ -14,7 +14,7 @@ import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.vo.Tutor;
 
-@Repository(value = "TutorDAO")
+@Repository(value = "tutorDAO")
 public class TutorDAO {
 	@Autowired
 	SqlSessionFactory sqlSessionFactory;
@@ -24,12 +24,12 @@ public class TutorDAO {
 	// 강사 정보 수정 : 경찬
 	
 	// 강사/예비강사 목록 보기(admin) : 준식
-	public List<Tutor> selectAllPreTutor() throws FindException{
+	public List<Tutor> selectAllTutor(String YN) throws FindException{
 		List<Tutor> tutorList = new ArrayList<>();
 		SqlSession session = null;
 		try {
 			session = sqlSessionFactory.openSession();
-			tutorList = session.selectList("TutorMapper.selectAllPreTutor");
+			tutorList = session.selectList("TutorMapper.selectAllPreTutor", YN);
 		}catch(DataAccessException e) {
 			throw new FindException("검색 과정에 오류가 있습니다");
 		}
@@ -38,15 +38,5 @@ public class TutorDAO {
 			throw new FindException("검색 결과가 없습니다");
 		
 		return tutorList;
-	}
-	// 강사 승인/반려(admin) : 준식
-	public void updateTutorState(Map<String, String> map) throws ModifyException{
-		SqlSession session = null;
-		try {
-			session = sqlSessionFactory.openSession();
-			session.update("TutorMapper.updateTutorState", map);
-		}catch(DataAccessException e) {
-			throw new ModifyException();
-		}
 	}
 }

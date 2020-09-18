@@ -30,12 +30,15 @@ public class MemberDAO {
 	
 
 	// 회원가입 : 상하
-//	public void joinMember(Map<String, Object>joinmem, MemberInfoBean mib) throws AddException{
-//		SqlSession session=null;
-//		session = sqlSessionFactory.openSession();
-//		mib = session.insert("MemberMapper.joinMember", parameter)
-		
-//	}
+	public void joinMember(MemberInfoBean mib) throws AddException{
+		SqlSession session=null;
+		try {
+			session = sqlSessionFactory.openSession();
+			session.insert("MemberMapper.joinMember", mib);
+		}catch(Exception e){
+			throw new AddException(e.getMessage());
+		}
+	}
 	// 내 정보 보기(수강생) : 상하
 	public MemberInfoBean selectById(String memberId) throws FindException
 	{
@@ -124,5 +127,30 @@ public class MemberDAO {
 		SqlSession session = null;
 		session = sqlSessionFactory.openSession();
 		return session.selectOne("MemberMapper.IdCheck",member);
+	}
+	
+	//멤버비밀번호 찾기: 경찬
+	public String pwdCheck(Map<String,Object> member)throws FindException{
+		SqlSession session = null;
+		session = sqlSessionFactory.openSession();
+		return session.selectOne("MemberMapper.pwdCheck",member);
+		
+	}
+	
+	public void changePwd(Map<String,Object> member)throws ModifyException{
+		SqlSession session = null;
+		session = sqlSessionFactory.openSession();
+		session.selectOne("MemberMapper.changePwd",member);
+	}
+	
+	// 강사 승인/반려(admin) : 준식
+	public void updateTutorState(Map<String, String> map) throws ModifyException{
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			session.update("MemberMapper.updateTutorState", map);
+		}catch(DataAccessException e) {
+			throw new ModifyException();
+		}
 	}
 }
