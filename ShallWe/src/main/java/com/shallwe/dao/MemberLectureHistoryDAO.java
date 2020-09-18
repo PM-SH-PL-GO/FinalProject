@@ -19,12 +19,12 @@ public class MemberLectureHistoryDAO {
 
 	// 수강 신청하기(수강생) : 수정
 	// 수강 목록보기(수강생) : 동일
-	public List<MemberLectureHistory> memberMyClassList() throws FindException {
+	public List<MemberLectureHistory> memberMyClassList(MemberLectureHistory mlth) throws FindException {
 		List<MemberLectureHistory> memberList = new ArrayList<>();
 		SqlSession session = null;
 		try {
 			session = sqlSessionFactory.openSession();
-			memberList = session.selectList("MemberLectureHistoryMapper.memberMyClassList");
+			memberList = session.selectList("MemberLectureHistoryMapper.memberMyClassList", mlth);
 		} catch (DataAccessException e) {
 			throw new FindException("조회 과정에 오류가 있습니다.");
 		}

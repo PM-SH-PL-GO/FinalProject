@@ -6,16 +6,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.shallwe.dao.LectureDAO;
 import com.shallwe.dao.LectureDetailDAO;
+import com.shallwe.dao.MemberLectureHistoryDAO;
 import com.shallwe.exception.AddException;
+import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureCategory;
 import com.shallwe.vo.LectureDetail;
 import com.shallwe.vo.Member;
+import com.shallwe.vo.MemberLectureHistory;
 import com.shallwe.vo.Tutor;
 
 import lombok.extern.log4j.Log4j;
@@ -28,6 +30,8 @@ public class LectureDTest {
 	private LectureDAO dao;
 	@Autowired
 	private LectureDetailDAO ddao;
+	@Autowired
+	private MemberLectureHistoryDAO mlhdao;
 
 //	@Test
 	void testInsertD() {
@@ -147,6 +151,33 @@ public class LectureDTest {
 		}
 	}
 	
+//	@Test
+	void slectTest() {
+		try {
+			Lecture lect = new Lecture();
+			Member mem = new Member();
+			MemberLectureHistory mlh = new MemberLectureHistory();
+			mem.setMember_id("member2");
+			mlh.setMember(mem);
+			mlhdao.memberMyClassList(mlh);
+//			dao.tutorMyClassList();
+		} catch (FindException e) {
+			e.printStackTrace();
+		}
+	}
 	
-	
+	@Test
+	void slecttutorTest() {
+		try {
+			Lecture lect = new Lecture();
+			Member mem = new Member();
+			Tutor tu = new Tutor();
+			mem.setMember_id("member2");
+			tu.setMember(mem);
+			lect.setTutor(tu);
+			dao.tutorMyClassList(lect);
+		} catch (FindException e) {
+			e.printStackTrace();
+		}
+	}
 }

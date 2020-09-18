@@ -58,12 +58,12 @@ public class LectureDAO {
 	}
 
 	// 교사 강의 조회 : 동일
-	public List<Lecture> tutorMyClassList() throws FindException {
+	public List<Lecture> tutorMyClassList(Lecture lect) throws FindException {
 		List<Lecture> lectureList = new ArrayList<>();
 		SqlSession session = null;
 		try {
 			session = sqlSessionFactory.openSession();
-			lectureList = session.selectList("LectureMapper.tutorMyClassList");
+			lectureList = session.selectList("LectureMapper.tutorMyClassList", lect);
 		} catch (DataAccessException e) {
 			throw new FindException("조회 과정에 오류가 있습니다.");
 		}

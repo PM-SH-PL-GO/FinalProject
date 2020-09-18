@@ -3,32 +3,6 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="LectureDetailMapper">
-	<resultMap type="Lecture" id="LectureResultMap"
-		autoMapping="true">
-		<id property="lecture_id" column="lecture_id" />
-		<result property="lecture_img" column="lecture_img" />
-		<result property="lecture_title" column="lecture_title" />
-		<result property="lecture_price" column="lecture_price" />
-		<result property="lecture_state" column="lecture_state" />
-		<result property="lecture_start_dt" column="lecture_start_dt" />
-		<result property="lecture_end_dt" column="lecture_end_dt" />
-		<result property="lecture_max" column="lecture_max" />
-		<result property="lecture_min" column="lecture_min" />
-		<result property="lecture_current" column="lecture_current" />
-		<association property="lectureCategory"
-			javaType="LectureCategory" autoMapping="true">
-			<id property="lecture_category_id" column="lecture_category_id" />
-			<result property="lecture_category_name"
-				column="lecture_category_name" />
-		</association>
-		<association property="tutor" javaType="Tutor"
-			autoMapping="true">
-		</association>
-		<association property="member" javaType="Member"
-			autoMapping="true">
-			<id property="member_id" column="member_id" />
-		</association>
-	</resultMap>
 	<select id="selectAllLectures" resultType="LectureDetail">
 		SELECT *
 		FROM lecture
