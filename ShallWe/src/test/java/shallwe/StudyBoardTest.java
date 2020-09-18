@@ -2,6 +2,7 @@ package shallwe;
 
 import java.rmi.RemoteException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.DisplayName;
@@ -29,24 +30,30 @@ public class StudyBoardTest {
 	@Autowired
 	StudyBoardDAO dao;
 		
-	@Test
+//	@Test
 	@DisplayName("게시글 호출")
 	void selectAll() throws FindException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("startRow", 1);
-		map.put("endRow", 10);
-		dao.selectAll(map);
+		map.put("endRow", 4);
+		List<StudyBoard> list = dao.selectAll(map);
+//		System.out.println(list);
+		for(StudyBoard b : list) {
+			System.out.println("board=" +b);
+		}
 	}
 	
 //	@Test
 	@DisplayName("제목+내용 검색")
 	void selectByTitleAndContent() throws FindException {
 		Map<String, Object> map = new HashMap<String, Object>();
-		String toc = "%다시%";
+		String toc = "%제목2%";
 		map.put("titleOrContent", toc);
 		map.put("startRow", 1);
 		map.put("endRow", 10);
-		dao.selectByTitleAndContent(map);
+		List<StudyBoard> list = dao.selectByTitleAndContent(map);
+		for(StudyBoard s : list)
+		System.out.println("검색내용:"+s);
 	}
 	
 //	@Test
@@ -57,9 +64,9 @@ public class StudyBoardTest {
 		Member member = new Member();
 		member.setMember_id("member1");
 		studyboard.setStudy_m(member);
-		studyboard.setStudyBoard_content("제목 : 1다시성운test");
-		studyboard.setStudyBoard_title("내용 : 1성운test");
-		studyboard.setStudyBoard_fileName("1성운.jpg");
+		studyboard.setStudyBoard_content("제목 : 2다시성운test");
+		studyboard.setStudyBoard_title("내용 : 2성운test");
+		studyboard.setStudyBoard_fileName("2성운.jpg");
 		dao.insert(studyboard);
 	}
 	
@@ -77,11 +84,11 @@ public class StudyBoardTest {
 		dao.update(studyboard);		
 	}
 	
-//	@Test
+	@Test
 	@DisplayName("게시글 삭제")
 	void delete() throws RemoteException {
 		StudyBoard studyboard = new StudyBoard();
-		int id = 8;
+		int id = 2;
 		dao.delete(id);
 	}
 	

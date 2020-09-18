@@ -56,7 +56,7 @@ public class StudyBoardDAO {
 	public void insert(StudyBoard board) throws AddException {
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
-		session.selectOne("StudyBoardMapper.insert", board);
+		session.insert("StudyBoardMapper.insert", board);
 			if(board.getStudy_m().getMember_id()==null) {
 				throw new AddException("해당하는 주문이 없습니다.");
 			}
@@ -84,7 +84,7 @@ public class StudyBoardDAO {
 	public void delete(int studyBoard_id) throws RemoteException {
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
-		session.delete("StudyBoardMapper.delete", studyBoard_id);
+		session.update("StudyBoardMapper.delete", studyBoard_id);
 		if(studyBoard_id == 0) {
 			throw new RemoteException("삭제할 게시물이 존재하지않습니다.");
 		}		
