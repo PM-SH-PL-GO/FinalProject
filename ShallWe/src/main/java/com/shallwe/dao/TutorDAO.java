@@ -2,6 +2,7 @@ package com.shallwe.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -10,6 +11,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.shallwe.exception.FindException;
+import com.shallwe.exception.ModifyException;
 import com.shallwe.vo.Tutor;
 
 @Repository(value = "TutorDAO")
@@ -38,4 +40,13 @@ public class TutorDAO {
 		return tutorList;
 	}
 	// 강사 승인/반려(admin) : 준식
+	public void updateTutorState(Map<String, String> map) throws ModifyException{
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			session.update("TutorMapper.updateTutorState", map);
+		}catch(DataAccessException e) {
+			throw new ModifyException();
+		}
+	}
 }

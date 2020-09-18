@@ -1,7 +1,9 @@
 package com.shallwe.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.shallwe.dao.LectureDetailDAO;
 import com.shallwe.dao.TutorDAO;
 import com.shallwe.exception.FindException;
+import com.shallwe.exception.ModifyException;
 import com.shallwe.model.AdminLectureListBean;
 import com.shallwe.model.AdminPreTutorBean;
 import com.shallwe.vo.LectureDetail;
@@ -34,7 +37,8 @@ public class AdminService {
 	}
 	
 	/**
-	 * 
+	 * 예비 강사 목록 보여주기
+	 * @author jun6
 	 */
 	public List<AdminPreTutorBean> showAllPreTutor() throws FindException{
 		List<AdminPreTutorBean> tutorBeanList = new ArrayList<>();
@@ -56,5 +60,22 @@ public class AdminService {
 		}
 		
 		return tutorBeanList;
+	}
+	
+	/**
+	 * 예비강사 승인/반려
+	 * @param id
+	 * @param status
+	 * @throws ModifyException
+	 */
+	public void approvePreTutor(String id, String status) throws ModifyException{
+		Map<String, String> map = new HashMap<>();
+		map.put("id", id);
+		map.put("status", status);
+		tutorDAO.updateTutorState(map);
+		
+		if(!status.equals("승인")){
+			// email로 반려 사유보내주기
+		}
 	}
 }

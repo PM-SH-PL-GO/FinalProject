@@ -18,16 +18,16 @@
 	        
 	  <c:forEach items="${preTutorList}" var="pt" varStatus="stats">
 	      <tr>
-	          <td>${stats.count}</td>                                              <!-- 순서 -->
-	          <td><img src="${contextPath}/tutorImages/${pt.img}"></td>      		 <!-- 강사 사진 -->
-	          <td>${pt.id}</td>													 <!-- 강사의 회원 아이디 -->
-	          <td>${pt.name}</td>													 <!-- 강사 이름 --> 
-	          <td>${pt.nickname }</td>											 <!-- 강사 별명 -->
-	          <td>${pt.category}</td>												 <!-- 전문 분야 -->		
-	          <td>${pt.score}</td>												 <!-- 강사 점수 -->		
-	          <td><a class="modal_show">상세정보 보기</a></td>                   <!-- 이력서, 자기소개, 소개link를 따로 보여주는 tutorDetail.jsp를 만들예정-->
-	          <td><button class="tutor_approve" value="${pt.id }">승인</button></td>
-	          <td><button class="tutor_return">반려</button></td>
+	          <td>${stats.count}</td>                                              		<!-- 순서 -->
+	          <td><img src="${contextPath}/tutorImages/${pt.img}"></td>      		 	<!-- 강사 사진 -->
+	          <td>${pt.id}</td>													 		<!-- 강사의 회원 아이디 -->
+	          <td>${pt.name}</td>													 	<!-- 강사 이름 --> 
+	          <td>${pt.nickname }</td>											 		<!-- 강사 별명 -->
+	          <td>${pt.category}</td>													<!-- 전문 분야 -->		
+	          <td>${pt.score}</td>												 		<!-- 강사 점수 -->		
+	          <td><a class="modal_show">상세정보 보기</a></td>                   			<!-- 이력서, 자기소개, 소개link를 따로 보여주는 tutorDetail.jsp를 만들예정-->
+	          <td><button class="tutor_status" value="${pt.id }">승인</button></td>
+	          <td><button class="tutor_status" value="${pt.id }">반려</button></td>
 	      </tr>
 	      <div class="modal_slot">
 	      	<div class="modal_content">
