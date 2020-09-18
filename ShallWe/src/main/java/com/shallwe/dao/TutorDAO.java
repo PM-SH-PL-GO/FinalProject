@@ -39,15 +39,4 @@ public class TutorDAO {
 		
 		return tutorList;
 	}
-	
-	// 강사 승인/반려(admin) : 준식
-	public void updateTutorState(Map<String, String> map) throws ModifyException{
-		SqlSession session = null;
-		try {
-			session = sqlSessionFactory.openSession();
-			session.update("TutorMapper.updateTutorState", map);
-		}catch(DataAccessException e) {
-			throw new ModifyException();
-		}
-	}
 }
