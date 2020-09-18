@@ -31,26 +31,23 @@ public class EmailController {
 	
 	//이메일 아이디 찾기 : 경찬
 	@RequestMapping(value="/idEmailCheck",method = RequestMethod.POST)
-	public ModelAndView newPassword(@RequestParam Map<String, Object> member, ModelMap model){
+	public ModelAndView idCheck(@RequestParam Map<String, Object> member, ModelMap model){
 		
 		ModelAndView modelAndView = new ModelAndView();
 		
 		String member_email = (String)member.get("member_email");
 		String member_name =(String) member.get("member_name");
 		
-		System.out.println("멤버이메일:" + member_email);
-		System.out.println("멤버이름:"+ member_name);
 		
 		try {
 			
 			String checkId = service.memberIdCheck(member);
-			log.info("컨트롤러:" + checkId);
 		
 			if (checkId != null) {
 				
 				email.setContent("아이디는" + checkId + " 입니다");
 				email.setReceiver(member_email);
-				email.setSubject(checkId+"님 비밀번호 찾기 메일입니다.");
+				email.setSubject(member_name+"님 비밀번호 찾기 메일입니다.");
 				emailSender.SendEmail(email);
 				
 				modelAndView.setViewName("/success");
@@ -67,4 +64,36 @@ public class EmailController {
 	}
 	
 	//이메일 비밀번호 찾기:경찬
+	@RequestMapping(value="pwdEmailCheck",method= RequestMethod.POST)
+	public ModelAndView pwdCheck(@RequestParam Map<String,Object>member,ModelMap model) {
+		
+		ModelAndView modelAndView = new ModelAndView();
+		String member_name = (String)member.get("member_name");
+		String member_email = (String)member.get("member_email");
+		
+		try {
+			String pwdCheck = service.memberpwdCheck(member);
+			if (pwdCheck != null) {
+				
+				email.setContent("찾으시는비밀번호는" + pwdCheck + " 입니다");
+				email.setReceiver(member_email);
+				email.setSubject(member_name+"님 비밀번호 찾기 메일입니다.");
+				emailSender.SendEmail(email);
+				
+				modelAndView.setViewName("/success");
+				
+				
+			}
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			modelAndView.setViewName("/fail");
+			modelAndView.addObject("errorMsg",e.getMessage());
+		}
+		
+		return modelAndView;
+		
+		
+		
+	}
 }
