@@ -23,12 +23,12 @@
 		</association>
 	</resultMap>
 
-<!-- jun6 : 예비강사 list 출력 -->
-	<select id="selectAllPreTutor" resultMap="tutor">
+<!-- jun6 : 예비/전체 강사 list 출력 -->
+	<select id="selectAllTutor" parameterType="String" resultMap="tutor">
 		SELECT *
 		FROM tutor tu
 		    JOIN member me ON (tu.tutor_id = me.member_id)
-		WHERE me.tutor_YN = 'N'
+		WHERE me.tutor_YN = #{YN}
 	</select>
 	
 </mapper>

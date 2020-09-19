@@ -19,7 +19,7 @@ public class StudyReplyDAO {
 	@Autowired
 	SqlSessionFactory sqlSessionFactory;
 	// 해당 게시글 댓글 전체조회 
-	public List<StudyReply> selectAll(Map<String, Integer> map) {
+	public List<StudyReply> selectAll(Map<String, Object> map) {
 		SqlSession session = sqlSessionFactory.openSession();
 		List<StudyReply> list = session.selectList("StudyReplyMapper.selectAll", map);
 		session.close();
@@ -29,7 +29,7 @@ public class StudyReplyDAO {
 	public void insert(StudyReply reply) throws AddException {
 		SqlSession session = sqlSessionFactory.openSession();	
 		try {
-		session.selectOne("StudyReplyMapper.insert", reply);
+		session.insert("StudyReplyMapper.insert", reply);
 		}catch (Exception e) {
 			throw new AddException("댓글 작성에 실패했습니다.");
 		}finally {
@@ -40,16 +40,16 @@ public class StudyReplyDAO {
 	public void update(StudyReply reply) throws ModifyException {
 		SqlSession session = sqlSessionFactory.openSession();	
 		try {
-		session.selectOne("StudyReplyMapper.update", reply);
+		session.update("StudyReplyMapper.update", reply);
 		}catch (Exception e) {
 			throw new ModifyException("댓글 수정에 실패했습니다.");
 		}
 	}
 	// 댓글 삭제
-	public void delete(StudyReply reply) throws RemoteException {
+	public void delete(int reply_id) throws RemoteException {
 		SqlSession session = sqlSessionFactory.openSession();	
 		try {
-		session.selectOne("StudyReplyMapper.delete", reply);
+		session.selectOne("StudyReplyMapper.delete", reply_id);
 		}catch (Exception e) {
 			throw new RemoteException("댓글 삭제에 실패했습니다.");
 		}

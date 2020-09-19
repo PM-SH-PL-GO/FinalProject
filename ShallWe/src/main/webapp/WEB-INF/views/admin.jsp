@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <title>ShallWe Admin</title>
     <link rel="stylesheet" href="/shallwe/assets/css/admin_style.css">
+    <link rel="stylesheet" href="/shallwe/assets/css/faq.css">
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
@@ -32,7 +33,7 @@
             //---------------------------------------------------------------
 
             // 메인화면 변수 잡기
-            let $cont = $(".content");
+            let $cont = $(".contents");
             
             // 회원목록 선택시
             $(".member").on("click", function(){
@@ -62,8 +63,6 @@
                 return false;
             });
             
-            
-
             // 강사목록 선택시
             $(".tutor-list").on("click", function(){
                 $.ajax({
@@ -79,7 +78,7 @@
             });
             
             // 강의목록 선택시
-            $(".lecture").on("click", function(){
+            $(".lecture-list").on("click", function(){
                 $.ajax({
                     url: "${contextPath}/admin/lectureList",
                     method: "GET",
@@ -91,9 +90,47 @@
 
                 return false;
             });
-			
             
-            //FAQ
+            // 예비강사 승인/반려 버튼
+            $cont.on("click", ".tutor_status", function(){
+            	alert("후회~ 하고 있어요~");
+            	
+            	let $tatus = $(this).html();
+            	let approve = $(this).attr('value');
+            	
+            	console.log(approve + " : " + $tatus);
+            	
+            	$.ajax({
+            		url: "${contextPath}/admin/status/" + approve,
+            		method: "PATCH",
+            		data: {status : $tatus},
+            		success: function(data){
+            			
+            		}
+            	});
+            	return null;
+            });
+            
+            
+            // modal 보이기
+            $cont.on("click", ".modal_show", function(){
+            	let $lot = $(this).parents(".table").siblings(".modal_slot");
+            	$lot.attr("style", "display:block");
+            	
+            	return null;
+            });
+            
+            // modal 숨기기
+            $cont.on("click", ".modal_close", function(){
+            	let $lot = $(this).parents(".modal_slot");
+            	$lot.attr("style", "display:none");
+            	
+            	return null;
+            });
+            
+			
+/***************************설정하기***************************/            
+            // FAQ 조회
             $(".faq").on("click", function(){
             	$.ajax({
             		url: "${contextPath}/admin/faq",
@@ -108,33 +145,31 @@
 	            return false;
             });
             
-            // 예비강사 승인 버튼
-            $(".tutor_approve").on("click", function(){
-            	let approve = $(this).attr('value');
-            	
+            // FAQ 추가
+            $cont.on("click", ".faq_insert", function(){
             	$.ajax({
-            		url: "${contextPath}/admin/approve/" + approve,
-            		method: "PATCH",
-            		data: {status : 'approve'},
-            		success: function(data){
+            		url:"",
+            		method:"POST",
+            		data: {},
+            		success: function(){
             			
             		}
             	});
-            	return null;
+            	
+            	return false;
+            });
+            
+            // FAQ 수정
+            $cont.on("click", ".faq_change", function(){
+            	
+            });
+            
+            // FAQ 삭제
+			$cont.on("click", ".faq_delete", function(){
+            	
             });
             
             
-            // modal 보이기
-            $(".modal_show").on("click", function(){
-            	let $lot = $(this).parent().siblings(".modal_slot");
-            	$lot.attr("stlye", "display:block");
-            });
-            
-            // modal 숨기기
-            $(".modal_close").on("click", function(){
-            	let $lot = $(this).parent(".modal_slot");
-            	$lot.attr("style", "display:none");
-            });
         });
     </script>
   </head>
@@ -171,12 +206,12 @@
                     <span class="fas fa-caret-down third"></span>
                 </a>
                 <ul class="tog">
-                    <li><a href="#" class="lecture">강의목록</a></li>
+                    <li><a href="#" class="lecture-list">강의목록</a></li>
                 </ul>
               </li>
 
               <li>
-              	<a href="#" class="atag config"><i class="fas fa-cog"></i>설정
+              	<a href="#" class="a-btn config"><i class="fas fa-cog"></i>설정
               		<span class="fas fa-caret-down forth"></span>
               	</a>
               	<ul class="tog">
@@ -186,7 +221,7 @@
           </ul>
       </nav>
 
-      <div class="content">
+      <div class="contents">
       </div>
   </body>
 </html>

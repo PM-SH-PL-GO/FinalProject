@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
+import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureDetail;
 
 @Repository(value = "lectureDetailDAO")
@@ -44,6 +45,22 @@ public class LectureDetailDAO {
 		}
 	}
 
+	// 강의 상세 보기 : 동일
+			public LectureDetail lectureDetailView(Lecture lect) throws FindException {
+				LectureDetail le = null;
+				SqlSession session = null;
+				try {
+					session = sqlSessionFactory.openSession();
+					le = session.selectOne("LectureDetailMapper.lectureDetailView", lect);
+				} catch (DataAccessException e) {
+					throw new FindException("조회 과정에 오류가 있습니다.");
+				}
+
+				if (le == null)
+					throw new FindException("조회 결과가 없습니다.");
+
+				return le;
+			}
 	/**
 	 * admin - 강의 전체 조회
 	 * 
