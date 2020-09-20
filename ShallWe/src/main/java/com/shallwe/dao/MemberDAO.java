@@ -1,5 +1,6 @@
 package com.shallwe.dao;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,18 +84,71 @@ public class MemberDAO {
 	}
 	
 	//이메일수정 : 상하
-	void updateEmail(String memberId, String memberEmail)throws ModifyException{
+	public void updateEmail(String memberId, String memberEmail)throws ModifyException{
+		SqlSession session=null;
+		Map<String,String>memEmail = new HashMap<String, String>();
+		memEmail.put("memberId", memberId);
+		memEmail.put("memberEmail", memberEmail);
+		
+		int i = 0;
+		try {
+			session = sqlSessionFactory.openSession();
+			i = session.update("MemberMapper.updateEmail", memEmail);
+			if(i==0) {
+				throw new ModifyException("이메일 수정에 실패하였습니다");
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw new ModifyException(e.getMessage());
+		}finally {
+			session.close();
+		}
 		
 	}
 	
 	//핸드폰번호수정 :상하
-	void updatePhone(String memberId, String memberPhone)throws ModifyException{
+	public void updatePhone(String memberId, String memberPhone)throws ModifyException{
+		SqlSession session=null;
+		Map<String,String>memPhone = new HashMap<String,String>();
+		memPhone.put("memberId", memberId);
+		memPhone.put("memberPhone", memberPhone);
 		
+		int i = 0;
+		try {
+			session = sqlSessionFactory.openSession();
+			i = session.update("MemberMapper.updatePhone", memPhone);
+			if(i==0) {
+				throw new ModifyException("핸드폰번호 수정에 실패하였습니다.");
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new ModifyException(e.getMessage());
+		}finally {
+			session.close();
+		}
 	}
 	
 	//선호카테고리 수정: 상하
-	void updateFavorites(String memberId, List<LectureCategory> favorite_list)throws ModifyException{
-		
+	public void updateFavorites(String memberId, List<LectureCategory> favoritelist)throws ModifyException{
+		SqlSession session = null;
+		Map<String, Object>memFav = new HashMap<String, Object>();
+		memFav.put(memberId, favoritelist);
+		System.out.println("이건 멤바아이디,카테고리"+memberId+","+favoritelist);
+		System.out.println("이건 멤페브다 " + memFav);
+		int i = 0;
+		try {
+			session = sqlSessionFactory.openSession();
+			i = session.update("MemberMapper.updateFavorites", memFav);
+			if(i==0) {
+				throw new ModifyException("카테고리 수정에 실패하였습니다.");
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			throw new ModifyException(e.getMessage());
+		}finally {
+			session.close();
+		}
+	
 	}
 
 	
