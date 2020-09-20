@@ -55,6 +55,18 @@
 	<update id="updatePassword" parameterType="Map">
 	UPDATE member set member_pwd = #{memberPwd} where member_id = #{memberId}
 	</update>
+	<update id="updateEmail" parameterType="Map">
+	UPDATE member set member_email = #{memberEmail} where member_id = #{memberId}
+	</update>
+	<update id="updatePhone" parameterType="Map">
+	UPDATE member set member_phone = #{memberPhone} where member_id = #{memberId}
+	</update>
+	<update id="updateFavorites" parameterType="Map">
+	UPDATE member set member_favorite1 = #{favorite1.lecture_category_id}, 
+					  member_favorite2 = #{favorite2.lecture_category_id},
+					  member_favorite3 = #{favorite3.lecture_category_id} 
+	WHERE member_id = #{memberId}
+	</update>
 	
 	<insert id="joinMember" parameterType="MemberInfoBean">
 	INSERT INTO member(member_id, member_pwd, member_name, member_email, member_phone, member_favorite1, member_favorite2, member_favorite3, member_sex, tutor_yn)

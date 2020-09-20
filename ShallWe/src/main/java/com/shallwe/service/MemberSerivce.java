@@ -35,22 +35,12 @@ public class MemberSerivce {
 		return memberDao.IdCheck(member);
 	
 	}
-
-	private MemberDAO dao;
-	
-	@Autowired
-	@Qualifier(value="memberDAO")
-	public MemberDAO getDao() {
-		return dao;
+	//내 정보 보기:상하 
+	public MemberInfoBean findById(String memberId)throws FindException{ 
+		return memberDao.selectById(memberId);
 	}
-
-	public void setDao(MemberDAO dao) {
-		this.dao = dao;
-	}
-	public MemberInfoBean findById(String memberId)throws FindException{ //상하 : 내 정보 보기 
-		return dao.selectById(memberId);
-	}
-	public void updatePwd(String memberId, String memberPassword)throws ModifyException {
-		dao.updatePassword(memberId, memberPassword);
+	//비밀번호 수정(로그인 된 상태): 상하 
+	public void updatePwd(String memberId, String memberPassword)throws ModifyException { //
+		memberDao.updatePassword(memberId, memberPassword);
 	}
 }
