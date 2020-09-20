@@ -132,9 +132,18 @@ public class MemberDAO {
 	public void updateFavorites(String memberId, List<LectureCategory> favoritelist)throws ModifyException{
 		SqlSession session = null;
 		Map<String, Object>memFav = new HashMap<String, Object>();
-		memFav.put(memberId, favoritelist);
-		System.out.println("이건 멤바아이디,카테고리"+memberId+","+favoritelist);
-		System.out.println("이건 멤페브다 " + memFav);
+//		memFav.put(memberId, favoritelist);
+//		System.out.println("이건 멤바아이디,카테고리"+memberId+","+favoritelist);
+//		System.out.println("이건 멤페브다 " + memFav);
+		
+		// 고수정이 추가
+		memFav.put("memberId", memberId);
+		memFav.put("favorite1", favoritelist.get(0));
+		memFav.put("favorite2", favoritelist.get(1) );
+		memFav.put("favorite3", favoritelist.get(2) );
+		
+		
+		System.out.println("수정쓰가 찍습니다 : " + memFav);
 		int i = 0;
 		try {
 			session = sqlSessionFactory.openSession();
