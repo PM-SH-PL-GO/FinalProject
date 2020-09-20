@@ -87,12 +87,7 @@ public class LectureDAO {
 		try {
 			session = sqlSessionFactory.openSession();
 			List<Lecture> lecutureList = new ArrayList<>();
-			
 			lecutureList = session.selectList("LectureMapper.selectLectureListBySearch", map);
-
-			if (lecutureList.size() == 0) {
-				throw new FindException("강의 검색 결과가 없습니다.");
-			}
 			return lecutureList;
 
 		} catch (Exception e) {

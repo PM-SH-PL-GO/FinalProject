@@ -34,8 +34,6 @@ public class LectureService {
 		
 		try { 
 			list = lectureDAO.selectLectureListBySearch(map);
-//			ObjectMapper mapper = new ObjectMapper();
-//			String jsonString = mapper.writeValueAsString(list);
 			
 			modelAndView.addObject("list", list);
 			modelAndView.addObject("status","success");
@@ -43,8 +41,6 @@ public class LectureService {
 		} catch (FindException e) {
 			modelAndView.addObject("status","fail");
 			modelAndView.addObject("errMsg",e.getMessage());
-//		} catch (JsonProcessingException e) {
-//			e.printStackTrace();
 		}
 
 		return modelAndView;
