@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shallwe.dao.LectureDAO;
+import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
+import com.shallwe.exception.ModifyException;
 import com.shallwe.vo.Lecture;
 
 
@@ -45,4 +45,49 @@ public class LectureService {
 
 		return modelAndView;
 	}
+	/**
+	 * 강의신청 후 결제 
+	 * @author Soojeong
+	 * @param map
+	 * @return
+	 * @throws AddException
+	 */
+	public ModelAndView insertMemberLectureHistory (HashMap<String,Object> map) throws AddException {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		try { 
+			lectureDAO.insertMemberLectureHistory(map);
+			modelAndView.addObject("status","success");
+			
+		} catch (AddException e) {
+			modelAndView.addObject("status","fail");
+			modelAndView.addObject("errMsg",e.getMessage());
+		}
+		
+		return modelAndView;
+	}
+	/**
+	 * 강의결제취소
+	 * @author Soojeong
+	 * @param map
+	 * @return
+	 * @throws ModifyException
+	 */
+	public ModelAndView updateMemberLectureHistory (HashMap<String,Object> map) throws ModifyException {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		try { 
+			lectureDAO.updateMemberLectureHistory(map);
+			modelAndView.addObject("status","success");
+			
+		} catch (ModifyException e) {
+			modelAndView.addObject("status","fail");
+			modelAndView.addObject("errMsg",e.getMessage());
+		}
+		
+		return modelAndView;
+	}
+	
+	
+	
 }
