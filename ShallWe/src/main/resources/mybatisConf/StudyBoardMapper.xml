@@ -14,7 +14,7 @@
 		select *
 		from (select rownum r, a.*
 		        from (select *
-		              from studyboard
+		              from studyboard sb join member m on(sb.STUDYBOARD_MEMBER_ID = m.member_id)
 		              ORDER BY STUDYBOARD_ID DESC) a
 		        )b
 		WHERE r BETWEEN #{startRow} AND #{endRow}
