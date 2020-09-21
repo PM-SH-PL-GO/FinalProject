@@ -1,8 +1,8 @@
 package com.shallwe.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -13,9 +13,11 @@ import org.springframework.stereotype.Repository;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
-import com.shallwe.model.LectureSearchBean;
 import com.shallwe.vo.Lecture;
 
+import lombok.extern.log4j.Log4j;
+
+@Log4j
 @Repository(value = "lectureDAO")
 public class LectureDAO {
 	@Autowired
@@ -80,17 +82,12 @@ public class LectureDAO {
 	 * @return
 	 * @throws FindException
 	 */
-	public List<LectureSearchBean> selectLectureListBySearch(Map map) throws FindException {
+	public List<Lecture> selectLectureListBySearch(HashMap<String, Object> map) throws FindException {
 		SqlSession session = null;
 		try {
 			session = sqlSessionFactory.openSession();
-			List<LectureSearchBean> lecutureList = new ArrayList<>();
-
+			List<Lecture> lecutureList = new ArrayList<>();
 			lecutureList = session.selectList("LectureMapper.selectLectureListBySearch", map);
-
-			if (lecutureList.size() == 0) {
-				throw new FindException("강의 검색 결과가 없습니다.");
-			}
 			return lecutureList;
 
 		} catch (Exception e) {

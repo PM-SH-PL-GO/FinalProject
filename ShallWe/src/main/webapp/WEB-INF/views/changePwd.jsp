@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-   <title>ID CHECK</title>
+   <title>ChangePassowrd</title>
    <link href='https://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
    <script
   src="https://code.jquery.com/jquery-3.5.1.min.js"
@@ -23,14 +23,17 @@
 body {
   font-family: 'Nunito', sans-serif;
   color: #384047;
+ 
 }
 
 form {
+
   max-width: 300px;
-  margin: 10px auto;
+  margin: 130px auto;
   padding: 10px 20px;
   background: #f4f7f8;
   border-radius: 8px;
+ 
 }
 
 h1 {
@@ -136,66 +139,76 @@ label.light {
 <script>
 $(function(){
 	
-	$('.resume').on('click', function() {
+/* 	$('.resume').on('click', function() {
 	    var $this = $(this);
 	  $this.button('loading');
 	    setTimeout(function() {
 	       $this.button('reset');
 	   }, 2000);
-	});
+	}); */
 
 	
-	let $msgId = $("span.idR")
+	let $msgId = $("span.idR");
+	let $msgId1 = $("span.PhoneR"); 
+	let $msgId2 = $("span.pwdR"); 
+	
+
 	let idR = /^([a-z0-9_]){4,16}$/;
-	let phoneR = /^((01[1|6|7|8|9])[1-9]+[0-9]{6,7})|(010[1-9][0-9]{7})$/;
+	let telR =/^01([0|1|6|7|8|9])?([0-9]{3,4})?([0-9]{4})$/;
 
 	$("button#load2").click(function(){
 		
 			let $pwdVal = $("input#password").val();
 			let $idVal = $("input#insertId").val();
-			let $phoneVal = $("phoneNumber").val();
+			let $phoneVal = $("input#phoneNumber").val();
+			let $temporary = $("input#temporary").val();
 			
 			if(idR.test($idVal) == false){
 				$("input#insertId").select();
 				$msgId.show();
 				
-			} else if(phoneR.test() == false) {
-
+			} else if(telR.test($phoneVal) == false) {
+				$("input#phoneNumber").select();
+				let $msgId1 = $("span.PhoneR"); 
 				
 			} else {
-
-				let today = new Date(); 
-				let year = today.getFullYear(); // 년도
-				let month = today.getMonth() + 1;  // 월
-				let date = today.getDate();  // 날짜  
 				
+				let today = new Date();   
+
 				$.ajax({
 
-					url:"/shallw/member/changePassword"
-				   ,method: 'POST'
-					   
+					url:"/shallwe/member/changePassword"
+				   ,method: 'POST'   
  				   ,data:{member_id:$idVal,
  				   		  member_pwd:$pwdVal,
- 				   		  member_phone:$phoneVal}
-		   		  
+ 				   		  member_phone:$phoneVal,
+ 				   		  member_temporary:$temporary}
+		   		  	
 				   ,success:function(data){
-					   
+					   console.log(data)
 					   let responseObj = JSON.parse(data);
 					   if(responseObj.status == 'success'){
 						   
-						   let pwdCheck = confirm("비밀번호를 변경하시겠습니까?");
+						   let pwdCheck = confirm(today.toLocaleDateString() + " 기준으로 비밀번호를 변경하시겠습니까?");
 						   
-						   if(pwdCheck == true){
+						 
+						   } else if(pwdCheck == true){
 
-							   document.write(year + '/' + month + '/' + date + " 비밀번호가 변경되었습니다");
+							   alert("비밀번호가변경되었습니다");
 							   location.href = "/shallwe/userLogin";
-						   }
-						   else if(pwdCheck == false){
-							   alert("비밀번호가 변경되지 않았습니다");
-							   e.preventDefault();
-						   }
 						   
-						   }
+						   } else if(pwdCheck == false){
+							   
+							   alert("비밀번호가 변경되지 않았습니다");
+							   location.reload();
+							   e.preventDefault();
+							   
+						   } else {
+
+							   alert("정보가 일치하지 않습니다");
+							   
+							   }
+						   
 					   }
 
 					});
@@ -203,31 +216,30 @@ $(function(){
 				}
 		});
 
-	
-
-	
 });
 
 </script>  
     </head>
-    
-    
-    
+	<jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include> 
     <body>
       <form action="changePassword" method="post">
         <h1>Password</h1>
     
         <fieldset>
-          <label for="name">ID:</label>
+          <label for="name">아이디:</label>
            <span hidden="hidden" class="idR" style="color: red; font-size: 0.8em;"><i>아아디가올바르지 않습니다.</i></span>
           <input type="text" id="insertId" name="idCheck" placeholder="ex)홍길동">
           
-           <label for="name">PHONE:</label>
-           <span hidden="hidden" class="phon" style="color: red; font-size: 0.8em;"><i>핸드폰번호를 올바르게 입력해주세요</i></span>
+           <label for="name">핸드폰:</label>
+           <span hidden="hidden" class="PhoneR" style="color: red; font-size: 0.8em;"><i>핸드폰번호를 올바르게 입력해주세요</i></span>
           <input type="text" id="phoneNumber" name="phoneCheck"placeholder="'-'추가해서 입력해주세요">
           
-          <label for="password">Password:</label>
-          <span hidden="hidden" class="mailR" style="color: red; font-size: 0.8em;"><i>비밀번호를 다시 입력해주세요</i></span>
+           <label for="password">임시비밀번호:</label>
+          <span hidden="hidden" class="pwdR" style="color: red; font-size: 0.8em;"><i>비밀번호를 다시 입력해주세요</i></span>
+          <input type="password" id="temporary" name="temporary">
+          
+          <label for="password">변경할번호:</label>
+          <span hidden="hidden" class="pwdR" style="color: red; font-size: 0.8em;"><i>비밀번호를 다시 입력해주세요</i></span>
           <input type="password" id="password" name="changePasswrod">
         </fieldset>
           <div style="margin:3em;">

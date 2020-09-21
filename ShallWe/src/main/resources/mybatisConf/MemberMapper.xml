@@ -18,20 +18,25 @@
 
 	</select>
 	
-	<select id="pwdCheck" parameterType="java.util.HashMap" resultType="String">
-	
+	 <select id="pwdCheck" parameterType="java.util.HashMap" resultType="String">
 		SELECT MEMBER_PWD
 		FROM MEMBER
 		WHERE MEMBER_NAME = #{member_name} AND MEMBER_EMAIL = #{member_email}
-	
 	</select>
 	
-	<update id="pwdUpdate" parameterType="java.util.HashMap">
+	<update id="randomPassword" parameterType="java.util.HashMap">
 	
 		UPDATE MEMBER
-		SET MEMBER_PWD = #{MEMBER_PWD}
-		WHERE MEMBER_ID = #{MEMBER_ID} AND MEMBER_PHONE = #{MEMBER_PHONE}
+		SET MEMBER_PWD = #{member_pwd}
+		WHERE MEMBER_NAME = #{member_name} AND MEMBER_EMAIL = #{member_email}
 	
+	</update>
+	
+	
+	 <update id="pwdUpdate" parameterType="java.util.HashMap">
+		UPDATE MEMBER
+		SET MEMBER_PWD = #{member_pwd}
+		WHERE MEMBER_ID = #{member_id} AND MEMBER_PHONE = #{member_phone} AND MEMBER_PWD = #{member_pwd}
 	</update>
 
 
@@ -70,6 +75,18 @@
 	
 	<update id="updatePassword" parameterType="Map">
 	UPDATE member set member_pwd = #{memberPwd} where member_id = #{memberId}
+	</update>
+	<update id="updateEmail" parameterType="Map">
+	UPDATE member set member_email = #{memberEmail} where member_id = #{memberId}
+	</update>
+	<update id="updatePhone" parameterType="Map">
+	UPDATE member set member_phone = #{memberPhone} where member_id = #{memberId}
+	</update>
+	<update id="updateFavorites" parameterType="Map">
+	UPDATE member set member_favorite1 = #{favorite1.lecture_category_id}, 
+					  member_favorite2 = #{favorite2.lecture_category_id},
+					  member_favorite3 = #{favorite3.lecture_category_id} 
+	WHERE member_id = #{memberId}
 	</update>
 	
 	<insert id="joinMember" parameterType="MemberInfoBean">

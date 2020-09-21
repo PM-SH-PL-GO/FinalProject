@@ -10,50 +10,58 @@
 		WHERE LECTURE_ID = #{lecture_id}
 	</update>
 
-	<resultMap id="searchLectureList" type="LectureSearchBean"
-		autoMapping="true">
-		<id property="lecture_id" column="lecture_id" />
-		<id property="lecture_img" column="lecture_img" />
-		<id property="lecture_title" column="lecture_title" />
-		<id property="lecture_start_dt" column="lecture_start_dt" />
-		<id property="lecture_end_dt" column="lecture_end_dt" />
-		<id property="lecture_max" column="lecture_max" />
-		<id property="lecture_current" column="lecture_current" />
-		<association property="tutor" javaType="tutor"
-			autoMapping="true">
-			<id property="tutor_score" column="tutor_score" />
-			<id property="lecture_category_name"
-				column="lecture_category_name" />
+	<resultMap id="LectureSearchMap" type="Lecture" autoMapping="true">
+			<id property="lecture_id" column="lecture_id" />
+			<id property="lecture_img" column="lecture_img" />
+			<id property="lecture_title" column="lecture_title" />
+			<id property="lecture_price" column="lecture_price" />
+			<id property="lecture_state" column="lecture_state" />
+			<id property="lecture_start_dt" column="lecture_start_dt" />
+			<id property="lecture_end_dt" column="lecture_end_dt" />
+			<id property="lecture_max" column="lecture_max" />
+			<id property="lecture_min" column="lecture_min" />
+			<id property="lecture_current" column="lecture_current" />
+		<association property="lectureCategory" javaType="LectureCategory" autoMapping="true">
+			<id property="lecture_category_id" column="category_id" />
+			<id property="lecture_category_name" column="category_name" />
 		</association>
-		<association property="lectureCategory"
-			javaType="lectureCategory" autoMapping="true">
-			<id property="lecture_category_id" column="lecture_category_id" />
-			<id property="lecture_category_name"
-				column="lecture_category_name" />
+		<association property="tutor" javaType="Tutor" autoMapping="true">
+			<id property="tutor_nickname" column="tutor_nickname" />
+			<id property="tutor_score" column="tutor_score" />
 		</association>
 	</resultMap>
 
 	<!-- lecture 검색 -->
-	<select id="selectLectureListBySearch"
-		parameterType="java.util.HashMap" resultType="LectureSearchBean">
-		SELECT lec.lecture_id lecture_id , lec.lecture_category_id
-		lecture_category_id, lec.lecture_tutor_id lecture_tutor_id ,
-		lecture_title, lecture_price, lec.lecture_start_dt lecture_start_dt,
-		lec.lecture_end_dt lecture_end_dt, tutor_score FROM LECTURE lec
-		JOIN
-		TUTOR tut ON (lec.LECTURE_CATEGORY_ID = tut.TUTOR_CATEGORY_ID AND
-		lec.LECTURE_TUTOR_ID = tut.TUTOR_ID)
-		JOIN LECTURE_CATEGORY lecc ON
-		(tut.TUTOR_CATEGORY_ID= lecc.CATEGORY_ID)
-		JOIN LECTURE_DETAIL lecd ON
-		(lec.lecture_id = lecd.LECTURE_ID AND
-		lec.LECTURE_CATEGORY_ID =
-		lecd.LECTURE_CATEGORY_ID)
-		WHERE LECTURE_TUTOR_ID LIKE
-		'%#{lecture_tutor_id}%'
-		<!-- AND LECTURE_TITLE LIKE '%#{lecture_title}%' -->
-		<!-- AND CATEGORY_NAME LIKE '%#{category_name}%' -->
-		<!-- AND LECTURE_CURRICULUM LIKE '%%' -->
+	<select id="selectLectureListBySearch"  parameterType="hashMap" resultMap="LectureSearchMap">
+			SELECT 
+			    lec.lecture_id, lecture_img, lecture_title, lecture_price, lecture_price, lecture_state
+			    , lecture_start_dt, lecture_end_dt, lecture_max, lecture_min, lecture_current
+			    , lecc.category_id, lecc.category_name
+			    , tutor_nickname, tutor_score
+			FROM LECTURE lec 
+			        JOIN TUTOR tut ON (lec.LECTURE_CATEGORY_ID = tut.TUTOR_CATEGORY_ID AND lec.LECTURE_TUTOR_ID = tut.TUTOR_ID)
+			        JOIN LECTURE_CATEGORY lecc ON (tut.TUTOR_CATEGORY_ID= lecc.CATEGORY_ID)
+			        JOIN LECTURE_DETAIL lecd ON (lec.lecture_id = lecd.LECTURE_ID AND lec.LECTURE_CATEGORY_ID = lecd.LECTURE_CATEGORY_ID)
+			WHERE lec.LECTURE_STATE = '승인'
+				AND ( 
+					<choose>
+						<when test="searchKey == 'all'">
+							TUTOR_NICKNAME LIKE '%' || #{searchText} || '%'
+					 		OR LECTURE_TITLE LIKE '%' || #{searchText} || '%'
+					 		OR CATEGORY_NAME LIKE '%' || #{searchText} || '%'
+						</when>
+						<when test="searchKey == 'tutor_name'">
+							TUTOR_NICKNAME LIKE '%' || #{searchText} || '%'
+						</when>
+						<when test="searchKey == 'lecture_title'">
+					 		LECTURE_TITLE LIKE '%' || #{searchText} || '%'
+						</when>
+						<when test="searchKey == 'category'">
+					 		CATEGORY_NAME LIKE '%' || #{searchText} || '%'
+						</when>
+					</choose>
+				)	
+			    	
 	</select>
 
 	<resultMap type="Lecture" id="lectResultMap"

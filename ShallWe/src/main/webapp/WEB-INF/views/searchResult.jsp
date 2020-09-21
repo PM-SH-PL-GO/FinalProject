@@ -27,52 +27,60 @@
 <style>
 .left_menu {
 	float: left;
-	width: 30%
+	width: 30%;
 }
 
 .left_menu_result {
 	text-align: center;
 }
 .right_menu { 
-		float : right;
+		float : center;
+		width: 70%;
 }
 </style>
 <!-- script area -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 	$(document).ready(function() {
+		
+		//검색 입력 left_menu
 		var $searchTextObj = $("section.left_menu").find("input#searchText");
+		var $searchKeyObj = $("section.left_menu").find("select#searchKey");
 		var $searchBtnObj = $("button#searchBtn");
-		var $condition ="";
-		var $searchContent ="";
+		var condition ="";
+		var $searchText ="";
 
 		$searchTextObj.focus();
-		$searchCondition.change(function(e) {
+		$searchKeyObj.change(function(e) {
 			condition = $(this).val();
 		});
 		
-		console.log(condition);
+		
+		
+		//right_menu - 검색결과값 출력부
+		var $rightAreaObj = $("section.right_menu").find("div.container");
+		
 		
 		// 검색하기 earchTextObj 검색어 찾기
 		$searchBtnObj.click(function(e) {
-			$searchContent = $searchTextObj.val();
-			
+			$searchText = $searchTextObj.val();
+			console.log($searchText);
+			console.log(condition);
+			$rightAreaObj.empty();
 			// 검색조건에 따른 검색 요청
 			$.ajax ({
-				url : ""
+				url : "/shallwe/search"
 				, method : "POST"
-				, data : { "searchCondition" : $condition , "searchContent" : $searchContent }
-				, success : function () {
-					alert("검색 요청 성공!");
+				, data : { "searchKey" : condition , "searchText" : $searchText }
+				, success : function (responseData) {
+					/* console.log(responseData); */
+					$rightAreaObj.append(responseData);
 				}
 			}); //end of ajax
 			
 		});
 		
 
-		
-		
-		
 		//강의상세화면으로 이동
 		var $lectureCard = $("section.right_menu > div.container> div.row").find("div.col");
 		console.log($lectureCard);
@@ -89,54 +97,11 @@
 </script>
 </head>
 <body>
-	<header>
-		<!-- Header Start -->
-		<div class="header-area header-transparent">
-			<div class="main-header header-sticky">
-				<div class="container-fluid">
-					<div
-						class="menu-wrapper d-flex align-items-center justify-content-between">
-						<!-- Logo -->
-						<div class="logo">
-							<a href="index.html"><img src="assets/img/logo/logo.png"
-								alt=""></a>
-						</div>
-						<!-- Main-menu -->
-						<div class="main-menu f-right d-none d-lg-block">
-							<nav>
-								<ul id="navigation">
-									<li><a href="index.html">Home</a></li>
-									<li><a href="listing.html">Catagories</a></li>
-									<li><a href="#">Pages</a>
-										<ul class="submenu">
-											<li><a href="directory_details.html">listing Details</a></li>
-											<li><a href="listing.html">Catagories</a></li>
-										</ul></li>
-									<li><a href="blog.html">Blog</a>
-										<ul class="submenu">
-											<li><a href="blog.html">Blog</a></li>
-											<li><a href="blog_details.html">Blog Details</a></li>
-											<li><a href="elements.html">Elements</a></li>
-										</ul></li>
-									<li><a href="contact.html">Contact</a></li>
-								</ul>
-							</nav>
-						</div>
-						<!-- Header-btn -->
-						<div class="header-btns d-none d-lg-block f-right">
-							<a href="#" class="mr-40"><i class="ti-user"></i> Log in</a> <a
-								href="#" class="btn">Add Listing</a>
-						</div>
-						<!-- Mobile Menu -->
-						<div class="col-12">
-							<div class="mobile_menu d-block d-lg-none"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- Header End -->
-	</header>
+    <!-- topbar Start -->
+	<div class="topMenu">
+		<jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
+	</div>
+    <!-- topbar End -->
 	<main>
 		<!--? Hero Start -->
 		<div class="slider-area2">
@@ -146,7 +111,7 @@
 					<div class="row">
 						<div class="col-xl-12">
 							<div class="hero-cap2 pt-20 text-center">
-								<h2>Element</h2>
+								<h2>강의 카테고리 검색 결과</h2>
 							</div>
 						</div>
 					</div>
@@ -161,12 +126,13 @@
 					<aside class="single_sidebar_widget search_widget">
 						<form action="#" class="form-select  mb-100">
 							<div>
-								<select class="nice-select" id="searchCondition">
+								<!-- searchKey = {"all", "tutor_name", "lecture_title" , "category" }; -->
+								<select class="nice-select" id="searchKey">
 									<option value="0" class="option">검색조건</option>
-									<option value="all" class="option">전체 검색</option>
-									<option value="region" class="option">지역 검색</option>
-									<option value="tutor_name" class="option">강사 이름</option>
-									<option value="lecture_title" class="option">강의명</option>
+									<option value="0" class="option">전체 검색</option>
+									<option value="1" class="option">강사 이름</option>
+									<option value="2" class="option">강의명</option>
+									<option value="3" class="option">카테고리명</option>
 								</select>
 							</div>
 							<div class="form-group">
@@ -184,7 +150,6 @@
 				</div>
 
 				<div class="left_menu_result">
-					<p>"모임" 에 대한 결과 10건이 조회되었습니다.</p>
 				</div>
 
 				<div class="category-img text-center">
@@ -209,88 +174,9 @@
 			</div>
 		</section>
 
-		<!--  -->
+		<!--검색결과 : searchLectureList.jsp   -->
 		<section class="right_menu section-padding">
 			<div class="container">
-				<div class="row">
-					<!-- single start -->
-					<div class="col">
-						<div class="properties pb-20">
-							<div class="properties__card">
-								<a href="#"><img src="/shallwe/assets/img/gallery/properties3.png" alt=""></a><br/><br/>
-								<div class="properties__caption">
-									<h3>
-										<a href="#">강의 제목</a>
-									</h3>
-									<h6>2020-08-30 ~ 2020-08-30</h6>
-									<h6>강사 이름</h6>
-									<h6>현재인원: 3 / 최대인원: 15</h6>
-									<input type="hidden" name="lecture_code" value="1"/>
-								</div>
-								<div
-									class="properties__footer d-flex justify-content-between align-items-center">
-									<div class="restaurant-name">
-										<h3>10,000원</h3>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- single end -->
-					<!-- single start -->
-					<div class="col">
-						<div class="properties pb-20">
-							<div class="properties__card">
-								<a href="#"><img
-									src="/shallwe/assets/img/gallery/properties3.png" alt=""></a>
-								<br /> <br />
-								<div class="properties__caption">
-									<h3>
-										<a href="#">강의 제목</a>
-									</h3>
-									<h6>2020-08-30 ~ 2020-08-30</h6>
-									<h6>강사 이름</h6>
-									<h6>현재인원: 3 / 최대인원: 15</h6>
-									<input type="hidden" name="lecture_code" value="2"/>
-								</div>
-								<div
-									class="properties__footer d-flex justify-content-between align-items-center">
-									<div class="restaurant-name">
-										<h3>10,000원</h3>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- single end -->
-					<!-- single start -->
-					<div class="col">
-						<div class="properties pb-20">
-							<div class="properties__card">
-								<a href="#"><img
-									src="/shallwe/assets/img/gallery/properties3.png" alt=""></a>
-								<br /> <br />
-								<div class="properties__caption">
-									<h3>
-										<a href="#">강의 제목</a>
-									</h3>
-									<h6>2020-08-30 ~ 2020-08-30</h6>
-									<h6>강사 이름</h6>
-									<h6>현재인원: 3 / 최대인원: 15</h6>
-									<input type="hidden" name="lecture_code" value="3"/>
-								</div>
-								<div
-									class="properties__footer d-flex justify-content-between align-items-center">
-									<div class="restaurant-name">
-										<h3>10,000원</h3>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- single end -->
-				</div>
-				<!-- section right end -->
 			</div>
 		</section>
 	</main>
