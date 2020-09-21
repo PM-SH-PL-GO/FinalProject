@@ -13,13 +13,14 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
-import com.shallwe.model.AdminPreTutorBean;
 //import com.shallwe.model.FaqBean;
 import com.shallwe.service.AdminService;
+import com.shallwe.vo.Faq;
 import com.shallwe.vo.Tutor;
 
 @Controller
@@ -33,7 +34,6 @@ public class AdminController {
 		System.out.println("Admin Index");
 	}
 	
-
 	@RequestMapping(value = "/preTutor")
 	public ModelAndView preTutor() {
 		ModelAndView mnv = new ModelAndView();
@@ -70,7 +70,8 @@ public class AdminController {
 	 * @return
 	 */
 	@PatchMapping(value = "/status/{tutorId}")
-	public ResponseEntity<String> statusChange(@PathVariable(value = "tutorId")String id, String status){
+	public ResponseEntity<String> statusChange(@PathVariable(value = "tutorId")String id, @RequestParam(name="status") String status){
+		System.out.println("/////////////////////////////////"+ id + " : " + status + "/////////////////////////////////");
 		try{
 			adminService.approvePreTutor(id, status);
 			return (ResponseEntity<String>) ResponseEntity.status(HttpStatus.OK).body("정상적으로 설정되었습니다");
@@ -97,11 +98,21 @@ public class AdminController {
 	
 	/**
 	 * FAQ 조회
-	 * @return ResponseEntity<List<Faq>>
+	 * @author jun6
+	 * @return faq 전체 목록
 	 */
-//	@RequestMapping(value = "/faq")
-//	public ResponseEntity<FaqBean> faq() {
-//		
-//		return null;
-//	}
+	@RequestMapping(value = "/faq")
+	public ModelAndView faq() {
+		ModelAndView mnv = new ModelAndView();
+		List<Faq> faqList = new ArrayList<>();
+		try {
+			faqList = adminService.showAllFaq();
+			mnv.addObject("faqList", faqList);
+			mnv.setViewName("/adminFaq");
+		}catch(FindException e) {
+			e.printStackTrace();
+		}
+		
+		return mnv;
+	}
 }

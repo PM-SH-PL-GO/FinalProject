@@ -7,11 +7,12 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.shallwe.dao.LectureDetailDAO;
+import com.shallwe.dao.FaqDAO;
 import com.shallwe.dao.MemberDAO;
 import com.shallwe.dao.TutorDAO;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
+import com.shallwe.vo.Faq;
 import com.shallwe.vo.Tutor;
 
 @Service(value = "adminService")
@@ -19,7 +20,7 @@ public class AdminService {
 	@Autowired
 	private TutorDAO tutorDAO;
 	@Autowired
-	private LectureDetailDAO lectureDetailDAO;
+	private FaqDAO faqDAO;
 	@Autowired
 	private MemberDAO memberDAO;
 	
@@ -41,11 +42,16 @@ public class AdminService {
 		Map<String, String> map = new HashMap<>();
 		map.put("id", id);
 		map.put("status", status);
-		tutorDAO.updateTutorState(map);
+		memberDAO.updateTutorState(map);
 		
 		if(!status.equals("승인")){
 			// email로 반려 사유보내주기
 		}
+	}
+	
+	
+	public List<Faq> showAllFaq() throws FindException{
+		return faqDAO.selectAll();
 	}
 	
 }

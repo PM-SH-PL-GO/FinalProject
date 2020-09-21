@@ -16,6 +16,8 @@ import com.shallwe.dao.StudyBoardDAO;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
+import com.shallwe.model.BoardPageBean;
+import com.shallwe.service.BoardService;
 import com.shallwe.vo.Member;
 import com.shallwe.vo.StudyBoard;
 
@@ -29,31 +31,37 @@ import lombok.extern.log4j.Log4j;
 public class StudyBoardTest {
 	@Autowired
 	StudyBoardDAO dao;
+	@Autowired
+	BoardService boardService;
 		
 //	@Test
 	@DisplayName("게시글 호출")
 	void selectAll() throws FindException {
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("startRow", 1);
-		map.put("endRow", 4);
-		List<StudyBoard> list = dao.selectAll(map);
-//		System.out.println(list);
-		for(StudyBoard b : list) {
-			System.out.println("board=" +b);
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		map.put("startRow", 1);
+//		map.put("endRow", 4);
+//		List<StudyBoard> list = dao.selectAll(map);
+//		for(StudyBoard b : list) {
+//			System.out.println("board=" +b);
+//		}
+		BoardPageBean<StudyBoard> slist = new BoardPageBean<StudyBoard>();
+		slist = boardService.findAll(2);
+		for(StudyBoard s : slist.getList()) {
+			System.out.println("게시글 조회="+s);
 		}
 	}
 	
 //	@Test
 	@DisplayName("제목+내용 검색")
 	void selectByTitleAndContent() throws FindException {
-		Map<String, Object> map = new HashMap<String, Object>();
-		String toc = "%제목2%";
-		map.put("titleOrContent", toc);
-		map.put("startRow", 1);
-		map.put("endRow", 10);
-		List<StudyBoard> list = dao.selectByTitleAndContent(map);
-		for(StudyBoard s : list)
-		System.out.println("검색내용:"+s);
+		String toc = "%제목%";
+//		List<StudyBoard> list = dao.selectByTitleAndContent(toc);
+//		System.out.println("리스트 사이즈 :"+list.size());
+//		for(StudyBoard s : list)
+//		System.out.println("검색내용:"+s);
+		
+		BoardPageBean<StudyBoard> bpb = boardService.search(toc, 1);
+		System.out.println("보드페이지빈="+bpb);
 	}
 	
 //	@Test
@@ -64,10 +72,12 @@ public class StudyBoardTest {
 		Member member = new Member();
 		member.setMember_id("member1");
 		studyboard.setStudy_m(member);
-		studyboard.setStudyBoard_content("제목 : 2다시성운test");
-		studyboard.setStudyBoard_title("내용 : 2성운test");
-		studyboard.setStudyBoard_fileName("2성운.jpg");
-		dao.insert(studyboard);
+		studyboard.setStudyBoard_content("제목 : 3다시성운test");
+		studyboard.setStudyBoard_title("내용 : 3성운test");
+		studyboard.setStudyBoard_fileName("3성운.jpg");
+//		dao.insert(studyboard);
+		boardService.writeBoard(studyboard);
+		
 	}
 	
 //	@Test
@@ -76,15 +86,16 @@ public class StudyBoardTest {
 		StudyBoard studyboard = new StudyBoard();
 		Member member = new Member();
 		member.setMember_id("member1");		
-		studyboard.setStudyBoard_id(8);
+		studyboard.setStudyBoard_id(9);
 		studyboard.setStudy_m(member);
-		studyboard.setStudyBoard_content("제목 : 정말다시성운test");
+		studyboard.setStudyBoard_content("제목 : 정말정말다시성운test");
 		studyboard.setStudyBoard_title("내용 : 성운test");
 		studyboard.setStudyBoard_fileName("성운.jpg");
-		dao.update(studyboard);		
+//		dao.update(studyboard);		
+		boardService.updateBoard(studyboard);
 	}
 	
-	@Test
+//	@Test
 	@DisplayName("게시글 삭제")
 	void delete() throws RemoteException {
 		StudyBoard studyboard = new StudyBoard();
@@ -100,9 +111,14 @@ public class StudyBoardTest {
 	}
 	
 //	@Test
-	@DisplayName("조회수 증가")
-	void insertViews() {
-		dao.insertViews(3);
+//	@DisplayName("조회수 증가")
+//	void insertViews() {
+//		dao.insertViews(3);
+//	}
+	
+	@Test
+	void selectByNo() throws FindException {
+		dao.selectByNo(1);
 	}
 	
 }

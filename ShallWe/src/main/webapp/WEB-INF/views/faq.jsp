@@ -30,65 +30,9 @@
 <link rel="stylesheet" href="/shallwe/assets/css/slick.css">
 <link rel="stylesheet" href="/shallwe/assets/css/nice-select.css">
 <link rel="stylesheet" href="/shallwe/assets/css/style.css">
-<style>
-/** 목록 스타일 초기화 및 중앙 배치, 가로 폭 지정 */
-ul {
-	padding: 0;
-	margin: 50px auto;
-	list-style: none;
-	width: 800px;
-}
 
-/** 제목 영역의 초기화 처리 */
-.title {
-	padding: 0;
-	margin: 0;
-/* 	border: 1px solid #000; */
-}
-
-/** 링크의 클릭 영역 확대 및 배경 및 폰트 처리 */
-.title>a {
-	display: block;
-	padding: 2px;
-	font-size: 14px;
-	font-weight: bold;
-	text-indent: 12px;
-	text-decoration: none;
-	color: white;
-	height: 32px;
-	line-height: 32px;
-	background: #8f8f8f;
-	border-radius: 5px;
-	-webkit-border-radius: 5px;
-	/*그라디언트 지정*/
-	background: linear-gradient(top, #cecece 0%, #8f8f8f 100%);
-	background: -moz-linear-gradient(top, #cecece, #8f8f8f);
-	background: -webkit-gradient(linear, left top, left bottom, from(#cecece),
-		to(#8f8f8f));
-}
-
-/** 현재 활성화된 요소에 적용할 배경이미지 지정 */
-.selected {
-	background: #2288dd !important;
-	color: #fff !important;
-	/*그라디언트 지정*/
-	background: linear-gradient(top, #6bb2ff 0%, #2288dd 100%) !important;
-	background: -moz-linear-gradient(top, #6bb2ff, #2288dd) !important;
-	background: -webkit-gradient(linear, left top, left bottom, from(#00dbd5),
-		to(#009994)) !important;
-}
-
-/** 내용 영역 */
-.content {
-	margin: 0;
-	background: #D4D0C8;
-	padding: 10px;
-	height: 200px;
-	overflow-y: auto;
-	border-radius: 5px;
-	-webkit-border-radius: 5px;
-}
-</style>
+<!-- faq용 css 추가 -->
+<link rel="stylesheet" href="/shallwe/assets/css/faq.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
@@ -143,7 +87,7 @@ ul {
 	<!-- Preloader Start -->
 	<header> </header>
 	<main>
-		<ul>
+		<ul class="faq_ul">
 			<li class="collapsible">
 				<h2 class="title">
 					<a href="#html5">[서비스 소개] shallwe는 어떻게 이용하나요?</a>

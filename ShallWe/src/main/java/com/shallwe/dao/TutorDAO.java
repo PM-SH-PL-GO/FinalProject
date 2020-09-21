@@ -29,7 +29,7 @@ public class TutorDAO {
 		SqlSession session = null;
 		try {
 			session = sqlSessionFactory.openSession();
-			tutorList = session.selectList("TutorMapper.selectAllPreTutor", YN);
+			tutorList = session.selectList("TutorMapper.selectAllTutor", YN);
 		}catch(DataAccessException e) {
 			throw new FindException("검색 과정에 오류가 있습니다");
 		}
@@ -38,16 +38,5 @@ public class TutorDAO {
 			throw new FindException("검색 결과가 없습니다");
 		
 		return tutorList;
-	}
-	
-	// 강사 승인/반려(admin) : 준식
-	public void updateTutorState(Map<String, String> map) throws ModifyException{
-		SqlSession session = null;
-		try {
-			session = sqlSessionFactory.openSession();
-			session.update("TutorMapper.updateTutorState", map);
-		}catch(DataAccessException e) {
-			throw new ModifyException();
-		}
 	}
 }
