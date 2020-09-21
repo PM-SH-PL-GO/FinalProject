@@ -17,17 +17,17 @@
 	        
 	  <c:forEach items="${preTutorList}" var="pt" varStatus="stats">
 	      <tr>
-	          <td>${stats.count}</td>                                              		<!-- 순서 -->
-	          <td><img src="${contextPath}/tutorImages/${pt.tutor_img}"></td>      		 	<!-- 강사 사진 -->
+	          <td>${stats.count}</td>                                              						<!-- 순서 -->
+	          <td><img src="${contextPath}/tutorImages/${pt.tutor_img}"></td>      		 				<!-- 강사 사진 -->
 	          <td>${pt.member.member_id}</td>													 		<!-- 강사의 회원 아이디 -->
-	          <td>${pt.member.member_name}</td>													 	<!-- 강사 이름 --> 
-	          <td>${pt.tutor_nickname }</td>											 		<!-- 강사 별명 -->
-	          <td>${pt.lecture_category.lecture_category_name}</td>													<!-- 전문 분야 -->		
-	          <td><button class="modal_show">상세정보 보기</button></td>                   	<!-- 이력서, 자기소개, 소개link를 따로 보여주는 tutorDetail.jsp를 만들예정-->
+	          <td>${pt.member.member_name}</td>													 		<!-- 강사 이름 --> 
+	          <td>${pt.tutor_nickname }</td>											 				<!-- 강사 별명 -->
+	          <td>${pt.lecture_category.lecture_category_name}</td>										<!-- 전문 분야 -->		
+	          <td><button class="modal_show" value="tutor${stats.count}">상세정보 보기</button></td>		<!-- 이력서, 자기소개, 소개link를 따로 보여주는 tutorDetail.jsp를 만들예정-->
 	          <td><button class="tutor_status" value="${pt.member.member_id }">승인</button></td>
 	          <td><button class="tutor_status" value="${pt.member.member_id }">반려</button></td>
 	      </tr>
-	      <div class="modal_slot">
+	      <div class="modal_slot tutor${stats.count}">
 	      	<div class="modal_content">
 	      		<h3>${pt.tutor_nickname} 강사의 세부정보</h3>
 	      		<hr>
