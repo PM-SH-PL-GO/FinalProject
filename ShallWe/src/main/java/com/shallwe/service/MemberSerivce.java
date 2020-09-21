@@ -41,21 +41,31 @@ public class MemberSerivce {
 		return memberDao.pwdCheck(member);
 	}
 
-	private MemberDAO dao;
-	
-	@Autowired
-	@Qualifier(value="memberDAO")
-	public MemberDAO getDao() {
-		return dao;
-	}
-
 	public void setDao(MemberDAO dao) {
-		this.dao = dao;
+		
+		this.memberDao = dao;
 	}
+	
 	public MemberInfoBean findById(String memberId)throws FindException{ //상하 : 내 정보 보기 
-		return dao.selectById(memberId);
+		
+		return memberDao.selectById(memberId);
 	}
+	
 	public void updatePwd(String memberId, String memberPassword)throws ModifyException {
-		dao.updatePassword(memberId, memberPassword);
+		
+		memberDao.updatePassword(memberId, memberPassword);
 	}
+	
+	//멤버비밀번호변경(로그인x):경찬
+	public void changePwd(Map<String,Object> member)throws ModifyException{
+	
+			memberDao.changePwd(member);
+	}
+	//비밀번호(임시비밀번호)
+	public void randomPassword(Map<String,Object>member1,Member member)throws ModifyException{
+		memberDao.randomPassword(member1,member);
+		
+	}
+		
 }
+	

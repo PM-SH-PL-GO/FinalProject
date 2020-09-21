@@ -18,20 +18,25 @@
 
 	</select>
 	
-	<select id="pwdCheck" parameterType="java.util.HashMap" resultType="String">
-	
+	 <select id="pwdCheck" parameterType="java.util.HashMap" resultType="String">
 		SELECT MEMBER_PWD
 		FROM MEMBER
 		WHERE MEMBER_NAME = #{member_name} AND MEMBER_EMAIL = #{member_email}
-	
 	</select>
 	
-	<update id="pwdUpdate" parameterType="java.util.HashMap">
+	<update id="randomPassword" parameterType="java.util.HashMap">
 	
 		UPDATE MEMBER
-		SET MEMBER_PWD = #{MEMBER_PWD}
-		WHERE MEMBER_ID = #{MEMBER_ID} AND MEMBER_PHONE = #{MEMBER_PHONE}
+		SET MEMBER_PWD = #{member_pwd}
+		WHERE MEMBER_NAME = #{member_name} AND MEMBER_EMAIL = #{member_email}
 	
+	</update>
+	
+	
+	 <update id="pwdUpdate" parameterType="java.util.HashMap">
+		UPDATE MEMBER
+		SET MEMBER_PWD = #{member_pwd}
+		WHERE MEMBER_ID = #{member_id} AND MEMBER_PHONE = #{member_phone} AND MEMBER_PWD = #{member_pwd}
 	</update>
 
 

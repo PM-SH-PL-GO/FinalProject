@@ -365,12 +365,12 @@ input.submit {
 		 
 // 		 비밀번호 찾기
 		 
-		 $("input#forPassword").click(function(){
+		 $("input#Password").click(function(){
 			 
 			 let $idValCheck = $("input#idInsert").val();
 		     let $mailCheck = $("input#emailInsert").val();
 		     
-			 //아이디 유효성검사
+		
 			 if($("input#idInsert").val()==""){
 				
 				 $("span#one_id").slideDown(2000);
@@ -415,9 +415,34 @@ input.submit {
 				      }	   
 
 				   });
- 
 				 }
 		 });
+
+
+		 $("input#RandomPassword").click(function(){
+			 let $idValCheck = $("input#idInsert").val();
+		     let $mailCheck = $("input#emailInsert").val();
+		     
+		     $.ajax({
+					
+					url:"/shallwe/email/randomPwd"
+				   ,method:'POST'
+				   ,data:{member_name:$idValCheck,member_email:$mailCheck}
+				   ,success:function(data){
+						let responseObj = JSON.parse(data)
+						console.log(data);
+						if(responseObj.status == 'success'){
+							 
+									alert("임시비밀번호가 발급되었습니다");
+								
+								
+						}else{
+	
+							alert("정보를 다시 입력해주세요");
+					}
+			      }	   
+			   });
+			 });
 
 
 //아이디 찾기 페이지 이동
@@ -471,12 +496,6 @@ input.submit {
 					<input class="submit" value="ID CHECK" type="submit" id ="idCheck">
 				</div>
 				
-			<!-- 	<hr> -->
-				
-			<!-- 	<a href="https://www.grandvincent-marion.fr/" target="_blank" class="forgot"><h4>Forgot password?</h4></a>
-				
-				<a href="https://www.grandvincent-marion.fr/" target="_blank"class="forgot"><h4>ID CHECK</h4></a> -->
-				
 			</div>
 			
 			<div class="enregistrer active-section">
@@ -490,10 +509,11 @@ input.submit {
 					<input placeholder="" type="text" id="emailInsert"><span hidden="hidden" id="one_email">Email must be filled out!</span>
 					<div class="check">
 						
-					</div>
-					<input class="submit" value="Password Check" type="submit" id="forPassword">	
-						
 				</div>
+					<input class="submit" value="RandomPassword" type="submit" id="RandomPassword">	
+				</div>
+					<input class="submit" value="Password Check" type="submit" id="Password">
+					
 			
 			</div>
 	</div>

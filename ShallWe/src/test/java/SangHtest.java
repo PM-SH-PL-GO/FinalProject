@@ -27,6 +27,7 @@ public class SangHtest {
 	
 	@Test
 	public void Join() {
+		
 		String memberId ="dms";
 		String memberPwd ="22352";
 		String memberName ="점보맘보";
@@ -76,6 +77,7 @@ public class SangHtest {
 	
 //	@Test
 	public void updatePassword() {
+		
 		String memberId = "member1";
 		String memberPwd= "yalayalayalasyeong3";
 		try {

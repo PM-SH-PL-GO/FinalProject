@@ -135,10 +135,18 @@ public class MemberDAO {
 		return session.selectOne("MemberMapper.pwdCheck",member);
 		
 	}
+	//멤버 비밀번호 변경(로그인x): 경찬
 	public void changePwd(Map<String,Object> member)throws ModifyException{
 		SqlSession session = null;
 		session = sqlSessionFactory.openSession();
-		session.selectOne("MemberMapper.changePwd",member);
+		session.selectOne("MemberMapper.pwdUpdate",member);
 	
+	}
+	//비밀번호(임시비밀번호):경찬
+	public void randomPassword(Map<String,Object>member1 , Member member) {
+		SqlSession session = null;
+		member1.put("member", member);
+		session = sqlSessionFactory.openSession();
+		session.selectOne("MemberMapper.randomPassword",member);
 	}
 }
