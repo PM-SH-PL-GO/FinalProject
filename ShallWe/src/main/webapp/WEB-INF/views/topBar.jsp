@@ -61,16 +61,15 @@ background : #00dbd5;
 $(function(){
 
 	$("a#login").click(function(){
-
 		location.href = "/shallwe/userLogin";
-		
 		});
+});
 
-	
+$(function(){
 
-
-	
-	
+	$("#tutorBtn").click(function(){
+		location.href = "/shallwe/instructor";
+		});
 });
 
 
@@ -111,7 +110,7 @@ $(function(){
 					<div class="menu-wrapper d-flex align-items-center justify-content-between" style="float: right; margin-right: 100px">
 						<!-- Header-btn -->
 						<div class="header-btns d-none d-lg-block f-right">
-							<a href="#" class="btn">전문가 등록</a>
+							<a href="#" class="btn" id="tutorBtn">전문가 등록</a>
 							<!--                             <a href="#" class="mr-40"><i class="ti-user"></i></a> -->
 						</div>
 						<div class="main-menu f-right d-none d-lg-block ">
