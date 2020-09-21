@@ -100,8 +100,12 @@ public class StudyBoardDAO {
 	//게시글 수 조회 : 성운
 	public int selectCount() {
 		SqlSession session = sqlSessionFactory.openSession();
-		int selectcount = session.selectOne("StudyBoardMapper.selectCount");
-		return selectcount;
+		try {
+			int selectcount = session.selectOne("StudyBoardMapper.selectCount");
+			return selectcount;
+		}finally {
+			session.close();	
+		}
 	}
 	
 	//조회수 삽입 : 성운
