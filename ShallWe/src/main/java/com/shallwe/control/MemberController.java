@@ -30,7 +30,6 @@ public class MemberController {
 	public ModelAndView memberLogin(HttpSession session, @RequestParam(value="member_id")String member_id,
 														 @RequestParam(value="member_pwd")String member_pwd
 												   ) {
-		
 		ModelAndView modelAndView = new ModelAndView();
 		
 		try {

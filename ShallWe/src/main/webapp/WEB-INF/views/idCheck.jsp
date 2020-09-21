@@ -31,6 +31,7 @@ form {
   padding: 10px 20px;
   background: #f4f7f8;
   border-radius: 8px;
+  margin-top: 120px;
 }
 
 h1 {
@@ -187,11 +188,9 @@ $(function(){
 
 </script>  
     </head>
-    
-    
-    
     <body>
       <form action="idEmailCheck" method="post">
+      <jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
         <h1>ID CHECK</h1>
         
         <fieldset>	
