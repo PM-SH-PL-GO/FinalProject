@@ -22,6 +22,7 @@ public class BoardService {
 	StudyBoardDAO studyBoardDAO;
 	
 	/**
+	 * 게시글 전체조회
 	 * @author 박성운
 	 * @param 페이지 번호
 	 * @return 페이지 번호에 해당하는 게시글
@@ -52,6 +53,7 @@ public class BoardService {
 	}
 	
 	/**
+	 * 게시글 검색(제목or내용)
 	 * @author 박성운
 	 * @param 검색내용
 	 * @return 검색된 게시글(페이징)
@@ -78,6 +80,7 @@ public class BoardService {
 	}
 	
 	/**
+	 * 게시글 번호로 검색
 	 * @author 박성운
 	 * @param 게시글 번호
 	 * @return 게시글 번호에 해당하는 게시글
@@ -89,6 +92,7 @@ public class BoardService {
 	}
 	
 	/**
+	 * 게시글 작성
 	 * @author 박성운
 	 * @param 작성할 게시글
 	 * @return 
@@ -100,6 +104,7 @@ public class BoardService {
 	}
 	
 	/**
+	 * 게시글 변경
 	 * @author 박성운
 	 * @param 변경할 게시글
 	 * @return 
@@ -110,6 +115,7 @@ public class BoardService {
 	}
 	
 	/**
+	 * 게시글 삭제
 	 * @author 박성운
 	 * @param 삭제할 게시글 번호
 	 * @return 
@@ -120,6 +126,7 @@ public class BoardService {
 	}
 
 	/**
+	 * 게시글 보기
 	 * @author 박성운
 	 * @param 게시글 번호
 	 * @return 번호로 조회된 게시글
