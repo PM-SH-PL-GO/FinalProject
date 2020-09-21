@@ -145,15 +145,12 @@ nav ul li a span.rotate{
 
 .table th{
     text-align: center;
-    font-size: 24px;
+    font-size: 18px;
 }
 
 .table td{
     text-align: center;
-    font-size: 20px;
-/*     max-height: 10%; */
-    height: 20px;
-    width: 20px;
+    font-size: 15px;
 }
 .table td img{
     height: 80px;
@@ -168,7 +165,7 @@ nav ul li a span.rotate{
 	z-index: 1;
 }
 
-.modeal_slot .modal_layer{
+.modal_slot .modal_close{
 	display: inline-block;
 	width: 100%;
 	margin-left: calc(100% - 100px - 10px);
@@ -192,7 +189,35 @@ nav ul li a span.rotate{
 	z-index: -1;
 }
 
-.modal_slot .modal_content p{
-	
+.lecture-list {
+	display: none;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+}
+
+.lecture-list .lecture-close{
+	display: inline-block;
+	width: 100%;
+	margin-left: calc(100% - 100px - 10px);
+}
+
+.lecture-list .lecture-content{
+	width: 500px;
+	margin: 100px auto;
+	padding: 20px 10px;
+	background: #fff;
+	border: 2px solid #666;
+}
+
+.lecture-list .lecture-layer{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: -1;
 }
     
