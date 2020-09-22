@@ -35,64 +35,89 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 </head>
 <script>
-	$(function() {
-		$('#insertBtn').on("click", function() {
-			let lectureTitleValue = $("#lectureTitle").val();
-			let lectureIntroValue = $("#lectureIntro").val();
-			let curiculumValue = $("#curiculum").val();
-			var select_city_value = function (select_city_obj){
-				var select_city = select_city_obj.selectedIndex;
-				var selected_city_value = select_city_obj.options[select_city].value;
-			};
-			var select_town_value = function (select_town_obj){
-				var select_town = select_town_obj.selectedIndex;
-				var selected_town_value = select_town_obj.options[select_town].value;
-			};
-			let locationValue = $("#location").val() + &nbsp; + select_city_value + &nbsp; + select_town_value;
-			let firstDateValue = $("#firstDate").val();
-			let lastDateValue = $("#lastDate").val();
-			let pMinValue = $("#pMin").val();
-			let pMaxValue = $("#pMax").val();
-			let preparedValue = $("#prepared").val();
-			let cautionValue = $("#caution").val();
-			let priceValue = $("price").val();
-			if (lectureTitleValue == "") {
-				alert("제목을 입력하세요.");
-				$("lectureTitleValue").focus();
-			} else if (lectureIntroValue == "") {
-				alert("강의 소개를 입력하세요.");
-				$("lectureIntroValue").focus();
-			} else {
-				$.ajax({
-					url : "/shallwe/Lectures/insert",
-					method : "POST",
-					data : {
-						'lecture.lecture_title' : lectureTitleValue
-						'lecture_introduce' : lectureIntroValue
-						'lecture_curriculum' : curiculumValue
-						'lecture_location' : locationValue
-						'lecture.lecture_start_dt' : firstDateValue
-						'lecture.lecture_end_dt' : lastDateValue
-						'lecture.lecture_min' : pMinValue
-						'lecture.lecture_max' : pMaxValue
-						'lecture_prepared' : preparedValue
-						'lecture_caution' : cautionValue
-						'lecture.lecture_price' : priceValue
-					},
-					success : function(data) {
-						let responseObj = JSON.parse(data);
-						if (responseObj.status == "success") {
-							alert("강의 등록이 정상적으로 되었습니다.");
-						} else {
-							alert("강의 등록에 실패했습니다.");
-							$("lectureTitleValue").focus();
-						}
-					}
-				});
-			}
+
+	$(function () {
+		$("#lectureImgFile").on('change', function () {
+			readURL(this);
 		});
 	});
+	function readURL(input) {
+		if (input.files && input.files[0]) {
+			var reader = new FileReader();
+			reader.onload = function (e) {
+				$('#preImage').attr('src', e.target.result);
+			}
+			reader.readAsDataURL(input.files[0]);
+		}
+	}
+	$(function () {
+		$('#insertBtn')
+			.on(
+				"click",
+				function () {
+					alert("insert click");
+					let lectureTitleValue = $("#lectureTitle").val();
+					let lectureIntroValue = $("#lectureIntro").val();
+					let curiculumValue = $("#curiculum").val();
+					let locationValue = $("input[name=lecture_location]").val();
+					let firstDateValue = $("#firstDate").val();
+					let lastDateValue = $("#lastDate").val();
+					let pMinValue = $("#pMin").val();
+					let pMaxValue = $("#pMax").val();
+					let preparedValue = $("#prepared").val();
+					let cautionValue = $("#caution").val();
+					let priceValue = $("#price").val();
+					let cateValue = $("#lectCate option:selected").val();
+					let lectureImgFileValue = $("#lectureImgFile").val();
+					alert(lectureImgFileValue);
+					if (lectureTitleValue == "") {
+						alert("제목을 입력하세요.");
+						$("lectureTitleValue").focus();
+					} else if (lectureIntroValue == "") {
+						alert("강의 소개를 입력하세요.");
+						$("lectureIntroValue").focus();
+					} else {
+						$
+							.ajax({
+								url: "/shallwe/Lectures/insert",
+								method: "POST",
+								data:
+								// 						$("#formLectureRegistration").serialize()
+								{
+									'lecture.lecture_title': lectureTitleValue,
+									'lecture_introduce': lectureIntroValue,
+									'lecture_curriculum': curiculumValue,
+									'lecture_location': locationValue,
+									'lecture.lecture_start_dt': firstDateValue,
+									'lecture.lecture_end_dt': lastDateValue,
+									'lecture.lecture_min': pMinValue,
+									'lecture.lecture_max': pMaxValue,
+									'lecture_prepared': preparedValue,
+									'lecture_caution': cautionValue,
+									'lecture.lecture_price': priceValue,
+									'lecture.lectureCategory.lecture_category_id': cateValue,
+									'lecture.tutor.member.member_id': 'member2',
+									'lecture.lecture_img': lectureImgFileValue,
+									'lecture.lecture_state': '승인대기'
+								},
+								success: function (data) {
+									let responseObj = JSON
+										.parse(data);
+									if (responseObj.status == "success") {
+										alert("강의 등록이 정상적으로 되었습니다.");
+									} else {
+										alert("강의 등록에 실패했습니다.");
+										$("lectureTitleValue")
+											.focus();
+									}
+								}
+							});
+						return false;
+					}
+				});
+	});
 </script>
+
 <body>
 	<main>
 		<!--? Start Align Area -->
@@ -102,115 +127,109 @@
 					<h3 class="mb-30">강의 등록</h3>
 					<div class="row">
 						<div class="col-md-12 mt-sm-20">
-							<form action="#">
-								<img src="assets/img/elements/d.jpg" alt=""
-									class="img-fluid d-block"> <input type="file"
-									name="lectureImg" value="사진 등록"
-									class="genric-btn primary-border mt-10">
+							<form id="formLectureRegistration"
+								${pageContext.request.contextPath}/updatetNoticePro.do"
+								method="post"
+								enctype="multipart/form-data" name="noticeForm">
+								<img id="preImage"
+									src="${pageContext.request.contextPath}/files/lecture/${noticeVO.lectureImgFile}"
+									alt="" class="img-fluid d-block"> 
+								<input type="file" id="lectureImgFile" name="lectureImg" class="mt-10">
 								<h6 class="mt-10">강의 제목</h6>
 								<div class="mt-10">
-									<input type="text" name="first_name" placeholder="몇글자 이내"
-										onfocus="this.placeholder = ''"
+									<input type="text" value="제목ㅎ" name="lecture.lecture_title"
+										placeholder="몇글자 이내" onfocus="this.placeholder = ''"
 										onblur="this.placeholder = '몇글자 이내'" required
 										class="single-input" id="lectureTitle">
 								</div>
 								<h6 class="mt-10">카테고리</h6>
-								<div class="form-select col-md-3 mt-10" id="default-select">
-									<select>
-										<option value="1">IT</option>
-										<option value="1">요리</option>
+								<div class="form-select col-md-3 mt-10">
+									<select id="lectCate"
+										name="lecture.lectureCategory.lecture_category_id">
+										<option value="IT">IT</option>
+										<option value="HO">취미</option>
+										<option value="SP" selected="selected">스포츠</option>
 									</select>
 								</div>
 								<h6 class="mt-10">강의 소개</h6>
 								<div class="mt-10">
 									<textarea class="single-textarea" id="lectureIntro"
-										style="height: 300px;" placeholder="몇글자 이내"
-										onfocus="this.placeholder = ''"
-										onblur="this.placeholder = '몇글자 이내'" required></textarea>
+										name="lecture_introduce" style="height: 300px;"
+										placeholder="몇글자 이내" onfocus="this.placeholder = ''"
+										onblur="this.placeholder = '몇글자 이내'" required>
+										강의 소개
+										</textarea>
 								</div>
 								<h6 class="mt-10">교육 과정</h6>
 								<div class="mt-10">
 									<textarea class="single-textarea" id="curiculum"
-										style="height: 300px;" placeholder="몇글자 이내"
-										onfocus="this.placeholder = ''"
-										onblur="this.placeholder = '몇글자 이내'" required></textarea>
+										name="lecture_curriculum" style="height: 300px;"
+										placeholder="몇글자 이내" onfocus="this.placeholder = ''"
+										onblur="this.placeholder = '몇글자 이내'" required>
+										교육과정
+										</textarea>
 								</div>
 								<h6 class="mt-10">강의 장소</h6>
 								<div class="input-group-icon d-flex mt-10">
 									<div class="icon">
 										<i class="fa fa-globe" aria-hidden="true"></i>
 									</div>
-									<div class="form-select col-md-3" id="default-select"
-										onchange="select_city_value">
-										<select>
-											<option value="1">서울</option>
-											<option value="2">경기도</option>
-										</select>
-									</div>
-									<div class="form-select col-md-3" id="default-select"
-										onchange="select_town_value">
-										<select>
-											<option value="1">강남구</option>
-											<option value="2">강동구</option>
-											<option value="3">안양</option>
-										</select>
-									</div>
-									<input type="text" name="first_name" placeholder="세부주소"
-										onfocus="this.placeholder = ''"
-										onblur="this.placeholder = '세부주소'" required
-										class="single-input col-md-6" id="location">
+									<input type="text" name="lecture_location" value="장소소"
+										placeholder="장소" onfocus="this.placeholder = ''"
+										onblur="this.placeholder = '장소'" required class="single-input">
 								</div>
 								<h6 class="mt-10">강의 날짜</h6>
 								<div class="d-flex mt-10">
 									<div class="d-block">
 										<h6 class="mt-10 col-md-5">시작일</h6>
-										<input type="date" name="first_date" class="single-input"
-											id="firstDate">
+										<input type="date" name="lecture.lecture_start_dt"
+											value="2020-09-22" class="single-input" id="firstDate">
 									</div>
 									<div class="col-md-1"></div>
 									<div class="d-block">
 										<h6 class="mt-10 col-md-5">종료일</h6>
-										<input type="date" name="last_date" class="single-input"
-											id="lastDate">
+										<input type="date" name="lecture.lecture_end_dt"
+											value="2020-10-10" class="single-input" id="lastDate">
 									</div>
 								</div>
 								<h6 class="mt-10">인원</h6>
 								<div class="d-flex mt-10">
-									<input type="text" name="first_name" id="pMin" placeholder="최소"
-										onfocus="this.placeholder = ''"
+									<input type="text" name="lecture.lecture_min" value="1"
+										id="pMin" placeholder="최소" onfocus="this.placeholder = ''"
 										onblur="this.placeholder = '최소'" required
 										class="single-input col-md-1 mr-10"> <input
-										type="text" name="first_name" id="pMax" placeholder="최대"
-										onfocus="this.placeholder = ''"
+										type="text" name="lecture.lecture_max" value="3" id="pMax"
+										placeholder="최대" onfocus="this.placeholder = ''"
 										onblur="this.placeholder = '최대'" required
 										class="single-input col-md-1">
 								</div>
 								<h6 class="mt-10">준비물</h6>
 								<div class="mt-10">
-									<input type="text" name="first_name" placeholder="몇글자 이내"
-										onfocus="this.placeholder = ''"
+									<input type="text" name="lecture_prepared" value="준비물"
+										placeholder="몇글자 이내" onfocus="this.placeholder = ''"
 										onblur="this.placeholder = '몇글자 이내'" required
 										class="single-input-primary" id="prepared">
 								</div>
 								<h6 class="mt-10">유의사항</h6>
 								<div class="mt-10">
-									<input type="text" name="first_name" placeholder="몇글자 이내"
-										onfocus="this.placeholder = ''"
+									<input type="text" name="lecture_caution" value="유의"
+										placeholder="몇글자 이내" onfocus="this.placeholder = ''"
 										onblur="this.placeholder = '몇글자 이내'" required
 										class="single-input-accent" id="caution">
 								</div>
 								<h6 class="mt-10">금액</h6>
 								<div class="mt-10 d-flex">
-									<input type="text" name="first_name" placeholder="10000"
-										onfocus="this.placeholder = ''"
+									<input type="text" name="lecture.lecture_price" value="10"
+										placeholder="10000" onfocus="this.placeholder = ''"
 										onblur="this.placeholder = '10000'" required
 										class="single-input-accent col-md-2" id="price">
 									<h5 class="mt-10">원</h5>
 								</div>
 								<a href="#" class="genric-btn primary-border mt-10">첨부파일등록</a>
 								<div class="mt-70">
-									<input type="submit" class="genric-btn primary-border" id="insertBtn" value="등록">
-									<input type="submit" class="genric-btn primary-border" id="updateBtn" value="수정">
+									<input type="button" class="genric-btn primary-border"
+										id="insertBtn" value="등록"> <input type="button"
+										class="genric-btn primary-border" id="updateBtn" value="수정">
 								</div>
 							</form>
 						</div>

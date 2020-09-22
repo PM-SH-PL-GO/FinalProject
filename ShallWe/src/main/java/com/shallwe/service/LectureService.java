@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.shallwe.dao.LectureDAO;
@@ -49,7 +50,8 @@ public class LectureService {
 
 		return modelAndView;
 	}
-
+	
+	@Transactional
 	public void insertLecture(Lecture lect, LectureDetail lectDe) throws AddException {
 		try {
 			lectureDAO.insert(lect);
