@@ -61,7 +61,14 @@ public class AdminService {
 		}
 	}
 	
-	public List<Lecture> ShowTutorLectureByTutorId(String tutor_id) throws FindException{
+	/**
+	 * 특정 강사의 강의 목록 가져오기
+	 * @author jun6
+	 * @param 강사 id
+	 * @return 그 강사의 강의 목록
+	 * @throws FindException
+	 */
+	public List<Lecture> showTutorLectureByTutorId(String tutor_id) throws FindException{
 		Member member = new Member();
 		Tutor tutor = new Tutor();
 		member.setMember_id(tutor_id);
@@ -72,8 +79,13 @@ public class AdminService {
 		return lectureDAO.tutorMyClassList(lecture);
 	}
 	
+	public List<Member> showAllMember() throws FindException{
+		return memberDAO.selectAllMember();
+	}
+	
 	/**
 	 * FAQ 목록 보여주기
+	 * @author jun6
 	 * @return 전체 FAQ 목록
 	 * @throws FindException
 	 */

@@ -94,12 +94,27 @@
 	VALUES(#{memberId}, #{memberPwd}, #{memberName}, #{memberEmail}, #{memberPhone}, #{favorite1.lecture_category_id}, #{favorite2.lecture_category_id}, #{favorite3.lecture_category_id}, #{memberSex}, #{tutorYN})
 	</insert>
 	
-<!-- jun6 : 예비강사 승인/반려 -->
+<!-- admin(jun6) : 예비강사 승인/반려 -->
 	<update id="updateTutorState" parameterType="map">
 		UPDATE member
 	 	SET tutor_yn = #{status}
  		WHERE member_id = #{id}
-	</update>	
+	</update>
+
+<!-- 	<resultMap type="Member" id="memberVO" autoMapping="true"> -->
+<!-- 		<id column="member_id" property="member_id"/> -->
+<!-- 		<collection property="favorite_list" ofType="LectureCategory" column=""/> -->
+<!-- 	</resultMap> -->
+
+
+
+<!-- admin(jun6) : 전체 회원 목록 조회 -->
+	<select id="selectAllMember" resultMap="memberVO">
+		SELECT me.*, lc1.lecture_category_name, lc2.lecture_category_name, lc3.lecture_category_name
+		FROM member me
+			JOIN lecture_category lc1 ON(me.member_favorite1 = lc1.lecture_category_id)
+			JOIN lecture_category lc2 ON(me.member_favorite2 = lc2.lecture_category_id)
+			JOIN lecture_category lc3 ON(me.member_favorite3 = lc3.lecture_category_id)
+	</select>
 	
-<!-- 	<insert id="joinMember" parameterType= -->
 </mapper>

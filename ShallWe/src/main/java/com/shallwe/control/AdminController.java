@@ -23,10 +23,10 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
-//import com.shallwe.model.FaqBean;
 import com.shallwe.service.AdminService;
 import com.shallwe.vo.Faq;
 import com.shallwe.vo.Lecture;
+import com.shallwe.vo.Member;
 import com.shallwe.vo.Tutor;
 
 @Controller
@@ -86,9 +86,7 @@ public class AdminController {
 	 * @param status
 	 * @return
 	 */
-	@PatchMapping(value = "/status/{tutorId}"
-			//,consumes = {"application/json; charset=UTF-8"}
-			)
+	@PatchMapping(value = "/status/{tutorId}")
 	public ResponseEntity<String> statusChange(@PathVariable(value = "tutorId")String id, @RequestBody String status){
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> map;
@@ -110,23 +108,39 @@ public class AdminController {
 		}
 	}
 	
+	/**
+	 * 특정 강사의 강의 목록 보여주기
+	 * @param 강사의 id
+	 * @return 강사의 강의 목록(title, state)
+	 */
 	@RequestMapping(value = "/tutorLecture/{tutorId}")
 	public ResponseEntity<List<Lecture>> tutorLectureList(@PathVariable(value = "tutorId") String tutor_id){
 		List<Lecture> lectureList = new ArrayList<>();
 		try {
-			lectureList = adminService.ShowTutorLectureByTutorId(tutor_id);
+			lectureList = adminService.showTutorLectureByTutorId(tutor_id);
 		}catch(FindException e) {
 			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(lectureList);
 		}
 		
 		return ResponseEntity.status(HttpStatus.OK).body(lectureList);
 	}
 	
 	
-	
+	/**
+	 * 전체 회원 목록 조회
+	 * @author jun6
+	 * @return 전체회원 목록
+	 */
 	@RequestMapping(value = "/userList", method = RequestMethod.GET)
-	public void userList(Locale locale, Model model) {
-		System.out.println("userList coming");
+	public ResponseEntity<List<Member>> userList() {
+		try {
+			List<Member> memberList = adminService.showAllMember();
+			return ResponseEntity.status(HttpStatus.OK).body(memberList);
+		}catch(FindException e) {
+			return ResponseEntity.status(HttpStatus.OK).body(null);
+		}
+		
 	}
 
 	@RequestMapping(value = "/lectureList", method = RequestMethod.GET)
