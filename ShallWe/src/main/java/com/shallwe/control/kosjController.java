@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.service.LectureService;
 
@@ -61,16 +62,42 @@ public class kosjController {
 			log.info(modelAndView.getModelMap()); 
 			modelAndView.setViewName("/searchLectureList");
 			
-			
 		} catch (FindException e) {
 			modelAndView.setViewName("/fail");
 			e.printStackTrace();
 		}
-		
 		return modelAndView;
 	}
-//	@RequestMapping(value = "/top", method = RequestMethod.GET)
-//	public void top() {
-//		System.out.println("top.jsp  호출");
-//	}
+	
+	
+	@RequestMapping(value = "/lecturePaid", method = RequestMethod.POST)
+	public ModelAndView lecturePaid (@RequestParam(value="lectureCategoryId")String lectureCategoryId
+									, @RequestParam(value="lecture_Id")String lecture_Id) throws AddException {
+		
+		//세션에서 로그인한 사용자의 member_id 컬럼값 가지고옴
+		//String LoginId = (String) session.getAttribute("loginInfo");
+		String memberId = "member1";
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("lectureCategoryId", lectureCategoryId);
+		map.put("lectureId", Integer.parseInt(lecture_Id));
+		map.put("memberId", memberId);
+		
+		ModelAndView modelAndView = new ModelAndView();
+
+		try {
+			modelAndView = lectureService.insertMemberLectureHistory(map);
+			
+			// 추후에 동일이 강의상세보기 화면으로 이동
+			//modelAndView.setViewName("/index");
+			modelAndView.setViewName("/index");
+			
+		} catch (AddException e) {
+			modelAndView.setViewName("/fail");
+			e.printStackTrace();
+		}
+		return modelAndView;
+	}
+	
+	
 }

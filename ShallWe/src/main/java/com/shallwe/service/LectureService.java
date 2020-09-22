@@ -14,7 +14,6 @@ import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.vo.Lecture;
 
-
 @Service(value = "lectureService")
 public class LectureService {
 	
@@ -44,6 +43,7 @@ public class LectureService {
 		}
 
 		return modelAndView;
+		
 	}
 	/**
 	 * 강의신청 후 결제 
@@ -84,10 +84,7 @@ public class LectureService {
 			modelAndView.addObject("status","fail");
 			modelAndView.addObject("errMsg",e.getMessage());
 		}
-		
 		return modelAndView;
 	}
-	
-	
 	
 }
