@@ -55,47 +55,6 @@
 			.on(
 				"click",
 				function () {
-					var file = $("lectureImgFile")[0].file[0];
-					var filename = file.name;
-					var reader = new FileReader();
-					reader.onload = function(e) {
-						var base64data = reader.result;
-						var data = base64data.split(',')[1];
-						var sendsize = 1024;
-						var filelength = data.length;
-						var pos = 0;
-						var upload = function() {
-							$.ajax({
-								type : 'POST',
-								dataType : 'json',
-								data : {
-								filename : filename,
-								filelength : filelength,
-								filepos : pos,
-								data : data.substring(pos, pos + sendsize)
-								},
-								url : './upload',
-								success : function(data) {
-								// 전체가 전송될 때까지
-								if (pos < filelength) {
-								// 재귀
-								setTimeout(upload, 1);
-								}
-								pos = pos + sendsize;
-								if (pos > filelength) {
-								pos = filelength;
-								}
-								$('#progress').text(pos + ' / ' + filelength);
-								},
-								error : function(jqXHR, textStatus, errorThrown) {
-								},
-								complete : function(jqXHR, textStatus) {
-								}
-							});
-						}
-						setTimeout(upload, 1);
-					}
-					reader.readAsDataURL(file);
 					alert("insert click");
 					let lectureTitleValue = $("#lectureTitle").val();
 					let lectureIntroValue = $("#lectureIntro").val();
