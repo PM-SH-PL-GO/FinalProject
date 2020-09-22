@@ -71,7 +71,7 @@ public class StudyBoardTest {
 		
 		Member member = new Member();
 		member.setMember_id("member1");
-		studyboard.setStudy_m(member);
+		studyboard.setMember(member);
 		studyboard.setStudyBoard_content("제목 : 5다시성운test");
 		studyboard.setStudyBoard_title("내용 : 5성운test");
 		studyboard.setStudyBoard_fileName("5성운.jpg");
@@ -87,7 +87,7 @@ public class StudyBoardTest {
 		Member member = new Member();
 		member.setMember_id("member1");		
 		studyboard.setStudyBoard_id(9);
-		studyboard.setStudy_m(member);
+		studyboard.setMember(member);
 		studyboard.setStudyBoard_content("제목 : 정말정말다시성운test");
 		studyboard.setStudyBoard_title("내용 : 성운test");
 		studyboard.setStudyBoard_fileName("성운.jpg");

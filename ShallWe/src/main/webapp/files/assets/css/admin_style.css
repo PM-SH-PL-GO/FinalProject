@@ -138,7 +138,8 @@ nav ul li a span.rotate{
     top: 100px;
     left: 255px;
     border: 0.5px;
-    border-style: solid;
+    border-style: solid #dddddd;
+    text-align: center;
     width: 80%;
     height: 150px;
 }
@@ -146,6 +147,7 @@ nav ul li a span.rotate{
 .table th{
     text-align: center;
     font-size: 18px;
+    background-color: #eeeeee;
 }
 
 .table td{
@@ -165,11 +167,11 @@ nav ul li a span.rotate{
 	z-index: 1;
 }
 
-.modal_slot .modal_close{
-	display: inline-block;
-	width: 100%;
-	margin-left: calc(100% - 100px - 10px);
-}
+/* .modal_slot .modal_close{ */
+/* 	display: inline-block; */
+/* 	width: 100%; */
+/* 	margin-left: calc(100% - 100px - 10px); */
+/* } */
 
 .modal_slot .modal_content{
 	width: 500px;
@@ -190,21 +192,21 @@ nav ul li a span.rotate{
 }
 
 .lecture-list {
-	display: none;
+	display: block;
 	position: relative;
 	width: 100%;
 	height: 100%;
 	z-index: 1;
 }
 
-.lecture-list .lecture-close{
-	display: inline-block;
-	width: 100%;
-	margin-left: calc(100% - 100px - 10px);
-}
+/* .lecture-list .lecture-close{ */
+/* 	display: inline-block; */
+/* 	width: 100%; */
+/* 	margin-left: calc(100% - 100px - 10px); */
+/* } */
 
 .lecture-list .lecture-content{
-	width: 500px;
+	width: 70%;
 	margin: 100px auto;
 	padding: 20px 10px;
 	background: #fff;
