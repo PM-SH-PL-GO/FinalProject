@@ -1,13 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:set var="pb" value="${sessionScope.pb}"/>
 <!doctype html>
 <html class="no-js" lang="zxx">
 <head>
 <style>
 th {
 	background-color: #eeeeee; text-algin: center
+}
+tr td.boardTitle:hover {
+    color: #00DBD5;
+    cursor: pointer;
 }
 </style>
 <script
@@ -17,6 +20,7 @@ $(function(){
 	var page ="1";
 	var $pageList=$("#pageList");
 	
+	//----------스터디 게시판 LOAD START---------
 	$.ajax({
 		url:"/shallwe/board/list/"+page
 		,method:"get"
@@ -30,7 +34,7 @@ $(function(){
 					boardPageData += "<tr>"
 					boardPageData += "	<td class=\"boardId\">"+studyBoard.studyBoard_id+"</td>";
 					boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"</td>";
-					boardPageData += "	<td>"+studyBoard.study_m.member_name+"</td>";
+					boardPageData += "	<td>"+studyBoard.member.member_name+"</td>";
 					boardPageData += "	<td>"+formatDate(studyBoard.studyBoard_write_dt)+"</td>";
 					boardPageData += "	<td>"+studyBoard.studyBoard_view_count+"</td>";
 					boardPageData += "</tr>"
@@ -55,7 +59,9 @@ $(function(){
 			alert("실패" + xhr.status)
 		}
 	});
+	//----------스터디 게시판 LOAD  END---------
 	
+	//----------스터디 게시판 페이지 CLICK  START---------	
 	$pageList.on("click","li>a", function(e){
 		var $etClass = $(e.target).attr('class');
 		if($etClass == 'prev'){
@@ -78,7 +84,7 @@ $(function(){
 						boardPageData += "<tr>"
 						boardPageData += "	<td class=\"boardId\">"+studyBoard.studyBoard_id+"</td>";
 						boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"</td>";
-						boardPageData += "	<td>"+studyBoard.study_m.member_name+"</td>";
+						boardPageData += "	<td>"+studyBoard.member.member_name+"</td>";
 						boardPageData += "	<td>"+formatDate(studyBoard.studyBoard_write_dt)+"</td>";
 						boardPageData += "	<td>"+studyBoard.studyBoard_view_count+"</td>";
 						boardPageData += "</tr>"
@@ -90,7 +96,9 @@ $(function(){
 			}
 		});
 	});
+	//----------스터디 게시판 페이지 CLICK  END---------	
 	
+	//----------스터디 게시판 검색 button CLICK  START---------		
 	$("button#search-btn").click(function(){
 		$searchVal = $("#searchBar").val()
 		if($searchVal== null || $searchVal== ""){
@@ -109,7 +117,7 @@ $(function(){
 					boardPageData += "<tr>"
 					boardPageData += "	<td class=\"boardId\">"+studyBoard.studyBoard_id+"</td>";
 					boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"</td>";
-					boardPageData += "	<td>"+studyBoard.study_m.member_name+"</td>";
+					boardPageData += "	<td>"+studyBoard.member.member_name+"</td>";
 					boardPageData += "	<td>"+formatDate(studyBoard.studyBoard_write_dt)+"</td>";
 					boardPageData += "	<td>"+studyBoard.studyBoard_view_count+"</td>";
 					boardPageData += "</tr>"
@@ -124,7 +132,9 @@ $(function(){
 
 		});
 	});
+	//----------스터디 게시판 검색 button CLICK  END---------	
 	
+	//----------스터디 게시판 검색 ENTER  START---------	
 	$("#searchBar").keydown(function(e) {
 
 		if (e.keyCode == 13) {
@@ -132,11 +142,15 @@ $(function(){
 		}
 
 	});	
+	//----------스터디 게시판 검색 ENTER  END---------	
 	
+	//--------- 게시글 CLICK  START---------		
 	$("tbody#tbody").on("click","td.boardTitle",function(){
 		var $boardIdVal = $(this).siblings('td.boardId').html();
 		location.href="/shallwe/board/detail/"+$boardIdVal;
 	});
+	//--------- 게시글 CLICK  START---------		
+
 });
 
 
