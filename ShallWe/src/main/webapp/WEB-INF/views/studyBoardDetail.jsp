@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:formatDate var="resultDt" value="${studyBoard.studyBoard_write_dt}" pattern="yyyy-MM-dd"/>
+
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 <title>Shallwe-함께 배우는 교육공간</title>
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -69,19 +72,6 @@ function formatDate(date) {
 </head>
 
 <body>
-	<!--? Preloader Start -->
-	<div id="preloader-active">
-		<div
-			class="preloader d-flex align-items-center justify-content-center">
-			<div class="preloader-inner position-relative">
-				<div class="preloader-circle"></div>
-				<div class="preloader-img pere-text">
-					<img src="assets/img/logo/loder.png" alt="">
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- Preloader Start -->
 
 	<!--? Blog Area Start -->
 	<section class="blog_area single-post-area section-padding">
@@ -100,7 +90,7 @@ function formatDate(date) {
 							<ul class="blog-info-link mt-3 mb-4">
 								<li><a href="#"><i class="fa fa-user"></i>${studyBoard.member.member_name}</a></li>
 								<li><a href="#"><i class="fa fa-comments"></i> 댓글 수()</a></li>
-								<li><a href="#">${studyBoard.studyBoard_write_dt}</a></li>
+								<li><a href="#">${resultDt}</a></li>
 							</ul>
 							<p class="excert">${studyBoard.studyBoard_content}</p>
 							${studyBoard}
