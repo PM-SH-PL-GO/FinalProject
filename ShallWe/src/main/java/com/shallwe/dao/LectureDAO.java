@@ -150,5 +150,21 @@ public class LectureDAO {
 			session.close();
 		}
 	} // end of selectLectureListBySearch method
-
+	
+	// test용
+	
+	public Lecture selectLectureBytutorId (String tutor_id) {
+		SqlSession session = null;
+		Lecture lecture = new Lecture();
+		try {
+			session = sqlSessionFactory.openSession();
+			lecture = session.selectOne("LectureMapper.selectLectureBytutorId", tutor_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			session.close();
+		}
+		return lecture;
+	}
 } // end of LectureDAO class

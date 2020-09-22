@@ -1,6 +1,9 @@
+
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
+<%-- <c:set var="lectureList" value="${requestScope['lectureList']}"/> --%>
 
 <!doctype html>
 <html class="no-js" lang="zxx">
@@ -25,39 +28,37 @@
 <link rel="stylesheet" href="assets/css/nice-select.css">
 <link rel="stylesheet" href="assets/css/style.css">
 <style>
-.left_menu {
-	float: left;
-	width: 30%;
+.right_menu { 
+	width: 100%;
 }
 
-.left_menu_result {
-	text-align: center;
-}
-.right_menu { 
-		float : center;
-		width: 70%;
-}
 /* div 테이블 스타일 영역, 추후 css 분리 예정 */
 .divTable{
 	display: table;
 	width: 100%;
 }
+
 .divTableRow {
 	display: table-row;
 }
+
 .divTableHeading {
 	background-color: #EEE;
 	display: table-header-group;
 }
+
 .divTableCell, .divTableHead {
 	border: 1px solid #999999;
 	display: table-cell;
 	padding: 3px 10px;
 }
+
 .divTableHeading {
+	display: table-row;
 	background-color: #EEE;
-	display: table-header-group;
+/* 	display: table-header-group; */
 	font-weight: bold;
+	text-align: center;
 }
 .divTableFoot {
 	background-color: #EEE;
@@ -68,7 +69,7 @@
 	display: table-row-group;
 }
 
-.paidMethod  {
+.paidMethod> input#pay_method  {
 	text-align: center;
 	padding: 10px;
 }
@@ -76,12 +77,48 @@
 .buttonArea {
 	text-align: center;
 }
-
 </style>
 	
 <!-- script area -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+
+$(document).ready(function() {
+	var lectureListJsonValue = '${lectureListJsonValue}';
+	var jsonObj = JSON.parse(lectureListJsonValue);
+	
+	var $divTableBodyObj = $("div.divTableBody");
+	for(var i=0; i<jsonObj.length; i++){
+		var lectureObj = jsonObj[i];
+		var $div = $('<div class="divTableRow">');
+		$divData = "";
+		$divData += '<div class="divTableCell"><img src="${contextPath}/lecture/'+ lectureObj.lecture_img +'"'+ 'class="mb-15" alt="강의사진"></div>';
+		$divData += '<div class="divTableCell"><span>'+ lectureObj.lecture_title+'</span></div>';
+		$divData += '<div class="divTableCell"><span>'+ lectureObj.tutor.tutor_nickname+'</span></div>'
+		$divData += '<div class="divTableCell"><span>'+ lectureObj.lecture_start_dt +' ~ '+ lectureObj.lecture_end_dt + '</span></div>';
+		$divData += '<div class="divTableCell"><span>'+ lectureObj.lecture_price + '</span></div>';
+		$div.html($divData);
+		$divTableBodyObj.append($div);
+	}
+
+	
+// 	$.ajax({url:
+// 		,data:{'lecture_start_dt':}});
+	
+	//ajax : 서버에서 넘어온 결제할 강의 목록 결제처리
+	$.ajax({
+		url : "/shallwe/insertMemberLectureHistory"
+		,method : "POST"
+ 		,contentType : "application/json;charset=utf-8"
+		,data : lectureListJsonValue
+		,success : function(responseData) {
+			console.log(responseData);
+		} // ajax통신 success
+	}); //end of ajax
+	
+	
+}); // end of load();
+  
   
   
 </script>
@@ -108,55 +145,60 @@
 			</div>
 		</div>
 
-<!-- <section class="right_menu section-padding"> -->
-<section class="blog_area single-post-area section-padding">
+<section class="right_menu section-padding">
 <div class="container">
 	<div class="row">
-		<div class="col-lg-8">
+		<div class="col-lg-12">
 			<!-- page title -->
 			<div class="small-tittle mb-20">
-				<h2>강의신청하기</h2>
+				<h2>강의결제페이지</h2>
 			</div>
 			<div class="directory-cap mb-40">
-				<p>신청한 강의는 바로 결제하실 수 있습니다</p>
+				<p>본 페이지에서 바로 결제 가능합니다!</p>
 			</div>
 
-			<!-- page contents -->
-			<div class="small-tittle mb-20">
-				<h2>강의신청내용</h2>
-			</div>
-			<div class="row">
-				<div class="col">
-					<img src="assets/img/gallery/gallery1.png" class="mb-15" alt="강의사진">
-				</div>
-				<div class="col">
-					<span id="강의제목">빡빡이 아저씨와 배우는 인성 기초</span><br>
-					<span>강사: 빡빡이아저씨</span>
-				</div>
-			</div>
 			<!--강의 정보 -->
-			<form name="#" action="post">
+			<form name="paidList" action="post">
 				<div class="divTable">
 					<div class="divTableBody">
-						<div class="divTableRow">
+						<div class="divTableHeading">
+							<div class="divTableCell">강의사진</div>
 							<div class="divTableCell">강의제목</div>
+							<div class="divTableCell">강사명</div>
 							<div class="divTableCell">강의날짜</div>
 							<div class="divTableCell">금액</div>
 						</div>
-						<div class="divTableRow">
-							<div class="divTableCell"><span>빡빡이 아저씨와 배우는 인성기초</span></div>
-							<div class="divTableCell"><span>2020-08-30 14:00 ~ 2020-08-30 17:00</span></div>
-							<div class="divTableCell"><span>100,000원</span></div>
-						</div>
+						<!-- single start -->
+<%-- 						<c:forEach items="${lectureList}" var="lecture" varStatus="stats"> --%>
+<%-- 							<c:forEach items="resultList.Lecture" var="lec" varStatus="lec_count"> --%>
+<!-- 								<div class="divTableBody"> -->
+<!-- 									<div class="divTableRow"> -->
+<!-- 										<div class="divTableCell"><img src="assets/img/gallery/gallery1.png" class="mb-15" alt="강의사진"></div> -->
+<%-- 										<div class="divTableCell"><span>${lecture.lecture_title}</span></div> --%>
+<%-- 										<div class="divTableCell"><span>${lecture.tutor.tutor_nickname}</span></div> --%>
+<!-- 										<div class="divTableCell"><span> -->
+<%-- 											<fmt:formatDate value="${lecture.lecture_start_dt}" pattern="yyyy-MM-dd"/> ~ --%>
+<%-- 											<fmt:formatDate value="${lecture.lecture_end_dt}" pattern="yyyy-MM-dd"/>  --%>
+<!-- 										</span></div> -->
+<!-- 										<div class="divTableCell"><span> -->
+<%-- 										<fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###원"/> --%>
+<!-- 										</span></div> -->
+<!-- 										<div> -->
+<%-- 											<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/> --%>
+<!-- 										</div> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<%-- 							</c:forEach> --%>
+<%-- 						</c:forEach> --%>
 					</div>
-				</div>
+				</div><!-- end of table -->
 
 				<!-- 결제방법선택 -->
 				<div class="paidMethod">
-					<input type="radio" name="pay_method" value="신용카드" /><font>신용카드</font>
-					<input type="radio" name="pay_method" value="계좌이체" /><font>계좌이체</font>
-					<input type="radio" name="pay_method" value="무통장입금" /><font>무통장입금</font>
-					<input type="radio" name="pay_method" value="휴대폰" /><font>휴대폰</font>
+					<label><input type="radio" name="pay_method" value="신용카드"/>신용카드</label>
+					<label><input type="radio" name="pay_method" value="계좌이체" />계좌이체</label>
+					<label><input type="radio" name="pay_method" value="무통장입금" />무통장입금</label>
+					<label><input type="radio" name="pay_method" value="휴대폰" />휴대폰</label>
 				</div>
 				<div class="buttonArea">
 					<button id="paid_btn">결제하기</button>

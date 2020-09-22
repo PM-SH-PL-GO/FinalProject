@@ -1,17 +1,24 @@
 package com.shallwe.control;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.shallwe.exception.AddException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shallwe.dao.LectureDAO;
 import com.shallwe.exception.FindException;
 import com.shallwe.service.LectureService;
+import com.shallwe.vo.Lecture;
 
 import lombok.extern.log4j.Log4j;
 
@@ -22,10 +29,13 @@ public class kosjController {
 	@Autowired
 	LectureService lectureService;
 	
-	@RequestMapping(value = "/lecturePaid", method = RequestMethod.GET)
-	public void lecturePaid() {
-		System.out.println("lecturePaid.jsp 호출");
-	}
+	@Autowired
+	LectureDAO lectureDAO;
+	
+//	@RequestMapping(value = "/lecturePaid", method = RequestMethod.GET)
+//	public void lecturePaid() {
+//		System.out.println("lecturePaid.jsp 호출");
+//	}
 	@RequestMapping(value = "/reviewAdd", method = RequestMethod.GET)
 	public void reviewAdd() {
 		System.out.println("lecturePaid.jsp  호출");
@@ -69,35 +79,46 @@ public class kosjController {
 		return modelAndView;
 	}
 	
-	
-	@RequestMapping(value = "/lecturePaid", method = RequestMethod.POST)
-	public ModelAndView lecturePaid (@RequestParam(value="lectureCategoryId")String lectureCategoryId
-									, @RequestParam(value="lecture_Id")String lecture_Id) throws AddException {
+	@RequestMapping(value="/lecturePaid", method = {RequestMethod.GET, RequestMethod.POST})
+	public String lecturePaymentList(Model model ) throws FindException {
 		
-		//세션에서 로그인한 사용자의 member_id 컬럼값 가지고옴
-		//String LoginId = (String) session.getAttribute("loginInfo");
-		String memberId = "member1";
 		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("searchKey", "all");
+		map.put("searchText", "마");
 		
-		map.put("lectureCategoryId", lectureCategoryId);
-		map.put("lectureId", Integer.parseInt(lecture_Id));
-		map.put("memberId", memberId);
+		List<Lecture> lectureList = new ArrayList<Lecture>();
+		lectureList = lectureDAO.selectLectureListBySearch(map);
+//		
+//		
+//		ModelAndView modelAndView = new ModelAndView();
+//		modelAndView.addObject("lectureList", lectureList);
+//		modelAndView.setViewName("/lecturePaid");
+//		
 		
-		ModelAndView modelAndView = new ModelAndView();
-
+		ObjectMapper mapper = new ObjectMapper();
+		String lectureListJsonValue="";
 		try {
-			modelAndView = lectureService.insertMemberLectureHistory(map);
+			lectureListJsonValue = mapper.writeValueAsString(lectureList);
+			System.out.println("in josjController lectureListJsonValue:" + lectureListJsonValue);
+			model.addAttribute("lectureListJsonValue", lectureListJsonValue);
 			
-			// 추후에 동일이 강의상세보기 화면으로 이동
-			//modelAndView.setViewName("/index");
-			modelAndView.setViewName("/index");
-			
-		} catch (AddException e) {
-			modelAndView.setViewName("/fail");
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return modelAndView;
+		
+		return "/lecturePaid";
 	}
 	
+	@RequestMapping(value = "/insertMemberLectureHistory", method = {RequestMethod.GET,RequestMethod.POST})
 	
-}
+	public void insertMemberLectureHistory(@RequestBody List<Lecture> lectureList ) {
+		
+		log.info(" insertMemberLectureHistory 호출했어용~");
+		log.info(" lectureList ::: " + lectureList);
+		
+		
+		//return modelAndView;
+	}
+	
+} // end of kosjController
