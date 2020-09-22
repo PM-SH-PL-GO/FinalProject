@@ -42,6 +42,27 @@ public class AdminController {
 	
 	
 	/**
+	 * 전체 회원 목록 조회
+	 * @author jun6
+	 * @return 전체회원 목록
+	 */
+	@RequestMapping(value = "/userList", method = RequestMethod.GET)
+	public ResponseEntity<List<Member>> userList() {
+		try {
+			List<Member> memberList = adminService.showAllMember();
+			if (memberList != null && memberList.size() != 0) {
+				System.out.println(memberList);
+				return ResponseEntity.status(HttpStatus.OK).body(memberList);
+			}else
+				return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(null);
+		}catch(FindException e) {
+			System.out.println("ㅈ대따");
+			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(null);
+		}
+		
+	}
+	
+	/**
 	 * 예비강사 목록 가져오기
 	 * @author jun6
 	 * @return
@@ -126,23 +147,6 @@ public class AdminController {
 		return ResponseEntity.status(HttpStatus.OK).body(lectureList);
 	}
 	
-	
-	/**
-	 * 전체 회원 목록 조회
-	 * @author jun6
-	 * @return 전체회원 목록
-	 */
-	@RequestMapping(value = "/userList", method = RequestMethod.GET)
-	public ResponseEntity<List<Member>> userList() {
-		try {
-			List<Member> memberList = adminService.showAllMember();
-			return ResponseEntity.status(HttpStatus.OK).body(memberList);
-		}catch(FindException e) {
-			return ResponseEntity.status(HttpStatus.OK).body(null);
-		}
-		
-	}
-
 	@RequestMapping(value = "/lectureList", method = RequestMethod.GET)
 	public void lectureList(Locale locale, Model model) {
 		System.out.println("lectureList coming");
