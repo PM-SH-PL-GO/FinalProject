@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class StudyBoard {
 	private int studyBoard_id;
 //	private String studyBoard_memeber_id;
-	private Member Study_m;
+	private Member member;
 	private String studyBoard_title;
 	private String studyBoard_content;
 	private String studyBoard_fileName;

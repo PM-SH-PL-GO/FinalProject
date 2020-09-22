@@ -1,5 +1,6 @@
 package com.shallwe.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,11 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.shallwe.dao.FaqDAO;
+import com.shallwe.dao.LectureDAO;
 import com.shallwe.dao.MemberDAO;
 import com.shallwe.dao.TutorDAO;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.vo.Faq;
+import com.shallwe.vo.Lecture;
+import com.shallwe.vo.Member;
 import com.shallwe.vo.Tutor;
 
 @Service(value = "adminService")
@@ -23,6 +27,8 @@ public class AdminService {
 	private FaqDAO faqDAO;
 	@Autowired
 	private MemberDAO memberDAO;
+	@Autowired
+	private LectureDAO lectureDAO;
 	
 	/**
 	 * 예비 강사 목록 보여주기
@@ -41,7 +47,13 @@ public class AdminService {
 	public void approvePreTutor(String id, String status) throws ModifyException{
 		Map<String, String> map = new HashMap<>();
 		map.put("id", id);
-		map.put("status", status);
+		if (status.equals("승인"))
+			map.put("status", "Y");
+		else if(status.equals("반려"))
+			map.put("status", "N");
+		else
+			throw new ModifyException("승인/반려 이외의 글자가 전달되었습니다 : " + status);
+		
 		memberDAO.updateTutorState(map);
 		
 		if(!status.equals("승인")){
@@ -49,7 +61,34 @@ public class AdminService {
 		}
 	}
 	
+	/**
+	 * 특정 강사의 강의 목록 가져오기
+	 * @author jun6
+	 * @param 강사 id
+	 * @return 그 강사의 강의 목록
+	 * @throws FindException
+	 */
+	public List<Lecture> showTutorLectureByTutorId(String tutor_id) throws FindException{
+		Member member = new Member();
+		Tutor tutor = new Tutor();
+		member.setMember_id(tutor_id);
+		tutor.setMember(member);
+		Lecture lecture = new Lecture();
+		lecture.setTutor(tutor);
+		
+		return lectureDAO.tutorMyClassList(lecture);
+	}
 	
+	public List<Member> showAllMember() throws FindException{
+		return memberDAO.selectAllMember();
+	}
+	
+	/**
+	 * FAQ 목록 보여주기
+	 * @author jun6
+	 * @return 전체 FAQ 목록
+	 * @throws FindException
+	 */
 	public List<Faq> showAllFaq() throws FindException{
 		return faqDAO.selectAll();
 	}

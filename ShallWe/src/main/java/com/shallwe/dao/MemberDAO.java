@@ -159,10 +159,6 @@ public class MemberDAO {
 		}
 	
 	}
-
-	
-	// 회원 목록 보기(admin) : 영민	
-	
 	
 	//멤버로그인 : 경찬
 	public Member memberLogin(String member_id)throws FindException{
@@ -223,5 +219,25 @@ public class MemberDAO {
 		member1.put("member", member);
 		session = sqlSessionFactory.openSession();
 		session.selectOne("MemberMapper.randomPassword",member);
+	}
+	
+	/**
+	 * Admin- 전체 회원 조회
+	 * @author jun6
+	 * @return 전체 회원 목록
+	 * @throws FindException
+	 */
+	public List<Member> selectAllMember() throws FindException{
+		SqlSession session = null;
+		List<Member> memberList = new ArrayList<>();
+		
+		try {
+			session = sqlSessionFactory.openSession();
+			memberList = session.selectList("MemberMapper.selectAllMember");
+		}catch(DataAccessException e) {
+			throw new FindException("서버연결 중 에러가 발생했습니다");
+		}
+		
+		return memberList;
 	}
 }

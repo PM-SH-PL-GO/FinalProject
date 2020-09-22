@@ -59,7 +59,7 @@ public class StudyBoardDAO {
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
 		session.insert("StudyBoardMapper.insert", board);
-			if(board.getStudy_m().getMember_id()==null) {
+			if(board.getMember().getMember_id()==null) {
 				throw new AddException("해당하는 주문이 없습니다.");
 			}
 		}catch (Exception e) {
@@ -73,7 +73,7 @@ public class StudyBoardDAO {
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
 		session.update("StudyBoardMapper.update", board);
-			if(board.getStudy_m().getMember_id()==null) {
+			if(board.getMember().getMember_id()==null) {
 				throw new ModifyException("수정할 데이터가 없습니다.");
 			}
 		}catch (Exception e) {
@@ -100,8 +100,12 @@ public class StudyBoardDAO {
 	//게시글 수 조회 : 성운
 	public int selectCount() {
 		SqlSession session = sqlSessionFactory.openSession();
-		int selectcount = session.selectOne("StudyBoardMapper.selectCount");
-		return selectcount;
+		try {
+			int selectcount = session.selectOne("StudyBoardMapper.selectCount");
+			return selectcount;
+		}finally {
+			session.close();	
+		}
 	}
 	
 	//조회수 삽입 : 성운

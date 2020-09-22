@@ -99,4 +99,56 @@ public class LectureDAO {
 		}
 	} // end of selectLectureListBySearch method
 
+	/**
+	 * 강의신청 후 결제 
+	 * @author Soojeong
+	 * @param map
+	 * @return
+	 * @throws AddException
+	 */
+	public void insertMemberLectureHistory (HashMap<String, Object> map) throws AddException {
+		SqlSession session = null;
+		int result = 0;
+		try {
+			session = sqlSessionFactory.openSession();
+			result= session.insert("LectureMapper.insertMemberLectureHistory", map);
+			if (result == 0 ) {
+				log.info("강의신청에 실패하였습니다.");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new AddException(e.getMessage());
+			
+		} finally {
+			session.close();
+		}
+	} // end of selectLectureListBySearch method
+	
+	/**
+	 * 강의결제취소
+	 * @author Soojeong
+	 * @param map
+	 * @return
+	 * @throws ModifyException
+	 */
+	public void updateMemberLectureHistory (HashMap<String, Object> map) throws ModifyException {
+		SqlSession session = null;
+		int result = 0;
+		try {
+			session = sqlSessionFactory.openSession();
+			result= session.update("LectureMapper.updateMemberLectureHistory", map);
+			if (result == 0 ) {
+				log.info("강의결제취소에 실패하였습니다.");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ModifyException(e.getMessage());
+			
+		} finally {
+			session.close();
+		}
+	} // end of selectLectureListBySearch method
+
 } // end of LectureDAO class
