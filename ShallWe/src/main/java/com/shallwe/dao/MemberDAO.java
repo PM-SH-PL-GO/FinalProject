@@ -230,10 +230,34 @@ public class MemberDAO {
 	public List<Member> selectAllMember() throws FindException{
 		SqlSession session = null;
 		List<Member> memberList = new ArrayList<>();
+		List<MemberInfoBean> beanList = new ArrayList<>();
 		
 		try {
 			session = sqlSessionFactory.openSession();
-			memberList = session.selectList("MemberMapper.selectAllMember");
+			beanList = session.selectList("MemberMapper.selectAllMember");
+			
+			for (MemberInfoBean bean : beanList) {
+				Member member = new Member();
+				member.setMember_id(bean.getMemberId());
+				member.setMember_name(bean.getMemberName());
+				member.setMember_email(bean.getMemberEmail());
+				member.setMember_phone(bean.getMemberPhone());
+				member.setMemeber_sex(bean.getMemberSex());
+				member.setTutor_YN(bean.getTutorYN());
+				
+				List<LectureCategory> lectureList = new ArrayList<>();
+				if (bean.getFavorite1() != null)
+					lectureList.add(bean.getFavorite1());
+				if (bean.getFavorite2() != null)
+					lectureList.add(bean.getFavorite2());
+				if (bean.getFavorite3() != null)
+					lectureList.add(bean.getFavorite3());
+				
+				member.setFavorite_list(lectureList);
+				
+				memberList.add(member);
+			}
+			
 		}catch(DataAccessException e) {
 			throw new FindException("서버연결 중 에러가 발생했습니다");
 		}

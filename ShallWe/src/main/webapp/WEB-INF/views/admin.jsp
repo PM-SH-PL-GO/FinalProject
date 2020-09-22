@@ -40,10 +40,10 @@
                     url: "${contextPath}/admin/userList",
                     method: "GET",
                     success: function(members){
-                    	let $memberList = '<table class="table">';
-                    	$memberList += "<tr><th>순서</th><th>아이디</th><th>이름</th><th>이메일></th><th>연락처</th>";
-                    	$memberList += '<th>관심분야1</th><th>관심분야2</th><th>관심분야3</th><th>성별</th><th>강사여부</th><th>정지조치</th></tr>';
-                    	
+                    	let $memberList = '<table class="table"><thead>';
+                    	$memberList += "<tr><th>순서</th><th>아이디</th><th>이름</th><th>이메일</th><th>연락처</th>";
+                    	$memberList += '<th>관심분야1</th><th>관심분야2</th><th>관심분야3</th><th>성별</th><th>강사여부</th><th>정지조치</th></tr></thead>';
+                    	$memberList += '<tbody>'
                     	members.forEach(function(member, index){
                     		let idx = index + 1;
 	                    	$memberList += '<tr><td>'+ idx +'</td>';
@@ -52,7 +52,7 @@
 	                    	$memberList += '<td>'+ member.member_email +'</td>';
 	                    	$memberList += '<td>'+ member.member_phone +'</td>';
 	                    	member.favorite_list.forEach(function(favorite){
-		                    	$memberList += '<td>'+ member.member_sex +'</td>';
+		                    	$memberList += '<td>'+ favorite.lecture_category_name +'</td>';
 	                    	});
 	                    	
 	                    	let listSize = member.favorite_list.length;
@@ -61,10 +61,11 @@
 	                    	}
 	                    	
 	                    	$memberList += '<td>'+ member.member_sex +'</td>';
-                    		$memberList += '<td>' + member.tutorYN + '</td></tr>';
+                    		$memberList += '<td>' + member.tutor_YN + '</td>';
                     		$memberList += '<td><button class="member_ban" value="' + member.member_id + '">정지하기</button></td></tr>';
                     	});
                     	
+                    	$memberList += '</tbody>';
                     	$memberList += '</table>';
                         $cont.html($memberList);
                     }
@@ -81,8 +82,18 @@
                 $.ajax({
                     url: "${contextPath}/admin/preTutor",
                     method: "GET",
-                    success: function(views){
-                        $cont.html(views);
+                    success: function(preTutors){
+                    	let $lot = '<table class="table"><thead><tr>';
+                    	$lot += '<th>순서</th><th>강사 사진</th><th>아이디</th><th>회원 이름</th><th>강사 별명</th>';
+                    	$lot += '<th>전문 분야</th><th>세부사항</th><th>승인</th><th>반려</th></tr></thead>';
+                    	
+                    	preTutors.forEach(function(preTutor, index){
+                    		let idx = index + 1;
+                    		$lot += '<tr><td>' + idx + '</td>';
+                    		$lot += '<td><img src="${contextPath}/tutorImages/' + preTutor.tutor_img + '"></td>';
+                    	});
+                    	
+                        $cont.html($lot);
                     }
                 });
                 $cont.html("");
@@ -155,7 +166,7 @@
             		method: "GET",
             		success: function(lectures){
             			let $tutor_Lecture = '<div class="lecture-list"><div class="lecture-content">';
-            			$tutor_Lecture += '<h3 ${pt.tutor_nickname} 강사의 강의목록</h3><hr>';
+            			$tutor_Lecture += '<h3>' + lectures[0].tutor.tutor_nickname + '강사의 강의목록</h3><hr>';
             			$tutor_Lecture += '<table class="lecture-table">';
             			$tutor_Lecture += '<tr><th>번호</th><th>강의명</th><th>상태</th></tr>';
             		
