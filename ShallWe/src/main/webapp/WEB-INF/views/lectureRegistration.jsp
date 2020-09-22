@@ -67,17 +67,17 @@
 					url : "/shallwe/Lectures/insert",
 					method : "POST",
 					data : {
-						'lecture_title' : lectureTitleValue
+						'lecture.lecture_title' : lectureTitleValue
 						'lecture_introduce' : lectureIntroValue
 						'lecture_curriculum' : curiculumValue
 						'lecture_location' : locationValue
-						'lecture_start_dt' : firstDateValue
-						'lecture_end_dt' : lastDateValue
-						'lecture_min' : pMinValue
-						'lecture_max' : pMaxValue
+						'lecture.lecture_start_dt' : firstDateValue
+						'lecture.lecture_end_dt' : lastDateValue
+						'lecture.lecture_min' : pMinValue
+						'lecture.lecture_max' : pMaxValue
 						'lecture_prepared' : preparedValue
 						'lecture_caution' : cautionValue
-						'lecture_price' : priceValue
+						'lecture.lecture_price' : priceValue
 					},
 					success : function(data) {
 						let responseObj = JSON.parse(data);

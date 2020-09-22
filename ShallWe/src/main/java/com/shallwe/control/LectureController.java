@@ -23,7 +23,7 @@ public class LectureController {
 	LectureService service;
 
 	@RequestMapping(value = "/insert")
-	public ModelAndView insertLecture(@RequestParam LectureDetail lectDe)
+	public ModelAndView insertLecture(LectureDetail lectDe)
 			throws AddException {
 		ModelAndView mnv = new ModelAndView();
 		try {
