@@ -8,11 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shallwe.dao.LectureDAO;
+import com.shallwe.dao.LectureDetailDAO;
+import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.vo.Lecture;
+import com.shallwe.vo.LectureDetail;
 
 
 @Service(value = "lectureService")
@@ -20,6 +21,8 @@ public class LectureService {
 	
 	@Autowired
 	LectureDAO lectureDAO;
+	@Autowired
+	LectureDetailDAO lectureDetailDAO;
 
 	/**
 	 * @author Soojeong
@@ -44,5 +47,14 @@ public class LectureService {
 		}
 
 		return modelAndView;
+	}
+	
+	public void insertLecture (Lecture lect, LectureDetail lectDe) throws AddException {
+		try {
+			lectureDAO.insert(lect);
+			lectureDetailDAO.insertDetail(lectDe);
+		} catch (AddException e) {
+			e.printStackTrace();
+		}
 	}
 }
