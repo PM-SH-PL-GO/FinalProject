@@ -129,16 +129,18 @@ public class MemberDAO {
 	}
 	
 	//선호카테고리 수정: 상하
-	public void updateFavorites(String memberId, List<LectureCategory> favoritelist)throws ModifyException{
+	public void updateFavorites(String member_id, List<LectureCategory>favorite_list)throws ModifyException{
 		SqlSession session = null;
-		Map<String, Object>memFav = new HashMap<String, Object>();
-		memFav.put(memberId, favoritelist);
-		System.out.println("이건 멤바아이디,카테고리"+memberId+","+favoritelist);
-		System.out.println("이건 멤페브다 " + memFav);
+		Map<String, Object>map = new HashMap<String, Object>();
+		map.put("member_id", member_id);
+		map.put("favorite1", favorite_list.get(0));
+		map.put("favorite2", favorite_list.get(1));
+		map.put("favorite3", favorite_list.get(2));
+		System.out.println("*************favorite1입니다"+ favorite_list.get(0));
 		int i = 0;
 		try {
 			session = sqlSessionFactory.openSession();
-			i = session.update("MemberMapper.updateFavorites", memFav);
+			i = session.update("MemberMapper.updateFavorites", map);
 			if(i==0) {
 				throw new ModifyException("카테고리 수정에 실패하였습니다.");
 			}
