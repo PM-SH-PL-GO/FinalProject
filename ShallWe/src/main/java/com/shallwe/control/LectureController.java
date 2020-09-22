@@ -23,11 +23,13 @@ public class LectureController {
 	@Autowired
 	LectureService service;
 	
+	// 강사 강의 등록 페이지 : 동일
 	@GetMapping(value = "/insert")
 	public String insertView() {
 		return "/lectureRegistration";
 	}
 	
+	// 강사 강의 등록 : 동일
 	@PostMapping(value = "/insert")
 	public ModelAndView insertLecture(@ModelAttribute LectureDetail lectDe)
 			throws AddException {
