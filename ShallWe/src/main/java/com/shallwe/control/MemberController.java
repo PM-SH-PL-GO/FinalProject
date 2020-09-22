@@ -1,14 +1,18 @@
 package com.shallwe.control;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.shallwe.exception.FindException;
+import com.shallwe.exception.ModifyException;
 import com.shallwe.service.MemberSerivce;
 
 @Controller
@@ -22,7 +26,7 @@ public class MemberController {
 	
 	
 	//멤버로그인:경찬
-	@RequestMapping(value="/memberLogin" )
+	@RequestMapping(value="/memberLogin")
 	public ModelAndView memberLogin(HttpSession session, @RequestParam(value="member_id")String member_id,
 														 @RequestParam(value="member_pwd")String member_pwd
 												   ) {
@@ -57,6 +61,26 @@ public class MemberController {
 		
 		return modelAndView;
 	
+		
+	}
+	
+	//비밀번호체인지(로그인x)
+	@RequestMapping(value="/changePassword")
+	public ModelAndView changePassword(@RequestParam Map<String,Object>member,Model model) {
+		
+		ModelAndView modelAndView = new ModelAndView();
+		try {
+			
+			service.changePwd(member);
+			modelAndView.setViewName("/success");
+			
+		} catch (ModifyException e) {
+			modelAndView.setViewName("/fail");
+			modelAndView.addObject("errMsg",e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return modelAndView;
 		
 	}
 	

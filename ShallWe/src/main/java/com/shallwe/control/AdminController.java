@@ -3,6 +3,7 @@ package com.shallwe.control;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,16 +12,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
-//import com.shallwe.model.FaqBean;
 import com.shallwe.service.AdminService;
 import com.shallwe.vo.Faq;
+import com.shallwe.vo.Lecture;
+import com.shallwe.vo.Member;
 import com.shallwe.vo.Tutor;
 
 @Controller
@@ -34,6 +40,33 @@ public class AdminController {
 		System.out.println("Admin Index");
 	}
 	
+	
+	/**
+	 * 전체 회원 목록 조회
+	 * @author jun6
+	 * @return 전체회원 목록
+	 */
+	@RequestMapping(value = "/userList", method = RequestMethod.GET)
+	public ResponseEntity<List<Member>> userList() {
+		try {
+			List<Member> memberList = adminService.showAllMember();
+			if (memberList != null && memberList.size() != 0) {
+				System.out.println(memberList);
+				return ResponseEntity.status(HttpStatus.OK).body(memberList);
+			}else
+				return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(null);
+		}catch(FindException e) {
+			System.out.println("ㅈ대따");
+			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(null);
+		}
+		
+	}
+	
+	/**
+	 * 예비강사 목록 가져오기
+	 * @author jun6
+	 * @return
+	 */
 	@RequestMapping(value = "/preTutor")
 	public ModelAndView preTutor() {
 		ModelAndView mnv = new ModelAndView();
@@ -48,6 +81,11 @@ public class AdminController {
 		return mnv;
 	}
 	
+	/**
+	 * 전체 강사 목록 가져오기
+	 * @author jun6
+	 * @return
+	 */
 	@RequestMapping(value = "/tutorList")
 	public ModelAndView tutorList() {
 		ModelAndView mnv = new ModelAndView();
@@ -70,10 +108,20 @@ public class AdminController {
 	 * @return
 	 */
 	@PatchMapping(value = "/status/{tutorId}")
-	public ResponseEntity<String> statusChange(@PathVariable(value = "tutorId")String id, @RequestParam(name="status") String status){
-		System.out.println("/////////////////////////////////"+ id + " : " + status + "/////////////////////////////////");
+	public ResponseEntity<String> statusChange(@PathVariable(value = "tutorId")String id, @RequestBody String status){
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> map;
+		String tutorStatus = "";
+		try {
+			map = mapper.readValue(status, new TypeReference<Map<String, Object>>() {});
+			tutorStatus = map.get("status").toString();
+		} catch (JsonMappingException e1) {
+			e1.printStackTrace();
+		} catch (JsonProcessingException e1) {
+			e1.printStackTrace();
+		}
 		try{
-			adminService.approvePreTutor(id, status);
+			adminService.approvePreTutor(id, tutorStatus);
 			return (ResponseEntity<String>) ResponseEntity.status(HttpStatus.OK).body("정상적으로 설정되었습니다");
 		}catch(ModifyException e) {
 			e.printStackTrace();
@@ -81,11 +129,24 @@ public class AdminController {
 		}
 	}
 	
-	@RequestMapping(value = "/userList", method = RequestMethod.GET)
-	public void userList(Locale locale, Model model) {
-		System.out.println("userList coming");
+	/**
+	 * 특정 강사의 강의 목록 보여주기
+	 * @param 강사의 id
+	 * @return 강사의 강의 목록(title, state)
+	 */
+	@RequestMapping(value = "/tutorLecture/{tutorId}")
+	public ResponseEntity<List<Lecture>> tutorLectureList(@PathVariable(value = "tutorId") String tutor_id){
+		List<Lecture> lectureList = new ArrayList<>();
+		try {
+			lectureList = adminService.showTutorLectureByTutorId(tutor_id);
+		}catch(FindException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(lectureList);
+		}
+		
+		return ResponseEntity.status(HttpStatus.OK).body(lectureList);
 	}
-
+	
 	@RequestMapping(value = "/lectureList", method = RequestMethod.GET)
 	public void lectureList(Locale locale, Model model) {
 		System.out.println("lectureList coming");
@@ -95,6 +156,11 @@ public class AdminController {
 	public void memberLectureHistory(Locale locale, Model model) {
 		System.out.println("memberLectureHistory coming");
 	}
+	
+	
+	
+	
+	/////////////////////////FAQ////////////////////////////
 	
 	/**
 	 * FAQ 조회
@@ -115,4 +181,6 @@ public class AdminController {
 		
 		return mnv;
 	}
+	
+	
 }

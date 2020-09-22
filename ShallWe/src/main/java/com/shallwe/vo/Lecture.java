@@ -2,10 +2,11 @@ package com.shallwe.vo;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,7 +19,9 @@ public class Lecture {
 	private String lecture_title;
 	private int lecture_price;
 	private String lecture_state;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date lecture_start_dt;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date lecture_end_dt;
 	private int lecture_max;
 	private int lecture_min;

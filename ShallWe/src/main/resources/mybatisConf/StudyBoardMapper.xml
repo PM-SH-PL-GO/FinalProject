@@ -6,7 +6,7 @@
 	<resultMap type="StudyBoard" id="StudyBoardResultMap" autoMapping="true">
 		<id property="studyBoard_id" column="STUDYBOARD_ID"/>
 		<result property="studyBoard_view_count" column="studyboard_viewcount"/>
-		<association property="Study_m" javaType="Member" autoMapping="true">
+		<association property="member" javaType="Member" autoMapping="true">
 			<id property="member_id" column="STUDYBOARD_MEMBER_ID"/>
 		</association>
 	</resultMap>
@@ -14,7 +14,7 @@
 		select *
 		from (select rownum r, a.*
 		        from (select *
-		              from studyboard
+		              from studyboard sb join member m on(sb.STUDYBOARD_MEMBER_ID = m.member_id)
 		              ORDER BY STUDYBOARD_ID DESC) a
 		        )b
 		WHERE r BETWEEN #{startRow} AND #{endRow}
@@ -22,7 +22,7 @@
 	<select id="selectByTitleAndContent" resultMap="StudyBoardResultMap">
 		select ROWNUM r, a.*
    		 FROM (select *
-            from studyboard
+            from studyboard sb join member m on(sb.STUDYBOARD_MEMBER_ID = m.member_id)
             where STUDYBOARD_TITLE like #{studyBoard_title} or STUDYBOARD_CONTENT like #{studyBoard_title}
             ORDER BY STUDYBOARD_ID desc) a
 	</select>
@@ -45,6 +45,7 @@
 		update STUDYBOARD set STUDYBOARD_VIEWCOUNT= STUDYBOARD_VIEWCOUNT+1 where STUDYBOARD_ID=#{studyBoard_id}
 	</insert>
 	<select id="selectByNo" resultMap="StudyBoardResultMap">
-		select * from STUDYBOARD where STUDYBOARD_ID = #{studyBoard_id}
+		select * from studyboard sb join member m on(sb.STUDYBOARD_MEMBER_ID = m.member_id)
+		where STUDYBOARD_ID = #{studyBoard_id}
 	</select>
 </mapper>

@@ -22,6 +22,7 @@
   	<typeAlias  type="com.shallwe.vo.StudyBoard" alias="StudyBoard"/>
   	<typeAlias  type="com.shallwe.vo.StudyReply" alias="StudyReply"/>
   	<typeAlias  type="com.shallwe.model.MemberInfoBean" alias="MemberInfoBean"/>
+  	<typeAlias  type="com.shallwe.model.BoardPageBean" alias="BoardPageBean"/>
   	<typeAlias  type="com.shallwe.model.ReviewBean" alias="ReviewBean"/>
   </typeAliases>
   

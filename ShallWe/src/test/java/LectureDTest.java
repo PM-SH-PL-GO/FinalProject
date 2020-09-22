@@ -166,13 +166,13 @@ public class LectureDTest {
 		}
 	}
 	
-//	@Test
+	@Test
 	void slecttutorTest() {
 		try {
 			Lecture lect = new Lecture();
 			Member mem = new Member();
 			Tutor tu = new Tutor();
-			mem.setMember_id("member2");
+			mem.setMember_id("member3");
 			tu.setMember(mem);
 			lect.setTutor(tu);
 			dao.tutorMyClassList(lect);
@@ -181,7 +181,7 @@ public class LectureDTest {
 		}
 	}
 	
-	@Test
+//	@Test
 	void leDeview() {
 		Lecture lect = new Lecture();
 		lect.setLecture_id(2);

@@ -6,8 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.shallwe.exception.AddException;
+import com.shallwe.exception.RemoveException;
 import com.shallwe.model.ReviewBean;
 
+import lombok.extern.log4j.Log4j;
+
+@Log4j
 @Repository(value = "reviewDAO")
 public class ReviewDAO {
 	@Autowired
@@ -20,7 +24,9 @@ public class ReviewDAO {
 		try {
 			// DB와의 연결
 			SqlSession session = sqlSessionFactory.openSession();
-			result = session.insert("ReviewMapper.insertReview", reviewBean);
+			System.out.println("insertReview reviewBean:" + reviewBean);
+			result = session.insert("ReviewMapper.insertReivew", reviewBean);
+//			session.selectList("LectureMapper.tutorMyClassList", "member1");
 			if ( result == 0  ) {
 				throw new AddException("강의후기 등록에 실패하였습니다.");
 			}
@@ -31,5 +37,20 @@ public class ReviewDAO {
 		
 	}
 	// 후기 삭제 (수강생) : 수정
+	public void deleteReivew ( ReviewBean reviewBean ) throws RemoveException {
+		int result = 0;
+		try {
+			// DB와의 연결
+			SqlSession session = sqlSessionFactory.openSession();
+			result = session.delete("ReviewMapper.deleteReivew", reviewBean);
+			if ( result == 0 ) {
+				log.info("강의 리뷰 삭제에 실패했습니다!");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RemoveException(e.getMessage());
+		}
+		
+	}
 
 }

@@ -13,12 +13,12 @@
 		INSERT INTO
 		lecture(LECTURE_ID, LECTURE_CATEGORY_ID, LECTURE_TUTOR_ID,
 		LECTURE_IMG, LECTURE_TITLE, LECTURE_PRICE, LECTURE_STATE,
-		LECTURE_START_DT, LECTURE_END_DT, LECTURE_MAX, LECTURE_MIN)
+		LECTURE_START_DT, LECTURE_END_DT, LECTURE_MAX, LECTURE_MIN, LECTURE_CURRENT)
 		VALUES(lecture_seq.nextVal, #{lectureCategory.lecture_category_id},
 		#{tutor.member.member_id}, #{lecture_img}, #{lecture_title},
 		#{lecture_price}, #{lecture_state}, #{lecture_start_dt},
 		#{lecture_end_dt},
-		#{lecture_max}, #{lecture_min})
+		#{lecture_max}, #{lecture_min}, 0)
 	</insert>
 	<insert id="insertDetail" parameterType="LectureDetail">
 		INSERT
@@ -26,7 +26,7 @@
 		lecture_detail(LECTURE_ID, LECTURE_CATEGORY_ID, LECTURE_INTRODUCE,
 		LECTURE_CURRICULUM, LECTURE_PREPARED, LECTURE_CAUTION,
 		LECTURE_FILENAME, LECTURE_LOCATION)
-		VALUES(#{lecture.lecture_id},
+		VALUES(lecture_seq.currVal,
 		#{lecture.lectureCategory.lecture_category_id}, #{lecture_introduce},
 		#{lecture_curriculum}, #{lecture_prepared}, #{lecture_caution},
 		#{lecture_fileName}, #{lecture_location})

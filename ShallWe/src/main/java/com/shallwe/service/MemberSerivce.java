@@ -40,10 +40,18 @@ public class MemberSerivce {
 		
 		return memberDao.pwdCheck(member);
 	}
+
+	//멤버비밀번호변경(로그인x):경찬
+	public void changePwd(Map<String,Object> member)throws ModifyException{
+	
+			memberDao.changePwd(member);
+	}
+
 	//회원가입 : 상하
 	public void memberJoin(MemberInfoBean mib)throws AddException{
 		
 	}
+
 	//내 정보 보기:상하 
 	public MemberInfoBean findById(String memberId)throws FindException{ 
 		return memberDao.selectById(memberId);
@@ -51,5 +59,13 @@ public class MemberSerivce {
 	//비밀번호 수정(로그인 된 상태): 상하 
 	public void updatePwd(String memberId, String memberPassword)throws ModifyException { //
 		memberDao.updatePassword(memberId, memberPassword);
+
 	}
+	//비밀번호(임시비밀번호)
+	public void randomPassword(Map<String,Object>member1,Member member)throws ModifyException{
+		memberDao.randomPassword(member1,member);
+		
+	}
+		
 }
+	

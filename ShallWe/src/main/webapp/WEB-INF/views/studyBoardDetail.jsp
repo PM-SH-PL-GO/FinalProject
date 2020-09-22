@@ -4,8 +4,12 @@
 <meta charset="utf-8">
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:formatDate var="resultDt" value="${studyBoard.studyBoard_write_dt}" pattern="yyyy-MM-dd"/>
+
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 <title>Shallwe-함께 배우는 교육공간</title>
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" type="image/x-icon"
@@ -58,22 +62,16 @@
 	color: #B367FF
 }
 </style>
+<script>
+function formatDate(date) { 
+	var d = new Date(date), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = d.getFullYear(); 
+	if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; 
+	return [year, month, day].join('-'); 
+}
+</script>
 </head>
 
 <body>
-	<!--? Preloader Start -->
-	<div id="preloader-active">
-		<div
-			class="preloader d-flex align-items-center justify-content-center">
-			<div class="preloader-inner position-relative">
-				<div class="preloader-circle"></div>
-				<div class="preloader-img pere-text">
-					<img src="assets/img/logo/loder.png" alt="">
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- Preloader Start -->
 
 	<!--? Blog Area Start -->
 	<section class="blog_area single-post-area section-padding">
@@ -87,14 +85,15 @@
 							<li><a href="#">목록보기</a></li>
 						</ul>
 						<div class="blog_details">
-							<h2 style="color: #2d2d2d;">제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목제목
+							<h2 style="color: #2d2d2d;">${studyBoard.studyBoard_title}
 							</h2>
 							<ul class="blog-info-link mt-3 mb-4">
-								<li><a href="#"><i class="fa fa-user"></i>박성운</a></li>
-								<li><a href="#"><i class="fa fa-comments"></i> 03 댓글수</a></li>
-								<li><a href="#">2020년 12월 9일</a></li>
+								<li><a href="#"><i class="fa fa-user"></i>${studyBoard.member.member_name}</a></li>
+								<li><a href="#"><i class="fa fa-comments"></i> 댓글 수()</a></li>
+								<li><a href="#">${resultDt}</a></li>
 							</ul>
-							<p class="excert">내용</p>
+							<p class="excert">${studyBoard.studyBoard_content}</p>
+							${studyBoard}
 							<p>MCSE boot camps have its supporters and its detractors.
 								Some people do not understand why you should have to spend money
 								on boot camp when you can get the MCSE study materials yourself
@@ -116,7 +115,7 @@
 					</div>
 
 					<div class="comments-area">
-						<h4>03 댓글</h4>
+						<h4>댓글(${studyBoard.studyBoard_view_count})</h4>
 						<div class="comment-list">
 							<div class="single-comment justify-content-between d-flex">
 								<div class="user justify-content-between d-flex">

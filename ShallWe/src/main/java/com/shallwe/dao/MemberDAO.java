@@ -136,7 +136,7 @@ public class MemberDAO {
 		map.put("favorite1", favorite_list.get(0));
 		map.put("favorite2", favorite_list.get(1));
 		map.put("favorite3", favorite_list.get(2));
-		System.out.println("*************favorite1입니다"+ favorite_list.get(0));
+
 		int i = 0;
 		try {
 			session = sqlSessionFactory.openSession();
@@ -152,10 +152,6 @@ public class MemberDAO {
 		}
 	
 	}
-
-	
-	// 회원 목록 보기(admin) : 영민	
-	
 	
 	//멤버로그인 : 경찬
 	public Member memberLogin(String member_id)throws FindException{
@@ -192,12 +188,13 @@ public class MemberDAO {
 		return session.selectOne("MemberMapper.pwdCheck",member);
 		
 	}
-	
+	//비밀번호 변경: 경찬
 	public void changePwd(Map<String,Object> member)throws ModifyException{
 		SqlSession session = null;
 		session = sqlSessionFactory.openSession();
 		session.selectOne("MemberMapper.changePwd",member);
 	}
+
 	
 	// 강사 승인/반려(admin) : 준식
 	public void updateTutorState(Map<String, String> map) throws ModifyException{
@@ -208,5 +205,56 @@ public class MemberDAO {
 		}catch(DataAccessException e) {
 			throw new ModifyException();
 		}
+	}
+	//비밀번호(임시비밀번호):경찬
+	public void randomPassword(Map<String,Object>member1 , Member member) {
+		SqlSession session = null;
+		member1.put("member", member);
+		session = sqlSessionFactory.openSession();
+		session.selectOne("MemberMapper.randomPassword",member);
+	}
+	
+	/**
+	 * Admin- 전체 회원 조회
+	 * @author jun6
+	 * @return 전체 회원 목록
+	 * @throws FindException
+	 */
+	public List<Member> selectAllMember() throws FindException{
+		SqlSession session = null;
+		List<Member> memberList = new ArrayList<>();
+		List<MemberInfoBean> beanList = new ArrayList<>();
+		
+		try {
+			session = sqlSessionFactory.openSession();
+			beanList = session.selectList("MemberMapper.selectAllMember");
+			
+			for (MemberInfoBean bean : beanList) {
+				Member member = new Member();
+				member.setMember_id(bean.getMemberId());
+				member.setMember_name(bean.getMemberName());
+				member.setMember_email(bean.getMemberEmail());
+				member.setMember_phone(bean.getMemberPhone());
+				member.setMemeber_sex(bean.getMemberSex());
+				member.setTutor_YN(bean.getTutorYN());
+				
+				List<LectureCategory> lectureList = new ArrayList<>();
+				if (bean.getFavorite1() != null)
+					lectureList.add(bean.getFavorite1());
+				if (bean.getFavorite2() != null)
+					lectureList.add(bean.getFavorite2());
+				if (bean.getFavorite3() != null)
+					lectureList.add(bean.getFavorite3());
+				
+				member.setFavorite_list(lectureList);
+				
+				memberList.add(member);
+			}
+			
+		}catch(DataAccessException e) {
+			throw new FindException("서버연결 중 에러가 발생했습니다");
+		}
+		
+		return memberList;
 	}
 }
