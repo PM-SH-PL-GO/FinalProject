@@ -1,16 +1,24 @@
 package com.shallwe.control;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shallwe.dao.LectureDAO;
 import com.shallwe.exception.FindException;
 import com.shallwe.service.LectureService;
+import com.shallwe.vo.Lecture;
 
 import lombok.extern.log4j.Log4j;
 
@@ -21,10 +29,13 @@ public class kosjController {
 	@Autowired
 	LectureService lectureService;
 	
-	@RequestMapping(value = "/lecturePaid", method = RequestMethod.GET)
-	public void lecturePaid() {
-		System.out.println("lecturePaid.jsp 호출");
-	}
+	@Autowired
+	LectureDAO lectureDAO;
+	
+//	@RequestMapping(value = "/lecturePaid", method = RequestMethod.GET)
+//	public void lecturePaid() {
+//		System.out.println("lecturePaid.jsp 호출");
+//	}
 	@RequestMapping(value = "/reviewAdd", method = RequestMethod.GET)
 	public void reviewAdd() {
 		System.out.println("lecturePaid.jsp  호출");
@@ -61,16 +72,53 @@ public class kosjController {
 			log.info(modelAndView.getModelMap()); 
 			modelAndView.setViewName("/searchLectureList");
 			
-			
 		} catch (FindException e) {
 			modelAndView.setViewName("/fail");
 			e.printStackTrace();
 		}
-		
 		return modelAndView;
 	}
-//	@RequestMapping(value = "/top", method = RequestMethod.GET)
-//	public void top() {
-//		System.out.println("top.jsp  호출");
-//	}
-}
+	
+	@RequestMapping(value="/lecturePaid", method = {RequestMethod.GET, RequestMethod.POST})
+	public String lecturePaymentList(Model model ) throws FindException {
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("searchKey", "all");
+		map.put("searchText", "마");
+		
+		List<Lecture> lectureList = new ArrayList<Lecture>();
+		lectureList = lectureDAO.selectLectureListBySearch(map);
+//		
+//		
+//		ModelAndView modelAndView = new ModelAndView();
+//		modelAndView.addObject("lectureList", lectureList);
+//		modelAndView.setViewName("/lecturePaid");
+//		
+		
+		ObjectMapper mapper = new ObjectMapper();
+		String lectureListJsonValue="";
+		try {
+			lectureListJsonValue = mapper.writeValueAsString(lectureList);
+			System.out.println("in josjController lectureListJsonValue:" + lectureListJsonValue);
+			model.addAttribute("lectureListJsonValue", lectureListJsonValue);
+			
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "/lecturePaid";
+	}
+	
+	@RequestMapping(value = "/insertMemberLectureHistory", method = {RequestMethod.GET,RequestMethod.POST})
+	
+	public void insertMemberLectureHistory(@RequestBody List<Lecture> lectureList ) {
+		
+		log.info(" insertMemberLectureHistory 호출했어용~");
+		log.info(" lectureList ::: " + lectureList);
+		
+		
+		//return modelAndView;
+	}
+	
+} // end of kosjController

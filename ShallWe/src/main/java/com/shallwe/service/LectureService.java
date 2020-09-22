@@ -17,6 +17,7 @@ import com.shallwe.exception.ModifyException;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureDetail;
 
+
 @Service(value = "lectureService")
 public class LectureService {
 
@@ -49,6 +50,7 @@ public class LectureService {
 		}
 
 		return modelAndView;
+		
 	}
 	
 	@Transactional
@@ -106,4 +108,6 @@ public class LectureService {
 
 		return modelAndView;
 	}
+	
+
 }

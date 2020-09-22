@@ -118,4 +118,5 @@
 			, #{lectureId}
 		)}
 	</update>
+	
 </mapper>
