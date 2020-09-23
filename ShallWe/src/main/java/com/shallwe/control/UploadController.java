@@ -125,22 +125,22 @@ public class UploadController {
 		
 	}
 	// 강사 강의 등록 : 동일
-			@PostMapping(value = "/insert")
-			public String insertLecture(LectureDetail lectDe, MultipartFile lecture_img) throws AddException {
-				
-				log.info("JSP에서 넘어온 랙처 이미지" + lecture_img);
-//				ModelAndView mnv = new ModelAndView();
-				try {
-					leservice.insertLecture(lectDe.getLecture(), lectDe);
-//					mnv.setViewName("/success");
-				} catch (AddException e) {
-					e.printStackTrace();
-//					mnv.setViewName("/fail");
-//					mnv.addObject("errorMsg", e.getMessage());
-				}
-				ResponseEntity<String> responseEntity = ResponseEntity.status(HttpStatus.OK).body(tutor_id);
-				return responseEntity;
-			}
+//			@PostMapping(value = "/insert")
+//			public String insertLecture(LectureDetail lectDe, MultipartFile lecture_img) throws AddException {
+//				
+//				log.info("JSP에서 넘어온 랙처 이미지" + lecture_img);
+////				ModelAndView mnv = new ModelAndView();
+//				try {
+//					leservice.insertLecture(lectDe.getLecture(), lectDe);
+////					mnv.setViewName("/success");
+//				} catch (AddException e) {
+//					e.printStackTrace();
+////					mnv.setViewName("/fail");
+////					mnv.addObject("errorMsg", e.getMessage());
+//				}
+//				ResponseEntity<String> responseEntity = ResponseEntity.status(HttpStatus.OK).body(tutor_id);
+//				return responseEntity;
+//			}
 
 	
 }

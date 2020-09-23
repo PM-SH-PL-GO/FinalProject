@@ -3,6 +3,8 @@ package com.shallwe.control;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +34,7 @@ public class LectureController {
 		return "/lectureRegistration";
 	}
 
-//	// 멤버 강의 조회 : 동일
+	// 멤버 강의 조회 : 동일
 //	@GetMapping(value = "/memberLecture")
 //	public String memberLectureView() {
 //		return "/memberLectureList";
@@ -55,17 +57,21 @@ public class LectureController {
 
 	// 강의 조회 : 동일
 	@RequestMapping(value = "/memberLecture")
-	public ModelAndView memberLectureView(MemberLectureHistory mlth) {
+	public ModelAndView memberLectureView(HttpSession session, MemberLectureHistory mlth) {
+		String id = (String)session.getAttribute("loginInfo");
 		List<MemberLectureHistory> mlthlist = new ArrayList<>();
 		ModelAndView mnv = new ModelAndView();
+		Member mem = new Member();
+		mem.setMember_id(id);
+		mlth.setMember(mem);
 		try {
 			mlthlist = service.memberLectureList(mlth);
 			mnv.addObject("mlthlist", mlthlist);
-//			mnv.setViewName("/memberLectureList");
 			mnv.setViewName("/memberLectureList");
 			mnv.addObject("status", "success");
 		} catch (FindException e) {
 			mnv.addObject("status", "fail");
+			mnv.setViewName("/memberLectureList");
 			mnv.addObject("errMsg", e.getMessage());
 		}
 		return mnv;

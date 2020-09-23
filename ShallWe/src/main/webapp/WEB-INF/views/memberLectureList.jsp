@@ -1,6 +1,8 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 <head>
@@ -19,20 +21,23 @@
 <link rel="stylesheet" href="/shallwe/assets/css/animate.min.css">
 <link rel="stylesheet" href="/shallwe/assets/css/hamburgers.min.css">
 <link rel="stylesheet" href="/shallwe/assets/css/magnific-popup.css">
-<link rel="stylesheet" href="/shallwe/assets/css/fontawesome-all.min.css">
+<link rel="stylesheet"
+	href="/shallwe/assets/css/fontawesome-all.min.css">
 <link rel="stylesheet" href="/shallwe/assets/css/themify-icons.css">
 <link rel="stylesheet" href="/shallwe/assets/css/slick.css">
 <link rel="stylesheet" href="/shallwe/assets/css/nice-select.css">
 <link rel="stylesheet" href="/shallwe/assets/css/style.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-</head>.
-<c:forEach items="${mlthlist}" var="m" varStatus="status1">
-${mlthlist}
-</c:forEach>
-<script>
-console.log(${mlthlist});
+</head>
 
+
+
+
+
+
+<script>
+	
 </script>
 <body>
 	<main>
@@ -48,134 +53,39 @@ console.log(${mlthlist});
 					</div>
 				</div>
 				<div class="directory-active">
-					<!-- Single -->
-					<div class="properties pb-20">
-						<div class="properties__cardseo">
-							<div class="properties__imgseo overlay1">
-								<a href="#"><img src="/shallwe/assets/img/gallery/properties1.png"
-									alt=""></a>
-							</div>
-							<div class="properties__caption">
-								<h3>
-									<a href="#">강의 제목</a>
-								</h3>
-								<h6>2020-08-30 ~ 2020-08-30</h6>
-								<h6>강사 이름</h6>
-								<h6>현재인원: 3 / 최대인원: 15</h6>
-							</div>
-							<div
-								class="properties__footer d-flex justify-content-between align-items-center">
-								<h3>12,000원</h3>
-								<div class="heart">
-									<img src="/shallwe/assets/img/gallery/cancel.png" width="30px"
-										alt="강의취소요청" title="강의취소요청">
+					<c:forEach items="${mlthlist}" var="m" varStatus="status">
+						<c:set var="lecture" value="${m.lecture}" />
+						<c:set var="tutor" value="${lecture.tutor}" />
+						<fmt:formatDate var="startDt" value="${lecture.lecture_start_dt}" pattern="yyyy-MM-dd"/>
+						<fmt:formatDate var="endDt" value="${lecture.lecture_end_dt}" pattern="yyyy-MM-dd"/>
+						<!-- Single -->
+						<div class="properties pb-20">
+							<div class="properties__cardseo">
+								<div class="properties__imgseo overlay1">
+									<a href="#"><img
+										src="/shallwe/assets/img/gallery/properties1.png" alt=""></a>
+								</div>
+								<div class="properties__caption">
+									<h3>
+										<a href="#">${lecture.lecture_title}</a>
+									</h3>
+									<h6>${startDt}~ ${endDt}</h6>
+									<h6>${tutor.tutor_nickname}</h6>
+									<h6>현재인원: ${lecture.lecture_current} / 최대인원:
+										${lecture.lecture_max}</h6>
+								</div>
+								<div
+									class="properties__footer d-flex justify-content-between align-items-center">
+									<h3>${lecture.lecture_price}원</h3>
+									<div class="heart">
+										<img src="/shallwe/assets/img/gallery/cancel.png" width="30px"
+											alt="강의취소요청" title="강의취소요청">
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<!-- Single -->
-					
-					<!-- Single -->
-					<div class="properties pb-20">
-						<div class="properties__cardseo">
-							<div class="properties__imgseo overlay1">
-								<a href="#"><img src="/shallwe/assets/img/gallery/properties1.png"
-									alt=""></a>
-							</div>
-							<div class="properties__caption">
-								<h3>
-									<a href="#">강의 제목</a>
-								</h3>
-								<h6>2020-08-30 ~ 2020-08-30</h6>
-								<h6>강사 이름</h6>
-								<h6>현재인원: 3 / 최대인원: 15</h6>
-							</div>
-							<div
-								class="properties__footer d-flex justify-content-between align-items-center">
-								<h3>12,000원</h3>
-								<div class="heart">
-									<img src="/shallwe/assets/img/gallery/cancel.png" width="30px"
-										alt="강의취소요청" title="강의취소요청">
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- Single -->
-					<div class="properties pb-20">
-						<div class="properties__cardseo">
-							<div class="properties__imgseo overlay1">
-								<a href="#"><img src="/shallwe/assets/img/gallery/properties2.png"
-									alt=""></a>
-							</div>
-							<div class="properties__caption">
-								<h3>
-									<a href="#">강의 제목</a>
-								</h3>
-								<h6>2020-08-30 ~ 2020-08-30</h6>
-								<h6>강사 이름</h6>
-								<h6>현재인원: 3 / 최대인원: 15</h6>
-							</div>
-							<div
-								class="properties__footer d-flex justify-content-between align-items-center">
-								<h3>12,000원</h3>
-								<div class="heart">
-									<img src="/shallwe/assets/img/gallery/cancel.png" width="30px"
-										alt="강의취소요청" title="강의취소요청">
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- Single -->
-					<div class="properties pb-20">
-						<div class="properties__cardseo">
-							<div class="properties__imgseo overlay1">
-								<a href="#"><img src="/shallwe/assets/img/gallery/properties3.png"
-									alt=""></a>
-							</div>
-							<div class="properties__caption">
-								<h3>
-									<a href="#">강의 제목</a>
-								</h3>
-								<h6>2020-08-30 ~ 2020-08-30</h6>
-								<h6>강사 이름</h6>
-								<h6>현재인원: 3 / 최대인원: 15</h6>
-							</div>
-							<div
-								class="properties__footer d-flex justify-content-between align-items-center">
-								<h3>12,000원</h3>
-								<div class="heart">
-									<img src="/shallwe/assets/img/gallery/cancel.png" width="30px"
-										alt="강의취소요청" title="강의취소요청">
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- Single -->
-					<div class="properties pb-20">
-						<div class="properties__cardseo">
-							<div class="properties__imgseo overlay1">
-								<a href="#"><img src="/shallwe/assets/img/gallery/properties1.png"
-									alt=""></a>
-							</div>
-							<div class="properties__caption">
-								<h3>
-									<a href="#">강의 제목</a>
-								</h3>
-								<h6>2020-08-30 ~ 2020-08-30</h6>
-								<h6>강사 이름</h6>
-								<h6>현재인원: 3 / 최대인원: 15</h6>
-							</div>
-							<div
-								class="properties__footer d-flex justify-content-between align-items-center">
-								<h3>12,000원</h3>
-								<div class="heart">
-									<img src="/shallwe/assets/img/gallery/cancel.png" width="30px"
-										alt="강의취소요청" title="강의취소요청">
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- Single -->
+						<!-- Single -->
+					</c:forEach>
 				</div>
 			</div>
 		</div>
@@ -198,8 +108,8 @@ console.log(${mlthlist});
 					<div class="properties pb-20">
 						<div class="properties__cardseo">
 							<div class="properties__imgseo overlay1">
-								<a href="#"><img src="/shallwe/assets/img/gallery/properties1.png"
-									alt=""></a>
+								<a href="#"><img
+									src="/shallwe/assets/img/gallery/properties1.png" alt=""></a>
 							</div>
 							<div class="properties__caption">
 								<h3>
@@ -213,8 +123,8 @@ console.log(${mlthlist});
 								class="properties__footer d-flex justify-content-between align-items-center">
 								<h3>10,000원</h3>
 								<div class="heart">
-									<img src="/shallwe/assets/img/gallery/performance.png" width="30px"
-										alt="강사후기보기" title="강사후기보기">
+									<img src="/shallwe/assets/img/gallery/performance.png"
+										width="30px" alt="강사후기보기" title="강사후기보기">
 								</div>
 							</div>
 						</div>
@@ -223,8 +133,8 @@ console.log(${mlthlist});
 					<div class="properties pb-20">
 						<div class="properties__cardseo">
 							<div class="properties__imgseo overlay1">
-								<a href="#"><img src="/shallwe/assets/img/gallery/properties2.png"
-									alt=""></a>
+								<a href="#"><img
+									src="/shallwe/assets/img/gallery/properties2.png" alt=""></a>
 							</div>
 							<div class="properties__caption">
 								<h3>
@@ -238,8 +148,8 @@ console.log(${mlthlist});
 								class="properties__footer d-flex justify-content-between align-items-center">
 								<h3>10,000원</h3>
 								<div class="heart">
-									<img src="/shallwe/assets/img/gallery/performance.png" width="30px"
-										alt="강사후기보기" title="강사후기보기">
+									<img src="/shallwe/assets/img/gallery/performance.png"
+										width="30px" alt="강사후기보기" title="강사후기보기">
 								</div>
 							</div>
 						</div>
@@ -248,8 +158,8 @@ console.log(${mlthlist});
 					<div class="properties pb-20">
 						<div class="properties__cardseo">
 							<div class="properties__imgseo overlay1">
-								<a href="#"><img src="/shallwe/assets/img/gallery/properties3.png"
-									alt=""></a>
+								<a href="#"><img
+									src="/shallwe/assets/img/gallery/properties3.png" alt=""></a>
 							</div>
 							<div class="properties__caption">
 								<h3>
@@ -263,8 +173,8 @@ console.log(${mlthlist});
 								class="properties__footer d-flex justify-content-between align-items-center">
 								<h3>10,000원</h3>
 								<div class="heart">
-									<img src="/shallwe/assets/img/gallery/performance.png" width="30px"
-										alt="강사후기보기" title="강사후기보기">
+									<img src="/shallwe/assets/img/gallery/performance.png"
+										width="30px" alt="강사후기보기" title="강사후기보기">
 								</div>
 							</div>
 						</div>
@@ -273,8 +183,8 @@ console.log(${mlthlist});
 					<div class="properties pb-20">
 						<div class="properties__cardseo">
 							<div class="properties__imgseo overlay1">
-								<a href="#"><img src="/shallwe/assets/img/gallery/properties1.png"
-									alt=""></a>
+								<a href="#"><img
+									src="/shallwe/assets/img/gallery/properties1.png" alt=""></a>
 							</div>
 							<div class="properties__caption">
 								<h3>
@@ -288,8 +198,8 @@ console.log(${mlthlist});
 								class="properties__footer d-flex justify-content-between align-items-center">
 								<h3>10,000원</h3>
 								<div class="heart">
-									<img src="/shallwe/assets/img/gallery/performance.png" width="30px"
-										alt="강사후기보기" title="강사후기보기">
+									<img src="/shallwe/assets/img/gallery/performance.png"
+										width="30px" alt="강사후기보기" title="강사후기보기">
 								</div>
 							</div>
 						</div>
