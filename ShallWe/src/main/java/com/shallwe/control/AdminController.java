@@ -2,14 +2,13 @@ package com.shallwe.control;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +25,7 @@ import com.shallwe.exception.ModifyException;
 import com.shallwe.service.AdminService;
 import com.shallwe.vo.Faq;
 import com.shallwe.vo.Lecture;
+import com.shallwe.vo.LectureDetail;
 import com.shallwe.vo.Member;
 import com.shallwe.vo.Tutor;
 
@@ -40,6 +40,33 @@ public class AdminController {
 		System.out.println("Admin Index");
 	}
 	
+	/**
+	 * 전체 회원 목록 조회
+	 * @author jun6
+	 * @return 전체회원 목록
+	 */
+	@RequestMapping(value = "/member", method = RequestMethod.GET)
+	public ResponseEntity<List<Member>> memberList() {
+		try {
+			List<Member> memberList = adminService.showAllMember();
+			if (memberList != null && memberList.size() != 0) {
+				System.out.println(memberList);
+				return ResponseEntity.status(HttpStatus.OK).body(memberList);
+			}else
+				return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(null);
+		}catch(FindException e) {
+			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(null);
+		}
+		
+	}
+
+	@DeleteMapping(value = "/member/{memberId}")
+	public ResponseEntity<String> deleteMember(@PathVariable(name = "memberId") String member_id){
+		
+		return ResponseEntity.status(HttpStatus.OK).body("");
+	}
+	
+	/////////////////////////강사 관리////////////////////////////
 	
 	/**
 	 * 전체 회원 목록 조회
@@ -68,18 +95,29 @@ public class AdminController {
 	 * @return
 	 */
 	@RequestMapping(value = "/preTutor")
-	public ModelAndView preTutor() {
-		ModelAndView mnv = new ModelAndView();
+	public ResponseEntity<List<Tutor>> preTutor() {
 		List<Tutor> tutorList = new ArrayList<>();
 		try {
 			tutorList = adminService.showAllTutor("N");
-			mnv.addObject("preTutorList", tutorList);
-			mnv.setViewName("/preTutor");
+			return ResponseEntity.status(HttpStatus.OK).body(tutorList);
 		} catch (FindException e) {
 			e.printStackTrace();
+			return new ResponseEntity<>(tutorList, HttpStatus.NOT_FOUND);
 		}
-		return mnv;
 	}
+//	@RequestMapping(value = "/preTutor")
+//	public ModelAndView preTutor() {
+//		ModelAndView mnv = new ModelAndView();
+//		List<Tutor> tutorList = new ArrayList<>();
+//		try {
+//			tutorList = adminService.showAllTutor("N");
+//			mnv.addObject("preTutorList", tutorList);
+//			mnv.setViewName("/preTutor");
+//		} catch (FindException e) {
+//			e.printStackTrace();
+//		}
+//		return mnv;
+//	}
 	
 	/**
 	 * 전체 강사 목록 가져오기
@@ -146,19 +184,41 @@ public class AdminController {
 		
 		return ResponseEntity.status(HttpStatus.OK).body(lectureList);
 	}
-	
-	@RequestMapping(value = "/lectureList", method = RequestMethod.GET)
-	public void lectureList(Locale locale, Model model) {
-		System.out.println("lectureList coming");
-	}
 
-	@RequestMapping(value = "/memberLectureHistory", method = RequestMethod.GET)
-	public void memberLectureHistory(Locale locale, Model model) {
-		System.out.println("memberLectureHistory coming");
+
+	/////////////////////////강의 관리////////////////////////////
+	
+	/**
+	 * 전체 강의 목록 조회하기
+	 * @author jun6
+	 * @return 전체 강의 목록
+	 */
+	@RequestMapping(value = "/lectureList", method = RequestMethod.GET)
+	public ResponseEntity<List<Lecture>> lectureList() {
+		try {
+			List<Lecture> lectureList = adminService.showAllLectures();
+			return ResponseEntity.status(HttpStatus.OK).body(lectureList);
+		}catch(FindException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(null);
+		}
 	}
 	
-	
-	
+	/**
+	 * 특정 강의 상세정보 조회하기 - 동일이꺼 가져다 쓰기
+	 * @author jun6
+	 * @param lecture_id
+	 * @return
+	 */
+//	@RequestMapping(value ="/lectureDetail/{lectureId}", method = RequestMethod.GET)
+//	public ResponseEntity<LectureDetail> lectureDetailList(@PathVariable(name = "lectureId") String lecture_id){
+//		try{
+//			LectureDetail lectureDetail = adminService.showLectureDetailById(lecture_id);
+//			return ResponseEntity.status(HttpStatus.OK).body(lectureDetail);
+//		}catch(FindException e) {
+//			return ResponseEntity.status(HttpStatus.OK).body(null);
+//		}
+//	}
 	
 	/////////////////////////FAQ////////////////////////////
 	

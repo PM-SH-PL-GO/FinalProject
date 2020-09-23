@@ -3,10 +3,10 @@ package com.shallwe.service;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.shallwe.dao.MemberDAO;
+import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.model.MemberInfoBean;
@@ -46,7 +46,12 @@ public class MemberSerivce {
 	
 			memberDao.changePwd(member);
 	}
-	
+
+	//회원가입 : 상하
+	public void memberJoin(MemberInfoBean mib)throws AddException{
+		
+	}
+
 	//내 정보 보기:상하 
 	public MemberInfoBean findById(String memberId)throws FindException{ 
 		return memberDao.selectById(memberId);

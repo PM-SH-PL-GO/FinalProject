@@ -61,6 +61,7 @@
 		<result column="fav3Name" property="lecture_category_name"/>
 	</association>		
 	</resultMap>
+	
 	<select id="selectById" parameterType="String" resultMap="MemberInfoMap">
 	SELECT m.member_id , m.member_pwd, m.member_name, m.member_sex, m.member_email, m.member_phone,
 			lc1.category_id fav1Id, lc1.category_name fav1Name
@@ -82,12 +83,34 @@
 	<update id="updatePhone" parameterType="Map">
 	UPDATE member set member_phone = #{memberPhone} where member_id = #{memberId}
 	</update>
-	<update id="updateFavorites" parameterType="Map">
-	UPDATE member set member_favorite1 = #{favorite1.lecture_category_id}, 
-					  member_favorite2 = #{favorite2.lecture_category_id},
-					  member_favorite3 = #{favorite3.lecture_category_id} 
-	WHERE member_id = #{memberId}
-	</update>
+
+	
+<!-- 	<resultMap type="Member" id ="updateCategoFav"> -->
+<!-- 		<id property= "member_id" column="member_id"/> -->
+<!-- 		<collection property="favorite_list" javaType="LectureCategory" autoMapping="true" resultMap="lecca"> -->
+<!-- 		</collection> -->
+<!-- 	</resultMap> -->
+<!-- 	<resultMap type="LectureCategory" id="lecca" autoMapping="true"> -->
+<!-- 		<id property= "lecture_category_id1" column="fav1"/> -->
+<!-- 		<id property= "lecture_category_id2" column="fav2"/> -->
+<!-- 		<id property= "lecture_category_id3" column="fav3"/> -->
+	
+<!-- 	</resultMap> -->
+<!-- 	<update id="updateFavorites" parameterType="Map"> -->
+<!-- 	UPDATE member set member_favorite1 = #{favorite_list.favorite1.lecture_category_id},  -->
+<!-- 					  member_favorite2 = #{favorite_list.favorite2.lecture_category_id}, -->
+<!-- 					  member_favorite3 = #{favorite_list.favorite3.lecture_category_id}  -->
+<!-- 	WHERE member_id = #{member_id} -->
+<!-- 	</update> -->
+
+<!-- ==================================================================	 -->
+
+<!-- 	<update id="updateFavorites" parameterType="Map" resultMap="updateCategoFav"> -->
+<!-- 	UPDATE member set member_favorite1 fav1 = #{favorite_list.favorite1.lecture_category_id},  -->
+<!-- 					  member_favorite2 fav2 = #{favorite_list.favorite2.lecture_category_id}, -->
+<!-- 					  member_favorite3 fav3 = #{favorite_list.favorite3.lecture_category_id}  -->
+<!-- 	WHERE member_id = #{member_id} -->
+<!-- 	</update> -->
 	
 	<insert id="joinMember" parameterType="MemberInfoBean">
 	INSERT INTO member(member_id, member_pwd, member_name, member_email, member_phone, member_favorite1, member_favorite2, member_favorite3, member_sex, tutor_yn)
@@ -112,5 +135,10 @@
 	    JOIN lecture_category lc2 ON(m.member_favorite2=lc2.category_id)LEFT OUTER
 	    JOIN lecture_category lc3 ON(m.member_favorite3=lc3.category_id)
 	</select>
-	
+
+<!-- admin(jun6) : 회원 삭제 -->
+<!-- 	<delete id="deleteMemberById"> -->
+<!-- 		DELETE member -->
+<!-- 		WHERE member_id = #{} -->
+<!-- 	</delete> -->
 </mapper>

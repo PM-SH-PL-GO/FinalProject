@@ -82,7 +82,7 @@ public class LectureDetailDAO {
 
 		return lectureList;
 	}
-
+	
 	// 강의 승인/반려(admin) : 준식
 	// 강의 취소 승인하기(admin) : 준식
 }

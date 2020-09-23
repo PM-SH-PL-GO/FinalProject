@@ -3,5 +3,51 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="WishListMapper">
+	<resultMap type="WishList" id="wishListMap" autoMapping="true">
+		<association property="member" javaType="Member" autoMapping="true">
+			<id property ="member_id" column="member_id"/>
+		</association>
+		<collection property="lecs" resultMap="lecsMap">
+		</collection>	
+	</resultMap>
+		
+	<resultMap type="Lecture" id="lecsMap">
+		<result property="lecture_img" column="lecimg"/>
+		<result property="lecture_title" column="lectitle"/>
+		<result property="lecture_price" column="lecprice"/>
+		<association property = "tutor" javaType="Tutor" autoMapping="true" resultMap="tutory">
+		</association>
+	</resultMap>	
+	<resultMap type="Tutor" id="tutory" autoMapping="true">
+		<association property="member" javaType="Member" autoMapping="true">
+		<result property="member_id" column="member_id"/>
+		<result property="member_name" column="tutorname"/>
+		</association>
+	</resultMap>
 
+<!-- 		<association property="lecture_id" javaType="Lecture" autoMapping="true"> -->
+<!-- 			<id property ="lecture_id" column="lecture_id"/> -->
+<!-- 		</association> -->
+<!-- 		<association property="lecture_category_id" javaType="lectureCategory" autoMapping="true"> -->
+<!-- 			<id property ="lecture_category_id" column="category_id"/> -->
+<!-- 		</association> -->
+	
+
+	<select id ="selectWishListById" parameterType ="String" resultMap="wishListMap">
+	SELECT lec.lecture_img lecimg, lec.lecture_title lectitle, tut.member_name tutorname, lec.lecture_price lecprice
+	FROM wishlist wish JOIN lecture lec on(wish.lecture_id = lec.lecture_id)
+                    JOIN member tut on(lec.lecture_tutor_id = tut.member_id)
+                    JOIN member mem on(wish.member_id = mem.member_id)
+	WHERE mem.member_id =#{member_id}
+	</select>
+
+	<insert id ="addFavLec" parameterType="Map">
+	INSERT INTO WishList(lecture_id, member_id, lecture_category_id)
+	VALUES( #{lecture.lecture_id},#{member_id}, #{lecture.lectureCategory.lecture_category_id})
+	</insert>
+	
+	<delete id ="deleteFavLec" parameterType="Map">
+	DELETE from WishList where member_id=#{member_id} AND lecture_id=#{lecture_id}
+	</delete>
+	
 </mapper>

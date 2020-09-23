@@ -1,5 +1,7 @@
 package com.shallwe.dao;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -150,5 +152,39 @@ public class LectureDAO {
 			session.close();
 		}
 	} // end of selectLectureListBySearch method
+	
+	// test용
+	
+	public Lecture selectLectureBytutorId (String tutor_id) {
+		SqlSession session = null;
+		Lecture lecture = new Lecture();
+		try {
+			session = sqlSessionFactory.openSession();
+			lecture = session.selectOne("LectureMapper.selectLectureBytutorId", tutor_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			session.close();
+		}
+		return lecture;
+	}
 
+	public List<Lecture> selectAllLectures() throws FindException{
+		SqlSession session = null;
+		List<Lecture> lectureList = new ArrayList<>();
+		
+		try {
+			session = sqlSessionFactory.openSession();
+			lectureList = session.selectList("LectureMapper.selectAllLectures");
+//			for (Lecture lec : lectureList) {
+//				System.out.println("Start = " + lec.getLecture_start_dt());
+//			}
+		}catch(DataAccessException e) {
+			e.printStackTrace();
+		}
+		
+		return lectureList;
+	}
+	
 } // end of LectureDAO class
