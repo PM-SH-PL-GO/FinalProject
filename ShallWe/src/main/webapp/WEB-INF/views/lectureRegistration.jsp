@@ -55,7 +55,11 @@
 			.on(
 				"click",
 				function () {
-					alert("insert click");
+					let form = $("#formLectureRegistration")[0];
+					let formData = new FormData(form);
+					formData.append("lecture_img", $("#lectureImgFile"))[0].files[0];
+// 					formData.append("name", "id")[0].files[0];
+					
 					let lectureTitleValue = $("#lectureTitle").val();
 					let lectureIntroValue = $("#lectureIntro").val();
 // 					let curiculumValue = $("#curiculum").val();
@@ -68,7 +72,7 @@
 // 					let cautionValue = $("#caution").val();
 // 					let priceValue = $("#price").val();
 // 					let cateValue = $("#lectCate option:selected").val();
-					let lectureImgFileValue = $("#lectureImgFile").val();
+// 					let lectureImgFileValue = $("#lectureImgFile").val();
 					alert(lectureImgFileValue);
 					if (lectureTitleValue == "") {
 						alert("제목을 입력하세요.");
@@ -79,10 +83,11 @@
 					} else {
 						console.log($("#formLectureRegistration").serialize());
 						$.ajax({
-								url: "/shallwe/Lectures/insert",
+								url: "/shallwe/insert",
 								method: "POST",
-								data:
-								$("#formLectureRegistration").serialize() + "&lecture.lecture_img=" + lectureImgFileValue
+								data: formData
+								
+// 								$("#formLectureRegistration").serialize() + "&lecture.lecture_img=" + lectureImgFileValue
 								
 // 								{
 // 									'lecture.lecture_title': lectureTitleValue,
@@ -136,7 +141,7 @@
 								<img id="preImage"
 									src="${pageContext.request.contextPath}/files/lecture/${noticeVO.lectureImgFile}"
 									width="300px" alt="" class="img-fluid d-block"> 
-								<input type="file" id="lectureImgFile" name="lecture.lecture_img" class="mt-10" accept=".gif, .jpg, .png">
+								<input type="file" id="lectureImgFile" name="lecture_img" class="mt-10" accept="imags/*">
 								<h6 class="mt-10">강의 제목</h6>
 								<div class="mt-10">
 									<input type="text" value="제목ㅎ" name="lecture.lecture_title"

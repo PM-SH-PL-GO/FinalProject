@@ -11,13 +11,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.shallwe.dao.LectureDAO;
 import com.shallwe.dao.LectureDetailDAO;
+import com.shallwe.dao.MemberLectureHistoryDAO;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureDetail;
-import com.shallwe.vo.Member;
-import com.shallwe.vo.Tutor;
+import com.shallwe.vo.MemberLectureHistory;
 
 
 @Service(value = "lectureService")
@@ -27,6 +27,8 @@ public class LectureService {
 	LectureDAO lectureDAO;
 	@Autowired
 	LectureDetailDAO lectureDetailDAO;
+	@Autowired
+	MemberLectureHistoryDAO memberLectureHistoryDAO;
 
 	/**
 	 * @author Soojeong
@@ -64,6 +66,11 @@ public class LectureService {
 		} catch (AddException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	//수강 강의 조회 : 동일
+	public List<MemberLectureHistory> memberLectureList(MemberLectureHistory mlth) throws FindException{
+		return memberLectureHistoryDAO.memberMyClassList(mlth);
 	}
 	
 	//강의 상세 조회 : 동일

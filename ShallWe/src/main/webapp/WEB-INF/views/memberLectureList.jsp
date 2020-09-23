@@ -1,5 +1,6 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 <head>
@@ -23,7 +24,15 @@
 <link rel="stylesheet" href="/shallwe/assets/css/slick.css">
 <link rel="stylesheet" href="/shallwe/assets/css/nice-select.css">
 <link rel="stylesheet" href="/shallwe/assets/css/style.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
+<c:forEach items="${mlthlist}" var="m" varStatus="status1"/>
+<script>
+alert(${m.lecture.lecture_id});
+console.log(${mlthlist});
+
+</script>
 <body>
 	<main>
 		<!--? 강의목록 Start -->
@@ -38,6 +47,33 @@
 					</div>
 				</div>
 				<div class="directory-active">
+					<!-- Single -->
+					<div class="properties pb-20">
+						<div class="properties__cardseo">
+							<div class="properties__imgseo overlay1">
+								<a href="#"><img src="/shallwe/assets/img/gallery/properties1.png"
+									alt=""></a>
+							</div>
+							<div class="properties__caption">
+								<h3>
+									<a href="#">강의 제목</a>
+								</h3>
+								<h6>2020-08-30 ~ 2020-08-30</h6>
+								<h6>강사 이름</h6>
+								<h6>현재인원: 3 / 최대인원: 15</h6>
+							</div>
+							<div
+								class="properties__footer d-flex justify-content-between align-items-center">
+								<h3>12,000원</h3>
+								<div class="heart">
+									<img src="/shallwe/assets/img/gallery/cancel.png" width="30px"
+										alt="강의취소요청" title="강의취소요청">
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Single -->
+					
 					<!-- Single -->
 					<div class="properties pb-20">
 						<div class="properties__cardseo">
