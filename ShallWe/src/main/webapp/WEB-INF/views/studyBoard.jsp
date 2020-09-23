@@ -151,6 +151,9 @@ $(function(){
 	});
 	//--------- 게시글 CLICK  START---------		
 
+	$("#boardWrite").click(function(){
+		location.href="/shallwe/board/write"
+	});
 });
 
 
@@ -206,7 +209,7 @@ function formatDate(date) {
 						</div>
 						<!-- 			<button type="submit" class="button-write">검색</button> -->
 						<div class="col-xl-12">
-							<a class="button button-write f-right">글쓰기</a>
+							<a class="button button-write f-right" id="boardWrite">글쓰기</a>
 							
 						</div>
 					</div>
