@@ -16,6 +16,8 @@ import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureDetail;
+import com.shallwe.vo.Member;
+import com.shallwe.vo.Tutor;
 
 
 @Service(value = "lectureService")
@@ -53,6 +55,7 @@ public class LectureService {
 		
 	}
 	
+	//강의 등록 : 동일
 	@Transactional
 	public void insertLecture(Lecture lect, LectureDetail lectDe) throws AddException {
 		try {
@@ -62,7 +65,12 @@ public class LectureService {
 			e.printStackTrace();
 		}
 	}
-
+	
+	//강의 상세 조회 : 동일
+	public LectureDetail lectureDetailView(Lecture lect) throws FindException {
+		return lectureDetailDAO.lectureDetailView(lect);
+	}
+	
 	/**
 	 * 강의신청 후 결제
 	 * 

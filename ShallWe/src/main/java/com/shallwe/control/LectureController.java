@@ -1,5 +1,8 @@
 package com.shallwe.control;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,11 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.shallwe.exception.AddException;
+import com.shallwe.exception.FindException;
 import com.shallwe.service.LectureService;
-import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureDetail;
-import com.shallwe.vo.Member;
-import com.shallwe.vo.Tutor;
 
 @Controller
 @RequestMapping(value = "/Lectures")
@@ -43,6 +44,30 @@ public class LectureController {
 			mnv.setViewName("/fail");
 			mnv.addObject("errorMsg", e.getMessage());
 		}
+		return mnv;
+	}
+	
+	//강의 조회 : 동일
+	@GetMapping(value = "memberLecture")
+	public String memberLectureView() {
+	return "/memberLectureList";
+	}
+	
+	// 강의 상세 조회 : 동일
+	@GetMapping(value = "/detail")
+//	public String detailView() {
+//		return "/lectureDetail";
+//	}
+	public ModelAndView detailView(LectureDetail lectDe) {
+		ModelAndView mnv = new ModelAndView();
+		try {
+			lectDe = service.lectureDetailView(lectDe.getLecture());
+			mnv.addObject("lectDe", lectDe);
+			mnv.setViewName("/lectureDetail");
+		} catch (FindException e) {
+			e.printStackTrace();
+		}
+		
 		return mnv;
 	}
 }

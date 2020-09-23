@@ -6,7 +6,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="x-ua-compatible" content="ie=edge">
-<title>DirectoryListing</title>
+<title>강의 등록</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" type="image/x-icon"
@@ -58,16 +58,16 @@
 					alert("insert click");
 					let lectureTitleValue = $("#lectureTitle").val();
 					let lectureIntroValue = $("#lectureIntro").val();
-					let curiculumValue = $("#curiculum").val();
-					let locationValue = $("input[name=lecture_location]").val();
-					let firstDateValue = $("#firstDate").val();
-					let lastDateValue = $("#lastDate").val();
-					let pMinValue = $("#pMin").val();
-					let pMaxValue = $("#pMax").val();
-					let preparedValue = $("#prepared").val();
-					let cautionValue = $("#caution").val();
-					let priceValue = $("#price").val();
-					let cateValue = $("#lectCate option:selected").val();
+// 					let curiculumValue = $("#curiculum").val();
+// 					let locationValue = $("input[name=lecture_location]").val();
+// 					let firstDateValue = $("#firstDate").val();
+// 					let lastDateValue = $("#lastDate").val();
+// 					let pMinValue = $("#pMin").val();
+// 					let pMaxValue = $("#pMax").val();
+// 					let preparedValue = $("#prepared").val();
+// 					let cautionValue = $("#caution").val();
+// 					let priceValue = $("#price").val();
+// 					let cateValue = $("#lectCate option:selected").val();
 					let lectureImgFileValue = $("#lectureImgFile").val();
 					alert(lectureImgFileValue);
 					if (lectureTitleValue == "") {
@@ -77,29 +77,31 @@
 						alert("강의 소개를 입력하세요.");
 						$("lectureIntroValue").focus();
 					} else {
-						$
-							.ajax({
+						console.log($("#formLectureRegistration").serialize());
+						$.ajax({
 								url: "/shallwe/Lectures/insert",
 								method: "POST",
 								data:
-								// 						$("#formLectureRegistration").serialize()
-								{
-									'lecture.lecture_title': lectureTitleValue,
-									'lecture_introduce': lectureIntroValue,
-									'lecture_curriculum': curiculumValue,
-									'lecture_location': locationValue,
-									'lecture.lecture_start_dt': firstDateValue,
-									'lecture.lecture_end_dt': lastDateValue,
-									'lecture.lecture_min': pMinValue,
-									'lecture.lecture_max': pMaxValue,
-									'lecture_prepared': preparedValue,
-									'lecture_caution': cautionValue,
-									'lecture.lecture_price': priceValue,
-									'lecture.lectureCategory.lecture_category_id': cateValue,
-									'lecture.tutor.member.member_id': 'member2',
-									'lecture.lecture_img': lectureImgFileValue,
-									'lecture.lecture_state': '승인대기'
-								},
+								$("#formLectureRegistration").serialize() + "&lecture.lecture_img=" + lectureImgFileValue
+								
+// 								{
+// 									'lecture.lecture_title': lectureTitleValue,
+// 									'lecture_introduce': lectureIntroValue,
+// 									'lecture_curriculum': curiculumValue,
+// 									'lecture_location': locationValue,
+// 									'lecture.lecture_start_dt': firstDateValue,
+// 									'lecture.lecture_end_dt': lastDateValue,
+// 									'lecture.lecture_min': pMinValue,
+// 									'lecture.lecture_max': pMaxValue,
+// 									'lecture_prepared': preparedValue,
+// 									'lecture_caution': cautionValue,
+// 									'lecture.lecture_price': priceValue,
+// 									'lecture.lectureCategory.lecture_category_id': cateValue,
+// 									'lecture.tutor.member.member_id': 'member2',
+// 									'lecture.lecture_img': lectureImgFileValue,
+// 									'lecture.lecture_state': '승인대기'
+// 								}
+							,
 								success: function (data) {
 									let responseObj = JSON
 										.parse(data);
@@ -133,8 +135,8 @@
 								enctype="multipart/form-data" name="noticeForm">
 								<img id="preImage"
 									src="${pageContext.request.contextPath}/files/lecture/${noticeVO.lectureImgFile}"
-									alt="" class="img-fluid d-block"> 
-								<input type="file" id="lectureImgFile" name="lectureImg" class="mt-10">
+									width="300px" alt="" class="img-fluid d-block"> 
+								<input type="file" id="lectureImgFile" name="lecture.lecture_img" class="mt-10" accept=".gif, .jpg, .png">
 								<h6 class="mt-10">강의 제목</h6>
 								<div class="mt-10">
 									<input type="text" value="제목ㅎ" name="lecture.lecture_title"
@@ -228,9 +230,12 @@
 								<a href="#" class="genric-btn primary-border mt-10">첨부파일등록</a>
 								<div class="mt-70">
 									<input type="button" class="genric-btn primary-border"
-										id="insertBtn" value="등록"> <input type="button"
+										id="insertBtn" value="등록"> 
+									<input type="button"
 										class="genric-btn primary-border" id="updateBtn" value="수정">
 								</div>
+								<input type="hidden" name="lecture.lecture_state" value="승인대기" />
+								<input type="hidden" name="lecture.tutor.member.member_id" value="member2" />
 							</form>
 						</div>
 					</div>
