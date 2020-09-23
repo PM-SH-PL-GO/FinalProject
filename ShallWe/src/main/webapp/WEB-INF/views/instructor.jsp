@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+ 
 <!DOCTYPE html>
 <!-- Created By CodingNepal -->
 <html lang="en" dir="ltr">
@@ -178,7 +179,8 @@ body {
   color: #384047;
 }
 
-form {
+/*form {*/
+.cer{
   max-width: 300px;
   margin: 10px auto;
   padding: 10px 20px;
@@ -252,6 +254,38 @@ button {
   box-shadow: 0 -1px 0 rgba(255,255,255,0.1) inset;
   margin-bottom: 10px;
 }
+.uploadImage{
+
+padding: 19px 39px 18px 39px;
+  color: #FFF;
+  background-color: #00DBD5;
+  font-size: 18px;
+  text-align: center;
+  font-style: normal;
+  border-radius: 5px;
+  width: 100%;
+  border: 1px solid #00DBD5;
+  border-width: 1px 1px 3px;
+  box-shadow: 0 -1px 0 rgba(255,255,255,0.1) inset;
+  margin-bottom: 10px;
+
+}
+.file2{
+
+  padding: 19px 39px 18px 39px;
+  color: #FFF;
+  background-color: #00DBD5;
+  font-size: 18px;
+  text-align: center;
+  font-style: normal;
+  border-radius: 5px;
+  width: 100%;
+  border: 1px solid #00DBD5;
+  border-width: 1px 1px 3px;
+  box-shadow: 0 -1px 0 rgba(255,255,255,0.1) inset;
+  margin-bottom: 10px;
+}
+
 
 fieldset {
   margin-bottom: 30px;
@@ -298,7 +332,7 @@ label.light {
   }
     .form2 {
     max-width: 480px;
-    margin-top: -670px;
+    margin-top: -680px;
     margin-left: 60%;
   }
   .content{
@@ -311,38 +345,73 @@ label.light {
 </style>
 <script>
 $(function(){
-    	
-    	$('.resume').on('click', function() {
-    	    var $this = $(this);
-    	  $this.button('loading');
-    	    setTimeout(function() {
-    	       $this.button('reset');
-    	   }, 2000);
-
-    	});
-
-
-    	function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    $('#select_img').attr('src', e.target.result);
+	
+        	function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#select_img').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
                 }
-                reader.readAsDataURL(input.files[0]);
             }
-        }
 
-        $("#imageFile").change(function() {
-            readURL(this);
-        });
+            $("input[name=tutor_img1]").change(function() {
+                readURL(this);
+            });
 
-    });
+//      	 	$('form').submit(function(){
+//         		return false;
+        		
+//         		});
+    	 
+       //강사등록//
+         
+			$('button#addTutor').click(function(){
+				
+				 let form = $('#fileUpload')[0];
+	             let formData = new FormData(form);
+                 formData.append("tutor_img1", $("input[name=tutor_img1]")[0].files[0]);
+                 formData.append("tutor_career_file1", $("input[name=tutor_career_file1]")[0].files[0]);
+            
+				let tutor_category_id = [];
+    	        $("input:checkbox[name='category']:checked").each(function (index) {
+    	        	tutor_category_id.push($(this).val());
+   
+    	        });
+    	    
+				$.ajax({
+					
+					url:'/shallwe/addTutor'
+				   ,method:"POST"
+				   ,processData: false
+				   ,contentType: false
+				   ,data: formData
+					,success:function(data){
+					   if(data.status == "success"){
 
-
+						   let $tutor = confirm('강사등록을 원하십니까?');
+							 
+							 if ($travelalert == true ) {
+								 
+								location.href = "http://localhost/shallwe/"
+								 
+							} else {	
+								alert("취소하셧습니다");
+								location.reload; 
+								
+							}
+					   }
+							   
+					} // end of success
+  		 		 }); // end of ajax
+ 		 		 return false;
+	});// end of click
+});    
 
 </script>
   </head>
-    <jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include> 
+  <jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include> 
   <body>
     <div class="wrapper">
       <input type="checkbox" id="btn" hidden>
@@ -374,46 +443,42 @@ $(function(){
   
 <div class="content">
  <h1>강사 등록</h1>
- <form class="cer" method="POST" action="upload" enctype="multipart/form-data" autocomplete="off">
+ <form method="post" enctype="multipart/form-data" id="fileUpload">
+ <div class="cer" >
     <div style="margin:3em;"> 
 		<br>
-         <input type="file" name="file" id="imageFile" accept="imags/*"/>
+         <input class="uploadImage" type="file" name="tutor_img1" accept="imags/*"/>
          <br>
-      		<!-- <button class="btn btn-primary btn-lg resume" type="submit"
-			id="load1"onclick="document.all.file.click();">퓍쳐!</button>
-			<br>  -->
-			 <img id="select_img" src="#" alt = "your image" style="width:100%;max-width:100%;border:1px solid #000;"/>
+			 <img  id="select_img" src="#" alt = "your image" style="width:100%;max-width:100%;"/>
 			 <br />
 		 </div> 
-</form>
- <form class ="cer">
         <fieldset> 	 
           <legend><span class="number">1</span>강사 기본정보 </legend>       
           <label for="name">닉네임:</label>
-          <input type="text" id="name" name="user_name" placeholder="ex)카드값죠체리">
+          <input type="text" id="nickName" name="tutor_nickname" placeholder="ex)카드값죠체리">
           
-          <label for="email">이메일:</label>
-          <input type="email" id="email" name="user_email" placeholder="ex)newDate@gmail.com">
+          <!-- <label for="email">이메일:</label>
+          <input type="email" id="email" name="user_email" placeholder="ex)newDate@gmail.com" id="gmail"> -->
           
            <label for="email">링크:</label>
-          <input type="text" id="Rink" name="user_Rink" placeholder="ex)https://www.instagram.com/">
-     
-        </fieldset>
-        
-          <div style="margin:4em; margin-top:10px;" >
-			<button type="button" class="btn btn-primary btn-lg resume" 
-			id="load1" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing Order">당신의 이력서 준비되셨나요?</button>
+          <input type="text" id="rink" name="tutor_link" placeholder="ex)https://www.instagram.com/">
+          
+           <div style="margin:4em; margin-top:10px;" >
+           <input  class = "file2" type="file" name="tutor_career_file1" accept="imags/*,">
+            
 			<br>
 		 </div>
-	</form>
+        </fieldset>
+	</div>
 	
-		<form class="form2">
+
+		<div class="form2" id = "tutor_info">
         <fieldset>
           <legend><span class="number">2</span> 강사 프로필</legend>
-          <label for="comment">강사 한마디:</label>
-          <textarea id="comment" name="user_comment" placeholder="강사한마디"></textarea>
+          <label for="coment">강사 한마디:</label>
+          <textarea id="coment" name="tutor_introduce" placeholder="강사한마디"></textarea>
           
-          <label for="job">직업선택:</label>
+          <!-- <label for="job">직업선택:</label>
           <select id="job" name="user_job">
             <optgroup label="Web Development">
               <option value="frontend_developer">Front-End Developer</option>
@@ -430,29 +495,44 @@ $(function(){
               <option value="business_owner">Business Owner</option>
               <option value="freelancer">Freelancer</option>
             </optgroup>
-          </select>
+          </select> -->
+          
           <br><br>
      
           <label>강의 선택:</label>
           <br />
-          <input type="checkbox" id="development" value="interest_development" name="user_interest">
-          <label class="light" for="development">Development</label>
+          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="ma">
+          <label class="light" for="development">마케팅</label>
           <br />
             
-          <input type="checkbox" id="design" value="interest_design" name="user_interest">
-          <label class="light" for="design">Design</label>
+          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="wp">
+          <label class="light" for="design">웹 프로그래밍</label>
           <br />
             
-          <input type="checkbox" id="business" value="interest_business" name="user_interest">
-          <label class="light" for="business">Business</label>
+          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="sc">
+          <label class="light" for="business">스터디 카운슬링</label>
+           <br />
+           
+           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="pb">
+          <label class="light" for="business">웹퍼블리셔</label>
+           <br />
+           
+           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="db">
+          <label class="light" for="business">디비설계자</label>
+           <br />
+         
+           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="king">
+          <label class="light" for="business">요리왕</label>
           <br />
             
         </fieldset>
        <div style="margin:3em;">
-			<button type="button" class="btn btn-primary btn-lg resume" 
+			<button type="submit" id="addTutor" class="btn btn-primary btn-lg resume" 
 			id="load1" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing Order">준비되셨다면 등록해주세요</button>
 			<br>
+			
 			</div>
+      </div>
       </form>
 
 </div>

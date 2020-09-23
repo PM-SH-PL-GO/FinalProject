@@ -33,4 +33,11 @@
 		WHERE me.tutor_YN = #{YN}
 	</select>
 	
+	<insert id="insertTutor" parameterType="Tutor">
+	INSERT INTO TUTOR
+				(TUTOR_ID,TUTOR_CATEGORY_ID,TUTOR_IMG,TUTOR_CAREER_FILE,tutor_introduce,TUTOR_LINK,TUTOR_SCORE,TUTOR_NICKNAME) 
+				VALUES(#{member.member_id},UPPER(#{lectureCategory.lecture_category_id}),#{tutor_img},
+				#{tutor_career_file},#{tutor_introduce},#{tutor_link},#{tutor_score},#{tutor_nickname})
+	</insert>
+	
 </mapper>
