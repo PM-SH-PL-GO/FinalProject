@@ -119,8 +119,8 @@ public class StudyBoardDAO {
 	public StudyBoard selectByNo(int studyBoard_id) throws FindException {
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
-		StudyBoard studBoard = session.selectOne("selectByNo", studyBoard_id);
 		session.insert("StudyBoardMapper.insertViews", studyBoard_id);
+		StudyBoard studBoard = session.selectOne("selectByNo", studyBoard_id);
 		return studBoard;
 		}catch (Exception e) {
 			throw new FindException("게시글을 찾기못했습니다.");

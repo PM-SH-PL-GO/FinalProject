@@ -76,6 +76,7 @@ function formatDate(date) {
 }
 
 $(function(){
+	//----------댓글 로드 START---------
 	$.ajax({
 		url:"/shallwe/reply/"+${studyBoard.studyBoard_id}
 		,method:"get"
@@ -113,7 +114,25 @@ $(function(){
 		}
 		
 	});
+	//----------댓글 ROAD END---------
 	
+	//----------댓글 삭제 START---------
+	$('#delete').click(function(){
+		var boardYN = confirm("게시글을 삭제하시겠습니까?");
+		var $studyBoard_id = ${studyBoard.studyBoard_id};
+		if(boardYN){
+			$.ajax({
+				url:"/shallwe/board/delete/" +$studyBoard_id
+				,method:"DELETE"
+				,success:function(){
+					alert($studyBoard_id+"번 게시물이 삭제되었습니다.")	
+					history.back();
+				}
+			});
+		}
+	});
+	
+	//----------댓글 삭제 END---------
 });
 function formatDate(date) { 
 	var d = new Date(date), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = d.getFullYear(); 
@@ -132,9 +151,9 @@ function formatDate(date) {
 				<div class="col-lg-8 posts-list" style="margin: auto; ">
 					<div class="single-post">
 						<ul class="blog-info-link"style="float: right;" >
-							<li><a href="#">삭제</a></li>
-							<li><a href="#">수정</a></li>
-							<li><a href="#">목록보기</a></li>
+							<li><a id="delete">삭제</a></li>
+							<li><a id="update">수정</a></li>
+							<li><a id="list">목록보기</a></li>
 						</ul>
 						<div class="blog_details">
 							<h2 style="color: #2d2d2d;">${studyBoard.studyBoard_title}
@@ -157,7 +176,6 @@ function formatDate(date) {
 							<h4>댓글 쓰기</h4>
 							<form class="form-contact comment_form" action="#"
 								id="commentForm">
-								<div class="row">
 									<div class="col-12">
 										<div class="form-group">
 											<textarea class="form-control w-100" name="comment"
@@ -205,55 +223,6 @@ function formatDate(date) {
 			</div>
 		</div>
 	</footer>
-	<!-- Scroll Up -->
-	<div id="back-top">
-		<a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
-	</div>
-
-    <!-- JS here -->
-
-    <script src="/shallwe/assets/js/vendor/modernizr-3.5.0.min.js"></script>
-    <!-- Jquery, Popper, Bootstrap -->
-    <script src="/shallwe/assets/js/vendor/jquery-1.12.4.min.js"></script>
-    <script src="/shallwe/assets/js/popper.min.js"></script>
-    <script src="/shallwe/assets/js/bootstrap.min.js"></script>
-    <!-- Jquery Mobile Menu -->
-    <script src="/shallwe/assets/js/jquery.slicknav.min.js"></script>
-
-    <!-- Jquery Slick , Owl-Carousel Plugins -->
-    <script src="/shallwe/assets/js/owl.carousel.min.js"></script>
-    <script src="/shallwe/assets/js/slick.min.js"></script>
-    <!-- One Page, Animated-HeadLin -->
-    <script src="/shallwe/assets/js/wow.min.js"></script>
-    <script src="/shallwe/assets/js/animated.headline.js"></script>
-    <script src="/shallwe/assets/js/jquery.magnific-popup.js"></script>
-
-    <!-- Date Picker -->
-    <script src="/shallwe/assets/js/gijgo.min.js"></script>
-    <!-- Nice-select, sticky -->
-    <script src="/shallwe/assets/js/jquery.nice-select.min.js"></script>
-    <script src="/shallwe/assets/js/jquery.sticky.js"></script>
-    <!-- Progress -->
-    <script src="/shallwe/assets/js/jquery.barfiller.js"></script>
-    
-    <!-- counter , waypoint,Hover Direction -->
-    <script src="/shallwe/assets/js/jquery.counterup.min.js"></script>
-    <script src="/shallwe/assets/js/waypoints.min.js"></script>
-    <script src="/shallwe/assets/js/jquery.countdown.min.js"></script>
-    <script src="/shallwe/assets/js/hover-direction-snake.min.js"></script>
-
-    <!-- contact js -->
-    <script src="/shallwe/assets/js/contact.js"></script>
-    <script src="/shallwe/assets/js/jquery.form.js"></script>
-    <script src="/shallwe/assets/js/jquery.validate.min.js"></script>
-    <script src="/shallwe/assets/js/mail-script.js"></script>
-    <script src="/shallwe/assets/js/jquery.ajaxchimp.min.js"></script>
-    
-    <!-- Jquery Plugins, main Jquery -->	
-    <script src="/shallwe/assets/js/plugins.js"></script>
-    <script src="/shallwe/assets/js/main.js"></script>
-
-
-    
+<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
     </body>
 </html>
