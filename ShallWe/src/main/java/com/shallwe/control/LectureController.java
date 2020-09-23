@@ -57,13 +57,9 @@ public class LectureController {
 	@RequestMapping(value = "/memberLecture")
 	public ModelAndView memberLectureView(MemberLectureHistory mlth) {
 		List<MemberLectureHistory> mlthlist = new ArrayList<>();
-		Member mem = new Member();
-		mem.setMember_id("member2");
-		mlth.setMember(mem);
 		ModelAndView mnv = new ModelAndView();
 		try {
 			mlthlist = service.memberLectureList(mlth);
-			System.out.println("테스트" + mlthlist);
 			mnv.addObject("mlthlist", mlthlist);
 			mnv.setViewName("/memberLectureList");
 			mnv.addObject("status", "success");

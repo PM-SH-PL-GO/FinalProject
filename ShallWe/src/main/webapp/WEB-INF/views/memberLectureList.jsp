@@ -26,10 +26,11 @@
 <link rel="stylesheet" href="/shallwe/assets/css/style.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-</head>
-<c:forEach items="${mlthlist}" var="m" varStatus="status1"/>
+</head>.
+<c:forEach items="${mlthlist}" var="m" varStatus="status1">
+${mlthlist}
+</c:forEach>
 <script>
-alert(${m.lecture.lecture_id});
 console.log(${mlthlist});
 
 </script>
