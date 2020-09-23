@@ -15,6 +15,9 @@ import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.service.MemberSerivce;
 
+import lombok.extern.log4j.Log4j;
+
+@Log4j
 @Controller
 @RequestMapping(value = "/member")
 public class MemberController {
@@ -61,7 +64,6 @@ public class MemberController {
 		
 		return modelAndView;
 	
-		
 	}
 	
 	//비밀번호체인지(로그인x)

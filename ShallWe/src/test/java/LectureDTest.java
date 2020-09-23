@@ -48,7 +48,7 @@ public class LectureDTest {
 		lect.setTutor(tutor);
 		lectCate.setLecture_category_id("SP");
 
-		tutor.setLecture_category(lectCate);
+		tutor.setLectureCategory(lectCate);
 		lect.setLectureCategory(lectCate);
 		lect.setLecture_img("TEST_img");
 		lect.setLecture_title("TEST_title");

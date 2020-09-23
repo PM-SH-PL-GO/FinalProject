@@ -72,6 +72,8 @@ public class EmailController {
 	@RequestMapping(value="randomPwd",method = RequestMethod.POST)
 	public String randomPwd(@RequestParam Map<String,Object>member1,Member member, HttpSession session) {
 		
+		log.info("비밀번호 난수값:"+member1);
+		
 		Random random = new Random();
 		int randomNumber = random.nextInt(89999)+10000;
 		String newPassword = "bapsi" + Integer.toString(randomNumber);

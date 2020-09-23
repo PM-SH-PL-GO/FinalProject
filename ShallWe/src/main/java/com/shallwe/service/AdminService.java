@@ -74,7 +74,7 @@ public class AdminService {
 		
 		memberDAO.updateTutorState(map);
 		
-		if(!status.equals("승인")){
+		if(status.equals("반려")){
 			// email로 반려 사유보내주기
 		}
 	}
@@ -117,6 +117,27 @@ public class AdminService {
 //	public LectureDetail showLectureDetailById(String lecture_id) throws FindException{
 //		return lectureDetailDAO.selectLectureDetailById(lecture_id);
 //	}
+	
+	/**
+	 * 강의 승인/반려하기
+	 * @author jun6
+	 * @param lecture_id
+	 * @param status
+	 * @throws ModifyException
+	 */
+	public void updateLectureStatusByIdAndStatus(String lecture_id, String status) throws ModifyException{
+		Map<String, String> map = new HashMap<>();
+		map.put("id", lecture_id);
+		if (status.equals("승인"))
+			map.put("status", status);
+		else if(status.equals("반려") || status.equals("취소승인"))
+			map.put("status", "취소");
+		else if(status.equals("복구"))
+			map.put("status", "승인대기");
+		else
+			throw new ModifyException("승인/반려 이외의 글자가 전달되었습니다 : " + status);
+	}
+	
 	
 	/**
 	 * FAQ 목록 보여주기
