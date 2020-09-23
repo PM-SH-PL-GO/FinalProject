@@ -7,6 +7,13 @@
   font-family: 'Poppins', sans-serif;
 }
 
+.contents{
+	margin-left: 255px;
+    margin-top: 100px;
+    width: 80%;
+    height: 100%;
+}
+
 .btn{
     position: absolute;
     top: 15px;
@@ -37,7 +44,7 @@
 .sidebar{
     position: fixed;
     width: 250px;
-    height: 100%;
+    height: 1000px;
     left: -250px;
     background: #404040;
     transition: left 0.4s ease;
@@ -45,6 +52,7 @@
 
 .sidebar.show{
     left: 0px;
+    top: 0px;
 }
 
 .sidebar .text{
@@ -133,26 +141,29 @@ nav ul li a span.rotate{
     transform: translateY(-50%) rotate(-180deg);
 }
 
+hr{
+	margin-top: 20px;
+    margin-bottom: 20px;
+}
+
 .table{
-    position: absolute;
-    top: 100px;
-    left: 255px;
     border: 0.5px;
-    border-style: solid #dddddd;
+    border-style: solid;
+    border-color: #dddddd;
     text-align: center;
-    width: 80%;
-    height: 150px;
 }
 
 .table th{
     text-align: center;
     font-size: 18px;
     background-color: #eeeeee;
+    padding: 5px;
 }
 
 .table td{
     text-align: center;
     font-size: 15px;
+    padding: 5px;
 }
 .table td img{
     height: 80px;
@@ -161,7 +172,7 @@ nav ul li a span.rotate{
     
 .modal_slot {
 	display: none;
-	position: relative;
+	position: absolute;
 	width: 100%;
 	height: 100%;
 	z-index: 1;
@@ -174,8 +185,10 @@ nav ul li a span.rotate{
 /* } */
 
 .modal_slot .modal_content{
+	position: absolute;
 	width: 500px;
-	margin: 100px auto;
+	height: auto;
+	left: 250px;
 	padding: 20px 10px;
 	background: #fff;
 	border: 2px solid #666;
@@ -191,21 +204,20 @@ nav ul li a span.rotate{
 	z-index: -1;
 }
 
-.lecture-list {
+.lecture-list-title{
+	margin-top: 10px
+}
+
+.tutor-lecture-list {
 	display: block;
-	position: relative;
+	position: absolute;
+	top: 100px;
 	width: 100%;
 	height: 100%;
 	z-index: 1;
 }
 
-/* .lecture-list .lecture-close{ */
-/* 	display: inline-block; */
-/* 	width: 100%; */
-/* 	margin-left: calc(100% - 100px - 10px); */
-/* } */
-
-.lecture-list .lecture-content{
+.tutor-lecture-list .tutor-lecture-content{
 	width: 70%;
 	margin: 100px auto;
 	padding: 20px 10px;
@@ -213,7 +225,7 @@ nav ul li a span.rotate{
 	border: 2px solid #666;
 }
 
-.lecture-list .lecture-layer{
+.tutor-lecture-list .tutor-lecture-layer{
 	position: fixed;
 	top: 0;
 	left: 0;

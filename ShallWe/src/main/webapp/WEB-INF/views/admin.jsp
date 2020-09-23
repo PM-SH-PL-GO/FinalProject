@@ -161,15 +161,14 @@
 
             // 예비강사 승인/반려 버튼
             $cont.on("click", ".tutor_status", function(){
-            	let $tatus = $(this).html();
-            	let approve = $(this).attr('value');
+            	let $tatus = $(this).html();				// 승인/반려 상태
+            	let approve = $(this).attr('value');		// 예비강사 ID
 
             	$.ajax({
             		url: "${contextPath}/admin/status/" + approve,
             		method: "patch",
             		contentType: 'application/json-patch+json; charset=utf-8',
-            		//processData: false,
-            		data: JSON.stringify({"status" : "승인"}),
+            		data: JSON.stringify({"status" : $tatus}),
             		success: function(data){
             			alert(data);
             			location.reload();
@@ -184,7 +183,7 @@
             	
             });
             
-            // 강사목록 선택시
+            // 전체 강사목록 선택시
             $(".tutor-list").on("click", function(){
                 $.ajax({
                     url: "${contextPath}/admin/tutorList",
@@ -193,7 +192,6 @@
                     	let $lot = '<table class="table"><thead><tr>';
                     	$lot += '<th>순서</th><th>강사 사진</th><th>아이디</th><th>회원 이름</th><th>강사 별명</th>';
                     	$lot += '<th>전문 분야</th><th>강의 목록</th><th>점수</th><th>세부사항</th><th>관리하기</th></tr></thead>';
-                    	
                     	tutors.forEach(function(tutor, index){
                     		let idx = index + 1;
                     		$lot += '<tr><td>' + idx + '</td>';
@@ -233,9 +231,9 @@
             		url: "${contextPath}/admin/tutorLecture/" + $tutorId,
             		method: "GET",
             		success: function(lectures){
-            			let $tutor_Lecture = '<div class="lecture-list"><div class="lecture-content">';
+            			let $tutor_Lecture = '<div class="tutor-lecture-list"><div class="tutor-lecture-content">';
             			$tutor_Lecture += '<h3>' + lectures[0].tutor.tutor_nickname + '강사의 강의목록</h3><hr>';
-            			$tutor_Lecture += '<table class="lecture-table">';
+            			$tutor_Lecture += '<table class="tutor-lecture-table">';
             			$tutor_Lecture += '<tr><th>번호</th><th>강의명</th><th>상태</th></tr>';
             		
             			lectures.forEach(function(lec, index){
@@ -247,9 +245,9 @@
             				$tutor_Lecture += '</tr>';
             			});
             			
-            			$tutor_Lecture += '<button class="lecture-close">닫기</button>';
+            			$tutor_Lecture += '<button class="tutor-lecture-close">닫기</button>';
             			$tutor_Lecture += '</table></div>';
-            			$tutor_Lecture += '<div class="lecture-layer"></div></div>';
+            			$tutor_Lecture += '<div class="tutor-lecture-layer"></div></div>';
             			
             			let cont = $cont.html() + $tutor_Lecture;
             			$cont.html(cont);
@@ -260,8 +258,8 @@
             });
             
             // 강의 목록 모달창 닫기
-            $cont.on("click", ".lecture-close", function(){
-            	$(".lecture-list").remove(".lecture-list");
+            $cont.on("click", ".tutor-lecture-close", function(){
+            	$(".tutor-lecture-list").remove(".tutor-lecture-list");
             	return false;
             });
             
@@ -273,18 +271,22 @@
                     url: "${contextPath}/admin/lectureList",
                     method: "GET",
                     success: function(lectures){
-                    	let prepared = '<table class="table prepared"><thead><tr><th>순서</th><th>강사 사진</th><th>아이디</th>';
-                    	prepared += '<th>회원 이름</th><th>강사 별명</th><th>전문 분야</th><th>강의 이력</th><th>점수</th><th>세부사항</th>';
+                    	let prepared = '<h3 class="lecture-list-title">승인대기</h3>';
+                    	prepared += '<table class="table prepared"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th><th>강의 가격</th>';
+                    	prepared += '<th>강의 상태</th><th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th><th>현재 수강 인원</th>';
                     	prepared += '<th colspan="2">관리하기</th></tr></thead><tbody>';
                     	
-                    	let process = '<table class="table process"><thead><tr><th>순서</th><th>강사 사진</th><th>아이디</th><th>회원 이름</th>';
-                    	process += '<th>강사 별명</th><th>전문 분야</th><th>강의 이력</th><th>점수</th><th>세부사항</th><th>관리하기</th></tr></thead><tbody>';
+                    	let process = '<h3 class="lecture-list-title">진행중</h3>';
+                    	process += '<table class="table process"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th><th>강의 가격</th><th>강의 상태</th>';
+                    	process += '<th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th><th>현재 수강 인원</th><th>관리하기</th></tr></thead><tbody>';
                     	
-                    	let finish = '<table class="table finish"><thead><tr><th>순서</th><th>강사 사진</th><th>아이디</th><th>회원 이름</th>';
-                    	finish += '<th>강사 별명</th><th>전문 분야</th><th>강의 이력</th><th>점수</th><th>세부사항</th><th>관리하기</th></tr></thead><tbody>';
+                    	let finish = '<h3 class="lecture-list-title">완료</h3>';
+                    	finish += '<table class="table finish"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th><th>강의 가격</th><th>강의 상태</th>';
+                    	finish += '<th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th><th>현재 수강 인원</th><th>관리하기</th></tr></thead><tbody>';
                     	
-                    	let cancel = '<table class="table finish"><thead><tr><th>순서</th><th>강사 사진</th><th>아이디</th><th>회원 이름</th>';
-                    	cancel += '<th>강사 별명</th><th>전문 분야</th><th>강의 이력</th><th>점수</th><th>세부사항</th><th>관리하기</th></tr></thead><tbody>';
+                    	let cancel = '<h3 class="lecture-list-title">취소 대기 / 취소</h3>';
+                    	cancel += '<table class="table finish"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th><th>강의 가격</th><th>강의 상태</th>';
+                    	cancel += '<th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th><th>현재 수강 인원</th><th colspan="2">관리하기</th></tr></thead><tbody>';
                     	
                     	lectures.forEach(function(lecture){
                     		let idNumber = '' + lecture.lecture_id;
@@ -294,7 +296,8 @@
                     		let start = formatDate(lecture.lecture_start_dt);
                     		let end = formatDate(lecture.lecture_end_dt);
                     		let today = formatDate(new Date());
-                    		if (lecture.lecture_state = '승인대기'){
+                    		
+                    		if (lecture.lecture_state == '승인대기'){
                     			prepared += '<tr><td>' + lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
                     			prepared += '<td><img src="${contextPath}/lecture/' + lecture.lecture_img + '"></td>';
                     			prepared += '<td>' + lecture.lectureCategory.lecture_category_name + '</td>';
@@ -308,7 +311,7 @@
                     			prepared += '<td>' + lecture.lecture_current + '</td>';
                     			prepared += '<td><button class="lecture-approve">승인</button></td>';
                     			prepared += '<td><button class="lecture-cancel">반려</button></td>';
-                    		}else if(lecture.lecture_state = '승인' && end > today){
+                    		}else if(lecture.lecture_state == '승인' && end > today){
                     			// 승인(진행중 + 시작 전 모집 중)
                     			process += '<tr><td>' + lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
                     			process += '<td><img src="${contextPath}/lecture/' + lecture.lecture_img + '"></td>';
@@ -321,8 +324,8 @@
                     			process += '<td>' + lecture.lecture_max + '</td>';
                     			process += '<td>' + lecture.lecture_min + '</td>';
                     			process += '<td>' + lecture.lecture_current + '</td>';
-                    			process += '<td><button class="tutor_edit">관리하기</button></td>';
-                    		}else if(lecture.lecture_state = '승인' && today >= end){
+                    			process += '<td><button class="lecture-edit">관리하기</button></td>';
+                    		}else if(lecture.lecture_state == '승인' && today >= end){
                     			// 완료
                     			finish += '<tr><td>' + lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
                     			finish += '<td><img src="${contextPath}/lecture/' + lecture.lecture_img + '"></td>';
@@ -335,7 +338,7 @@
                     			finish += '<td>' + lecture.lecture_max + '</td>';
                     			finish += '<td>' + lecture.lecture_min + '</td>';
                     			finish += '<td>' + lecture.lecture_current + '</td>';
-                    			finish += '<td><button class="tutor_edit">관리하기</button></td>';
+                    			finish += '<td><button class="lecture-edit">관리하기</button></td>';
                     		}else{
                     			//취소 or 취소대기
                     			cancel += '<tr><td>' + lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
@@ -349,7 +352,12 @@
                     			cancel += '<td>' + lecture.lecture_max + '</td>';
                     			cancel += '<td>' + lecture.lecture_min + '</td>';
                     			cancel += '<td>' + lecture.lecture_current + '</td>';
-                    			cancel += '<td><button class="tutor_edit">관리하기</button></td>'
+                    			if (lecture.lecture_state == '취소대기'){
+                    				cancel += '<td><button class="lecture-cancel-approve">취소하기</button></td>';
+                    				cancel += '<td><button class="lecture-cancel-deny">반려</button></td>';
+                    			}
+                    			else
+                    				cancel += '<td><button class="lecture-review">후기보기</button></td>';
                     		}
                     			
                     	 });
@@ -361,34 +369,6 @@
                     	
                     	$lot = prepared + process + finish + cancel;
                     	$cont.html($lot);
-                    	
-//////////////////////////////////////////////////////////////////////////////////////////
-//                     	let $lot = '<table class="table"><thead><tr>';
-// 						$lot += '<th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th><th>강의 가격</th><th>강의 상태</th>';              	
-// 						$lot += '<th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th><th>현재 수강 인원</th><th>상세 정보</th>';              	
-//                     	$lot += '</tr></thead><tbody>';
-                    	
-//                     	lectures.forEach(function(lecture){
-//                     		let idNumber = '' + lecture.lecture_id;
-//                     		for (let i = idNumber.length; i < 4; i++)
-//                     			idNumber = '0' + idNumber;
-                    		
-//                     		$lot += '<tr><td>' + lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
-//                     		$lot += '<td><img src="${contextPath}/lecture/' + lecture.lecture_img + '"></td>';
-//                     		$lot += '<td>' + lecture.lectureCategory.lecture_category_name + '</td>';
-//                     		$lot += '<td>' + lecture.lecture_title + '</td>';
-//                     		$lot += '<td>' + lecture.lecture_price + '원</td>';
-//                     		$lot += '<td>' + lecture.lecture_state + '</td>';
-//                     		$lot += '<td>' + formatDate(lecture.lecture_start_dt) + '</td>';
-//                     		$lot += '<td>' + formatDate(lecture.lecture_end_dt) + '</td>';
-//                     		$lot += '<td>' + lecture.lecture_max + '</td>';
-//                     		$lot += '<td>' + lecture.lecture_min + '</td>';
-//                     		$lot += '<td>' + lecture.lecture_current + '</td>';
-//                     		$lot += '<td><button class="lecture-detail" value="'+ lecture.lecture_id +'">상세정보보기</td></tr>';
-//                     	});
-                    	
-//                     	$lot += '</tbody></table>';
-//                         $cont.html($lot);
                     },
                     fail: function(){
                     	let $lot = '<table class="table"><thead><tr>';
@@ -466,6 +446,8 @@
             	
             });
             
+            
+            // 날짜 변환 함수
 			function formatDate(date) { 
 				   let d = new Date(date), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = d.getFullYear(); 
 				   if (month.length < 2)

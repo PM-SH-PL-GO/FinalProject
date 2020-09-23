@@ -104,18 +104,29 @@ public class AdminController {
 	 * @return
 	 */
 	@RequestMapping(value = "/tutorList")
-	public ModelAndView tutorList() {
-		ModelAndView mnv = new ModelAndView();
+	public ResponseEntity<List<Tutor>> tutorList() {
 		List<Tutor> tutorList = new ArrayList<>();
 		try {
 			tutorList = adminService.showAllTutor("Y");
-			mnv.addObject("preTutorList", tutorList);
-			mnv.setViewName("/tutorList");
+			return ResponseEntity.status(HttpStatus.OK).body(tutorList);
 		} catch (FindException e) {
 			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
-		return mnv;
 	}
+//	@RequestMapping(value = "/tutorList")
+//	public ModelAndView tutorList() {
+//		ModelAndView mnv = new ModelAndView();
+//		List<Tutor> tutorList = new ArrayList<>();
+//		try {
+//			tutorList = adminService.showAllTutor("Y");
+//			mnv.addObject("preTutorList", tutorList);
+//			mnv.setViewName("/tutorList");
+//		} catch (FindException e) {
+//			e.printStackTrace();
+//		}
+//		return mnv;
+//	}
 	
 	/**
 	 * 예비 강사 승인/반려
