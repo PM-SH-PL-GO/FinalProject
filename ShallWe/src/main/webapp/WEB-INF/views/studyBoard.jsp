@@ -8,45 +8,151 @@
 th {
 	background-color: #eeeeee; text-algin: center
 }
+tr td.boardTitle:hover {
+    color: #00DBD5;
+    cursor: pointer;
+}
 </style>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 $(function(){
+	var page ="1";
+	var $pageList=$("#pageList");
+	
+	//----------스터디 게시판 LOAD START---------
 	$.ajax({
-		url:"/shallwe/board/list/1"
+		url:"/shallwe/board/list/"+page
 		,method:"get"
 		,success:function(pbObj){
-		var $boardPage=$("table.table");
+		var $boardPage=$("#tbody");
 		var cunrrentPage = pbObj.currentPage;
 		var totalPage = pbObj.totalPage;
 		var boardPageData ="";
-			boardPageData += "<thead>";
-			boardPageData += "<tr>"
-			boardPageData += "<th>번호</th>"
-			boardPageData += "<th>제목</th>"
-			boardPageData += "<th>작성자</th>"
-			boardPageData += "<th>작성일</th>"
-			boardPageData += "<th>조회수</th>"
-			boardPageData += "</tr>"
-			boardPageData += "</thead>"
-			boardPageData += "<tbody>"
 				var arr = pbObj.list;
 				arr.forEach(function(studyBoard, index){
 					boardPageData += "<tr>"
-					boardPageData += "	<td>"+studyBoard.studyBoard_id+"</td>";
-					boardPageData += "	<td>"+studyBoard.studyBoard_title+"</td>";
-					boardPageData += "	<td>"+studyBoard.study_m.member_name+"</td>";
+					boardPageData += "	<td class=\"boardId\">"+studyBoard.studyBoard_id+"</td>";
+					boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"</td>";
+					boardPageData += "	<td>"+studyBoard.member.member_name+"</td>";
 					boardPageData += "	<td>"+formatDate(studyBoard.studyBoard_write_dt)+"</td>";
 					boardPageData += "	<td>"+studyBoard.studyBoard_view_count+"</td>";
 					boardPageData += "</tr>"
 				});
-			boardPageData += "</tbody>"
 			$boardPage.html(boardPageData);
+			var $pageList = $("#pageList");
+			var pageListData = "";
+			if(pbObj.startPage > 1){
+				pageListData += '<li class="page-item"><a class="prev"><span class="ti-angle-left"></span></a></li>';
+			}
+			
+			for(var i=pbObj.startPage; i<=pbObj.totalPage; i++){
+				pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
+			}
+			if(pbObj.endPage < pbObj.totalPage){
+				pageListData += '<li class="page-item"><a class="next"><span class="ti-angle-right"></span></a></li>'
+			}
+			
+			$pageList.html(pageListData);
 		}
 		,errer:function(xhr){
 			alert("실패" + xhr.status)
 		}
+	});
+	//----------스터디 게시판 LOAD  END---------
+	
+	//----------스터디 게시판 페이지 CLICK  START---------	
+	$pageList.on("click","li>a", function(e){
+		var $etClass = $(e.target).attr('class');
+		if($etClass == 'prev'){
+			page = ${pb.startPage-1};			
+		}else if($etClass == 'next'){
+			page = ${endPage+1};
+		}else{
+			page = $(e.target).html();
+		}
+		$.ajax({
+			url:"/shallwe/board/list/"+page
+			,method:"get"
+			,success:function(pbObj){
+			var $boardPage=$("#tbody");
+			var cunrrentPage = pbObj.currentPage;
+			var totalPage = pbObj.totalPage;
+			var boardPageData ="";
+					var arr = pbObj.list;
+					arr.forEach(function(studyBoard, index){
+						boardPageData += "<tr>"
+						boardPageData += "	<td class=\"boardId\">"+studyBoard.studyBoard_id+"</td>";
+						boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"</td>";
+						boardPageData += "	<td>"+studyBoard.member.member_name+"</td>";
+						boardPageData += "	<td>"+formatDate(studyBoard.studyBoard_write_dt)+"</td>";
+						boardPageData += "	<td>"+studyBoard.studyBoard_view_count+"</td>";
+						boardPageData += "</tr>"
+					});
+				$boardPage.html(boardPageData);
+			}
+			,errer:function(xhr){
+				alert("실패" + xhr.status)
+			}
+		});
+	});
+	//----------스터디 게시판 페이지 CLICK  END---------	
+	
+	//----------스터디 게시판 검색 button CLICK  START---------		
+	$("button#search-btn").click(function(){
+		$searchVal = $("#searchBar").val()
+		if($searchVal== null || $searchVal== ""){
+			location.href = "/shallwe/studyBoard";
+		}
+		$.ajax({
+			url:"/shallwe/board/search/" + $searchVal
+			,method:"get"
+			,success:function(pbObj){
+				var $boardPage=$("#tbody");
+				var cunrrentPage = pbObj.currentPage;
+				var totalPage = pbObj.totalPage;
+				var boardPageData ="";
+				var arr = pbObj.list;
+				arr.forEach(function(studyBoard, index){
+					boardPageData += "<tr>"
+					boardPageData += "	<td class=\"boardId\">"+studyBoard.studyBoard_id+"</td>";
+					boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"</td>";
+					boardPageData += "	<td>"+studyBoard.member.member_name+"</td>";
+					boardPageData += "	<td>"+formatDate(studyBoard.studyBoard_write_dt)+"</td>";
+					boardPageData += "	<td>"+studyBoard.studyBoard_view_count+"</td>";
+					boardPageData += "</tr>"
+				});
+				$boardPage.empty();
+				$boardPage.html(boardPageData);		
+				
+			}
+			,  error:function(request,status,error){
+	            alert("해당하는 게시글이 존재하지 않습니다.");
+	         }
+
+		});
+	});
+	//----------스터디 게시판 검색 button CLICK  END---------	
+	
+	//----------스터디 게시판 검색 ENTER  START---------	
+	$("#searchBar").keydown(function(e) {
+
+		if (e.keyCode == 13) {
+			$("button#search-btn").trigger("click");
+		}
+
+	});	
+	//----------스터디 게시판 검색 ENTER  END---------	
+	
+	//--------- 게시글 CLICK  START---------		
+	$("tbody#tbody").on("click","td.boardTitle",function(){
+		var $boardIdVal = $(this).siblings('td.boardId').html();
+		location.href="/shallwe/board/detail/"+$boardIdVal;
+	});
+	//--------- 게시글 CLICK  START---------		
+
+	$("#boardWrite").click(function(){
+		location.href="/shallwe/board/write"
 	});
 });
 
@@ -56,6 +162,7 @@ function formatDate(date) {
 	if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; 
 	return [year, month, day].join('-'); 
 }
+
 
 
 </script>
@@ -75,16 +182,25 @@ function formatDate(date) {
 						<div class="row">
 							<table class="table table-striped"
 								style="text-align: center; border: 1px solid #dddddd">
-								
+								<thead>
+									<tr>
+										<th>번호</th>
+										<th>제목</th>
+										<th>작성자</th>
+										<th>작성일</th>
+										<th>조회수</th>
+									</tr>
+								</thead>
+								<tbody id="tbody">
+								</tbody>
 							</table>
-
-							<div class="freeboard_related_search">
+							<div class="freeboard_related_search" style="">
 								<aside class="serach_form search_btn">
-									<input type="text" class="searchbar"
-										placeholder='키워드를 입력하세요...' onfocus="this.placeholder=''"
-										onblur="this.placeholder='키워드를 입력하세요...''">
+									<input type="text" class="searchbar" id="searchBar" placeholder='키워드를 입력하세요...' onfocus="this.placeholder=''" onblur='this.placeholder="키워드를 입력하세요..."'>
+										
+										
 									<div class="input-group-append">
-										<button class="btns" type="button">
+										<button class="btns" id="search-btn" type="button">
 											<i class="ti-search"></i>
 										</button>
 									</div>
@@ -93,7 +209,8 @@ function formatDate(date) {
 						</div>
 						<!-- 			<button type="submit" class="button-write">검색</button> -->
 						<div class="col-xl-12">
-							<a href="board_write.jsp" class="button button-write f-right">글쓰기</a>
+							<a class="button button-write f-right" id="boardWrite">글쓰기</a>
+							
 						</div>
 					</div>
 				</div>
@@ -104,17 +221,7 @@ function formatDate(date) {
 							<div class="col-xl-12">
 								<div class="single-wrap d-flex justify-content-center">
 									<nav aria-label="Page navigation example">
-										<ul class="pagination justify-content-start " id="myDIV">
-											<li class="page-item"><a class="page-link" href="#"><span
-													class="ti-angle-left"></span></a></li>
-											<li class="page-item active"><a class="page-link"
-												href="#">01</a></li>
-											<li class="page-item"><a class="page-link" href="#">02</a></li>
-											<li class="page-item"><a class="page-link" href="#">03</a></li>
-											<li class="page-item"><a class="page-link" href="#">04</a></li>
-											<li class="page-item"><a class="page-link" href="#">05</a></li>
-											<li class="page-item"><a class="page-link" href="#"><span
-													class="ti-angle-right"></span></a></li>
+										<ul class="pagination justify-content-start " id="pageList">
 										</ul>
 									</nav>
 								</div>
@@ -122,7 +229,6 @@ function formatDate(date) {
 						</div>
 					</div>
 				</div>
-				<!--Pagning End  -->
 			</div>
 		</div>
 

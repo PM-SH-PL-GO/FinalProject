@@ -49,6 +49,8 @@ public class BoardService {
 		boardPageBean.setStartRow(startRow);
 		boardPageBean.setEndRow(endRow);
 		boardPageBean.setCurrentPage(page);
+		boardPageBean.setStartPage(((page-1)/10)*10+1);	
+		boardPageBean.setEndPage(((page-1)/10+1)*10);
 		return boardPageBean;
 	}
 	
@@ -65,7 +67,8 @@ public class BoardService {
 			throw new FindException(page+"페이지가 존재하지 않습니다.");
 		}
 		BoardPageBean<StudyBoard> boardPageBean = new BoardPageBean(page);
-		List<StudyBoard> list = studyBoardDAO.selectByTitleAndContent(titleOrContent);
+		String toc = "%"+titleOrContent+"%";
+		List<StudyBoard> list = studyBoardDAO.selectByTitleAndContent(toc);
 
 		int rowCnt = list.size();
 		int totalPage = (rowCnt % boardPageBean.CNT_PER_PAGE <= 0)? rowCnt/boardPageBean.CNT_PER_PAGE : rowCnt/boardPageBean.CNT_PER_PAGE+1;
@@ -73,8 +76,8 @@ public class BoardService {
 		boardPageBean.setTotalPage(totalPage);
 		boardPageBean.setList(list);
 		boardPageBean.setCurrentPage(page);
-		boardPageBean.setStartRow(((page-1)/10)*10+1);
-		boardPageBean.setEndRow(((page-1)/10+1)*10);
+		boardPageBean.setStartPage(((page-1)/10)*10+1);	
+		boardPageBean.setEndPage(((page-1)/10+1)*10);
 		return boardPageBean;
 		
 	}

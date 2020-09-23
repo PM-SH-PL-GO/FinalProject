@@ -334,7 +334,7 @@ input.submit {
 				return false;
 				
 			} /* else if(pwdR.test(pwdVal) == false){
-				// 비밀번호 맞지 않으면 비밀번호가 일치하지 않습니다 에러메세지
+				// 비밀번호 맞지 않으면 비밀번호가 일치하지 않습니다 에러메세지 
 				$("input#userPassword").select();
 				$msgPwd.show();
 			} */ else {
@@ -417,6 +417,8 @@ input.submit {
 				   });
 				 }
 		 });
+
+			let a = document.qu
 
 
 		 $("input#RandomPassword").click(function(){

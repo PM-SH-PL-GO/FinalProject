@@ -60,7 +60,6 @@
 		//right_menu - 검색결과값 출력부
 		var $rightAreaObj = $("section.right_menu").find("div.container");
 		
-		
 		// 검색하기 earchTextObj 검색어 찾기
 		$searchBtnObj.click(function(e) {
 			$searchText = $searchTextObj.val();

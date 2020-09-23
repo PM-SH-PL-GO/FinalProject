@@ -99,4 +99,32 @@
 		WHERE le.LECTURE_TUTOR_ID = #{tutor.member.member_id} AND m.tutor_yn =
 		'Y'
 	</select>
+	
+	<!-- 강의신청 후 결제 프로시저 : 수정 -->
+	<insert id="insertMemberLectureHistory" parameterType ="hashMap" statementType="CALLABLE">
+		{ call 	INSERT_MEMBER_LECTURE_HISTORY (
+			#{lectureCategoryId} 
+			, #{memberId}
+			, #{lectureId}
+		)}
+	</insert>
+	
+	
+	<!-- 강의결제취소  프로시저 : 수정  -->
+	<update id="updateMemberLectureHistory" parameterType="hashMap" statementType="CALLABLE">
+		{ call 	update_member_lecture_history (
+			#{lectureCategoryId} 
+			, #{memberId}
+			, #{lectureId}
+		)}
+	</update>
+	
+	<!-- admin(jun6) : 강의 전체 조회 -->
+	<select id="selectAllLectures" resultMap="lectResultMap">
+		SELECT le.*, lc.category_name "lecture_category_name", le.lecture_tutor_id "member_id"
+		FROM lecture le
+			JOIN lecture_category lc ON(le.lecture_category_id = lc.category_id)
+		ORDER BY lecture_id DESC
+	</select>
+	
 </mapper>

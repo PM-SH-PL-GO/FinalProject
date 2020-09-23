@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
+import com.shallwe.exception.RemoveException;
 import com.shallwe.model.MemberInfoBean;
 import com.shallwe.vo.LectureCategory;
 import com.shallwe.vo.Member;
@@ -129,25 +130,18 @@ public class MemberDAO {
 	}
 	
 	//선호카테고리 수정: 상하
-	public void updateFavorites(String memberId, List<LectureCategory> favoritelist)throws ModifyException{
+	public void updateFavorites(String member_id, List<LectureCategory>favorite_list)throws ModifyException{
 		SqlSession session = null;
-		Map<String, Object>memFav = new HashMap<String, Object>();
-//		memFav.put(memberId, favoritelist);
-//		System.out.println("이건 멤바아이디,카테고리"+memberId+","+favoritelist);
-//		System.out.println("이건 멤페브다 " + memFav);
-		
-		// 고수정이 추가
-		memFav.put("memberId", memberId);
-		memFav.put("favorite1", favoritelist.get(0));
-		memFav.put("favorite2", favoritelist.get(1) );
-		memFav.put("favorite3", favoritelist.get(2) );
-		
-		
-		System.out.println("수정쓰가 찍습니다 : " + memFav);
+		Map<String, Object>map = new HashMap<String, Object>();
+		map.put("member_id", member_id);
+		map.put("favorite1", favorite_list.get(0));
+		map.put("favorite2", favorite_list.get(1));
+		map.put("favorite3", favorite_list.get(2));
+
 		int i = 0;
 		try {
 			session = sqlSessionFactory.openSession();
-			i = session.update("MemberMapper.updateFavorites", memFav);
+			i = session.update("MemberMapper.updateFavorites", map);
 			if(i==0) {
 				throw new ModifyException("카테고리 수정에 실패하였습니다.");
 			}
@@ -159,10 +153,6 @@ public class MemberDAO {
 		}
 	
 	}
-
-	
-	// 회원 목록 보기(admin) : 영민	
-	
 	
 	//멤버로그인 : 경찬
 	public Member memberLogin(String member_id)throws FindException{
@@ -196,6 +186,7 @@ public class MemberDAO {
 	public String pwdCheck(Map<String,Object> member)throws FindException{
 		SqlSession session = null;
 		session = sqlSessionFactory.openSession();
+		
 		return session.selectOne("MemberMapper.pwdCheck",member);
 		
 	}
@@ -219,9 +210,68 @@ public class MemberDAO {
 	}
 	//비밀번호(임시비밀번호):경찬
 	public void randomPassword(Map<String,Object>member1 , Member member) {
+		
 		SqlSession session = null;
 		member1.put("member", member);
 		session = sqlSessionFactory.openSession();
 		session.selectOne("MemberMapper.randomPassword",member);
 	}
+	
+	/**
+	 * Admin- 전체 회원 조회
+	 * @author jun6
+	 * @return 전체 회원 목록
+	 * @throws FindException
+	 */
+	public List<Member> selectAllMember() throws FindException{
+		SqlSession session = null;
+		List<Member> memberList = new ArrayList<>();
+		List<MemberInfoBean> beanList = new ArrayList<>();
+		
+		try {
+			session = sqlSessionFactory.openSession();
+			beanList = session.selectList("MemberMapper.selectAllMember");
+			
+			for (MemberInfoBean bean : beanList) {
+				Member member = new Member();
+				member.setMember_id(bean.getMemberId());
+				member.setMember_name(bean.getMemberName());
+				member.setMember_email(bean.getMemberEmail());
+				member.setMember_phone(bean.getMemberPhone());
+				member.setMemeber_sex(bean.getMemberSex());
+				member.setTutor_YN(bean.getTutorYN());
+				
+				List<LectureCategory> lectureList = new ArrayList<>();
+				if (bean.getFavorite1() != null)
+					lectureList.add(bean.getFavorite1());
+				if (bean.getFavorite2() != null)
+					lectureList.add(bean.getFavorite2());
+				if (bean.getFavorite3() != null)
+					lectureList.add(bean.getFavorite3());
+				
+				member.setFavorite_list(lectureList);
+				
+				memberList.add(member);
+			}
+			
+		}catch(DataAccessException e) {
+			throw new FindException("서버연결 중 에러가 발생했습니다");
+		}
+		
+		return memberList;
+	}
+	
+	public void deleteMemberById(String member_id) throws RemoveException{
+		SqlSession session = null;
+		
+		try {
+			session = sqlSessionFactory.openSession();
+			session.delete("MemberMapper.deleteMemberById", member_id);
+		}catch(DataAccessException e) {
+			e.printStackTrace();
+			throw new RemoveException("삭제 시도 중 에러가 발생했습니다");
+		}
+	}
+	
+	
 }

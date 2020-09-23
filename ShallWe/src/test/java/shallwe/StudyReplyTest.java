@@ -61,8 +61,8 @@ public class StudyReplyTest {
 		board.setStudyBoard_id(1);
 		member.setMember_id("member2");
 		reply.setStudyreply_content("내용이에요33");
-		reply.setStudyreply_b(board);
-		reply.setStudyreply_m(member);
+		reply.setStudyboard(board);
+		reply.setMember(member);
 //		dao.insert(reply);
 		service.wrieReply(reply);
 	}
@@ -77,8 +77,8 @@ public class StudyReplyTest {
 		member.setMember_id("member2");
 		reply.setStudyreply_id(1);
 		reply.setStudyreply_content("수정333");
-		reply.setStudyreply_b(board);
-		reply.setStudyreply_m(member);
+		reply.setStudyboard(board);
+		reply.setMember(member);
 //		dao.update(reply);		
 		service.updateReply(reply);
 	}

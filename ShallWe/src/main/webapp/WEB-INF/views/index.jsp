@@ -4,57 +4,36 @@
 <head>
     <meta charset="utf-8">
     <%@ page language="java" contentType="text/html; charset=UTF-8"    pageEncoding="UTF-8"%>
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Shallwe-함께 배우는 교육공간</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="manifest" href="site.webmanifest">
-<!--     <link rel="shortcut icon" type="image/x-icon" href="/shallwe/assets/img/favicon.ico"> -->
-
-	<!-- CSS here -->
-	<link rel="stylesheet" href="/shallwe/assets/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/owl.carousel.min.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/slicknav.css">
-    <link rel="stylesheet" href="/shallwe/assets/css/flaticon.css">
-    <link rel="stylesheet" href="/shallwe/assets/css/progressbar_barfiller.css">
-    <link rel="stylesheet" href="/shallwe/assets/css/gijgo.css">
-    <link rel="stylesheet" href="/shallwe/assets/css/animate.min.css">
-    <link rel="stylesheet" href="/shallwe/assets/css/animated-headline.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/magnific-popup.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/fontawesome-all.min.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/themify-icons.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/slick.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/nice-select.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/style.css">
+    <link rel="shortcut icon" type="image/x-icon" href="/shallwe/assets/img/favicon.ico">
 <style>
-	.menu-wrapper {
-		float:left;
-	}
-	.mr-40 {
-		margin-left: 20px
-	}
-	.mr-40 {
-		text-align: center;
-	}
-	.header-btns a i {
-		vertical-align: bottom;
-	}
-	.header-area .menu-wrapper .main-menu ul li a i {
-		font-size: 50px
-	}
-	.header-area{
-	    box-shadow: 0 2px 4px 0 hsla(0,0%,80.8%,.5);
-	    min-height: unset;
-	    background-color: white;
-	}
-	.btn{
-		background : #00dbd5;
-	}
-	.btn::before {
-		background: #009994;
-	}
+.menu-wrapper {
+	float:left;
+}
+.mr-40 {
+	margin-left: 20px
+}
+.mr-40 {
+	text-align: center;
+}
+.header-btns a i {
+	vertical-align: bottom;
+}
+.header-area .menu-wrapper .main-menu ul li a i {
+	font-size: 50px
+}
+.header-area{
+    box-shadow: 0 2px 4px 0 hsla(0,0%,80.8%,.5);
+    min-height: unset;
+    background-color: white;
+}
+.btn{
+	background : #00dbd5;
+}
+.btn::before {
+	background: #009994;
+}
 </style>
-<script type="text/javascript">
+<script>
 
 
 

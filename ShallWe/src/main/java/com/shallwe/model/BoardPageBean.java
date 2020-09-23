@@ -19,6 +19,8 @@ public class BoardPageBean<T> {
    private int startRow;
    private int endRow;
    private int totalPage;
+   private int startPage;
+   private int endPage;
    private List<T> list;
    
    public BoardPageBean(int currentPage) {
