@@ -170,6 +170,12 @@ public class LectureDAO {
 		return lecture;
 	}
 
+	/**
+	 * admin 강의 전체 목록 조회하기
+	 * @author jun6
+	 * @return 강의 전체 목록
+	 * @throws FindException
+	 */
 	public List<Lecture> selectAllLectures() throws FindException{
 		SqlSession session = null;
 		List<Lecture> lectureList = new ArrayList<>();
@@ -182,9 +188,23 @@ public class LectureDAO {
 //			}
 		}catch(DataAccessException e) {
 			e.printStackTrace();
+		}finally {
+			session.close();
 		}
 		
 		return lectureList;
+	}
+	
+	public void updateLectureStatusByIdAndStatus(String lecture_id, String status) throws ModifyException{
+		SqlSession session = null;
+		
+		try {
+			session = sqlSessionFactory.openSession();
+			session.update("LectureMapper.updateLectureStateByIdAndStatus");
+		}catch(DataAccessException e) {
+			e.printStackTrace();
+			throw new ModifyException("설정을 변경하는 중 에러가 발생했습니다");
+		}
 	}
 	
 } // end of LectureDAO class

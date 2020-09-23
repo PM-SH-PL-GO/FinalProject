@@ -103,7 +103,7 @@ public class AdminController {
 	 * @author jun6
 	 * @return
 	 */
-	@RequestMapping(value = "/tutorList")
+	@RequestMapping(value = "/tutor/list")
 	public ResponseEntity<List<Tutor>> tutorList() {
 		List<Tutor> tutorList = new ArrayList<>();
 		try {
@@ -135,8 +135,8 @@ public class AdminController {
 	 * @param status
 	 * @return
 	 */
-	@PatchMapping(value = "/status/{tutorId}")
-	public ResponseEntity<String> statusChange(@PathVariable(value = "tutorId")String id, @RequestBody String status){
+	@PatchMapping(value = "/tutor/status/{tutorId}")
+	public ResponseEntity<String> tutorStatusChange(@PathVariable(value = "tutorId")String id, @RequestBody String status){
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> map;
 		String tutorStatus = "";
@@ -162,7 +162,7 @@ public class AdminController {
 	 * @param 강사의 id
 	 * @return 강사의 강의 목록(title, state)
 	 */
-	@RequestMapping(value = "/tutorLecture/{tutorId}")
+	@RequestMapping(value = "/tutor/lecture/{tutorId}")
 	public ResponseEntity<List<Lecture>> tutorLectureList(@PathVariable(value = "tutorId") String tutor_id){
 		List<Lecture> lectureList = new ArrayList<>();
 		try {
@@ -182,7 +182,7 @@ public class AdminController {
 	 * @author jun6
 	 * @return 전체 강의 목록
 	 */
-	@RequestMapping(value = "/lectureList", method = RequestMethod.GET)
+	@RequestMapping(value = "/lecture/list", method = RequestMethod.GET)
 	public ResponseEntity<List<Lecture>> lectureList() {
 		try {
 			List<Lecture> lectureList = adminService.showAllLectures();
@@ -208,6 +208,39 @@ public class AdminController {
 //			return ResponseEntity.status(HttpStatus.OK).body(null);
 //		}
 //	}
+	
+	/**
+	 * 강의 승인/반려/취소 하기
+	 * @author jun6
+	 * @param lecture_id
+	 * @param status
+	 * @return
+	 */
+	@PatchMapping(value = "/lecture/status/{lectureId}")
+	public ResponseEntity<String> lectureStatusChange(@PathVariable(name = "lectureId") String lecture_id, String status){
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> map;
+		String lectureStatus = "";
+		System.out.println("///////////////////////////" + status + "//////////////////////////////////////////");
+		try {
+			map = mapper.readValue(status, new TypeReference<Map<String, Object>>() {});
+			lectureStatus = map.get("status").toString();
+		} catch (JsonMappingException e1) {
+			e1.printStackTrace();
+		} catch (JsonProcessingException e1) {
+			e1.printStackTrace();
+		}
+		
+		try {
+			adminService.updateLectureStatusByIdAndStatus(lecture_id, lectureStatus);
+			return ResponseEntity.status(HttpStatus.OK).body("정상적으로 설정하였습니다");
+		}catch(ModifyException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("설정에 실패하였습니다");
+		}
+	}
+	
+	
 	
 	/////////////////////////FAQ////////////////////////////
 	

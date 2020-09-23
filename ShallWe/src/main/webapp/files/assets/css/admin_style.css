@@ -160,11 +160,20 @@ hr{
     padding: 5px;
 }
 
+.table tr.modal_show:hover{
+	background-color: #a8ffec;
+}
+
+.table tr.lecture-detail:hover{
+	background-color: #a8ffec;
+}
+
 .table td{
     text-align: center;
     font-size: 15px;
     padding: 5px;
 }
+
 .table td img{
     height: 80px;
     width: 80px;
@@ -218,11 +227,12 @@ hr{
 }
 
 .tutor-lecture-list .tutor-lecture-content{
-	width: 70%;
-	margin: 100px auto;
-	padding: 20px 10px;
-	background: #fff;
-	border: 2px solid #666;
+	width: 65%;
+    height: 65%;
+    margin: 50px;
+    padding: 20px 10px;
+    background: #fff;
+    border: 2px solid #666;
 }
 
 .tutor-lecture-list .tutor-lecture-layer{
