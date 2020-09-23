@@ -7,15 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-<<<<<<< HEAD
-import com.shallwe.dao.MemberDAO;
-import com.shallwe.exception.FindException;
-=======
 import com.shallwe.dao.LectureDAO;
 import com.shallwe.dao.MemberDAO;
 import com.shallwe.exception.FindException;
 import com.shallwe.vo.Lecture;
->>>>>>> pre_master
 
 import lombok.extern.log4j.Log4j;
 

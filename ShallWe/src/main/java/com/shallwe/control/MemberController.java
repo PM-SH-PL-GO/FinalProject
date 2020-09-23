@@ -51,7 +51,7 @@ public class MemberController {
 	
 	//멤버로그아웃:경찬
 	@RequestMapping(value="/memberLogout")
-	public ModelAndView memberLogout(HttpSession session,@RequestParam(value="member_id")String member_id) {
+	public ModelAndView memberLogout(HttpSession session) {
 		
 		ModelAndView modelAndView = new ModelAndView();
 		
