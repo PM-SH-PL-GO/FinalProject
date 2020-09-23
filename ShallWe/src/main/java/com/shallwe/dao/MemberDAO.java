@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
+import com.shallwe.exception.RemoveException;
 import com.shallwe.model.MemberInfoBean;
 import com.shallwe.vo.LectureCategory;
 import com.shallwe.vo.Member;
@@ -257,4 +258,18 @@ public class MemberDAO {
 		
 		return memberList;
 	}
+	
+	public void deleteMemberById(String member_id) throws RemoveException{
+		SqlSession session = null;
+		
+		try {
+			session = sqlSessionFactory.openSession();
+			session.delete("MemberMapper.deleteMemberById", member_id);
+		}catch(DataAccessException e) {
+			e.printStackTrace();
+			throw new RemoveException("삭제 시도 중 에러가 발생했습니다");
+		}
+	}
+	
+	
 }
