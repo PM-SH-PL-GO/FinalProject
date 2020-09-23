@@ -22,10 +22,10 @@ public class HomeController {
 //		System.out.println("admin 입장");
 //	}
 	
-	@RequestMapping(value = "/studyBoard", method = RequestMethod.GET)
-	public void studyBoard(Locale locale, Model model) {
-		System.out.println("studyBoard coming");
-	}
+//	@RequestMapping(value = "/studyBoard", method = RequestMethod.GET)
+//	public void studyBoard(Locale locale, Model model) {
+//		System.out.println("studyBoard coming");
+//	}
 	
 	@RequestMapping(value = "/studyBoardWrite", method = RequestMethod.GET)
 	public void studyBoardWrite(Locale locale, Model model) {

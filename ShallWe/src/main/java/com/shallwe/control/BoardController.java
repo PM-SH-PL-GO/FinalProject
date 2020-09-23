@@ -1,21 +1,31 @@
 package com.shallwe.control;
 
+import java.util.Locale;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.annotation.JacksonInject.Value;
+import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.model.BoardPageBean;
 import com.shallwe.service.BoardService;
+import com.shallwe.vo.Member;
 import com.shallwe.vo.StudyBoard;
 
 @Controller
@@ -24,6 +34,16 @@ public class BoardController {
 	private static final long serialVersionUID = 1L;
 	@Autowired
 	BoardService service;
+	
+	@RequestMapping(value = "/studyBoard", method = RequestMethod.GET)
+	public void studyBoard(Locale locale, Model model) {
+		System.out.println("studyBoard coming");
+	}
+	
+	@RequestMapping(value = "/faq", method = RequestMethod.GET)
+	public void faq(Locale locale, Model model) {
+		System.out.println("studyBoard coming");
+	}
 	
 	@RequestMapping("/list/{currentPage}")
 	@ResponseBody
@@ -59,7 +79,7 @@ public class BoardController {
 	}
 	
 	@RequestMapping("/detail/{boardIdVal}")
-	@ResponseBody
+//	@ResponseBody
 	public ModelAndView detail(@PathVariable int boardIdVal) {
 		ModelAndView mnv = new ModelAndView();
 		StudyBoard board;
@@ -76,14 +96,24 @@ public class BoardController {
 		}
 		return mnv;
 	}
-//	public ResponseEntity<StudyBoard> detail(@PathVariable(value = "boardIdVal",required = false) Integer bv){
-//		StudyBoard sb =null;
-//		try {
-//			sb=service.FindByNo(bv);
-//			return (ResponseEntity<StudyBoard>)ResponseEntity.status(HttpStatus.OK).body(sb);
-//		} catch (FindException e) {
-//			e.printStackTrace();
-//			return (ResponseEntity<StudyBoard>)ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(sb);
-//		}
-//	}
+	
+	@RequestMapping(value = "/write")
+	public String studyBoardWrite() {
+		return "studyBoardWrite";
+	}
+	
+	@RequestMapping("writeBoard")
+	public String writeBoard(@RequestBody StudyBoard sb) {
+		System.out.println("sb="+sb);
+		try {
+			service.writeBoard(sb);
+			return "success";
+		} catch (AddException e) {
+			e.printStackTrace();
+			return "fail";
+		}
+		
+	}
+	
 }
+

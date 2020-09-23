@@ -56,21 +56,42 @@ background : #00dbd5;
 	
 }
 
+a.community{
+cursor: pointer;
+}
 </style>
 <script>
 $(function(){
-
 	$("a#login").click(function(){
 		location.href = "/shallwe/userLogin";
 		});
 });
 
 $(function(){
+	$("#faq").click(function(){
+		location.href = "/shallwe/faq";
+		});
+});
 
+$(function(){
 	$("#tutorBtn").click(function(){
 		location.href = "/shallwe/instructor";
 		});
 });
+
+$(function(){
+	$("#studBoard").click(function(){
+		location.href = "/shallwe/studyBoard";
+		});
+});
+
+$(function(){
+	$("#signUp").click(function(){
+		location.href = "/shallwe/signup";
+		});
+});
+
+
 
 
 
@@ -95,9 +116,9 @@ $(function(){
 								<ul id="navigation">
 									<li><a href="#">커뮤니티</a>
 										<ul class="submenu">
-											<li><a href="#">공부 게시판</a></li>
-											<li><a href="#">자유게시판</a></li>
-											<li><a href="#">FAQ</a></li>
+											<li><a id="studBoard" class="community">공부 게시판</a></li>
+											<li><a class="community">자유게시판</a></li>
+											<li><a id="faq" class="community">FAQ</a></li>
 										</ul></li>
 								</ul>
 							</nav>
@@ -110,16 +131,15 @@ $(function(){
 					<div class="menu-wrapper d-flex align-items-center justify-content-between" style="float: right; margin-right: 100px">
 						<!-- Header-btn -->
 						<div class="header-btns d-none d-lg-block f-right">
-							<a href="#" class="btn" id="tutorBtn">전문가 등록</a>
-							<!--                             <a href="#" class="mr-40"><i class="ti-user"></i></a> -->
+							<a class="btn" id="tutorBtn">전문가 등록</a>
 						</div>
 						<div class="main-menu f-right d-none d-lg-block ">
 							<nav>
 								<ul id="navigation">
 									<li><a href="#"><i class="ti-user"></i></a>
 										<ul class="submenu">
-											<li><a href="#" id ="login">로그인</a></li>
-											<li><a href="#" id ="signUp">회원가입</a></li>
+											<li><a id ="login">로그인</a></li>
+											<li><a id ="signUp">회원가입</a></li>
 										</ul></li>
 								</ul>
 							</nav>
