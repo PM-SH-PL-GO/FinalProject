@@ -8,8 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class Tutor {
+	
 	private Member member;						// 회원 정보
-	private LectureCategory lecture_category;	// 전문 분야
+	private LectureCategory lectureCategory;	// 전문 분야
 	private String tutor_nickname;				// 닉네임
 	private String tutor_img;					// 강사 사진파일 명
 	private String tutor_career_file;			// 강사 이력서
