@@ -61,6 +61,7 @@ public class LectureController {
 		try {
 			mlthlist = service.memberLectureList(mlth);
 			mnv.addObject("mlthlist", mlthlist);
+//			mnv.setViewName("/memberLectureList");
 			mnv.setViewName("/memberLectureList");
 			mnv.addObject("status", "success");
 		} catch (FindException e) {
