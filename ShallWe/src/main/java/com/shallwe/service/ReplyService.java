@@ -51,6 +51,8 @@ public class ReplyService {
 		boardPageBean.setList(list);
 		boardPageBean.setStartRow(startRow);
 		boardPageBean.setEndRow(endRow);
+		boardPageBean.setStartPage(((page-1)/10)*10+1);	
+		boardPageBean.setEndPage(((page-1)/10)*10+1);	
 		boardPageBean.setCurrentPage(page);
 		return boardPageBean;
 	}	

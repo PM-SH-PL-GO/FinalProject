@@ -61,8 +61,60 @@
 .blog_details a:hover {
 	color: #B367FF
 }
+p {
+    margin-bottom: 0px;
+}
+h5 i{
+	margin-right: 10px;
+}
 </style>
 <script>
+function formatDate(date) { 
+	var d = new Date(date), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = d.getFullYear(); 
+	if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; 
+	return [year, month, day].join('-'); 
+}
+
+$(function(){
+	$.ajax({
+		url:"/shallwe/reply/"+${studyBoard.studyBoard_id}
+		,method:"get"
+		,success:function(pbObj){
+		var $replyPage=$("#replyList");
+		var $replyCount=$("div.comments-area h4#replyCount")
+		var replyPageCountData="댓글 수("+pbObj.list.length+")"
+		var replyPageData="";
+			var arr = pbObj.list;
+			arr.forEach(function(studyReply, index){
+				replyPageData += "<div class=\"single-comment justify-content-between d-flex\">"
+				replyPageData += "<div class=\"user justify-content-between d-flex\">"
+				replyPageData += "<div class=\"desc\">"
+				replyPageData += "<p class=\"comment\">"+studyReply.studyreply_content+"</p>"
+				replyPageData += "<div class=\"d-flex justify-content-between\">"
+				replyPageData += "<div class=\"d-flex align-items-center\">"
+				replyPageData += "<h5>"
+				replyPageData += "<a><i class=\"fa fa-user\"></i>"+studyReply.member.member_name+"</a>"
+				replyPageData += "</h5>"
+				replyPageData += "<p>"+formatDate(studyReply.studyreply_dt)+"</p>"
+				replyPageData += "</div>"
+				replyPageData += "<div class=\"reply-btn\">"
+				replyPageData += "<a class=\"btn-reply text-uppercase\">수정</a>" 
+				replyPageData += "<a class=\"btn-reply text-uppercase\">삭제</a>"
+				replyPageData += "</div>"
+				replyPageData += "</div>"
+				replyPageData += "</div>"
+				replyPageData += "</div>"
+				replyPageData += "</div>"			
+				replyPageData += "<hr>"			
+				
+			});
+			$replyCount.html(replyPageCountData);
+			$replyPage.html(replyPageData);
+		}
+		
+	});
+	
+});
 function formatDate(date) { 
 	var d = new Date(date), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = d.getFullYear(); 
 	if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; 
@@ -89,56 +141,17 @@ function formatDate(date) {
 							</h2>
 							<ul class="blog-info-link mt-3 mb-4">
 								<li><a href="#"><i class="fa fa-user"></i>${studyBoard.member.member_name}</a></li>
-								<li><a href="#"><i class="fa fa-comments"></i> 댓글 수()</a></li>
-								<li><a href="#">${resultDt}</a></li>
+								<li><a href="#"><i class="fa fa-comments"></i> 조회 수(${studyBoard.studyBoard_view_count})</a></li>
+								<li><a href="#">작성일 ${resultDt}</a></li>
 							</ul>
 							<p class="excert">${studyBoard.studyBoard_content}</p>
-							${studyBoard}
-							<p>MCSE boot camps have its supporters and its detractors.
-								Some people do not understand why you should have to spend money
-								on boot camp when you can get the MCSE study materials yourself
-								at a fraction of the camp price. However, who has the willpower
-								to actually sit through a self-imposed MCSE training. who has
-								the willpower to actually</p>
-							<p>MCSE boot camps have its supporters and its detractors.
-								Some people do not understand why you should have to spend money
-								on boot camp when you can get the MCSE study materials yourself
-								at a fraction of the camp price. However, who has the willpower
-							</p>
-							<p>MCSE boot camps have its supporters and its detractors.
-								Some people do not understand why you should have to spend money
-								on boot camp when you can get the MCSE study materials yourself
-								at a fraction of the camp price. However, who has the willpower
-								to actually sit through a self-imposed MCSE training. who has
-								the willpower to actually</p>
 						</div>
 					</div>
 
 					<div class="comments-area">
-						<h4>댓글(${studyBoard.studyBoard_view_count})</h4>
-						<div class="comment-list">
-							<div class="single-comment justify-content-between d-flex">
-								<div class="user justify-content-between d-flex">
-									<div class="desc">
-										<p class="comment">Multiply sea night grass fourth day sea
-											lesser rule open subdue female fill which them Blessed, give
-											fill lesser bearing multiply sea night grass fourth day sea
-											lesser</p>
-										<div class="d-flex justify-content-between">
-											<div class="d-flex align-items-center">
-												<h5>
-													<a href="#">고준식</a>
-												</h5>
-												<p class="date">2020년 12월 9일</p>
-											</div>
-											<div class="reply-btn">
-												<a href="#" class="btn-reply text-uppercase">수정</a> <a
-													href="#" class="btn-reply text-uppercase">삭제</a>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+						<h4 id="replyCount"></h4>
+						<div class="comment-list" id="replyList">
+
 						</div>
 						<div class="comment-form">
 							<h4>댓글 쓰기</h4>
@@ -151,7 +164,9 @@ function formatDate(date) {
 												id="comment" cols="30" rows="9" placeholder="내용을 입력하세요"></textarea>
 										</div>
 										<div class="form-group">
-											<button type="submit" class="button button-contactForm btn_1 boxed-btn">댓글 쓰기</button>
+											<button type="submit"
+												class="button button-contactForm btn_1 boxed-btn">댓글
+												쓰기</button>
 										</div>
 									</div>
 									<div class="col-12"></div>
