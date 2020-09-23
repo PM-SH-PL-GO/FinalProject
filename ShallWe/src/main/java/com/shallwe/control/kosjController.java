@@ -49,7 +49,8 @@ public class kosjController {
 	public ModelAndView search(@RequestParam(value="searchKey")String searchKeyParam
 							 , @RequestParam(value="searchText")String searchText) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		
+		System.out.println(searchKeyParam);
+		System.out.println(searchText);
 		// 입력 받은 검색어 param null값 처리
 		if ( ("").equals(searchText) ) {
 			searchText = " ";
