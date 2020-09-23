@@ -64,17 +64,17 @@ public class StudyBoardTest {
 		System.out.println("보드페이지빈="+bpb);
 	}
 	
-//	@Test
+	@Test
 	@DisplayName("게시판 입력")
 	void insert() throws AddException {
 		StudyBoard studyboard = new StudyBoard();
 		
 		Member member = new Member();
 		member.setMember_id("member1");
-		studyboard.setStudy_m(member);
-		studyboard.setStudyBoard_content("제목 : 3다시성운test");
-		studyboard.setStudyBoard_title("내용 : 3성운test");
-		studyboard.setStudyBoard_fileName("3성운.jpg");
+		studyboard.setMember(member);
+		studyboard.setStudyBoard_content("제목 : 5다시성운test");
+		studyboard.setStudyBoard_title("내용 : 5성운test");
+		studyboard.setStudyBoard_fileName("5성운.jpg");
 //		dao.insert(studyboard);
 		boardService.writeBoard(studyboard);
 		
@@ -87,7 +87,7 @@ public class StudyBoardTest {
 		Member member = new Member();
 		member.setMember_id("member1");		
 		studyboard.setStudyBoard_id(9);
-		studyboard.setStudy_m(member);
+		studyboard.setMember(member);
 		studyboard.setStudyBoard_content("제목 : 정말정말다시성운test");
 		studyboard.setStudyBoard_title("내용 : 성운test");
 		studyboard.setStudyBoard_fileName("성운.jpg");
@@ -116,7 +116,7 @@ public class StudyBoardTest {
 //		dao.insertViews(3);
 //	}
 	
-	@Test
+//	@Test
 	void selectByNo() throws FindException {
 		dao.selectByNo(1);
 	}

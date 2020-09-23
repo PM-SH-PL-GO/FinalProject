@@ -11,7 +11,7 @@
 <body>
 	<a href="#contents" class="skip">본문바로가기</a>
 	<main>
-		
+		<form>
         <div class="contents">
             <h2 class="h2">회원가입</h2>
             <p>배움에는 나이가 없다. 혼자보단 둘, 둘보다는 셋, 함께 배우시겠습니까? Shall We?</p>
@@ -104,10 +104,11 @@
           	</table>
           	
             <div class="btn_center">
-                <a href="#a" class="btn_type1">회원가입</a>
-                <a href="#a" class="btn_type2">취소</a>
+                <a href="/shallwe" class="btn_type1" type="submit">회원가입</a>
+                <a href="/shallwe" class="btn_type2">취소</a>
             </div>
         </div>
+        </form>
 	</main>
 	<footer>
 		<div class="clear">

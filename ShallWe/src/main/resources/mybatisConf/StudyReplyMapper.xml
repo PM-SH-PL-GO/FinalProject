@@ -5,10 +5,10 @@
 <mapper namespace="StudyReplyMapper">
 	<resultMap type="StudyReply" id="StudyReplyResultMap" autoMapping="true">
 		<id property="studyreply_id" column="STUDYREPLY_ID"/>
-		<association property="studyreply_b" javaType="StudyBoard" autoMapping="true">
+		<association property="studyboard" javaType="StudyBoard" autoMapping="true">
 			<id property="studyBoard_id" column="STUDYREPLY_PARENT_BOARD"/>
 		</association>	
-		<association property="studyreply_m" javaType="Member" autoMapping="true">
+		<association property="member" javaType="Member" autoMapping="true">
 			<id property="member_id" column="STUDYREPLY_MEMBER_ID"/>
 		</association>	
 	</resultMap>
@@ -16,7 +16,7 @@
 	select *
 	from(select rownum r, a.*
 	    from(select *
-	        from STUDYREPLY
+	        from STUDYREPLY sr join member m on(sr.STUDYREPLY_MEMBER_ID = m.member_id)
 	        where STUDYREPLY_PARENT_BOARD=#{boardNo}
 	        order by studyreply_id desc)a)b
 	where r BETWEEN #{startRow} AND #{endRow}

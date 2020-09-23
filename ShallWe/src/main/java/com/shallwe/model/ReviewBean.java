@@ -14,9 +14,10 @@ import lombok.NoArgsConstructor;
 @Data
 public class ReviewBean {
 	
-	private String member_id;
-	private String lecture_category_id;
-	private int lecture_id;
-	private int review_score;
+	private String memberId;
+	private String lectureCategoryId;
+	private String reviewContent;
+	private int lectureId;
+	private int reviewScore;
 	
 }
