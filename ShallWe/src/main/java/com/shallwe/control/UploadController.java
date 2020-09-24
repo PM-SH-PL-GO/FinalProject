@@ -26,6 +26,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 @Controller
 @RequiredArgsConstructor
+@RequestMapping(value="upload")
 public class UploadController {
 	
 	@Autowired TutorService service;
@@ -46,7 +47,6 @@ public class UploadController {
 		//파일 중복 되지 않기 위해 사용함
 		File saveFile = new File(UPLOAD_PATH,saveName);
 		
-
 			try {
 				
 				file.transferTo(saveFile);

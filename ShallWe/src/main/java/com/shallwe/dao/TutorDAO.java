@@ -23,7 +23,6 @@ public class TutorDAO {
 	// 강사 등록 : 경찬
 	// 강사 정보 조회 : 경찬
 	// 강사 정보 수정 : 경찬
-	
 	// 강사/예비강사 목록 보기(admin) : 준식
 	public List<Tutor> selectAllTutor(String YN) throws FindException{
 		List<Tutor> tutorList = new ArrayList<>();
