@@ -36,136 +36,54 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-	$(document).ready(
-			function() {
+$(function(){
+//----------FAQ LOAD START---------
+	/** 초기화 처리*/
+	// 첫 번재 항목이 펼쳐져 있도록 처리
+	$(".collapsible:eq(0) a").addClass("selected"); //첫번째 항목만 selected 클래스를 적용
+	$(".collapsible").not(":eq(0)").find(".content").hide(); //첫번째 항목 이외의 content를 숨김
 
-				/** 초기화 처리*/
+	/** 링크에 대한 클릭 이벤트 처리 */
+	$(".collapsible .title a").click( function () {
+		
+		$(this).toggleClass("selected");
+		//클릭된 나 자신을 제외한 나머리 링크들은 slected 클래스를 무조건 제거
+		$(".collapsible .title a").not(this).removeClass(
+				"selected");
 
-				// 첫 번재 항목이 펼쳐져 있도록 처리
-				$(".collapsible:eq(0) a").addClass("selected"); //첫번째 항목만 selected 클래스를 적용
-				$(".collapsible").not(":eq(0)").find(".content").hide(); //첫번째 항목 이외의 content를 숨김
+		// 펼칠 내용 영역 선택
+		var target = $(this).parents(".collapsible").find(
+				".content");
 
-				/** 링크에 대한 클릭 이벤트 처리 */
-				$(".collapsible .title a").click(
-						function() {
-							$(this).toggleClass("selected");
-							//클릭된 나 자신을 제외한 나머리 링크들은 slected 클래스를 무조건 제거
-							$(".collapsible .title a").not(this).removeClass(
-									"selected");
+		// 나머지 내용 영역을 선택
+		var other = $(".collapsible .title a").not(this)
+				.parents(".collapsible").find(".content");
 
-							// 펼칠 내용 영역 선택
-							var target = $(this).parents(".collapsible").find(
-									".content");
+		// 애니메이션으로 열고 닫기 처리
+		target.slideToggle(300);
+		other.slideUp(300);
 
-							// 나머지 내용 영역을 선택
-							var other = $(".collapsible .title a").not(this)
-									.parents(".collapsible").find(".content");
-
-							// 애니메이션으로 열고 닫기 처리
-							target.slideToggle(300);
-							other.slideUp(300);
-
-							// 링크 페이지 이동 중지
-							return false;
-						});
-			});
+		// 링크 페이지 이동 중지
+		return false;
+	});
+	//----------FAQ LOAD END---------
+});
 </script>
 </head>
 <body>
-	<!-- ? Preloader Start -->
-	<div id="preloader-active">
-		<div
-			class="preloader d-flex align-items-center justify-content-center">
-			<div class="preloader-inner position-relative">
-				<div class="preloader-circle"></div>
-				<div class="preloader-img pere-text">
-					<img src="/shallwe/assets/img/logo/loder.png" alt="">
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- Preloader Start -->
-	<header> </header>
 	<main>
 		<ul class="faq_ul">
-			<li class="collapsible">
-				<h2 class="title">
-					<a href="#html5">[서비스 소개] shallwe는 어떻게 이용하나요?</a>
-				</h2>
-				<p class="content">
-					shallwe는각 분야의 전문가가 제공하는 서비스와 상품을 거래할 수 있는 프리랜서 마켓입니다. shallwe의
-					이용방법은 아래 안내를 참고해 주세요. <br>✱ 목차 <br>01. 원하는 서비스를 찾는 방법 <br>02. 적합한 서비스를
-					선택하는 방법 <br>03. 전문가에게 문의하는 방법 <br>04. 성공적으로 거래 완료하는 방법
-				</p>
-			</li>
-			<li class="collapsible">
-				<h2 class="title">
-					<a href="#css3">[이용방법] 전문가와 어떻게 커뮤니케이션해야 할까요?</a>
-				</h2>
-				<p class="content">shallwe에서 거래되는 무형 서비스의 특성상, 최종 작업물은 의뢰인-전문가의 소통에
-					따라 결정됩니다. 이에 따라 거래의 전 과정에서 의뢰인의 요구 사항을 구체적이고 명확하게 전달하는 것이 중요합니다.
-
-					커뮤니케이션 방법은 아래의 안내를 참고해 주세요.</p>
-			</li>
-			<li class="collapsible">
-				<h2 class="title">
-					<a href="#api">[가입/인증] 회원가입은 어떻게 진행하나요?</a>
-				</h2>
-				<p class="content">만 14세 이상의 개인이라면 누구나 무료로 회원가입하실 수 있습니다.</p>
-			</li>
+			<c:forEach items="${faqList}" var="fl" varStatus="stats" >
+				<li class="collapsible">
+					<h2 class="title">
+						<a>faq.${fl.faq_question}</a>
+					</h2>
+					<p class="content">faq.${fl.faq_answer}</p>
+				</li>
+			</c:forEach>
 		</ul>
 	</main>
-
-
-	<!-- Scroll Up -->
-	<div id="back-top">
-		<a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
-	</div>
-
-	<!-- JS here -->
-
-	<script src="/shallwe/assets/js/vendor/modernizr-3.5.0.min.js"></script>
-	<!-- Jquery, Popper, Bootstrap -->
-	<script src="/shallwe/assets/js/vendor/jquery-1.12.4.min.js"></script>
-	<script src="/shallwe/assets/js/popper.min.js"></script>
-	<script src="/shallwe/assets/js/bootstrap.min.js"></script>
-	<!-- Jquery Mobile Menu -->
-	<script src="/shallwe/assets/js/jquery.slicknav.min.js"></script>
-
-	<!-- Jquery Slick , Owl-Carousel Plugins -->
-	<script src="/shallwe/assets/js/owl.carousel.min.js"></script>
-	<script src="/shallwe/assets/js/slick.min.js"></script>
-	<!-- One Page, Animated-HeadLin -->
-	<script src="/shallwe/assets/js/wow.min.js"></script>
-	<script src="/shallwe/assets/js/animated.headline.js"></script>
-	<script src="/shallwe/assets/js/jquery.magnific-popup.js"></script>
-
-	<!-- Date Picker -->
-	<script src="/shallwe/assets/js/gijgo.min.js"></script>
-	<!-- Nice-select, sticky -->
-	<script src="/shallwe/assets/js/jquery.nice-select.min.js"></script>
-	<script src="/shallwe/assets/js/jquery.sticky.js"></script>
-	<!-- Progress -->
-	<script src="/shallwe/assets/js/jquery.barfiller.js"></script>
-
-	<!-- counter , waypoint,Hover Direction -->
-	<script src="/shallwe/assets/js/jquery.counterup.min.js"></script>
-	<script src="/shallwe/assets/js/waypoints.min.js"></script>
-	<script src="/shallwe/assets/js/jquery.countdown.min.js"></script>
-	<script src="/shallwe/assets/js/hover-direction-snake.min.js"></script>
-
-	<!-- contact js -->
-	<script src="/shallwe/assets/js/contact.js"></script>
-	<script src="/shallwe/assets/js/jquery.form.js"></script>
-	<script src="/shallwe/assets/js/jquery.validate.min.js"></script>
-	<script src="/shallwe/assets/js/mail-script.js"></script>
-	<script src="/shallwe/assets/js/jquery.ajaxchimp.min.js"></script>
-
-	<!-- Jquery Plugins, main Jquery -->
-	<script src="/shallwe/assets/js/plugins.js"></script>
-	<script src="/shallwe/assets/js/main.js"></script>
-
-
+<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 
 </body>
 </html>

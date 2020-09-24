@@ -83,6 +83,28 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 
+// timestamp to yyyy-mm-dd 변환
+function yyyymmbb (timeStamp ) {
+	var date = new Date (timeStamp);
+	var year = date.getFullYear();
+	var month = (1+ date.getMonth());
+	if ( month < 10 ) {
+		month = '0'+month;
+	}
+	var day = date.getDate();
+	if ( day < 10 ) {
+		day = '0'+day;
+	}
+	return year +'-'+month+'-'+day;
+}
+
+// 세자리 수마다 ' ,' 찍어주는 함수
+function money (data) {
+	var price = Number(data).toLocaleString();
+	return price;
+}
+
+
 $(document).ready(function() {
 	var lectureListJsonValue = '${lectureListJsonValue}';
 	var jsonObj = JSON.parse(lectureListJsonValue);
@@ -95,28 +117,35 @@ $(document).ready(function() {
 		$divData += '<div class="divTableCell"><img src="${contextPath}/lecture/'+ lectureObj.lecture_img +'"'+ 'class="mb-15" alt="강의사진"></div>';
 		$divData += '<div class="divTableCell"><span>'+ lectureObj.lecture_title+'</span></div>';
 		$divData += '<div class="divTableCell"><span>'+ lectureObj.tutor.tutor_nickname+'</span></div>'
-		$divData += '<div class="divTableCell"><span>'+ lectureObj.lecture_start_dt +' ~ '+ lectureObj.lecture_end_dt + '</span></div>';
-		$divData += '<div class="divTableCell"><span>'+ lectureObj.lecture_price + '</span></div>';
+		$divData += '<div class="divTableCell"><span>'+ yyyymmbb(lectureObj.lecture_start_dt) +' ~ '+ yyyymmbb(lectureObj.lecture_end_dt) + '</span></div>';
+		$divData += '<div class="divTableCell"><span>'+ money(lectureObj.lecture_price) + '</span></div>';
+		$divData += '<input type="hidden" value="' + lectureObj.lecture_id +'"/>';
+ 		$divData += '<input type="hidden" value="' + lectureObj.lectureCategory.lecture_category_id +'"/>';
 		$div.html($divData);
 		$divTableBodyObj.append($div);
 	}
+	
+	var $formObj = $('form[name=paidList');
+	console.log("lectureListJsonValue : " + lectureListJsonValue);
+	$formObj.submit(function e () {
+		//ajax : 서버에서 넘어온 결제할 강의 목록 결제처리
+		$.ajax({
+			url : "/shallwe/insertMemberLectureHistory"
+			,method : "POST"
+	 		,contentType : "application/json;charset=utf-8"
+			,data : lectureListJsonValue
+			,success : function(responseData) {
+				var jsonData = JSON.parse(responseData);
+				if ( jsonData.status  == 'success') {
+					alert("강의구매완료!");
+					location.href("/index");
+				} else if ( jsonData.status  == 'fail') {
+					alert("강의구매실패 :본사에 문의하세요!");
+				}
+			} // ajax통신 success
+		}); //end of ajax
+	}); // end of form submit 이벤트
 
-	
-// 	$.ajax({url:
-// 		,data:{'lecture_start_dt':}});
-	
-	//ajax : 서버에서 넘어온 결제할 강의 목록 결제처리
-	$.ajax({
-		url : "/shallwe/insertMemberLectureHistory"
-		,method : "POST"
- 		,contentType : "application/json;charset=utf-8"
-		,data : lectureListJsonValue
-		,success : function(responseData) {
-			console.log(responseData);
-		} // ajax통신 success
-	}); //end of ajax
-	
-	
 }); // end of load();
   
   
@@ -158,7 +187,7 @@ $(document).ready(function() {
 			</div>
 
 			<!--강의 정보 -->
-			<form name="paidList" action="post">
+			<form name="paidList" method="post">
 				<div class="divTable">
 					<div class="divTableBody">
 						<div class="divTableHeading">

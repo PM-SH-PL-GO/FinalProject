@@ -103,13 +103,13 @@
                     	
                     	preTutors.forEach(function(preTutor, index){
                     		let idx = index + 1;
-                    		$lot += '<tr><td>' + idx + '</td>';
+                    		$lot += '<tr class="modal_show" value="tutor' + idx + '"><td>' + idx + '</td>';
                     		$lot += '<td><img src="${contextPath}/tutorImages/' + preTutor.tutor_img + '"></td>';
                     		$lot += '<td>' + preTutor.member.member_id + '</td>';
                     		$lot += '<td>' + preTutor.member.member_name + '</td>';
                     		$lot += '<td>' + preTutor.tutor_nickname + '</td>';
                     		$lot += '<td>' + preTutor.lecture_category.lecture_category_name + '</td>';
-                    		$lot += '<td><button class="modal_show" value="tutor' + idx + '">상세정보 보기</button></td>';
+//                     		$lot += '<td><button class="modal_show" value="tutor' + idx + '">상세정보 보기</button></td>';
                     		$lot += ' <td><button class="tutor_status" value="' + preTutor.member.member_id + '">승인</button></td>';
                     		$lot += ' <td><button class="tutor_status" value="' + preTutor.member.member_id + '">반려</button></td></tr>';
                     		
@@ -126,13 +126,12 @@
                     	
                         $cont.html($lot);
                     },
-                    fail: function(){
-                    	alert("얌마 이대리!");
+                    error: function(){
                     	let $lot = '<table class="table"><thead><tr>';
                     	$lot += '<th>순서</th><th>강사 사진</th><th>아이디</th><th>회원 이름</th><th>강사 별명</th>';
                     	$lot += '<th>전문 분야</th><th>세부사항</th><th>승인</th><th>반려</th></tr></thead>';
                     	
-                    	$lot += '<tbody><tr>표시할 데이터가 없습니다</tr></tbody>';
+                    	$lot += '<tbody><tr>표시할 데이터가 없습니다</tr></tbody></table>';
                         $cont.html($lot);
                     }
                 });
@@ -162,39 +161,42 @@
             // 예비강사 승인/반려 버튼
             $cont.on("click", ".tutor_status", function(){
             	let $tatus = $(this).html();				// 승인/반려 상태
-            	let approve = $(this).attr('value');		// 예비강사 ID
-
-            	$.ajax({
-            		url: "${contextPath}/admin/status/" + approve,
-            		method: "patch",
-            		contentType: 'application/json-patch+json; charset=utf-8',
-            		data: JSON.stringify({"status" : $tatus}),
-            		success: function(data){
-            			alert(data);
-            			location.reload();
-            			$(".pre-tutor").trigger("click")
-            		},
-            		fail: function(data){
-            			alert(data);
-            			
-            		}
-            	});
-            	return false;
+            	let isTrue = confirm($tatus + " 하시겠습니까?");
             	
+            	if (isTrue == true){
+	            	let approve = $(this).attr('value');		// 예비강사 ID
+	
+	            	$.ajax({
+	            		url: "${contextPath}/admin/tutor/status/" + approve,
+	            		method: "patch",
+	            		contentType: 'application/json-patch+json; charset=utf-8',
+	            		data: JSON.stringify({"status" : $tatus}),
+	            		success: function(data){
+	            			alert(data);
+	            			$(".pre-tutor").trigger("click")
+	            		},
+	            		error: function(data){
+	            			alert(data);
+	            			
+	            		}
+	            	});
+            	}
+            	
+           		return false;
             });
             
             // 전체 강사목록 선택시
             $(".tutor-list").on("click", function(){
                 $.ajax({
-                    url: "${contextPath}/admin/tutorList",
+                    url: "${contextPath}/admin/tutor/list",
                     method: "GET",
                     success: function(tutors){
                     	let $lot = '<table class="table"><thead><tr>';
                     	$lot += '<th>순서</th><th>강사 사진</th><th>아이디</th><th>회원 이름</th><th>강사 별명</th>';
-                    	$lot += '<th>전문 분야</th><th>강의 목록</th><th>점수</th><th>세부사항</th><th>관리하기</th></tr></thead>';
+                    	$lot += '<th>전문 분야</th><th>강의 목록</th><th>점수</th><th>관리하기</th></tr></thead><tbody>';
                     	tutors.forEach(function(tutor, index){
                     		let idx = index + 1;
-                    		$lot += '<tr><td>' + idx + '</td>';
+                    		$lot += '<tr class="modal_show" value="tutor' + idx + '"><td>' + idx + '</td>';
                     		$lot += '<td><img src="${contextPath}/tutorImages/' + tutor.tutor_img + '"></td>';
                     		$lot += '<td>' + tutor.member.member_id + '</td>';
                     		$lot += '<td>' + tutor.member.member_name + '</td>';
@@ -202,8 +204,7 @@
                     		$lot += '<td>' + tutor.lecture_category.lecture_category_name + '</td>';
                     		$lot += '<td><button class="tutor_lecture" value="' + tutor.member.member_id + '">강의 목록 보기</button></td>';
                     		$lot += '<td>' + tutor.tutor_score + '</td>';
-                    		$lot += '<td><button class="modal_show" value="tutor' + idx + '">상세정보 보기</button></td>';
-                    		$lot += '<td><button class="tutor_edit">관리하기</button></td>';
+                    		$lot += '<td><button class="tutor_edit">관리하기</button></td></tr>';
                     		
                     		$lot += '<div class="modal_slot tutor' + idx + '"><div class="modal_content">';
                       		$lot += '<h3>' + tutor.tutor_nickname + '강사의 세부정보</h3><hr>';
@@ -214,7 +215,15 @@
                       		$lot += '<button class="modal_close">닫기</button></div><div class="modal_layer"></div></div>'
                     	});
                     	
-                    	$lot += '</table>';
+                    	$lot += '</tbody></table>';
+                    	
+                        $cont.html($lot);
+                    },
+                    error: function(){
+                    	let $lot = '<table class="table"><thead><tr>';
+                    	$lot += '<th>순서</th><th>강사 사진</th><th>아이디</th><th>회원 이름</th><th>강사 별명</th>';
+                    	$lot += '<th>전문 분야</th><th>강의 목록</th><th>점수</th><th>관리하기</th></tr></thead><tbody>';
+                    	$lot += '<tbody><tr>표시할 데이터가 업습니다</tr></tbody></table>'
                     	
                         $cont.html($lot);
                     }
@@ -228,27 +237,42 @@
             $cont.on("click", ".tutor_lecture", function(){
             	let $tutorId = $(this).attr("value");
             	$.ajax({
-            		url: "${contextPath}/admin/tutorLecture/" + $tutorId,
+            		url: "${contextPath}/admin/tutor/lecture/" + $tutorId,
             		method: "GET",
             		success: function(lectures){
             			let $tutor_Lecture = '<div class="tutor-lecture-list"><div class="tutor-lecture-content">';
-            			$tutor_Lecture += '<h3>' + lectures[0].tutor.tutor_nickname + '강사의 강의목록</h3><hr>';
-            			$tutor_Lecture += '<table class="tutor-lecture-table">';
-            			$tutor_Lecture += '<tr><th>번호</th><th>강의명</th><th>상태</th></tr>';
+            			$tutor_Lecture += '<h3>' + lectures[0].tutor.tutor_nickname + '강사의 강의목록</h3><br>';
+            			$tutor_Lecture += '<button class="tutor-lecture-close">닫기</button><hr>';
+            			$tutor_Lecture += '<table class="table">';
+            			$tutor_Lecture += '<tr><thead><th>순서</th><th>강의번호</th><th>강의명</th><th>상태</th></tr></thead>';
+           				$tutor_Lecture += '<tbody>';
             		
             			lectures.forEach(function(lec, index){
+            				let idNumber = '' + lec.lecture_id;
+                    		for (let i = idNumber.length; i < 4; i++)
+                    			idNumber = '0' + idNumber;
             				let idx = index + 1;
-            				$tutor_Lecture += '<tr>';
+            				$tutor_Lecture += '<tr class="lecture-detail" value="' + lec.lecture_id + '">';
             				$tutor_Lecture += '<td>' + idx + '</td>';
+            				$tutor_Lecture += '<td>' + lec.lectureCategory.lecture_category_id + idNumber + '</td>';
             				$tutor_Lecture += '<td>'+ lec.lecture_title +'</td>';
             				$tutor_Lecture += '<td>' + lec.lecture_state + '</td>';
             				$tutor_Lecture += '</tr>';
             			});
             			
-            			$tutor_Lecture += '<button class="tutor-lecture-close">닫기</button>';
-            			$tutor_Lecture += '</table></div>';
+            			$tutor_Lecture += '</tbody></table></div>';
             			$tutor_Lecture += '<div class="tutor-lecture-layer"></div></div>';
             			
+            			let cont = $cont.html() + $tutor_Lecture;
+            			$cont.html(cont);
+            		},
+            		error: function(){
+            			let $tutor_Lecture = '<div class="tutor-lecture-list"><div class="tutor-lecture-content">';
+            			$tutor_Lecture += '<h3>' + lectures[0].tutor.tutor_nickname + '강사의 강의목록</h3><br>';
+            			$tutor_Lecture += '<button class="tutor-lecture-close">닫기</button><hr>';
+            			$tutor_Lecture += '<table class="table">';
+            			$tutor_Lecture += '<tr><thead><th>순서</th><th>강의번호</th><th>강의명</th><th>상태</th></tr></thead>';
+           				$tutor_Lecture += '<tbody><tr>신청한 강의가 존재하지 않습니다</tr></tbody></table>'
             			let cont = $cont.html() + $tutor_Lecture;
             			$cont.html(cont);
             		}
@@ -268,25 +292,32 @@
             // 강의목록 선택시
             $(".lecture-list").on("click", function(){
                 $.ajax({
-                    url: "${contextPath}/admin/lectureList",
+                    url: "${contextPath}/admin/lecture/list",
                     method: "GET",
                     success: function(lectures){
+                    	let preparedCnt = 0;
                     	let prepared = '<h3 class="lecture-list-title">승인대기</h3>';
-                    	prepared += '<table class="table prepared"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th><th>강의 가격</th>';
-                    	prepared += '<th>강의 상태</th><th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th><th>현재 수강 인원</th>';
-                    	prepared += '<th colspan="2">관리하기</th></tr></thead><tbody>';
+                    	prepared += '<table class="table prepared"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th>';
+                    	prepared += '<th>강의 가격</th><th>강의 상태</th><th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th>';
+                    	prepared += '<th>현재 수강 인원</th><th colspan="2">관리하기</th></tr></thead><tbody>';
                     	
+                    	let processCnt = 0;
                     	let process = '<h3 class="lecture-list-title">진행중</h3>';
-                    	process += '<table class="table process"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th><th>강의 가격</th><th>강의 상태</th>';
-                    	process += '<th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th><th>현재 수강 인원</th><th>관리하기</th></tr></thead><tbody>';
+                    	process += '<table class="table process"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th>';
+                    	process += '<th>강의 가격</th><th>강의 상태</th><th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th>';
+                    	process += '<th>현재 수강 인원</th></tr></thead><tbody>';
                     	
+                    	let finishCnt = 0;
                     	let finish = '<h3 class="lecture-list-title">완료</h3>';
-                    	finish += '<table class="table finish"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th><th>강의 가격</th><th>강의 상태</th>';
-                    	finish += '<th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th><th>현재 수강 인원</th><th>관리하기</th></tr></thead><tbody>';
+                    	finish += '<table class="table finish"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th>';
+                    	finish += '<th>강의 가격</th><th>강의 상태</th><th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th>';
+                    	finish += '<th>현재 수강 인원</th><th>후기</th></tr></thead><tbody>';
                     	
+                    	let cancelCnt = 0;
                     	let cancel = '<h3 class="lecture-list-title">취소 대기 / 취소</h3>';
-                    	cancel += '<table class="table finish"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th><th>강의 가격</th><th>강의 상태</th>';
-                    	cancel += '<th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th><th>현재 수강 인원</th><th colspan="2">관리하기</th></tr></thead><tbody>';
+                    	cancel += '<table class="table finish"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th>';
+                    	cancel += '<th>강의 가격</th><th>강의 상태</th><th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th>';
+                    	cancel += '<th>현재 수강 인원</th><th colspan="2">관리하기</th></tr></thead><tbody>';
                     	
                     	lectures.forEach(function(lecture){
                     		let idNumber = '' + lecture.lecture_id;
@@ -298,7 +329,9 @@
                     		let today = formatDate(new Date());
                     		
                     		if (lecture.lecture_state == '승인대기'){
-                    			prepared += '<tr><td>' + lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
+                    			preparedCnt++;
+                    			
+                    			prepared += '<tr class="lecture-detail"><td>' + lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
                     			prepared += '<td><img src="${contextPath}/lecture/' + lecture.lecture_img + '"></td>';
                     			prepared += '<td>' + lecture.lectureCategory.lecture_category_name + '</td>';
                     			prepared += '<td>' + lecture.lecture_title + '</td>';
@@ -309,11 +342,13 @@
                     			prepared += '<td>' + lecture.lecture_max + '</td>';
                     			prepared += '<td>' + lecture.lecture_min + '</td>';
                     			prepared += '<td>' + lecture.lecture_current + '</td>';
-                    			prepared += '<td><button class="lecture-approve">승인</button></td>';
-                    			prepared += '<td><button class="lecture-cancel">반려</button></td>';
+//                     			prepared += '<td><button class="lecture-detail" value="' + lecture.lecture_id + '">상세정보</button></td>';
+                    			prepared += '<td><button class="lecture-edit" value="' + lecture.lecture_id + '">승인</button></td>';
+                    			prepared += '<td><button class="lecture-edit" value="' + lecture.lecture_id + '">반려</button></td>';
                     		}else if(lecture.lecture_state == '승인' && end > today){
                     			// 승인(진행중 + 시작 전 모집 중)
-                    			process += '<tr><td>' + lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
+                    			processCnt++;
+                    			process += '<tr class="lecture-detail"><td>' + lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
                     			process += '<td><img src="${contextPath}/lecture/' + lecture.lecture_img + '"></td>';
                     			process += '<td>' + lecture.lectureCategory.lecture_category_name + '</td>';
                     			process += '<td>' + lecture.lecture_title + '</td>';
@@ -324,10 +359,11 @@
                     			process += '<td>' + lecture.lecture_max + '</td>';
                     			process += '<td>' + lecture.lecture_min + '</td>';
                     			process += '<td>' + lecture.lecture_current + '</td>';
-                    			process += '<td><button class="lecture-edit">관리하기</button></td>';
+//                     			process += '<td><button class="lecture-detail" value="' + lecture.lecture_id + '">상세정보</button></td>';
                     		}else if(lecture.lecture_state == '승인' && today >= end){
                     			// 완료
-                    			finish += '<tr><td>' + lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
+                    			finishCnt++;
+                    			finish += '<tr class="lecture-detail"><td>' + lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
                     			finish += '<td><img src="${contextPath}/lecture/' + lecture.lecture_img + '"></td>';
                     			finish += '<td>' + lecture.lectureCategory.lecture_category_name + '</td>';
                     			finish += '<td>' + lecture.lecture_title + '</td>';
@@ -338,10 +374,12 @@
                     			finish += '<td>' + lecture.lecture_max + '</td>';
                     			finish += '<td>' + lecture.lecture_min + '</td>';
                     			finish += '<td>' + lecture.lecture_current + '</td>';
-                    			finish += '<td><button class="lecture-edit">관리하기</button></td>';
+//                     			finish += '<td><button class="lecture-detail" value="' + lecture.lecture_id + '">상세정보</button></td>';
+                    			finish += '<td><button class="lecture-review" value="' + lecture.lecture_id + '">후기보기</button></td>';
                     		}else{
                     			//취소 or 취소대기
-                    			cancel += '<tr><td>' + lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
+                    			cancelCnt++;
+                    			cancel += '<tr class="lecture-detail"><td>' + lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
                     			cancel += '<td><img src="${contextPath}/lecture/' + lecture.lecture_img + '"></td>';
                     			cancel += '<td>' + lecture.lectureCategory.lecture_category_name + '</td>';
                     			cancel += '<td>' + lecture.lecture_title + '</td>';
@@ -352,16 +390,25 @@
                     			cancel += '<td>' + lecture.lecture_max + '</td>';
                     			cancel += '<td>' + lecture.lecture_min + '</td>';
                     			cancel += '<td>' + lecture.lecture_current + '</td>';
+//                     			cancel += '<td><button class="lecture-detail" value="' + lecture.lecture_id + '">상세정보</button></td>';
                     			if (lecture.lecture_state == '취소대기'){
-                    				cancel += '<td><button class="lecture-cancel-approve">취소하기</button></td>';
-                    				cancel += '<td><button class="lecture-cancel-deny">반려</button></td>';
+                    				cancel += '<td><button class="lecture-edit" value="' + lecture.lecture_id + '">취소승인</button></td>';
+                    				cancel += '<td><button class="lecture-edit" value="' + lecture.lecture_id + '">복구</button></td>';
                     			}
-                    			else
-                    				cancel += '<td><button class="lecture-review">후기보기</button></td>';
+//                     			else
+//                     				cancel += '<td><button class="lecture-review">후기보기</button></td>';
                     		}
-                    			
                     	 });
                     	
+                    	if (preparedCnt == 0)
+                    		prepared += '<tr>표시할 데이터가 없습니다</tr>';
+                    	if (processCnt == 0)
+                    		process += '<tr>표시할 데이터가 없습니다</tr>';
+                    	if (finishCnt == 0)
+                    		finish += '<tr>표시할 데이터가 없습니다</tr>';
+                    	if (cancelCnt == 0)
+                    		cancel += '<tr>표시할 데이터가 없습니다</tr>';
+                    		
                     	prepared += '</tbody></table><hr>';
                     	process += '</tbody></table><hr>';
                     	finish += '</tbody></table><hr>';
@@ -370,7 +417,7 @@
                     	$lot = prepared + process + finish + cancel;
                     	$cont.html($lot);
                     },
-                    fail: function(){
+                    error: function(){
                     	let $lot = '<table class="table"><thead><tr>';
 						$lot += '<th>강의 번호</th><th>강의 사진</th><th>강의명</th><th>강의 가격</th><th>강의 상태</th>';              	
 						$lot += '<th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th><th>현재 수강 인원</th><th>상세 정보</th>';              	
@@ -383,11 +430,11 @@
                 return false;
             });
             
-
             // 강의 상세정보 보기 -> 동일이꺼 가져다 새창에 띄워주기 ㅇㅋ?
             $cont.on("click", ".lecture-detail", function(){
+            	alert("아직 준비중입니다");
             	let $lectureId = $(this).attr("value");
-            	
+            	return false;
 //             	$.ajax({
 //             		url: "${contentPath}/admin/lectureDetail/" + $lectureId,
 //             		method: "GET",
@@ -400,12 +447,45 @@
 //             			$lot += '<button class="modal_close"></button>';
 //             			$lot += '<div class="modal_layer"></div></table></div></div>';
 //             		},
-//             		fail: function(){
+//             		error: function(){
             			
 //             		}
 //             	});
             });
+            
+            // 강의 신청 대기 상태 변동하기(강의 승인/반려)
+            $cont.on("click", ".lecture-edit", function(){
+            	let $tatus = $(this).html();					// 승인/반려 상태
+            	let isTrue = confirm($tatus + " 하시겠습니까?");
+            	
+            	if (isTrue == true){
+	            	let approve = $(this).attr('value');		// 강의 ID
+	
+	            	$.ajax({
+	            		url: "${contextPath}/admin/lecture/status/" + approve,
+	            		method: "patch",
+	            		contentType: 'application/json-patch+json; charset=utf-8',
+	            		data: JSON.stringify({"status" : $tatus}),
+	            		success: function(data){
+	            			alert(data);
+	            			$(".lecture-list").trigger("click")
+	            		},
+	            		error: function(data){
+	            			alert(data);
+	            			
+	            		}
+	            	});
+            	}
+            	
+            	return false;
+            });
 			
+            // 종료된 강의 후기보기
+            $cont.on("click", ".lecture-review", function(){
+            	alert("아직 준비중입니다");
+            	return false;
+            });
+            
 //---------설정하기----------------------------------------------------------------------------------------           
             // FAQ 조회
             $(".faq").on("click", function(){

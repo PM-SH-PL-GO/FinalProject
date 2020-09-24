@@ -2,30 +2,21 @@ package com.shallwe.control;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
 import java.util.UUID;
-
-import javax.mail.Multipart;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.shallwe.exception.AddException;
-import com.shallwe.exception.FindException;
+import com.shallwe.service.LectureService;
 import com.shallwe.service.TutorService;
+import com.shallwe.vo.LectureDetail;
 import com.shallwe.vo.Member;
 import com.shallwe.vo.Tutor;
 
@@ -39,7 +30,11 @@ import lombok.extern.log4j.Log4j;
 public class UploadController {
 	
 	@Autowired TutorService service;
+	@Autowired
+	LectureService leservice;
+	@Autowired
 	private static final String UPLOAD_PATH = "/Users/chan/Desktop/Web/FinalProject/ShallWe/src/main/webapp/files/tutorImages";
+	private static final String LECTURE_UPLOAD_PATH = "C:\\Users\\pc\\Desktop\\FinalProject\\ShallWe\\src\\main\\webapp\\files\\lecture";
 	
 	//파일 업로드 이메서드는 마지막으로 하는일(업로드일은 여기서 처리한다) 
 	// 랜덤으로 난수값을 정해주고 + 오리지날 파일값을 더해서 저장해주는곳이고
@@ -129,7 +124,23 @@ public class UploadController {
 		return responseEntity;
 		
 	}
-	
+	// 강사 강의 등록 : 동일
+//			@PostMapping(value = "/insert")
+//			public String insertLecture(LectureDetail lectDe, MultipartFile lecture_img) throws AddException {
+//				
+//				log.info("JSP에서 넘어온 랙처 이미지" + lecture_img);
+////				ModelAndView mnv = new ModelAndView();
+//				try {
+//					leservice.insertLecture(lectDe.getLecture(), lectDe);
+////					mnv.setViewName("/success");
+//				} catch (AddException e) {
+//					e.printStackTrace();
+////					mnv.setViewName("/fail");
+////					mnv.addObject("errorMsg", e.getMessage());
+//				}
+//				ResponseEntity<String> responseEntity = ResponseEntity.status(HttpStatus.OK).body(tutor_id);
+//				return responseEntity;
+//			}
 
 	
 }
