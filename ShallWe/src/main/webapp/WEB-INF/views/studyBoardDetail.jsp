@@ -151,7 +151,7 @@ function formatDate(date) {
 					<div class="comments-area">
 						<h4 id="replyCount"></h4>
 						<div class="comment-list" id="replyList">
-
+							
 						</div>
 						<div class="comment-form">
 							<h4>댓글 쓰기</h4>
