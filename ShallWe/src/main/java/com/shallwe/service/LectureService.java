@@ -3,6 +3,7 @@ package com.shallwe.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,9 @@ import com.shallwe.exception.ModifyException;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureDetail;
 
+import lombok.extern.log4j.Log4j;
 
+@Log4j
 @Service(value = "lectureService")
 public class LectureService {
 
@@ -71,19 +74,29 @@ public class LectureService {
 	 * @return
 	 * @throws AddException
 	 */
-	public ModelAndView insertMemberLectureHistory(HashMap<String, Object> map) throws AddException {
-		ModelAndView modelAndView = new ModelAndView();
-
+	public int  insertMemberLectureHistory(List<Lecture> lectureList) throws AddException {
+		int result = 0;
+		
+		String member_id = "member2";
 		try {
-			lectureDAO.insertMemberLectureHistory(map);
-			modelAndView.addObject("status", "success");
-
+			if ( lectureList.size() > 0 ) {
+				for (Lecture lecture : lectureList ) {
+					Map<String, Object> map = new HashMap<String, Object>();
+					
+					log.info ("memberId : " + member_id + " : lectureCategoryid : " +lecture.getLectureCategory().getLecture_category_id()   ); 
+					map.put("memberId", member_id);
+					map.put("lectureCategoryId", lecture.getLectureCategory().getLecture_category_id());
+					map.put("lectureId", lecture.getLecture_id());
+					result+= lectureDAO.insertMemberLectureHistory(map);
+				}
+			} else { // lectureList 목록이 없을 때  0 값 반환
+				return result;
+			}
+			
 		} catch (AddException e) {
-			modelAndView.addObject("status", "fail");
-			modelAndView.addObject("errMsg", e.getMessage());
+			throw new AddException(e.getMessage());
 		}
-
-		return modelAndView;
+		return result;
 	}
 
 	/**
@@ -94,19 +107,14 @@ public class LectureService {
 	 * @return
 	 * @throws ModifyException
 	 */
-	public ModelAndView updateMemberLectureHistory(HashMap<String, Object> map) throws ModifyException {
-		ModelAndView modelAndView = new ModelAndView();
-
+	public int updateMemberLectureHistory(HashMap<String, Object> map) throws ModifyException {
+		int result = 0;
 		try {
-			lectureDAO.updateMemberLectureHistory(map);
-			modelAndView.addObject("status", "success");
-
+			result = lectureDAO.updateMemberLectureHistory(map);
 		} catch (ModifyException e) {
-			modelAndView.addObject("status", "fail");
-			modelAndView.addObject("errMsg", e.getMessage());
+			throw new ModifyException(e.getMessage());
 		}
-
-		return modelAndView;
+		return result;
 	}
 	
 

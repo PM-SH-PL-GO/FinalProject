@@ -1,10 +1,9 @@
 package com.shallwe.dao;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -108,23 +107,25 @@ public class LectureDAO {
 	 * @return
 	 * @throws AddException
 	 */
-	public void insertMemberLectureHistory (HashMap<String, Object> map) throws AddException {
+	public int insertMemberLectureHistory (Map<String, Object> map) throws AddException {
 		SqlSession session = null;
 		int result = 0;
 		try {
 			session = sqlSessionFactory.openSession();
-			result= session.insert("LectureMapper.insertMemberLectureHistory", map);
+			result = session.insert("LectureMapper.insertMemberLectureHistory", map);
+			
 			if (result == 0 ) {
 				log.info("강의신청에 실패하였습니다.");
 			}
+			log.info("강의결제 갯수 : " + result);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new AddException(e.getMessage());
-			
 		} finally {
 			session.close();
 		}
+		return result;
 	} // end of selectLectureListBySearch method
 	
 	/**
@@ -134,7 +135,7 @@ public class LectureDAO {
 	 * @return
 	 * @throws ModifyException
 	 */
-	public void updateMemberLectureHistory (HashMap<String, Object> map) throws ModifyException {
+	public int updateMemberLectureHistory (HashMap<String, Object> map) throws ModifyException {
 		SqlSession session = null;
 		int result = 0;
 		try {
@@ -151,6 +152,7 @@ public class LectureDAO {
 		} finally {
 			session.close();
 		}
+		return result;
 	} // end of selectLectureListBySearch method
 	
 	// test용
