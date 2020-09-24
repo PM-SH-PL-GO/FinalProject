@@ -118,7 +118,7 @@ $(function(){
 
 	//----------내 강의보기 CLICK START---------	
 	$("#myLecture").click(function(){
-		location.href = "/shallwe/memberLectureList";
+		location.href = "/shallwe/Lectures/memberLecture";
 	});
 	//----------내 강의보기 CLICK END---------	
 
