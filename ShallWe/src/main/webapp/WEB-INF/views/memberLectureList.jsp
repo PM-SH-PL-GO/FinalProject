@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 <head>
@@ -13,7 +13,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" type="image/x-icon"
 	href="/shallwe/assets/img/favicon.ico">
-
 <!-- CSS here -->
 <link rel="stylesheet" href="/shallwe/assets/css/bootstrap.min.css">
 <link rel="stylesheet" href="/shallwe/assets/css/owl.carousel.min.css">
@@ -30,14 +29,10 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
-
-
-
-
-
-
 <script>
-	
+<c:set var="now" value="<%=new java.util.Date()%>" />
+<fmt:formatDate pattern="yyyy-MM-dd" value="${now}" />
+<fmt:parseNumber value="${now.time/(1000*60*60*24)}" integerOnly="true" var="nowDate" />
 </script>
 <body>
 	<main>
@@ -56,35 +51,42 @@
 					<c:forEach items="${mlthlist}" var="m" varStatus="status">
 						<c:set var="lecture" value="${m.lecture}" />
 						<c:set var="tutor" value="${lecture.tutor}" />
-						<fmt:formatDate var="startDt" value="${lecture.lecture_start_dt}" pattern="yyyy-MM-dd"/>
-						<fmt:formatDate var="endDt" value="${lecture.lecture_end_dt}" pattern="yyyy-MM-dd"/>
-						<!-- Single -->
-						<div class="properties pb-20">
-							<div class="properties__cardseo">
-								<div class="properties__imgseo overlay1">
-									<a href="#"><img
-										src="/shallwe/assets/img/gallery/properties1.png" alt=""></a>
-								</div>
-								<div class="properties__caption">
-									<h3>
-										<a href="#">${lecture.lecture_title}</a>
-									</h3>
-									<h6>${startDt}~ ${endDt}</h6>
-									<h6>${tutor.tutor_nickname}</h6>
-									<h6>현재인원: ${lecture.lecture_current} / 최대인원:
-										${lecture.lecture_max}</h6>
-								</div>
-								<div
-									class="properties__footer d-flex justify-content-between align-items-center">
-									<h3>${lecture.lecture_price}원</h3>
-									<div class="heart">
-										<img src="/shallwe/assets/img/gallery/cancel.png" width="30px"
-											alt="강의취소요청" title="강의취소요청">
+						<fmt:formatDate var="startDt" value="${lecture.lecture_start_dt}"
+							pattern="yyyy-MM-dd" />
+						<fmt:formatDate var="endDt" value="${lecture.lecture_end_dt}"
+							pattern="yyyy-MM-dd" />
+						<fmt:parseDate var="endDat" value="${endDt}" pattern="yyyy-MM-dd" />
+						<fmt:parseNumber value="${endDat.time/(1000*60*60*24)}"
+							integerOnly="true" var="endDate" />
+						<c:if test="${endDate-nowDate>=0}">
+							<!-- Single -->
+							<div class="properties pb-20">
+								<div class="properties__cardseo">
+									<div class="properties__imgseo overlay1">
+										<a href="#"><img
+											src="/shallwe/assets/img/gallery/properties1.png" alt=""></a>
+									</div>
+									<div class="properties__caption">
+										<h3>
+											<a href="#">${lecture.lecture_title}</a>
+										</h3>
+										<h6>${startDt}~${endDt}</h6>
+										<h6>${tutor.tutor_nickname}</h6>
+										<h6>현재인원: ${lecture.lecture_current} / 최대인원:
+											${lecture.lecture_max}</h6>
+									</div>
+									<div
+										class="properties__footer d-flex justify-content-between align-items-center">
+										<h3>${lecture.lecture_price}원</h3>
+										<div class="heart">
+											<img src="/shallwe/assets/img/gallery/cancel.png"
+												width="30px" alt="강의취소요청" title="강의취소요청">
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-						<!-- Single -->
+							<!-- Single -->
+						</c:if>
 					</c:forEach>
 				</div>
 			</div>
@@ -104,107 +106,37 @@
 					</div>
 				</div>
 				<div class="directory-active">
-					<!-- Single -->
-					<div class="properties pb-20">
-						<div class="properties__cardseo">
-							<div class="properties__imgseo overlay1">
-								<a href="#"><img
-									src="/shallwe/assets/img/gallery/properties1.png" alt=""></a>
-							</div>
-							<div class="properties__caption">
-								<h3>
-									<a href="#">강의 제목</a>
-								</h3>
-								<h6>2020-08-30 ~ 2020-08-30</h6>
-								<h6>강사 이름</h6>
-								<h6>현재인원: 3 / 최대인원: 15</h6>
-							</div>
-							<div
-								class="properties__footer d-flex justify-content-between align-items-center">
-								<h3>10,000원</h3>
-								<div class="heart">
-									<img src="/shallwe/assets/img/gallery/performance.png"
-										width="30px" alt="강사후기보기" title="강사후기보기">
+					<c:forEach items="${mlthlist}" var="m" begin="1" varStatus="status">
+						<c:if test="${endDate-nowDate<0}">
+							<!-- Single -->
+							<div class="properties pb-20">
+								<div class="properties__cardseo">
+									<div class="properties__imgseo overlay1">
+										<a href="#"><img
+											src="/shallwe/assets/img/gallery/properties1.png" alt=""></a>
+									</div>
+									<div class="properties__caption">
+										<h3>
+											<a href="#">${lecture.lecture_title}</a>
+										</h3>
+										<h6>${startDt}~ ${endDt}</h6>
+										<h6>${tutor.tutor_nickname}</h6>
+										<h6>현재인원: ${lecture.lecture_current} / 최대인원:
+											${lecture.lecture_max}</h6>
+									</div>
+									<div
+										class="properties__footer d-flex justify-content-between align-items-center">
+										<h3>${lecture.lecture_price}원</h3>
+										<div class="heart">
+											<img src="/shallwe/assets/img/gallery/performance.png"
+												width="30px" alt="강사후기보기" title="강사후기보기">
+										</div>
+									</div>
 								</div>
 							</div>
-						</div>
-					</div>
-					<!-- Single -->
-					<div class="properties pb-20">
-						<div class="properties__cardseo">
-							<div class="properties__imgseo overlay1">
-								<a href="#"><img
-									src="/shallwe/assets/img/gallery/properties2.png" alt=""></a>
-							</div>
-							<div class="properties__caption">
-								<h3>
-									<a href="#">강의 제목</a>
-								</h3>
-								<h6>2020-08-30 ~ 2020-08-30</h6>
-								<h6>강사 이름</h6>
-								<h6>현재인원: 3 / 최대인원: 15</h6>
-							</div>
-							<div
-								class="properties__footer d-flex justify-content-between align-items-center">
-								<h3>10,000원</h3>
-								<div class="heart">
-									<img src="/shallwe/assets/img/gallery/performance.png"
-										width="30px" alt="강사후기보기" title="강사후기보기">
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- Single -->
-					<div class="properties pb-20">
-						<div class="properties__cardseo">
-							<div class="properties__imgseo overlay1">
-								<a href="#"><img
-									src="/shallwe/assets/img/gallery/properties3.png" alt=""></a>
-							</div>
-							<div class="properties__caption">
-								<h3>
-									<a href="#">강의 제목</a>
-								</h3>
-								<h6>2020-08-30 ~ 2020-08-30</h6>
-								<h6>강사 이름</h6>
-								<h6>현재인원: 3 / 최대인원: 15</h6>
-							</div>
-							<div
-								class="properties__footer d-flex justify-content-between align-items-center">
-								<h3>10,000원</h3>
-								<div class="heart">
-									<img src="/shallwe/assets/img/gallery/performance.png"
-										width="30px" alt="강사후기보기" title="강사후기보기">
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- Single -->
-					<div class="properties pb-20">
-						<div class="properties__cardseo">
-							<div class="properties__imgseo overlay1">
-								<a href="#"><img
-									src="/shallwe/assets/img/gallery/properties1.png" alt=""></a>
-							</div>
-							<div class="properties__caption">
-								<h3>
-									<a href="#">강의 제목</a>
-								</h3>
-								<h6>2020-08-30 ~ 2020-08-30</h6>
-								<h6>강사 이름</h6>
-								<h6>현재인원: 3 / 최대인원: 15</h6>
-							</div>
-							<div
-								class="properties__footer d-flex justify-content-between align-items-center">
-								<h3>10,000원</h3>
-								<div class="heart">
-									<img src="/shallwe/assets/img/gallery/performance.png"
-										width="30px" alt="강사후기보기" title="강사후기보기">
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- Single -->
+							<!-- Single -->
+						</c:if>
+					</c:forEach>
 				</div>
 			</div>
 		</div>

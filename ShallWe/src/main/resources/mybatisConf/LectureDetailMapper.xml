@@ -34,8 +34,6 @@
 	<update id="update" parameterType="Lecture">
 		UPDATE lecture
 		SET
-		LECTURE_CATEGORY_ID = #{lectureCategory.lecture_category_id}
-		,
 		LECTURE_IMG = #{lecture_img}, LECTURE_TITLE = #{lecture_title},
 		LECTURE_PRICE = #{lecture_price}
 		, LECTURE_START_DT =
