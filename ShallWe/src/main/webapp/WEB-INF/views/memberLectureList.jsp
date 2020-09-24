@@ -48,7 +48,8 @@
 					</div>
 				</div>
 				<div class="directory-active">
-					<c:forEach items="${mlthlist}" var="m" varStatus="status">
+					<c:forEach items="${mlthlist}" var="ml" varStatus="i">
+					<c:set var="m" value="${mlthlist[i.index]}"/>
 						<c:set var="lecture" value="${m.lecture}" />
 						<c:set var="tutor" value="${lecture.tutor}" />
 						<fmt:formatDate var="startDt" value="${lecture.lecture_start_dt}"
@@ -58,15 +59,15 @@
 						<fmt:parseDate var="endDat" value="${endDt}" pattern="yyyy-MM-dd" />
 						<fmt:parseNumber value="${endDat.time/(1000*60*60*24)}"
 							integerOnly="true" var="endDate" />
-						<c:if test="${endDate-nowDate>=0}">
+						<c:if test="${endDate-nowDate>=0 && lecture.lecture_state eq '승인'}">
 							<!-- Single -->
 							<div class="properties pb-20">
 								<div class="properties__cardseo">
 									<div class="properties__imgseo overlay1">
-										<a href="#"><img
+										<a href="/shallwe/lectures/detail"><img
 											src="/shallwe/assets/img/gallery/properties1.png" alt=""></a>
 									</div>
-									<div class="properties__caption">
+									<div class="properties__caption" style="cursor: pointer;" onclick="location.href='/shallwe/lectures/detail'">
 										<h3>
 											<a href="#">${lecture.lecture_title}</a>
 										</h3>
@@ -105,9 +106,20 @@
 						</div>
 					</div>
 				</div>
+				
 				<div class="directory-active">
-					<c:forEach items="${mlthlist}" var="m" begin="1" varStatus="status">
-						<c:if test="${endDate-nowDate<0}">
+					<c:forEach var="i" begin="0" end="${fn:length(mlthlist)}">
+						<c:set var="m" value="${mlthlist[i]}"/>
+						<c:set var="lecture" value="${m.lecture}" />
+						<c:set var="tutor" value="${lecture.tutor}" />
+						<fmt:formatDate var="startDt" value="${lecture.lecture_start_dt}"
+							pattern="yyyy-MM-dd" />
+						<fmt:formatDate var="endDt" value="${lecture.lecture_end_dt}"
+							pattern="yyyy-MM-dd" />
+						<fmt:parseDate var="endDat" value="${endDt}" pattern="yyyy-MM-dd" />
+						<fmt:parseNumber value="${endDat.time/(1000*60*60*24)}"
+							integerOnly="true" var="endDate" />
+						<c:if test="${endDate-nowDate<0 && lecture.lecture_state eq '승인'}">
 							<!-- Single -->
 							<div class="properties pb-20">
 								<div class="properties__cardseo">
@@ -119,7 +131,7 @@
 										<h3>
 											<a href="#">${lecture.lecture_title}</a>
 										</h3>
-										<h6>${startDt}~ ${endDt}</h6>
+										<h6>${startDt}~${endDt}</h6>
 										<h6>${tutor.tutor_nickname}</h6>
 										<h6>현재인원: ${lecture.lecture_current} / 최대인원:
 											${lecture.lecture_max}</h6>
@@ -186,8 +198,6 @@
 	<!-- Jquery Plugins, main Jquery -->
 	<script src="/shallwe/assets/js/plugins.js"></script>
 	<script src="/shallwe/assets/js/main.js"></script>
-
-
 
 </body>
 </html>

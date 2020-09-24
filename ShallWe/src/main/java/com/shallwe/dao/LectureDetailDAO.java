@@ -46,12 +46,12 @@ public class LectureDetailDAO {
 	}
 
 	// 강의 상세 보기 : 동일
-			public LectureDetail lectureDetailView(Lecture lect) throws FindException {
+			public LectureDetail lectureDetailView(int lecture_id) throws FindException {
 				LectureDetail le = null;
 				SqlSession session = null;
 				try {
 					session = sqlSessionFactory.openSession();
-					le = session.selectOne("LectureDetailMapper.lectureDetailView", lect);
+					le = session.selectOne("LectureDetailMapper.lectureDetailView", lecture_id);
 				} catch (DataAccessException e) {
 					throw new FindException("조회 과정에 오류가 있습니다.");
 				}
