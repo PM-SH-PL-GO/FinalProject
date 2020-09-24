@@ -72,7 +72,7 @@ class KosjServiceTest {
 	 * 			String [] searchKey = {"all", "tutor_name", "lecture_title" , "category" };
 	 * 			0 , 1 , 2 , 3 보내면 됨.
 	 */
-	//@Test
+	@Test
 	@DisplayName("lectureSearchService TEST : 메인->검색조건 : all")
 	void selectLectureListTest() throws FindException {
 		
@@ -113,17 +113,19 @@ class KosjServiceTest {
 	//@Test
 	@DisplayName("insertMemberLectureHistoryService TEST ")
 	void insertMemberLectureHistory() throws AddException {
+//		
+//		HashMap<String, Object> map = new HashMap<String, Object>();
+//		String lectureCategoryId = "SP";
+//		String memberId = "member1";
+//		int lectureId =3;
+//		map.put("lectureCategoryId", lectureCategoryId);
+//		map.put("memberId", memberId);
+//		map.put("lectureId", lectureId);
 		
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		String lectureCategoryId = "SP";
-		String memberId = "member1";
-		int lectureId =3;
-		map.put("lectureCategoryId", lectureCategoryId);
-		map.put("memberId", memberId);
-		map.put("lectureId", lectureId);
-		
+		List<Lecture> lectureList = new ArrayList<Lecture>();
 		try {
-			lectureService.insertMemberLectureHistory(map);
+			int result = lectureService.insertMemberLectureHistory(lectureList);
+			log.info("lectureService : " + result);
 			
 		} catch (AddException e) {
 			e.printStackTrace();
@@ -135,7 +137,7 @@ class KosjServiceTest {
 	 * @author Soojeong
 	 * 강의결제취소
 	 */
-	@Test
+	//@Test
 	@DisplayName("updateMemberLectureHistoryService TEST ")
 	void updateMemberLectureHistory() throws ModifyException {
 		
