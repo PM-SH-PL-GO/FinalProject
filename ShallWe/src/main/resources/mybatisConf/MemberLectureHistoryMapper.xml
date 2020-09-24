@@ -20,6 +20,9 @@
 				javaType="LectureCategory" autoMapping="true">
 				<id property="lecture_category_id" column="lecture_category_id" />
 			</association>
+			<association property="tutor"
+				javaType="Tutor" autoMapping="true">
+			</association>
 		</association>
 	</resultMap>
 	<select id="memberMyClassList" resultMap="MLHResultMap">

@@ -1,5 +1,7 @@
 package com.shallwe.control;
 
+import java.rmi.RemoteException;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpSession;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -25,6 +28,8 @@ import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.model.BoardPageBean;
 import com.shallwe.service.BoardService;
+import com.shallwe.service.FaqService;
+import com.shallwe.vo.Faq;
 import com.shallwe.vo.Member;
 import com.shallwe.vo.StudyBoard;
 
@@ -34,16 +39,31 @@ public class BoardController {
 	private static final long serialVersionUID = 1L;
 	@Autowired
 	BoardService service;
+	@Autowired
+	FaqService faqService;
 	
 	@RequestMapping(value = "/studyBoard", method = RequestMethod.GET)
-	public void studyBoard(Locale locale, Model model) {
-		System.out.println("studyBoard coming");
+	public String studyBoard(Locale locale, Model model) {
+		return "studyBoard";
+		
 	}
 	
-	@RequestMapping(value = "/faq", method = RequestMethod.GET)
-	public void faq(Locale locale, Model model) {
-		System.out.println("studyBoard coming");
+	@RequestMapping(value = "/faqList")
+	public ModelAndView faqList() {
+		ModelAndView mnv = new ModelAndView();
+		try {
+			List<Faq> list= faqService.findAll();
+			mnv.addObject("faqList", list);
+			mnv.setViewName("/faq");
+		} catch (FindException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return mnv;
+		
 	}
+	
 	
 	@RequestMapping("/list/{currentPage}")
 	@ResponseBody
@@ -85,7 +105,7 @@ public class BoardController {
 		StudyBoard board;
 		try {
 			board = service.FindByNo(boardIdVal);
-			System.out.println("board="+board);
+			System.out.println("board="+board.getStudyBoard_view_count());
 			mnv.addObject("studyBoard", board);
 			mnv.setViewName("/studyBoardDetail");
 
@@ -114,6 +134,15 @@ public class BoardController {
 		}
 		
 	}
-	
+	@DeleteMapping(value = "/delete/{studyBoard_id}")
+	public ResponseEntity<String> delete(@PathVariable(value = "studyBoard_id",required = false) Integer id) {
+		try {
+			System.out.println("되나요");
+			service.deleteBoard(id);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		return ResponseEntity.status(HttpStatus.OK).body("");
+	}
 }
 

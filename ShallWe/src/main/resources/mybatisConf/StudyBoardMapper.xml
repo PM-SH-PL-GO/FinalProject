@@ -18,6 +18,7 @@
 		              ORDER BY STUDYBOARD_ID DESC) a
 		        )b
 		WHERE r BETWEEN #{startRow} AND #{endRow}
+		and STUDYBOARD_DELETEYN='N'
 	</select>
 	<select id="selectByTitleAndContent" resultMap="StudyBoardResultMap">
 		select ROWNUM r, a.*
@@ -25,6 +26,7 @@
             from studyboard sb join member m on(sb.STUDYBOARD_MEMBER_ID = m.member_id)
             where STUDYBOARD_TITLE like #{studyBoard_title} or STUDYBOARD_CONTENT like #{studyBoard_title}
             ORDER BY STUDYBOARD_ID desc) a
+         where STUDYBOARD_DELETEYN='N'
 	</select>
 	<insert id="insert" parameterType="StudyBoard">
 		insert into STUDYBOARD(studyboard_id, studyboard_member_id, studyboard_title, studyboard_content, studyboard_filename, studyboard_viewcount, studyboard_write_dt, studyboard_deleteyn) 
