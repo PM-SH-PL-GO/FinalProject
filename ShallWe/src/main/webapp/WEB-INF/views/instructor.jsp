@@ -382,13 +382,12 @@ $(function(){
     	    
 				$.ajax({
 					
-					url:'/shallwe/addTutor'
+					url:'/shallwe/upload/addTutor'
 				   ,method:"POST"
 				   ,processData: false
 				   ,contentType: false
 				   ,data: formData
 					,success:function(data){
-					   if(data.status == "success"){
 
 						   let $tutor = confirm('강사등록을 원하십니까?');
 							 
@@ -401,8 +400,7 @@ $(function(){
 								location.reload; 
 								
 							}
-					   }
-							   
+					    
 					} // end of success
   		 		 }); // end of ajax
  		 		 return false;
