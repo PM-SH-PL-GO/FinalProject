@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:set var="pb" value="${sessionScope.pb}"/>
 <!doctype html>
 <html class="no-js" lang="zxx">
 <head>
@@ -169,11 +168,11 @@ function formatDate(date) {
 </script>
 </head>
 <body>
-	<main>
 		<!-- topbar Start -->
 		<div class="topMenu">
 			<jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
 		</div>
+	<main>
 		<!-- topbar End -->
 		<!--게시판 Start -->
 		<div class="listing-area pt-150">

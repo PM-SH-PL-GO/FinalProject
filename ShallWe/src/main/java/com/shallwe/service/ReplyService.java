@@ -62,7 +62,7 @@ public class ReplyService {
 	 * @return 
 	 * @throws AddException
 	 */	
-	public void wrieReply(StudyReply reply) throws AddException {
+	public void writeReply(StudyReply reply) throws AddException {
 		studyReplyDAO.insert(reply);
 	}
 	
