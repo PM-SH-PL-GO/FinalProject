@@ -19,7 +19,9 @@ import com.shallwe.dao.LectureDAO;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.service.LectureService;
+import com.shallwe.service.ReviewService;
 import com.shallwe.vo.Lecture;
+import com.shallwe.vo.Review;
 
 import lombok.extern.log4j.Log4j;
 
@@ -159,7 +161,11 @@ public class kosjController {
 	public ModelAndView insertReview(@RequestBody List<Lecture> lectureList ) throws AddException {
 		
 		Review r = new Review();
+		ReviewService service = new ReviewService();
 		
+		ModelAndView modelAndView = new ModelAndView();
+		
+		return modelAndView;
 		
 	}
 	
