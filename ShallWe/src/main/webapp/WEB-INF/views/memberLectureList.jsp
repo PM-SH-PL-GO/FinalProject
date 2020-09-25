@@ -33,6 +33,16 @@
 <c:set var="now" value="<%=new java.util.Date()%>" />
 <fmt:formatDate pattern="yyyy-MM-dd" value="${now}" />
 <fmt:parseNumber value="${now.time/(1000*60*60*24)}" integerOnly="true" var="nowDate" />
+$(function(){
+	$("#gotoDe").click(function(){
+		let letidValue = $("input[name=listlecture_id]").val();
+		$.ajax({
+			url: "/shallwe/lectures/detail",
+			method: "POST",
+			data: {'lecture_id' : letidValue}
+		});
+	});
+});
 </script>
 <body>
 	<main>
@@ -49,7 +59,7 @@
 				</div>
 				<div class="directory-active">
 					<c:forEach items="${mlthlist}" var="ml" varStatus="i">
-					<c:set var="m" value="${mlthlist[i.index]}"/>
+						<c:set var="m" value="${mlthlist[i.index]}" />
 						<c:set var="lecture" value="${m.lecture}" />
 						<c:set var="tutor" value="${lecture.tutor}" />
 						<fmt:formatDate var="startDt" value="${lecture.lecture_start_dt}"
@@ -59,22 +69,27 @@
 						<fmt:parseDate var="endDat" value="${endDt}" pattern="yyyy-MM-dd" />
 						<fmt:parseNumber value="${endDat.time/(1000*60*60*24)}"
 							integerOnly="true" var="endDate" />
-						<c:if test="${endDate-nowDate>=0 && lecture.lecture_state eq '승인'}">
+						<c:if
+							test="${endDate-nowDate>=0 && lecture.lecture_state eq '승인'}">
 							<!-- Single -->
 							<div class="properties pb-20">
 								<div class="properties__cardseo">
-									<div class="properties__imgseo overlay1">
-										<a href="/shallwe/lectures/detail"><img
-											src="/shallwe/assets/img/gallery/properties1.png" alt=""></a>
-									</div>
-									<div class="properties__caption" style="cursor: pointer;" onclick="location.href='/shallwe/lectures/detail'">
-										<h3>
-											<a href="#">${lecture.lecture_title}</a>
-										</h3>
-										<h6>${startDt}~${endDt}</h6>
-										<h6>${tutor.tutor_nickname}</h6>
-										<h6>현재인원: ${lecture.lecture_current} / 최대인원:
-											${lecture.lecture_max}</h6>
+									<div id="gotoDe">
+										<div class="properties__imgseo overlay1">
+											<img src="/shallwe/lecture/${lecture.lecture_img}" alt=""
+												style="cursor: pointer;">
+
+										</div>
+										<div class="properties__caption" style="cursor: pointer;">
+											<h3>
+												<a href="#">${lecture.lecture_title}</a>
+											</h3>
+											<h6>${startDt}~${endDt}</h6>
+											<h6>${tutor.tutor_nickname}</h6>
+											<h6>현재인원: ${lecture.lecture_current} / 최대인원:
+												${lecture.lecture_max}</h6>
+										</div>
+										<input type="hidden" name="listlecture_id" value="${lecture.lecture_id}" />
 									</div>
 									<div
 										class="properties__footer d-flex justify-content-between align-items-center">
@@ -106,10 +121,10 @@
 						</div>
 					</div>
 				</div>
-				
+
 				<div class="directory-active">
 					<c:forEach var="i" begin="0" end="${fn:length(mlthlist)}">
-						<c:set var="m" value="${mlthlist[i]}"/>
+						<c:set var="m" value="${mlthlist[i]}" />
 						<c:set var="lecture" value="${m.lecture}" />
 						<c:set var="tutor" value="${lecture.tutor}" />
 						<fmt:formatDate var="startDt" value="${lecture.lecture_start_dt}"
@@ -123,9 +138,9 @@
 							<!-- Single -->
 							<div class="properties pb-20">
 								<div class="properties__cardseo">
-									<div class="properties__imgseo overlay1">
+									<div name="divimg" class="properties__imgseo overlay1">
 										<a href="#"><img
-											src="/shallwe/assets/img/gallery/properties1.png" alt=""></a>
+											src="/shallwe/lecture/${lecture.lecture_img}" alt=""></a>
 									</div>
 									<div class="properties__caption">
 										<h3>

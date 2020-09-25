@@ -73,7 +73,7 @@ public class LectureController {
 
 	// 강의 상세 조회 : 동일
 	@RequestMapping(value = "/detail")
-	public ModelAndView detailView(HttpSession session, Lecture lect) {
+	public ModelAndView detailView(HttpSession session, @RequestParam Integer lecture_id) {
 		String id = (String)session.getAttribute("loginInfo");
 		ModelAndView mnv = new ModelAndView();
 		Member mem = new Member();
@@ -81,13 +81,14 @@ public class LectureController {
 		Lecture lecttuto = new Lecture();
 		LectureDetail lectDetuto = new LectureDetail();
 		MemberLectureHistory mlth = new MemberLectureHistory();
+		Lecture lect = new Lecture();
 		LectureDetail lectDetail = new LectureDetail();
 		mem.setMember_id(id);
 		tuto.setMember(mem);
 		lecttuto.setTutor(tuto);
 		lectDetuto.setLecture(lecttuto);
 		mlth.setMember(mem);
-		lect.setLecture_id(1);
+		lect.setLecture_id(lecture_id);
 		lectDetail.setLecture(lect);
 		try {
 			lectDetail = service.lectureDetailView(lect);
