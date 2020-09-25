@@ -30,10 +30,6 @@ import lombok.extern.log4j.Log4j;
 @RequestMapping(value = "/member/*")
 @Log4j
 public class MemberController {
-<<<<<<< HEAD
-	// 회원 : 내 정보 조회/수정, 강의 조회/신청/삭제
-=======
->>>>>>> pre_master
 	
 	private static final Logger Logger = LoggerFactory.getLogger(MemberController.class);
 	
