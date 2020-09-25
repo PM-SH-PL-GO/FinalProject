@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -84,14 +86,14 @@ public class UploadController {
 	@PostMapping(value="/addTutor")
 	public ResponseEntity<String> addTutor(Tutor tutor,
 											  MultipartFile tutor_img1,
-											  MultipartFile tutor_career_file1) 
+											  MultipartFile tutor_career_file1,HttpSession session) 
 											  throws AddException{
 		
 		System.out.println("jsp넘어온 데이터:" + tutor);
 		log.info("이미지파일:" + tutor_img1);
 		log.info("이력서파일:" + tutor_career_file1);
 		
-		String tutor_id = "championcom";
+		String tutor_id = (String)session.getAttribute("loginInfo");
 		// 테스트용 아이디입니다
 		
 		if (tutor_id == null) {

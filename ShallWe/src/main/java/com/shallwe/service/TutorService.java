@@ -33,7 +33,6 @@ public class TutorService {
 	//강사정보 보기: 경찬
 	public List<Tutor> showTutorInfo(Tutor tutor_id)throws FindException{
 		
-		
 		return dao.TutorInfo(tutor_id);
 		
 	}
