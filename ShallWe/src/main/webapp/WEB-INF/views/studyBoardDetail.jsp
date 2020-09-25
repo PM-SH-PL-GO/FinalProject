@@ -5,6 +5,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="loginId" value="${sessionScope.loginInfo}"/>
+<c:set var="boardId" value="${studyBoard.member.member_id}"/>
 <fmt:formatDate var="resultDt" value="${studyBoard.studyBoard_write_dt}" pattern="yyyy-MM-dd"/>
 
 <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -90,18 +93,19 @@ $(function(){
 				replyPageData += "<div class=\"single-comment justify-content-between d-flex\">"
 				replyPageData += "<div class=\"user justify-content-between d-flex\">"
 				replyPageData += "<div class=\"desc\">"
-				replyPageData += "<p class=\"comment\">"+studyReply.studyreply_content+"</p>"
-				replyPageData += "<div class=\"d-flex justify-content-between\">"
-				replyPageData += "<div class=\"d-flex align-items-center\">"
-				replyPageData += "<h5>"
-				replyPageData += "<a><i class=\"fa fa-user\"></i>"+studyReply.member.member_name+"</a>"
-				replyPageData += "</h5>"
-				replyPageData += "<p>"+formatDate(studyReply.studyreply_dt)+"</p>"
-				replyPageData += "</div>"
-				replyPageData += "<div class=\"reply-btn\">"
-				replyPageData += "<a class=\"btn-reply text-uppercase\">수정</a>" 
-				replyPageData += "<a class=\"btn-reply text-uppercase\">삭제</a>"
-				replyPageData += "</div>"
+				replyPageData += "<p id = \"comment\">"+studyReply.studyreply_content+"</p>"
+				replyPageData += "	<div class=\"d-flex justify-content-between\">"
+				replyPageData += "		<div class=\"d-flex align-items-center\">"
+				replyPageData += "			<h5>"
+				replyPageData += "				<a><i class=\"fa fa-user\"></i>"+studyReply.member.member_name+"</a>"
+				replyPageData += "			</h5>"
+				replyPageData += "				<p>"+formatDate(studyReply.studyreply_dt)+"</p>"
+				replyPageData += "		</div>"
+				replyPageData += "	<input type=\"hidden\" class=\"replyId\" value=\""+ studyReply.studyreply_id +"\">" 
+				replyPageData += "	<div class=\"reply-btn\">"
+				replyPageData += "			<a class=\"btn-reply text-uppercase\" id=\"replyUpdate\">수정</a>" 
+				replyPageData += "			<a class=\"btn-reply text-uppercase\" id=\"replyDelete\">삭제</a>"
+				replyPageData += "	</div>"
 				replyPageData += "</div>"
 				replyPageData += "</div>"
 				replyPageData += "</div>"
@@ -116,7 +120,7 @@ $(function(){
 	});
 	//----------댓글 ROAD END---------
 	
-	//----------댓글 삭제 START---------
+	//----------게시글 삭제 START---------
 	$('#delete').click(function(){
 		var boardYN = confirm("게시글을 삭제하시겠습니까?");
 		var $studyBoard_id = ${studyBoard.studyBoard_id};
@@ -132,7 +136,85 @@ $(function(){
 		}
 	});
 	
-	//----------댓글 삭제 END---------
+	//----------게시글 삭제 END---------
+	
+	//----------게시글 수정 START---------
+	$('#update').click(function(){
+		var $studyBoard_id = "${studyBoard.studyBoard_id}";
+		location.href = "/shallwe/board/updateBoard/"+$studyBoard_id
+	});
+	
+	//----------게시글 수정 END---------
+	
+	//----------게시글 목록보기 START---------
+	$('#list').click(function(){
+		history.back();
+	});
+	//----------게시글 목록보기 END---------
+
+	//----------댓글쓰기 버튼 CLICK START---------
+	$('#replyBtn').click(function(){
+		var $replyContent = $('#replyText').val();
+		var $studyBoard_Id = ${studyBoard.studyBoard_id};
+		
+		$.ajax({
+			url:"/shallwe/reply/write"
+			,method:"POST"
+			,data:{"studyReply_content":$replyContent,"studyBoard_Id":$studyBoard_Id}
+			,success:function(){
+				location.reload();
+			}
+			,error: function(data){
+				alert(data.responseText);
+			}
+		});
+		
+	});
+	
+	//----------댓글쓰기 버튼 CLICK END---------	
+	
+	//----------댓글 수정 버튼 CLICK START---------	
+	$('#replyList').on("click","#replyUpdate",function(){
+		var $commentClass = $(this).parents('.desc').children('#comment');
+		var $commentClassVal = $(this).parents('.desc').children('#comment').html();
+		var replytextData = "<input type=\"text\" class=\"replytext\" value=\""+ $commentClassVal +"\">" 
+
+		var $replyBtn = $(this).parents('.reply-btn');
+		var replyBtnData = ""
+			replyBtnData += "<a class=\"btn-reply text-uppercase\" id=\"replyUpdateWrite\">등록</a>" 
+			replyBtnData += "<a class=\"btn-reply text-uppercase\" id=\"replyCancel\">취소</a>"
+		$commentClass.html(replytextData);
+		$replyBtn.html(replyBtnData);
+	});
+	//----------댓글 수정 버튼 CLICK END---------	
+	
+	//----------댓글 수정 등록 버튼 CLICK START---------	
+	$('#replyList').on("click","#replyUpdateWrite",function(){
+		var $replyIdVal = $(this).parents('.reply-btn').siblings('.replyId') .val();
+		var $replyContentVal = $(this).parents('.desc').children('#comment').children('.replytext').val();
+		$.ajax({
+			url:"/shallwe/reply/update"
+			,method:"post"
+			,data:{"studyreply_id":$replyIdVal,"studyreply_content":$replyContentVal}
+			,success:function(data){
+				alert(data);
+				location.reload();
+			}
+			,error: function(data){
+				alert(data.responseText);
+			}
+		});
+		
+	});
+	//----------댓글 수정 등록 버튼 CLICK END---------	
+	
+	//----------댓글 삭제 버튼 CLICK START---------	
+	$('#replyList').on("click","#replyDelete",function(){
+		console.log("딜리트도?");
+		var $replyIdVal = $(this).siblings('.replyId').val();
+		
+	});
+	//----------댓글 삭제 버튼 CLICK END---------	
 });
 function formatDate(date) { 
 	var d = new Date(date), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = d.getFullYear(); 
@@ -146,14 +228,15 @@ function formatDate(date) {
 
 	<!--? Blog Area Start -->
 	<section class="blog_area single-post-area section-padding">
-		<div class="container">
 			<div class="row">
 				<div class="col-lg-8 posts-list" style="margin: auto; ">
 					<div class="single-post">
 						<ul class="blog-info-link"style="float: right;" >
-							<li><a id="delete">삭제</a></li>
-							<li><a id="update">수정</a></li>
-							<li><a id="list">목록보기</a></li>
+							<c:if test="${loginId eq  boardId}">
+								<li><a id="delete">삭제  </a></li>
+								<li><a id="update">수정</a></li>
+							</c:if>
+								<li><a id="list">목록보기</a></li>
 						</ul>
 						<div class="blog_details">
 							<h2 style="color: #2d2d2d;">${studyBoard.studyBoard_title}
@@ -166,7 +249,6 @@ function formatDate(date) {
 							<p class="excert">${studyBoard.studyBoard_content}</p>
 						</div>
 					</div>
-
 					<div class="comments-area">
 						<h4 id="replyCount"></h4>
 						<div class="comment-list" id="replyList">
@@ -174,16 +256,21 @@ function formatDate(date) {
 						</div>
 						<div class="comment-form">
 							<h4>댓글 쓰기</h4>
-							<form class="form-contact comment_form" action="#"
-								id="commentForm">
+							<form class="form-contact comment_form" id="commentForm">
 									<div class="col-12">
 										<div class="form-group">
 											<textarea class="form-control w-100" name="comment"
-												id="comment" cols="30" rows="9" placeholder="내용을 입력하세요"></textarea>
+												id="replyText" cols="30" rows="9" placeholder="내용을 입력하세요"></textarea>
 										</div>
+<<<<<<< HEAD
 										<div class="form-group">																
 											<button type="submit"
 												class="button button-contactForm btn_1 boxed-btn">댓글
+=======
+										<div class="form-group">
+											<button type="button"
+												class="button button-contactForm btn_1 boxed-btn" id="replyBtn">댓글
+>>>>>>> pre_master
 												쓰기</button>
 										</div>
 									</div>
@@ -196,7 +283,6 @@ function formatDate(date) {
 	</section>
 	<!-- Blog Area End -->
 
-	</main>
 	<footer>
 		<div class="footer-wrapper pt-30">
 			<!-- footer-bottom -->

@@ -19,7 +19,9 @@ import com.shallwe.dao.LectureDAO;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.service.LectureService;
+import com.shallwe.service.ReviewService;
 import com.shallwe.vo.Lecture;
+import com.shallwe.vo.Review;
 
 import lombok.extern.log4j.Log4j;
 
@@ -39,7 +41,7 @@ public class kosjController {
 //	}
 	@RequestMapping(value = "/reviewAdd", method = RequestMethod.GET)
 	public void reviewAdd() {
-		System.out.println("lecturePaid.jsp  호출");
+		System.out.println("reviewAdd.jsp  호출");
 	}
 	@RequestMapping(value = "/searchResult", method = RequestMethod.GET)
 	public void searchResult() {
@@ -151,4 +153,22 @@ public class kosjController {
 		
 		return modelAndView;
 	}
+	
+	
+	
+	//--- review 등록
+	@RequestMapping(value = "/reviewAdd", method = RequestMethod.POST)
+	public ModelAndView insertReview(@RequestBody List<Lecture> lectureList ) throws AddException {
+		
+		Review r = new Review();
+		ReviewService service = new ReviewService();
+		
+		ModelAndView modelAndView = new ModelAndView();
+		
+		return modelAndView;
+		
+	}
+	
+	
+	
 } // end of kosjController

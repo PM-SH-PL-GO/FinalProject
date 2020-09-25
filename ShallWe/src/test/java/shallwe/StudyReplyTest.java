@@ -64,7 +64,7 @@ public class StudyReplyTest {
 		reply.setStudyboard(board);
 		reply.setMember(member);
 //		dao.insert(reply);
-		service.wrieReply(reply);
+		service.writeReply(reply);
 	}
 	
 //	@Test

@@ -69,10 +69,7 @@ public class HomeController {
 	public void myinfoModi(Locale locale, Model model) {
 		System.out.println("myinfo");
 	}
-	@RequestMapping(value = "/signup", method = RequestMethod.GET)
-	public void signup(Locale locale, Model model) {
-		System.out.println("signup");
-	}
+	
 	@RequestMapping(value = "/wishlist", method = RequestMethod.GET)
 	public void wishlist(Locale locale, Model model) {
 		System.out.println("wishlist");

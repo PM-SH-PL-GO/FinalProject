@@ -88,7 +88,6 @@ public class BoardController {
 	@ResponseBody
 	public ResponseEntity<BoardPageBean<StudyBoard>> searchList(@PathVariable(value = "searchVal",required = false) String sv){
 		BoardPageBean<StudyBoard> pb = null;
-		System.out.println("sv="+sv);
 		try {
 			 pb = service.search(sv, 1);
 			return (ResponseEntity<BoardPageBean<StudyBoard>>)ResponseEntity.status(HttpStatus.OK).body(pb);
@@ -124,7 +123,6 @@ public class BoardController {
 	
 	@RequestMapping("writeBoard")
 	public String writeBoard(@RequestBody StudyBoard sb) {
-		System.out.println("sb="+sb);
 		try {
 			service.writeBoard(sb);
 			return "success";
@@ -137,12 +135,25 @@ public class BoardController {
 	@DeleteMapping(value = "/delete/{studyBoard_id}")
 	public ResponseEntity<String> delete(@PathVariable(value = "studyBoard_id",required = false) Integer id) {
 		try {
-			System.out.println("되나요");
 			service.deleteBoard(id);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
 		return ResponseEntity.status(HttpStatus.OK).body("");
+	}
+	
+	@RequestMapping("/updateBoard/{studyBoard_id}")
+	public ModelAndView updateBoard(@PathVariable(value = "studyBoard_id",required = false) Integer id) {
+		ModelAndView mnv = new ModelAndView();
+		try {
+			StudyBoard sb = service.FindByNo(id);
+			mnv.addObject("sb", sb);
+			mnv.setViewName("/studyBoardWrite");
+		} catch (FindException e) {
+			e.printStackTrace();
+		}
+		return mnv;
+		
 	}
 }
 

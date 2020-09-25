@@ -166,7 +166,7 @@ public class LectureDTest {
 		}
 	}
 	
-	@Test
+//	@Test
 	void slecttutorTest() {
 		try {
 			Lecture lect = new Lecture();

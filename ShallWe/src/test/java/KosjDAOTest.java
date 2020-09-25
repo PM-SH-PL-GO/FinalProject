@@ -35,16 +35,16 @@ class KosjDAOTest {
 	@Autowired
 	LectureDAO lectureDAO;
 
-	//@Test
+//	@Test
 	@DisplayName("ReviewDAO TEST : insertReview method")
 	void insertReviewDAOTest() {
 
 //		파라미터로 전달 받을 값
-		String review_content = "수강후기 내용테스트 1";
-		int review_score = 100;
+		String review_content = "수강후기 내용테스트 2";
+		int review_score = 50;
 		int lecture_id = 1;
 		String lecture_category_id = "SP";
-		String member_id = "member1";
+		String member_id = "member2";
 		
 		ReviewBean reviewBean = new ReviewBean();
 		reviewBean.setLectureCategoryId(lecture_category_id);
@@ -129,13 +129,13 @@ class KosjDAOTest {
 	 * @author Soojeong
 	 * 강의신청 후 결제
 	 */
-	//@Test
+	@Test
 	@DisplayName("insertMemberLectureHistoryDAO TEST ")
 	void insertMemberLectureHistory() throws AddException {
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		String lectureCategoryId = "SP";
-		String memberId = "member1";
+		String memberId = "member2";
 		int lectureId =1;
 		map.put("lectureCategoryId", lectureCategoryId);
 		map.put("memberId", memberId);
@@ -154,7 +154,7 @@ class KosjDAOTest {
 	 * @author Soojeong
 	 * 강의결제취소
 	 */
-	@Test
+	//@Test
 	@DisplayName("updateMemberLectureHistoryDAO TEST ")
 	void updateMemberLectureHistory() throws ModifyException {
 		
