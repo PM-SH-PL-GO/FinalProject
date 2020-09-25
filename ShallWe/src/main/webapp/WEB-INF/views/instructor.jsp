@@ -360,13 +360,6 @@ $(function(){
                 readURL(this);
             });
 
-//      	 	$('form').submit(function(){
-//         		return false;
-        		
-//         		});
-    	 
-       //강사등록//
-         
 			$('button#addTutor').click(function(){
 				
 				 let form = $('#fileUpload')[0];
@@ -379,7 +372,7 @@ $(function(){
     	        	tutor_category_id.push($(this).val());
    
     	        });
-    	    
+    
 				$.ajax({
 					
 					url:'/shallwe/upload/addTutor'
@@ -387,11 +380,11 @@ $(function(){
 				   ,processData: false
 				   ,contentType: false
 				   ,data: formData
-					,success:function(data){
+					,success:function(){
 
 						   let $tutor = confirm('강사등록을 원하십니까?');
 							 
-							 if ($travelalert == true ) {
+							 if ($tutor == true ) {
 								 
 								location.href = "http://localhost/shallwe/"
 								 
@@ -441,7 +434,7 @@ $(function(){
   
 <div class="content">
  <h1>강사 등록</h1>
- <form method="post" enctype="multipart/form-data" id="fileUpload">
+ <form method="post" enctype="multipart/form-data" id="fileUpload" accept-charset="">
  <div class="cer" >
     <div style="margin:3em;"> 
 		<br>
@@ -522,6 +515,12 @@ $(function(){
            <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="king">
           <label class="light" for="business">요리왕</label>
           <br />
+          
+          <input hidden="hidden" name ="lectureCategory.lecture_category_id1">
+          <input hidden="hidden" name ="lectureCategory.lecture_category_id2">
+          <input hidden="hidden" name ="lectureCategory.lecture_category_id3">
+          
+          
             
         </fieldset>
        <div style="margin:3em;">

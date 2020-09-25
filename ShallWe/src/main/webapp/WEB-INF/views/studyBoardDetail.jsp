@@ -181,7 +181,7 @@ function formatDate(date) {
 											<textarea class="form-control w-100" name="comment"
 												id="comment" cols="30" rows="9" placeholder="내용을 입력하세요"></textarea>
 										</div>
-										<div class="form-group">
+										<div class="form-group">																
 											<button type="submit"
 												class="button button-contactForm btn_1 boxed-btn">댓글
 												쓰기</button>

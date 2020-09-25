@@ -50,4 +50,10 @@
 		select * from studyboard sb join member m on(sb.STUDYBOARD_MEMBER_ID = m.member_id)
 		where STUDYBOARD_ID = #{studyBoard_id}
 	</select>
+<!-- 	파일 다운르도 sql -->
+	<select id="selectFileName" resultType="StudyBoard">
+			SELECT STUDYBOARD_FILENAME 
+			FROM STUDYBOARD
+			WHERE STUDYBOARD_MEMBER_ID = #{STUDYBOARD_MEMBER_ID}
+	</select>
 </mapper>

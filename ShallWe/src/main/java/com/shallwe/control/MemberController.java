@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,14 +23,13 @@ import lombok.extern.log4j.Log4j;
 @RequestMapping(value = "/member")
 public class MemberController {
 	// 회원 : 내 정보 조회/수정, 강의 조회/신청/삭제
-	// 
 	
 	@Autowired
 	MemberSerivce service;
 	
 	
 	//멤버로그인:경찬
-	@RequestMapping(value="/memberLogin")
+	@RequestMapping(value="/memberLogin",method=RequestMethod.POST)
 	public ModelAndView memberLogin(HttpSession session, @RequestParam(value="member_id")String member_id,
 														 @RequestParam(value="member_pwd")String member_pwd
 												   ) {
@@ -52,7 +52,7 @@ public class MemberController {
 	}
 	
 	//멤버로그아웃:경찬
-	@RequestMapping(value="/memberLogout")
+	@RequestMapping(value="/memberLogout",method=RequestMethod.POST)
 	public ModelAndView memberLogout(HttpSession session) {
 		
 		ModelAndView modelAndView = new ModelAndView();
@@ -66,7 +66,7 @@ public class MemberController {
 	}
 	
 	//비밀번호체인지(로그인x)
-	@RequestMapping(value="/changePassword")
+	@RequestMapping(value="/changePassword",method=RequestMethod.POST)
 	public ModelAndView changePassword(@RequestParam Map<String,Object>member,Model model) {
 		
 		ModelAndView modelAndView = new ModelAndView();

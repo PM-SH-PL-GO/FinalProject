@@ -91,5 +91,12 @@ public class HomeController {
 	public void tutorLectureList(Locale locale, Model model) {
 		System.out.println("HOMECONTROL: tutorLectureList");
 	}
-	
+	@RequestMapping(value="/tutorInfo",method = RequestMethod.GET)
+	public void tutorInfo(Locale locale, Model model) {
+		
+	}
+	@RequestMapping(value="/myinfoTutorInfo",method = RequestMethod.GET)
+	public void myinfoTutorInfo(Locale locale, Model model) {
+		System.out.println("myinfoTutorInfo");
+	}
 }

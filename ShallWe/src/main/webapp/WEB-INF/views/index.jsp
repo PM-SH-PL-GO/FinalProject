@@ -51,10 +51,7 @@
 }
 </style>
 <script>
-<<<<<<< HEAD
 
-
-=======
 $(function(){
 	$('#searchBtn').click(function(){
 		var $searchText = $('#searchText').val()
