@@ -39,7 +39,7 @@ public class kosjController {
 //	}
 	@RequestMapping(value = "/reviewAdd", method = RequestMethod.GET)
 	public void reviewAdd() {
-		System.out.println("lecturePaid.jsp  호출");
+		System.out.println("reviewAdd.jsp  호출");
 	}
 	@RequestMapping(value = "/searchResult", method = RequestMethod.GET)
 	public void searchResult() {
@@ -151,4 +151,18 @@ public class kosjController {
 		
 		return modelAndView;
 	}
+	
+	
+	
+	//--- review 등록
+	@RequestMapping(value = "/reviewAdd", method = RequestMethod.POST)
+	public ModelAndView insertReview(@RequestBody List<Lecture> lectureList ) throws AddException {
+		
+		Review r = new Review();
+		
+		
+	}
+	
+	
+	
 } // end of kosjController

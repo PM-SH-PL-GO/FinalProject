@@ -44,7 +44,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 	$(document).ready(function() {
-		
 		//right_menu - 검색결과값 출력부
 		var $rightAreaObj = $("section.right_menu").find("div.container");
 		
@@ -77,19 +76,10 @@
 		var $searchBtnObj = $("form[name='resultList']").find('button#searchBtn');
 		$searchBtnObj.click (function ( ) {
 			$searchText = $searchTextObj.val();
-			
-			// 검색조건에 따른 검색 요청
-			$.ajax ({
-				url : "/shallwe/search"
-				, method : "post"
-				, data : { "searchKey" : condition , "searchText" : $searchText }
-				, success : function (responseData) {
-					$rightAreaObj.empty();
-					$rightAreaObj.append(responseData);
-				}
-			}); //end of ajax
+			var url = '/shallwe/search?searchKey='+condition+'&searchText='+$searchText ;
+			location.href = url;
 		}); // end of clickEvent
-	});
+	}); // end 
 	
 </script>
 </head>
@@ -148,25 +138,25 @@
 				
 				</div>
 
-				<div class="category-img text-center">
-					<a href="#"> <img src="assets/img/gallery/category_icon1.png"
-						alt=""></a> <a href="#"> <img
-						src="assets/img/gallery/category_icon2.png" alt=""></a> <a
-						href="#"> <img src="assets/img/gallery/category_icon3.png"
-						alt=""></a>
-				</div>
-				<div class="category-img text-center">
-					<a href="#"> <img src="assets/img/gallery/category_icon4.png"
-						alt=""></a> <a href="#"> <img
-						src="assets/img/gallery/category_icon6.png" alt=""></a> <a
-						href="#"> <img src="assets/img/gallery/category_icon7.png"
-						alt=""></a>
-				</div>
-				<div class="category-img text-center">
-					<a href="#"> <img src="assets/img/gallery/category_icon8.png"
-						alt=""></a> <a href="#"> <img
-						src="assets/img/gallery/category_icon9.png" alt=""></a>
-				</div>
+<!-- 				<div class="category-img text-center"> -->
+<!-- 					<a href="#"> <img src="assets/img/gallery/category_icon1.png" -->
+<!-- 						alt=""></a> <a href="#"> <img -->
+<!-- 						src="assets/img/gallery/category_icon2.png" alt=""></a> <a -->
+<!-- 						href="#"> <img src="assets/img/gallery/category_icon3.png" -->
+<!-- 						alt=""></a> -->
+<!-- 				</div> -->
+<!-- 				<div class="category-img text-center"> -->
+<!-- 					<a href="#"> <img src="assets/img/gallery/category_icon4.png" -->
+<!-- 						alt=""></a> <a href="#"> <img -->
+<!-- 						src="assets/img/gallery/category_icon6.png" alt=""></a> <a -->
+<!-- 						href="#"> <img src="assets/img/gallery/category_icon7.png" -->
+<!-- 						alt=""></a> -->
+<!-- 				</div> -->
+<!-- 				<div class="category-img text-center"> -->
+<!-- 					<a href="#"> <img src="assets/img/gallery/category_icon8.png" -->
+<!-- 						alt=""></a> <a href="#"> <img -->
+<!-- 						src="assets/img/gallery/category_icon9.png" alt=""></a> -->
+<!-- 				</div> -->
 			</div>
 		</section>
 
