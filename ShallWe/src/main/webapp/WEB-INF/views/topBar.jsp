@@ -106,7 +106,7 @@ $(function(){
 
 	//----------회원가입 CLICK START---------		
 	$("#signUp").click(function(){
-		location.href = "/shallwe/signup";
+		location.href = "/shallwe/member/signup";
 	});
 	//----------회원가입 CLICK END---------		
 	
