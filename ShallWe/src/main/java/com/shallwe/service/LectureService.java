@@ -77,8 +77,8 @@ public class LectureService {
 	}
 	
 	//강의 상세 조회 : 동일
-	public LectureDetail lectureDetailView(int lecture_id) throws FindException {
-		return lectureDetailDAO.lectureDetailView(lecture_id);
+	public LectureDetail lectureDetailView(Lecture lect) throws FindException {
+		return lectureDetailDAO.lectureDetailView(lect);
 	}
 	
 	/**

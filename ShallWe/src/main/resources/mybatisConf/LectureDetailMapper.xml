@@ -68,7 +68,7 @@
 			<association property="tutor" javaType="Tutor"
 				autoMapping="true">
 				<id property="member.member_id" column="tutor_id" />
-				<id property="lecture_category.lecture_category_id" column="tutor_category_id"/>
+				<id property="lectureCategory.lecture_category_id" column="tutor_category_id"/>
 				<association property="member" javaType="Member"
 					autoMapping="true">
 				</association>
