@@ -8,7 +8,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="x-ua-compatible" content="ie=edge">
-<title>학생강의목록</title>
+<title>학생수강목록</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" type="image/x-icon"
@@ -54,7 +54,7 @@ $(function(){
 					<div class="col-lg-12">
 						<!-- Section Tittle -->
 						<div class="section-tittle text-center mb-80">
-							<h2>강의 목록</h2>
+							<h2>수강 목록</h2>
 						</div>
 					</div>
 				</div>
@@ -95,10 +95,10 @@ $(function(){
 									</div>
 									<div
 										class="properties__footer d-flex justify-content-between align-items-center">
-										<h3>${lecture.lecture_price}원</h3>
+										<h3><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###"/>원</h3>
 										<div class="heart">
 											<img src="/shallwe/assets/img/gallery/cancel.png"
-												width="30px" alt="강의취소요청" title="강의취소요청">
+												width="30px" alt="수강취소" title="수강취소">
 										</div>
 									</div>
 								</div>
@@ -158,10 +158,10 @@ $(function(){
 									</div>
 									<div
 										class="properties__footer d-flex justify-content-between align-items-center">
-										<h3>${lecture.lecture_price}원</h3>
+										<h3><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###"/>원</h3>
 										<div class="heart">
 											<img src="/shallwe/assets/img/gallery/performance.png"
-												width="30px" alt="강사후기보기" title="강사후기보기">
+												width="30px" alt="강사후기" title="강사후기">
 										</div>
 									</div>
 								</div>

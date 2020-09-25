@@ -49,7 +49,7 @@ public class LectureController {
 //		return mnv;
 //	}
 
-	// 강의 조회 : 동일
+	//학생 강의 조회 : 동일
 	@RequestMapping(value = "/memberLecture")
 	public ModelAndView memberLectureView(HttpSession session, MemberLectureHistory mlth) {
 		String id = (String)session.getAttribute("loginInfo");
@@ -70,7 +70,31 @@ public class LectureController {
 		}
 		return mnv;
 	}
-
+	
+	//강사 강의 조회 : 동일
+		@RequestMapping(value = "/tutorLecture")
+		public ModelAndView tutorLectureView(HttpSession session, Lecture lect) {
+			String id = (String)session.getAttribute("loginInfo");
+			List<Lecture> lectlist = new ArrayList<>();
+			ModelAndView mnv = new ModelAndView();
+			Member mem = new Member();
+			Tutor tutor = new Tutor();
+			mem.setMember_id(id);
+			tutor.setMember(mem);
+			lect.setTutor(tutor);
+			try {
+				lectlist = service.tutorLectureList(lect);
+				mnv.addObject("lectlist", lectlist);
+				mnv.setViewName("/tutorLectureList");
+				mnv.addObject("status", "success");
+			} catch (FindException e) {
+				mnv.addObject("status", "fail");
+				mnv.setViewName("/tutorLectureList");
+				mnv.addObject("errMsg", e.getMessage());
+			}
+			return mnv;
+		}
+	
 	// 강의 상세 조회 : 동일
 	@RequestMapping(value = "/detail")
 	public ModelAndView detailView(HttpSession session, @RequestParam Integer lecture_id) {

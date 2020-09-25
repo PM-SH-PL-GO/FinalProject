@@ -106,7 +106,7 @@
 									<a href="#">${lecture.tutor.tutor_score}</a>
 								</h6>
 							</div>
-							<h4 class="mt-30">${lecture.lecture_price}원</h4>
+							<h4 class="mt-30"><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###"/>원</h4>
 							<a href="#" class="genric-btn primary-border mt-10">신청</a> <a
 								href="#" class="genric-btn primary-border mt-10">찜하기</a>
 							<div class="d-flex mt-10">
