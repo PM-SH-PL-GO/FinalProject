@@ -2,7 +2,6 @@ package com.shallwe.control;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
@@ -13,13 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.shallwe.exception.AddException;
-import com.shallwe.service.LectureService;
 import com.shallwe.service.TutorService;
-import com.shallwe.vo.LectureCategory;
 import com.shallwe.vo.Member;
 import com.shallwe.vo.Tutor;
 
@@ -109,7 +105,6 @@ public class UploadController {
 		tutor.setMember(m);
 		tutor.setTutor_img(tutor_fileName);
 		tutor.setTutor_career_file(tutor_careerfile);
-		
 		
 		try {
 			
