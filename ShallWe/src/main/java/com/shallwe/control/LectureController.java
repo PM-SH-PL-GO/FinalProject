@@ -8,20 +8,20 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.service.LectureService;
+import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureDetail;
 import com.shallwe.vo.Member;
 import com.shallwe.vo.MemberLectureHistory;
+import com.shallwe.vo.Tutor;
 
 @Controller
-@RequestMapping(value = "/Lectures")
+@RequestMapping(value = "/lectures")
 public class LectureController {
 	// 회원 : 강의 검색, 강의 세부정보 조회
 	// 강사 : 강의 등록/수정/취소, 등록한 강의 조회
@@ -33,12 +33,6 @@ public class LectureController {
 	public String insertView() {
 		return "/lectureRegistration";
 	}
-
-	// 멤버 강의 조회 : 동일
-//	@GetMapping(value = "/memberLecture")
-//	public String memberLectureView() {
-//		return "/memberLectureList";
-//	}
 
 //	// 강사 강의 등록 : 동일
 //	@PostMapping(value = "/insert")
@@ -78,18 +72,33 @@ public class LectureController {
 	}
 
 	// 강의 상세 조회 : 동일
-	@GetMapping(value = "/detail")
-//	public String detailView() {
-//		return "/lectureDetail";
-//	}
-	public ModelAndView detailView(LectureDetail lectDe) {
+	@RequestMapping(value = "/detail")
+	public ModelAndView detailView(HttpSession session, @RequestParam Integer lecture_id) {
+		String id = (String)session.getAttribute("loginInfo");
 		ModelAndView mnv = new ModelAndView();
+		Member mem = new Member();
+		Tutor tuto = new Tutor();
+		Lecture lecttuto = new Lecture();
+		LectureDetail lectDetuto = new LectureDetail();
+		MemberLectureHistory mlth = new MemberLectureHistory();
+		Lecture lect = new Lecture();
+		LectureDetail lectDetail = new LectureDetail();
+		mem.setMember_id(id);
+		tuto.setMember(mem);
+		lecttuto.setTutor(tuto);
+		lectDetuto.setLecture(lecttuto);
+		mlth.setMember(mem);
+		lect.setLecture_id(lecture_id);
+		lectDetail.setLecture(lect);
 		try {
-			lectDe = service.lectureDetailView(lectDe.getLecture());
-			mnv.addObject("lectDe", lectDe);
+			lectDetail = service.lectureDetailView(lect);
+			mnv.addObject("lectDetail", lectDetail);
+			mnv.addObject("mlth", mlth);
+			mnv.addObject("lectDetuto", lectDetuto);
 			mnv.setViewName("/lectureDetail");
 		} catch (FindException e) {
 			e.printStackTrace();
+			mnv.setViewName("/lectureDetail");
 		}
 
 		return mnv;

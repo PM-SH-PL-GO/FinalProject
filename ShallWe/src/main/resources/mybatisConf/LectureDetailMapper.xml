@@ -13,12 +13,17 @@
 		INSERT INTO
 		lecture(LECTURE_ID, LECTURE_CATEGORY_ID, LECTURE_TUTOR_ID,
 		LECTURE_IMG, LECTURE_TITLE, LECTURE_PRICE, LECTURE_STATE,
-		LECTURE_START_DT, LECTURE_END_DT, LECTURE_MAX, LECTURE_MIN, LECTURE_CURRENT)
-		VALUES(lecture_seq.nextVal, #{lectureCategory.lecture_category_id},
-		#{tutor.member.member_id}, #{lecture_img}, #{lecture_title},
-		#{lecture_price}, #{lecture_state}, #{lecture_start_dt},
+		LECTURE_START_DT, LECTURE_END_DT, LECTURE_MAX, LECTURE_MIN,
+		LECTURE_CURRENT)
+		VALUES(lecture_seq.nextVal,
+		#{lectureCategory.lecture_category_id},
+		#{tutor.member.member_id},
+		#{lecture_img}, #{lecture_title},
+		#{lecture_price}, #{lecture_state},
+		#{lecture_start_dt},
 		#{lecture_end_dt},
-		#{lecture_max}, #{lecture_min}, 0)
+		#{lecture_max}, #{lecture_min},
+		0)
 	</insert>
 	<insert id="insertDetail" parameterType="LectureDetail">
 		INSERT
@@ -34,14 +39,16 @@
 	<update id="update" parameterType="Lecture">
 		UPDATE lecture
 		SET
-		LECTURE_CATEGORY_ID = #{lectureCategory.lecture_category_id}
-		,
-		LECTURE_IMG = #{lecture_img}, LECTURE_TITLE = #{lecture_title},
-		LECTURE_PRICE = #{lecture_price}
+		LECTURE_IMG =
+		#{lecture_img}, LECTURE_TITLE = #{lecture_title},
+		LECTURE_PRICE =
+		#{lecture_price}
 		, LECTURE_START_DT =
-		#{lecture_start_dt}, LECTURE_END_DT = #{lecture_end_dt},
+		#{lecture_start_dt},
+		LECTURE_END_DT = #{lecture_end_dt},
 		LECTURE_MAX =
-		#{lecture_max}, LECTURE_MIN = #{lecture_min}
+		#{lecture_max},
+		LECTURE_MIN = #{lecture_min}
 		WHERE LECTURE_ID =
 		#{lecture_id}
 	</update>
@@ -70,7 +77,8 @@
 			<association property="tutor" javaType="Tutor"
 				autoMapping="true">
 				<id property="member.member_id" column="tutor_id" />
-				<id property="lecture_category.lecture_category_id" column="tutor_category_id"/>
+				<id property="lectureCategory.lecture_category_id"
+					column="tutor_category_id" />
 				<association property="member" javaType="Member"
 					autoMapping="true">
 				</association>
@@ -80,20 +88,25 @@
 
 	<select id="lectureDetailView" resultMap="lectDeResultMap">
 		SELECT le.lecture_id,
-		le.lecture_img,
-		le.lecture_title, le.lecture_price, le.lecture_state
+		le.lecture_img, le.lecture_category_id
+		, le.lecture_title,
+		le.lecture_price, le.lecture_state
 		,
-		le.lecture_start_dt, le.lecture_end_dt, le.lecture_max,
+		le.lecture_start_dt,
+		le.lecture_end_dt, le.lecture_max,
 		le.lecture_min, le.lecture_current
-		, ld.lecture_introduce,
+		,
+		ld.lecture_introduce,
 		ld.lecture_curriculum, ld.lecture_prepared,
 		ld.lecture_caution,
 		ld.lecture_filename, ld.lecture_location
-		, tu.tutor_id,
+		,
+		tu.tutor_id,
 		tu.tutor_category_id, tu.tutor_nickname, tu.tutor_img,
 		tu.tutor_score
 		FROM lecture le
-		JOIN lecture_detail ld ON (ld.lecture_id =
+		JOIN lecture_detail ld ON (ld.lecture_id
+		=
 		le.lecture_id AND
 		ld.LECTURE_CATEGORY_ID = le.LECTURE_CATEGORY_ID)
 		JOIN
