@@ -85,7 +85,7 @@
 	<select id="tutorMyClassList" resultMap="lectResultMap">
 		SELECT le.lecture_id,
 		le.lecture_img, le.lecture_title, le.lecture_price,
-		le.lecture_state
+		le.lecture_state, le.lecture_category_id, lc.category_name
 		,
 		le.lecture_start_dt, le.lecture_end_dt, le.lecture_max,
 		le.lecture_current
@@ -96,6 +96,7 @@
 		tu.TUTOR_CATEGORY_ID =
 		le.LECTURE_CATEGORY_ID)
 		JOIN member m ON (m.member_id = tu.tutor_id)
+		JOIN lecture_category lc ON (le.lecture_category_id = lc.category_id)
 		WHERE le.LECTURE_TUTOR_ID = #{tutor.member.member_id} AND m.tutor_yn =
 		'Y'
 	</select>
@@ -118,4 +119,20 @@
 			, #{lectureId}
 		)}
 	</update>
+	
+	<!-- admin(jun6) : 강의 전체 조회 -->
+	<select id="selectAllLectures" resultMap="lectResultMap">
+		SELECT le.*, lc.category_name "lecture_category_name", le.lecture_tutor_id "member_id"
+		FROM lecture le
+			JOIN lecture_category lc ON(le.lecture_category_id = lc.category_id)
+		ORDER BY lecture_id DESC
+	</select>
+	
+	<!-- admin(jun6) : 강의 승인/반려 -->
+	<update id="updateLectureStateByIdAndStatus" parameterType="Map">
+		UPDATE lecture
+		SET lecture_state = #{status}
+		WHERE lecture_id = #{lecture_id}
+	</update>
+	
 </mapper>

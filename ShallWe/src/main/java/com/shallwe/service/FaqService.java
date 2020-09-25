@@ -14,7 +14,7 @@ public class FaqService {
 	@Autowired
 	FaqDAO dao;
 	
-	public List<Faq> faqAll() throws FindException{
+	public List<Faq> findAll() throws FindException{
 		List<Faq> faq= dao.selectAll();
 		return faq;
 	}

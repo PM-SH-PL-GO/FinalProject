@@ -22,10 +22,10 @@ public class HomeController {
 //		System.out.println("admin 입장");
 //	}
 	
-	@RequestMapping(value = "/studyBoard", method = RequestMethod.GET)
-	public void studyBoard(Locale locale, Model model) {
-		System.out.println("studyBoard coming");
-	}
+//	@RequestMapping(value = "/studyBoard", method = RequestMethod.GET)
+//	public void studyBoard(Locale locale, Model model) {
+//		System.out.println("studyBoard coming11");
+//	}
 	
 	@RequestMapping(value = "/studyBoardWrite", method = RequestMethod.GET)
 	public void studyBoardWrite(Locale locale, Model model) {
@@ -37,10 +37,10 @@ public class HomeController {
 		System.out.println("studyBoardDetail coming");
 	}
 	
-	@RequestMapping(value = "/faq", method = RequestMethod.GET)
-	public void faq(Locale locale, Model model) {
-		System.out.println("faq coming");
-	}
+//	@RequestMapping(value = "/faq", method = RequestMethod.GET)
+//	public void faq(Locale locale, Model model) {
+//		System.out.println("faq coming");
+//	}
 	@RequestMapping(value = "/userLogin", method = RequestMethod.GET)
 	public void uerLogin(Locale locale, Model model) {
 		System.out.println("userLogin");
@@ -77,6 +77,16 @@ public class HomeController {
 	@RequestMapping(value = "/changePwd", method = RequestMethod.GET)
 	public void chagePwd(Locale locale, Model model) {
 		System.out.println("HOMECONTROL: changePwd");
+	}
+	
+	@RequestMapping(value = "/memberLectureList", method = RequestMethod.GET)
+	public void memberLectureList(Locale locale, Model model) {
+		System.out.println("HOMECONTROL: memberLectureList");
+	}
+	
+	@RequestMapping(value = "/tutorLectureList", method = RequestMethod.GET)
+	public void tutorLectureList(Locale locale, Model model) {
+		System.out.println("HOMECONTROL: tutorLectureList");
 	}
 	
 }

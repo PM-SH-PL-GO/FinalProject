@@ -3,6 +3,7 @@ package com.shallwe.dao;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -106,23 +107,25 @@ public class LectureDAO {
 	 * @return
 	 * @throws AddException
 	 */
-	public void insertMemberLectureHistory (HashMap<String, Object> map) throws AddException {
+	public int insertMemberLectureHistory (Map<String, Object> map) throws AddException {
 		SqlSession session = null;
 		int result = 0;
 		try {
 			session = sqlSessionFactory.openSession();
-			result= session.insert("LectureMapper.insertMemberLectureHistory", map);
+			result = session.insert("LectureMapper.insertMemberLectureHistory", map);
+			
 			if (result == 0 ) {
 				log.info("강의신청에 실패하였습니다.");
 			}
+			log.info("강의결제 갯수 : " + result);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new AddException(e.getMessage());
-			
 		} finally {
 			session.close();
 		}
+		return result;
 	} // end of selectLectureListBySearch method
 	
 	/**
@@ -132,7 +135,7 @@ public class LectureDAO {
 	 * @return
 	 * @throws ModifyException
 	 */
-	public void updateMemberLectureHistory (HashMap<String, Object> map) throws ModifyException {
+	public int updateMemberLectureHistory (HashMap<String, Object> map) throws ModifyException {
 		SqlSession session = null;
 		int result = 0;
 		try {
@@ -149,6 +152,61 @@ public class LectureDAO {
 		} finally {
 			session.close();
 		}
+		return result;
 	} // end of selectLectureListBySearch method
+	
+	// test용
+	
+	public Lecture selectLectureBytutorId (String tutor_id) {
+		SqlSession session = null;
+		Lecture lecture = new Lecture();
+		try {
+			session = sqlSessionFactory.openSession();
+			lecture = session.selectOne("LectureMapper.selectLectureBytutorId", tutor_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally {
+			session.close();
+		}
+		return lecture;
+	}
 
+	/**
+	 * admin 강의 전체 목록 조회하기
+	 * @author jun6
+	 * @return 강의 전체 목록
+	 * @throws FindException
+	 */
+	public List<Lecture> selectAllLectures() throws FindException{
+		SqlSession session = null;
+		List<Lecture> lectureList = new ArrayList<>();
+		
+		try {
+			session = sqlSessionFactory.openSession();
+			lectureList = session.selectList("LectureMapper.selectAllLectures");
+//			for (Lecture lec : lectureList) {
+//				System.out.println("Start = " + lec.getLecture_start_dt());
+//			}
+		}catch(DataAccessException e) {
+			e.printStackTrace();
+		}finally {
+			session.close();
+		}
+		
+		return lectureList;
+	}
+	
+	public void updateLectureStatusByIdAndStatus(String lecture_id, String status) throws ModifyException{
+		SqlSession session = null;
+		
+		try {
+			session = sqlSessionFactory.openSession();
+			session.update("LectureMapper.updateLectureStateByIdAndStatus");
+		}catch(DataAccessException e) {
+			e.printStackTrace();
+			throw new ModifyException("설정을 변경하는 중 에러가 발생했습니다");
+		}
+	}
+	
 } // end of LectureDAO class

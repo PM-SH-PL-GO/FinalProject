@@ -51,6 +51,8 @@ public class ReplyService {
 		boardPageBean.setList(list);
 		boardPageBean.setStartRow(startRow);
 		boardPageBean.setEndRow(endRow);
+		boardPageBean.setStartPage(((page-1)/10)*10+1);	
+		boardPageBean.setEndPage(((page-1)/10)*10+1);	
 		boardPageBean.setCurrentPage(page);
 		return boardPageBean;
 	}	
@@ -60,7 +62,7 @@ public class ReplyService {
 	 * @return 
 	 * @throws AddException
 	 */	
-	public void wrieReply(StudyReply reply) throws AddException {
+	public void writeReply(StudyReply reply) throws AddException {
 		studyReplyDAO.insert(reply);
 	}
 	

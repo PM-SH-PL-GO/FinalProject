@@ -25,6 +25,7 @@ import com.shallwe.model.MemberInfoBean;
 import com.shallwe.service.MemberSerivce;
 
 import lombok.extern.log4j.Log4j;
+
 @Controller
 @RequestMapping(value = "/member/*")
 @Log4j
@@ -92,7 +93,7 @@ public class MemberController {
 	}
 	//멤버로그아웃:경찬
 	@RequestMapping(value="/memberLogout")
-	public ModelAndView memberLogout(HttpSession session,@RequestParam(value="member_id")String member_id) {
+	public ModelAndView memberLogout(HttpSession session) {
 		
 		ModelAndView modelAndView = new ModelAndView();
 		
@@ -102,7 +103,6 @@ public class MemberController {
 		
 		return modelAndView;
 	
-		
 	}
 	
 	//비밀번호체인지(로그인x)

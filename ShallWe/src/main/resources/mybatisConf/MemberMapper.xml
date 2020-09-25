@@ -145,5 +145,10 @@
 	    JOIN lecture_category lc2 ON(m.member_favorite2=lc2.category_id)LEFT OUTER
 	    JOIN lecture_category lc3 ON(m.member_favorite3=lc3.category_id)
 	</select>
-	
+
+<!-- admin(jun6) : 회원 삭제 -->
+<!-- 	<delete id="deleteMemberById"> -->
+<!-- 		DELETE member -->
+<!-- 		WHERE member_id = #{} -->
+<!-- 	</delete> -->
 </mapper>

@@ -5,6 +5,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="loginId" value="${sessionScope.loginInfo}"/>
+<c:set var="boardId" value="${studyBoard.member.member_id}"/>
 <fmt:formatDate var="resultDt" value="${studyBoard.studyBoard_write_dt}" pattern="yyyy-MM-dd"/>
 
 <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -61,8 +64,158 @@
 .blog_details a:hover {
 	color: #B367FF
 }
+p {
+    margin-bottom: 0px;
+}
+h5 i{
+	margin-right: 10px;
+}
 </style>
 <script>
+function formatDate(date) { 
+	var d = new Date(date), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = d.getFullYear(); 
+	if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; 
+	return [year, month, day].join('-'); 
+}
+
+$(function(){
+	//----------댓글 로드 START---------
+	$.ajax({
+		url:"/shallwe/reply/"+${studyBoard.studyBoard_id}
+		,method:"get"
+		,success:function(pbObj){
+		var $replyPage=$("#replyList");
+		var $replyCount=$("div.comments-area h4#replyCount")
+		var replyPageCountData="댓글 수("+pbObj.list.length+")"
+		var replyPageData="";
+			var arr = pbObj.list;
+			arr.forEach(function(studyReply, index){
+				replyPageData += "<div class=\"single-comment justify-content-between d-flex\">"
+				replyPageData += "<div class=\"user justify-content-between d-flex\">"
+				replyPageData += "<div class=\"desc\">"
+				replyPageData += "<p id = \"comment\">"+studyReply.studyreply_content+"</p>"
+				replyPageData += "	<div class=\"d-flex justify-content-between\">"
+				replyPageData += "		<div class=\"d-flex align-items-center\">"
+				replyPageData += "			<h5>"
+				replyPageData += "				<a><i class=\"fa fa-user\"></i>"+studyReply.member.member_name+"</a>"
+				replyPageData += "			</h5>"
+				replyPageData += "				<p>"+formatDate(studyReply.studyreply_dt)+"</p>"
+				replyPageData += "		</div>"
+				replyPageData += "	<input type=\"hidden\" class=\"replyId\" value=\""+ studyReply.studyreply_id +"\">" 
+				replyPageData += "	<div class=\"reply-btn\">"
+				replyPageData += "			<a class=\"btn-reply text-uppercase\" id=\"replyUpdate\">수정</a>" 
+				replyPageData += "			<a class=\"btn-reply text-uppercase\" id=\"replyDelete\">삭제</a>"
+				replyPageData += "	</div>"
+				replyPageData += "</div>"
+				replyPageData += "</div>"
+				replyPageData += "</div>"
+				replyPageData += "</div>"			
+				replyPageData += "<hr>"			
+				
+			});
+			$replyCount.html(replyPageCountData);
+			$replyPage.html(replyPageData);
+		}
+		
+	});
+	//----------댓글 ROAD END---------
+	
+	//----------게시글 삭제 START---------
+	$('#delete').click(function(){
+		var boardYN = confirm("게시글을 삭제하시겠습니까?");
+		var $studyBoard_id = ${studyBoard.studyBoard_id};
+		if(boardYN){
+			$.ajax({
+				url:"/shallwe/board/delete/" +$studyBoard_id
+				,method:"DELETE"
+				,success:function(){
+					alert($studyBoard_id+"번 게시물이 삭제되었습니다.")	
+					history.back();
+				}
+			});
+		}
+	});
+	
+	//----------게시글 삭제 END---------
+	
+	//----------게시글 수정 START---------
+	$('#update').click(function(){
+		var $studyBoard_id = "${studyBoard.studyBoard_id}";
+		location.href = "/shallwe/board/updateBoard/"+$studyBoard_id
+	});
+	
+	//----------게시글 수정 END---------
+	
+	//----------게시글 목록보기 START---------
+	$('#list').click(function(){
+		history.back();
+	});
+	//----------게시글 목록보기 END---------
+
+	//----------댓글쓰기 버튼 CLICK START---------
+	$('#replyBtn').click(function(){
+		var $replyContent = $('#replyText').val();
+		var $studyBoard_Id = ${studyBoard.studyBoard_id};
+		
+		$.ajax({
+			url:"/shallwe/reply/write"
+			,method:"POST"
+			,data:{"studyReply_content":$replyContent,"studyBoard_Id":$studyBoard_Id}
+			,success:function(){
+				location.reload();
+			}
+			,error: function(data){
+				alert(data.responseText);
+			}
+		});
+		
+	});
+	
+	//----------댓글쓰기 버튼 CLICK END---------	
+	
+	//----------댓글 수정 버튼 CLICK START---------	
+	$('#replyList').on("click","#replyUpdate",function(){
+		var $commentClass = $(this).parents('.desc').children('#comment');
+		var $commentClassVal = $(this).parents('.desc').children('#comment').html();
+		var replytextData = "<input type=\"text\" class=\"replytext\" value=\""+ $commentClassVal +"\">" 
+
+		var $replyBtn = $(this).parents('.reply-btn');
+		var replyBtnData = ""
+			replyBtnData += "<a class=\"btn-reply text-uppercase\" id=\"replyUpdateWrite\">등록</a>" 
+			replyBtnData += "<a class=\"btn-reply text-uppercase\" id=\"replyCancel\">취소</a>"
+		$commentClass.html(replytextData);
+		$replyBtn.html(replyBtnData);
+	});
+	//----------댓글 수정 버튼 CLICK END---------	
+	
+	//----------댓글 수정 등록 버튼 CLICK START---------	
+	$('#replyList').on("click","#replyUpdateWrite",function(){
+		var $replyIdVal = $(this).parents('.reply-btn').siblings('.replyId') .val();
+		var $replyContentVal = $(this).parents('.desc').children('#comment').children('.replytext').val();
+		$.ajax({
+			url:"/shallwe/reply/update"
+			,method:"post"
+			,data:{"studyreply_id":$replyIdVal,"studyreply_content":$replyContentVal}
+			,success:function(data){
+				alert(data);
+				location.reload();
+			}
+			,error: function(data){
+				alert(data.responseText);
+			}
+		});
+		
+	});
+	//----------댓글 수정 등록 버튼 CLICK END---------	
+	
+	//----------댓글 삭제 버튼 CLICK START---------	
+	$('#replyList').on("click","#replyDelete",function(){
+		console.log("딜리트도?");
+		var $replyIdVal = $(this).siblings('.replyId').val();
+		
+	});
+	//----------댓글 삭제 버튼 CLICK END---------	
+});
 function formatDate(date) { 
 	var d = new Date(date), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = d.getFullYear(); 
 	if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; 
@@ -75,83 +228,44 @@ function formatDate(date) {
 
 	<!--? Blog Area Start -->
 	<section class="blog_area single-post-area section-padding">
-		<div class="container">
 			<div class="row">
 				<div class="col-lg-8 posts-list" style="margin: auto; ">
 					<div class="single-post">
 						<ul class="blog-info-link"style="float: right;" >
-							<li><a href="#">삭제</a></li>
-							<li><a href="#">수정</a></li>
-							<li><a href="#">목록보기</a></li>
+							<c:if test="${loginId eq  boardId}">
+								<li><a id="delete">삭제  </a></li>
+								<li><a id="update">수정</a></li>
+							</c:if>
+								<li><a id="list">목록보기</a></li>
 						</ul>
 						<div class="blog_details">
 							<h2 style="color: #2d2d2d;">${studyBoard.studyBoard_title}
 							</h2>
 							<ul class="blog-info-link mt-3 mb-4">
 								<li><a href="#"><i class="fa fa-user"></i>${studyBoard.member.member_name}</a></li>
-								<li><a href="#"><i class="fa fa-comments"></i> 댓글 수()</a></li>
-								<li><a href="#">${resultDt}</a></li>
+								<li><a href="#"><i class="fa fa-comments"></i> 조회 수(${studyBoard.studyBoard_view_count})</a></li>
+								<li><a href="#">작성일 ${resultDt}</a></li>
 							</ul>
 							<p class="excert">${studyBoard.studyBoard_content}</p>
-							${studyBoard}
-							<p>MCSE boot camps have its supporters and its detractors.
-								Some people do not understand why you should have to spend money
-								on boot camp when you can get the MCSE study materials yourself
-								at a fraction of the camp price. However, who has the willpower
-								to actually sit through a self-imposed MCSE training. who has
-								the willpower to actually</p>
-							<p>MCSE boot camps have its supporters and its detractors.
-								Some people do not understand why you should have to spend money
-								on boot camp when you can get the MCSE study materials yourself
-								at a fraction of the camp price. However, who has the willpower
-							</p>
-							<p>MCSE boot camps have its supporters and its detractors.
-								Some people do not understand why you should have to spend money
-								on boot camp when you can get the MCSE study materials yourself
-								at a fraction of the camp price. However, who has the willpower
-								to actually sit through a self-imposed MCSE training. who has
-								the willpower to actually</p>
 						</div>
 					</div>
-
 					<div class="comments-area">
-						<h4>댓글(${studyBoard.studyBoard_view_count})</h4>
-						<div class="comment-list">
-							<div class="single-comment justify-content-between d-flex">
-								<div class="user justify-content-between d-flex">
-									<div class="desc">
-										<p class="comment">Multiply sea night grass fourth day sea
-											lesser rule open subdue female fill which them Blessed, give
-											fill lesser bearing multiply sea night grass fourth day sea
-											lesser</p>
-										<div class="d-flex justify-content-between">
-											<div class="d-flex align-items-center">
-												<h5>
-													<a href="#">고준식</a>
-												</h5>
-												<p class="date">2020년 12월 9일</p>
-											</div>
-											<div class="reply-btn">
-												<a href="#" class="btn-reply text-uppercase">수정</a> <a
-													href="#" class="btn-reply text-uppercase">삭제</a>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+						<h4 id="replyCount"></h4>
+						<div class="comment-list" id="replyList">
+							
 						</div>
 						<div class="comment-form">
 							<h4>댓글 쓰기</h4>
-							<form class="form-contact comment_form" action="#"
-								id="commentForm">
-								<div class="row">
+							<form class="form-contact comment_form" id="commentForm">
 									<div class="col-12">
 										<div class="form-group">
 											<textarea class="form-control w-100" name="comment"
-												id="comment" cols="30" rows="9" placeholder="내용을 입력하세요"></textarea>
+												id="replyText" cols="30" rows="9" placeholder="내용을 입력하세요"></textarea>
 										</div>
 										<div class="form-group">
-											<button type="submit" class="button button-contactForm btn_1 boxed-btn">댓글 쓰기</button>
+											<button type="button"
+												class="button button-contactForm btn_1 boxed-btn" id="replyBtn">댓글
+												쓰기</button>
 										</div>
 									</div>
 									<div class="col-12"></div>
@@ -163,7 +277,6 @@ function formatDate(date) {
 	</section>
 	<!-- Blog Area End -->
 
-	</main>
 	<footer>
 		<div class="footer-wrapper pt-30">
 			<!-- footer-bottom -->
@@ -190,55 +303,6 @@ function formatDate(date) {
 			</div>
 		</div>
 	</footer>
-	<!-- Scroll Up -->
-	<div id="back-top">
-		<a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
-	</div>
-
-    <!-- JS here -->
-
-    <script src="/shallwe/assets/js/vendor/modernizr-3.5.0.min.js"></script>
-    <!-- Jquery, Popper, Bootstrap -->
-    <script src="/shallwe/assets/js/vendor/jquery-1.12.4.min.js"></script>
-    <script src="/shallwe/assets/js/popper.min.js"></script>
-    <script src="/shallwe/assets/js/bootstrap.min.js"></script>
-    <!-- Jquery Mobile Menu -->
-    <script src="/shallwe/assets/js/jquery.slicknav.min.js"></script>
-
-    <!-- Jquery Slick , Owl-Carousel Plugins -->
-    <script src="/shallwe/assets/js/owl.carousel.min.js"></script>
-    <script src="/shallwe/assets/js/slick.min.js"></script>
-    <!-- One Page, Animated-HeadLin -->
-    <script src="/shallwe/assets/js/wow.min.js"></script>
-    <script src="/shallwe/assets/js/animated.headline.js"></script>
-    <script src="/shallwe/assets/js/jquery.magnific-popup.js"></script>
-
-    <!-- Date Picker -->
-    <script src="/shallwe/assets/js/gijgo.min.js"></script>
-    <!-- Nice-select, sticky -->
-    <script src="/shallwe/assets/js/jquery.nice-select.min.js"></script>
-    <script src="/shallwe/assets/js/jquery.sticky.js"></script>
-    <!-- Progress -->
-    <script src="/shallwe/assets/js/jquery.barfiller.js"></script>
-    
-    <!-- counter , waypoint,Hover Direction -->
-    <script src="/shallwe/assets/js/jquery.counterup.min.js"></script>
-    <script src="/shallwe/assets/js/waypoints.min.js"></script>
-    <script src="/shallwe/assets/js/jquery.countdown.min.js"></script>
-    <script src="/shallwe/assets/js/hover-direction-snake.min.js"></script>
-
-    <!-- contact js -->
-    <script src="/shallwe/assets/js/contact.js"></script>
-    <script src="/shallwe/assets/js/jquery.form.js"></script>
-    <script src="/shallwe/assets/js/jquery.validate.min.js"></script>
-    <script src="/shallwe/assets/js/mail-script.js"></script>
-    <script src="/shallwe/assets/js/jquery.ajaxchimp.min.js"></script>
-    
-    <!-- Jquery Plugins, main Jquery -->	
-    <script src="/shallwe/assets/js/plugins.js"></script>
-    <script src="/shallwe/assets/js/main.js"></script>
-
-
-    
+<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
     </body>
 </html>

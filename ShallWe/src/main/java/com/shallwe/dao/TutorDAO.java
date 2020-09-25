@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
+import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.vo.Tutor;
@@ -22,7 +23,6 @@ public class TutorDAO {
 	// 강사 등록 : 경찬
 	// 강사 정보 조회 : 경찬
 	// 강사 정보 수정 : 경찬
-	
 	// 강사/예비강사 목록 보기(admin) : 준식
 	public List<Tutor> selectAllTutor(String YN) throws FindException{
 		List<Tutor> tutorList = new ArrayList<>();
@@ -38,5 +38,13 @@ public class TutorDAO {
 			throw new FindException("검색 결과가 없습니다");
 		
 		return tutorList;
+	}
+	
+	//강사등록 : 경찬
+	public void insertTutor(Tutor tutor)throws AddException{
+		SqlSession session = null;
+		session = sqlSessionFactory.openSession();
+		session.insert("TutorMapper.insertTutor",tutor);
+		
 	}
 }
