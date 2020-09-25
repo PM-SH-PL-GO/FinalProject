@@ -17,10 +17,23 @@ import lombok.extern.log4j.Log4j;
 @Controller
 public class HomeController {
 
-//	@RequestMapping("/admin")
-//	public void admin() {
-//		System.out.println("admin 입장");
-//	}
+	@RequestMapping({"/index", "/"})
+	public String admin() {
+		System.out.println("index 입장");
+		return "/index";
+	}
+
+	@RequestMapping("/customLogin")
+	public void customLogin(String error, String logout, Model model) {
+		log.info("error : " + error);
+		log.info("logout : " + logout);
+		
+		if (error != null) 
+			model.addAttribute("error", "Login error check your accout");
+		
+		if (logout != null) 
+			model.addAttribute("logout", "Login error check your accout");
+	}
 	
 //	@RequestMapping(value = "/studyBoard", method = RequestMethod.GET)
 //	public void studyBoard(Locale locale, Model model) {

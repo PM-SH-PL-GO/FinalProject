@@ -136,6 +136,8 @@ public class AdminService {
 			map.put("status", "승인대기");
 		else
 			throw new ModifyException("승인/반려 이외의 글자가 전달되었습니다 : " + status);
+		
+		lectureDAO.updateLectureStatusByIdAndStatus(map);
 	}
 	
 	

@@ -197,12 +197,12 @@ public class LectureDAO {
 		return lectureList;
 	}
 	
-	public void updateLectureStatusByIdAndStatus(String lecture_id, String status) throws ModifyException{
+	public void updateLectureStatusByIdAndStatus(Map<String, String> map) throws ModifyException{
 		SqlSession session = null;
 		
 		try {
 			session = sqlSessionFactory.openSession();
-			session.update("LectureMapper.updateLectureStateByIdAndStatus");
+			session.update("LectureMapper.updateLectureStateByIdAndStatus", map);
 		}catch(DataAccessException e) {
 			e.printStackTrace();
 			throw new ModifyException("설정을 변경하는 중 에러가 발생했습니다");
