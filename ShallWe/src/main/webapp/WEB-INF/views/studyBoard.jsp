@@ -168,11 +168,11 @@ function formatDate(date) {
 </script>
 </head>
 <body>
-	<main>
 		<!-- topbar Start -->
 		<div class="topMenu">
 			<jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
 		</div>
+	<main>
 		<!-- topbar End -->
 		<!--게시판 Start -->
 		<div class="listing-area pt-150">
