@@ -33,27 +33,27 @@ public class TutorController {
 	@GetMapping(value="showTutor")
 	public ModelAndView showTutorInfo(HttpSession session) throws FindException {
 		
-		String member_id = "championcom";
-//		String member_id = (String)session.getAttribute("loginInfo");
+		String member_id = (String)session.getAttribute("loginInfo");
+//		String member_id = "championcom";
+		Member member  = new Member();
+		member.setMember_id(member_id);
+		Tutor t = new Tutor();
+		t.setMember(member);
+
 		ModelAndView model = new ModelAndView();
 		List<Tutor> tutor_id = new ArrayList<>();
-		Tutor t = new Tutor();
+		
 		
 		if (member_id == null) {
 			
 			throw new FindException("예외발생:로그인 안되어 있음");
 			
 		}
-		
-		Member member  = new Member();
-		member.setMember_id(member_id);
-		t.setMember(member);
-		
 		try {
 			
 			tutor_id = service.showTutorInfo(t);
 			model.setViewName("/tutorInfo");
-			model.addObject("t", t);
+			model.addObject("t", tutor_id);
 			
 		} catch (FindException e) {
 			

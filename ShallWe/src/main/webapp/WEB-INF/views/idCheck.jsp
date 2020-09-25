@@ -137,14 +137,6 @@ label.light {
 <script>
 $(function(){
 	
-	$('.resume').on('click', function() {
-	    var $this = $(this);
-	  $this.button('loading');
-	    setTimeout(function() {
-	       $this.button('reset');
-	   }, 2000);
-	});
-
 
 	let mailR= /^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/i;
 	let $msgMail = $("span.mailR");

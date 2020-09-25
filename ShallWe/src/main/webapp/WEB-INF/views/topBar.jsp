@@ -126,6 +126,7 @@ $(function(){
 	$("#signOut").click(function(){
 		$.ajax({
 			url:"/shallwe/member/memberLogout"
+			,method:"POST"
 			,success:function(data){
 				var responseObj = JSON.parse(data);
 				if(responseObj.status =="success"){
