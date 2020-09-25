@@ -35,9 +35,14 @@
 <fmt:parseNumber value="${now.time/(1000*60*60*24)}" integerOnly="true" var="nowDate" />
 $(function(){
 	let letidValue = $("input[name=listlecture_id]").val();
-	$("#gotoDe").click(function(){
+	$("div[name=gotoDe]").click(function(){
 		location.href = "/shallwe/lectures/detail?lecture_id=" +letidValue;		
 	});
+	let letidendValue = $("input[name=listendlecture_id]").val();
+	$("div[name=gotoDeend]").click(function(){
+		location.href = "/shallwe/lectures/detail?lecture_id=" +letidendValue;		
+	});
+	return false;
 });
 </script>
 <body>
@@ -70,13 +75,13 @@ $(function(){
 							<!-- Single -->
 							<div class="properties pb-20">
 								<div class="properties__cardseo">
-									<div id="gotoDe">
+									<div name="gotoDe" style="cursor: pointer;">
 										<div class="properties__imgseo overlay1">
 											<img src="/shallwe/lecture/${lecture.lecture_img}" alt=""
 												style="cursor: pointer;">
 
 										</div>
-										<div class="properties__caption" style="cursor: pointer;">
+										<div class="properties__caption">
 											<h3>
 												<a href="#">${lecture.lecture_title}</a>
 											</h3>
@@ -85,7 +90,8 @@ $(function(){
 											<h6>현재인원: ${lecture.lecture_current} / 최대인원:
 												${lecture.lecture_max}</h6>
 										</div>
-										<input type="hidden" name="listlecture_id" value="${lecture.lecture_id}" />
+										<input type="hidden" name="listlecture_id"
+											value="${lecture.lecture_id}" />
 									</div>
 									<div
 										class="properties__footer d-flex justify-content-between align-items-center">
@@ -134,18 +140,21 @@ $(function(){
 							<!-- Single -->
 							<div class="properties pb-20">
 								<div class="properties__cardseo">
-									<div name="divimg" class="properties__imgseo overlay1">
-										<a href="#"><img
-											src="/shallwe/lecture/${lecture.lecture_img}" alt=""></a>
-									</div>
-									<div class="properties__caption">
-										<h3>
-											<a href="#">${lecture.lecture_title}</a>
-										</h3>
-										<h6>${startDt}~${endDt}</h6>
-										<h6>${tutor.tutor_nickname}</h6>
-										<h6>현재인원: ${lecture.lecture_current} / 최대인원:
-											${lecture.lecture_max}</h6>
+									<div name="gotoDeend" style="cursor: pointer;">
+										<div class="properties__imgseo overlay1">
+											<img src="/shallwe/lecture/${lecture.lecture_img}" alt="">
+										</div>
+										<div class="properties__caption">
+											<h3>
+												<a href="#">${lecture.lecture_title}</a>
+											</h3>
+											<h6>${startDt}~${endDt}</h6>
+											<h6>${tutor.tutor_nickname}</h6>
+											<h6>현재인원: ${lecture.lecture_current} / 최대인원:
+												${lecture.lecture_max}</h6>
+										</div>
+										<input type="hidden" name="listendlecture_id"
+											value="${lecture.lecture_id}" />
 									</div>
 									<div
 										class="properties__footer d-flex justify-content-between align-items-center">
