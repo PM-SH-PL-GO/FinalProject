@@ -13,6 +13,8 @@ import org.springframework.stereotype.Repository;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
+import com.shallwe.vo.LectureCategory;
+import com.shallwe.vo.Member;
 import com.shallwe.vo.Tutor;
 
 @Repository(value = "tutorDAO")
@@ -41,10 +43,27 @@ public class TutorDAO {
 	}
 	
 	//강사등록 : 경찬
-	public void insertTutor(Tutor tutor)throws AddException{
+	public void insertTutor(Tutor tutor,String[]category)throws AddException{
 		SqlSession session = null;
 		session = sqlSessionFactory.openSession();
-		session.insert("TutorMapper.insertTutor",tutor);
+		LectureCategory lectureCategory = new LectureCategory();
+	
+		for(String t: category) {
+			
+			lectureCategory.setLecture_category_id(t);
+			tutor.setLectureCategory(lectureCategory);
+			session.insert("TutorMapper.insertTutor",tutor);
+			
+		}
+		
+	}
+	
+	//강의상세보기: 경찬
+	public List<Tutor> TutorInfo(Tutor tutor_id) {
+		
+		SqlSession session = null;
+		session = sqlSessionFactory.openSession();
+		return session.selectList("TutorMapper.selectTutorInfo",tutor_id);
 		
 	}
 }

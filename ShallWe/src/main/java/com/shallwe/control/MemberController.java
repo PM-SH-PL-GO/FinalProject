@@ -69,11 +69,10 @@ public class MemberController {
 //	}
 	@ResponseBody
 	//멤버로그인:경찬
-	@RequestMapping(value="/memberLogin")
+	@RequestMapping(value="/memberLogin",method=RequestMethod.POST)
 	public ModelAndView memberLogin(HttpSession session, @RequestParam(value="member_id")String member_id,
 														 @RequestParam(value="member_pwd")String member_pwd
 												   ) {
-		
 		ModelAndView modelAndView = new ModelAndView();
 		
 		try {
@@ -92,7 +91,7 @@ public class MemberController {
 		return modelAndView;
 	}
 	//멤버로그아웃:경찬
-	@RequestMapping(value="/memberLogout")
+	@RequestMapping(value="/memberLogout",method=RequestMethod.POST)
 	public ModelAndView memberLogout(HttpSession session) {
 		
 		ModelAndView modelAndView = new ModelAndView();
@@ -106,7 +105,7 @@ public class MemberController {
 	}
 	
 	//비밀번호체인지(로그인x)
-	@RequestMapping(value="/changePassword")
+	@RequestMapping(value="/changePassword",method=RequestMethod.POST)
 	public ModelAndView changePassword(@RequestParam Map<String,Object>member,Model model) {
 		
 		ModelAndView modelAndView = new ModelAndView();

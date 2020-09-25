@@ -50,6 +50,7 @@
 }
 </style>
 <script>
+
 $(function(){
 	$('#searchBtn').click(function(){
 		var $searchText = $('#searchText').val()
@@ -65,6 +66,7 @@ $(function(){
 	});
 	
 });
+>>>>>>> pre_master
 
 </script>
 </head>
