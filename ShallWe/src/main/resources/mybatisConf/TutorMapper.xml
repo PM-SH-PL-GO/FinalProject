@@ -39,7 +39,7 @@
 				VALUES(#{member.member_id},UPPER(#{lectureCategory.lecture_category_id}),#{tutor_img},
 				#{tutor_career_file},#{tutor_introduce},#{tutor_link},#{tutor_score},#{tutor_nickname})
 	</insert>
-	<select id="selectTutorInfo" resultMap="tutor">
+	<select id="selectTutorInfo" resultType="tutor">
 	
 		SELECT ME.MEMBER_NAME, TU.*,ME.MEMBER_EMAIL,ME.MEMBER_PHONE
 		FROM TUTOR TU JOIN MEMBER ME ON(TU.TUTOR_ID = ME.MEMBER_ID)
