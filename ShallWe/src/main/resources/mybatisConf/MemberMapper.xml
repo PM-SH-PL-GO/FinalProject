@@ -111,12 +111,22 @@
 <!-- 					  member_favorite3 fav3 = #{favorite_list.favorite3.lecture_category_id}  -->
 <!-- 	WHERE member_id = #{member_id} -->
 <!-- 	</update> -->
-	
+
+<!-- member(SH) : 회원가입 -->	
 	<insert id="joinMember" parameterType="MemberInfoBean">
 	INSERT INTO member(member_id, member_pwd, member_name, member_email, member_phone, member_favorite1, member_favorite2, member_favorite3, member_sex, tutor_yn)
-	VALUES(#{memberId}, #{memberPwd}, #{memberName}, #{memberEmail}, #{memberPhone}, #{favorite1.lecture_category_id}, #{favorite2.lecture_category_id}, #{favorite3.lecture_category_id}, #{memberSex}, #{tutorYN})
+	VALUES(#{memberId}, #{memberPwd}, #{memberName}, #{memberEmail}, #{memberPhone} ,#{favorite1.lecture_category_id}, #{favorite2.lecture_category_id}, #{favorite3.lecture_category_id} , #{memberSex}, 'N')
 	</insert>
-	
+<!-- 	#{favorite1.lecture_category_id}, #{favorite2.lecture_category_id}, #{favorite3.lecture_category_id} 
+#{memberPhone}-->
+<!-- member(SH) : 아이디 중복체크 -->	
+	<select id="checkId" resultType="MemberInfoBean">
+	select member_id from member
+	<if test="memberId!=null">
+	where member_id=#{memberId};
+	</if>
+	</select>
+
 <!-- admin(jun6) : 예비강사 승인/반려 -->
 	<update id="updateTutorState" parameterType="map">
 		UPDATE member
