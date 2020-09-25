@@ -34,13 +34,9 @@
 <fmt:formatDate pattern="yyyy-MM-dd" value="${now}" />
 <fmt:parseNumber value="${now.time/(1000*60*60*24)}" integerOnly="true" var="nowDate" />
 $(function(){
+	let letidValue = $("input[name=listlecture_id]").val();
 	$("#gotoDe").click(function(){
-		let letidValue = $("input[name=listlecture_id]").val();
-		$.ajax({
-			url: "/shallwe/lectures/detail",
-			method: "POST",
-			data: {'lecture_id' : letidValue}
-		});
+		location.href = "/shallwe/lectures/detail?lecture_id=" +letidValue;		
 	});
 });
 </script>
