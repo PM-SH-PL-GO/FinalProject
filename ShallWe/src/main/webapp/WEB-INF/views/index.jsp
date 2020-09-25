@@ -66,7 +66,6 @@ $(function(){
 	});
 	
 });
->>>>>>> pre_master
 
 </script>
 </head>
