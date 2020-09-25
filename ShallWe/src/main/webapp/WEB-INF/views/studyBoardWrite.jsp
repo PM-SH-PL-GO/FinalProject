@@ -101,7 +101,7 @@
 					<div class="form-group">
 						<input class="form-control valid" name="studyBoard_title"
 							id="title" type="text" onfocus="this.placeholder = ''"
-							onblur="this.placeholder = '제목을 입력하세요'" placeholder="제목을 입력하세요">
+							onblur="this.placeholder = '제목을 입력하세요'" placeholder="제목을 입력하세요" value="${sb.studyBoard_title}">
 					</div>
 				</div>
 				<div class="row">
@@ -109,7 +109,7 @@
 						<h4>내용</h4>
 						<div class="form-group">
 							<textarea name="studyBoard_content" id="weditor" rows="10"
-								cols="100" placeholder="내용을 입력하세요"></textarea>
+								cols="100" placeholder="내용을 입력하세요">${sb.studyBoard_content}</textarea>
 						</div>
 					</div>
 					<div class="col-sm-6">
@@ -118,7 +118,7 @@
 						<div class="form-group">
 							<input class="form-control valid" name="studyBoard_fileName"
 								id="fileLoad" type="text" onfocus="this.placeholder = ''"
-								onblur="this.placeholder = '파일첨부'" placeholder="파일첨부">
+								onblur="this.placeholder = '파일첨부'" placeholder="파일첨부" value="${sb.studyBoard_fileName}">
 						</div>
 					</div>
 				</div>
