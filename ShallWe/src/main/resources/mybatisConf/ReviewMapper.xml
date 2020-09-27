@@ -4,25 +4,63 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ReviewMapper">
 
+	<resultMap id="ReviewMap" type="Review" autoMapping="true">
+			<id property="review_content" column="review_content" />
+			<id property="review_dt" column="review_dt" />
+		<association property="member_lecture_history" javaType="MemberLectureHistory" autoMapping="true">
+			<association property="member" javaType="Member" autoMapping="true">
+				<id property="member_id" column="member_id" />
+			</association>
+			<association property="lecture" javaType="Lecture" autoMapping="true">
+				<id property="lecture_id" column="lecture_id" />
+				<association property="tutor" javaType="Tutor" autoMapping="true">
+					<association property="member" javaType="Member" autoMapping="true">
+						<id property="member_id" column="lecture_tutor_id" />
+					</association>
+				</association>
+				<association property="lectureCategory" javaType="LectureCategory" autoMapping="true">
+					<id property="lecture_category_id" column="lecture_category_id" />
+				</association>
+			</association>
+		</association>
+	</resultMap>
+
+
+
+
 	<!--강의후기 추가 프로시저 -->
 	<insert id="insertReivew" parameterType="ReviewBean" statementType="CALLABLE">
-		{ call 	INSERT_REVIEW (
+		{ call 	INSERT_REVIEW_TEST (
 			#{lectureCategoryId} 
 			, #{memberId}
 			, #{lectureId}
 			, #{reviewScore} 
 			, #{reviewContent}
+			, #{tutorId}
 		)}
 	</insert>
 	
 	<!-- 강의후기 삭제 프로시저 -->
-	<delete id="deleteReivew" parameterType="ReviewBean" statementType="CALLABLE">
-		{ call  DELETE_REVIEW (
+	<delete id="deleteReivew" parameterType="hashMap" statementType="CALLABLE">
+		{ call  DELETE_REVIEW_TEST (
 			#{lectureCategoryId} 
-			, #{memberId}
-			, #{lectureId}
+			, #{member_id}
+			, #{lecture_id}
+			, #{tutor_id}
 		)}
 	</delete>
+	<!-- 강의후기 목록조회 -->
+	<select id="selectReivewList" parameterType="hashMap" resultMap= "ReviewMap">
+		SELECT review.lecture_category_id
+		, review.member_id
+		, review.lecture_id
+		, review_content
+		, review_dt
+		, lecture_tutor_id
+		 FROM REVIEW review
+		JOIN LECTURE lec ON lec.lecture_id = review.lecture_id
+		WHERE lec.lecture_tutor_id = #{tutor_id} AND review.lecture_category_id = #{category_id}
+	</select>
 	
 </mapper>
 

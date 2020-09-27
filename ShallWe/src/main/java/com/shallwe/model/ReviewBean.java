@@ -19,5 +19,5 @@ public class ReviewBean {
 	private String reviewContent;
 	private int lectureId;
 	private int reviewScore;
-	
+	private String tutorId;
 }

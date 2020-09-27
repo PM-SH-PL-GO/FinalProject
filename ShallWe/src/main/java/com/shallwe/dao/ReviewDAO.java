@@ -1,13 +1,20 @@
 package com.shallwe.dao;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.shallwe.exception.AddException;
+import com.shallwe.exception.FindException;
 import com.shallwe.exception.RemoveException;
 import com.shallwe.model.ReviewBean;
+import com.shallwe.vo.Review;
 
 import lombok.extern.log4j.Log4j;
 
@@ -37,12 +44,12 @@ public class ReviewDAO {
 		
 	}
 	// 후기 삭제 (수강생) : 수정
-	public void deleteReivew ( ReviewBean reviewBean ) throws RemoveException {
+	public void deleteReivew ( Map<String, String> map ) throws RemoveException {
 		int result = 0;
 		try {
 			// DB와의 연결
 			SqlSession session = sqlSessionFactory.openSession();
-			result = session.delete("ReviewMapper.deleteReivew", reviewBean);
+			result = session.delete("ReviewMapper.deleteReivew", map);
 			if ( result == 0 ) {
 				log.info("강의 리뷰 삭제에 실패했습니다!");
 			}
@@ -51,6 +58,27 @@ public class ReviewDAO {
 			throw new RemoveException(e.getMessage());
 		}
 		
+	}
+	
+	// 강사별, 카테고리별 후기 목록조회 : 수정
+	public List<Review> selectReivew (Map<String,String> map ) throws FindException {
+		List<Review> list = new ArrayList<Review>();
+		try {
+			// DB와의 연결
+			SqlSession session = sqlSessionFactory.openSession();
+			list = session.selectList("ReviewMapper.selectReivewList", map);
+			if ( list.size() == 0 ) {
+				log.info("강사별 후기 목록 조회 결과 없습니다.");
+			} else {
+				for ( Review r : list ) {
+					log.info(r);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		}
+		return list;
 	}
 
 }
