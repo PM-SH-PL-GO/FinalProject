@@ -29,43 +29,6 @@
 <link rel="stylesheet" href="assets/css/style.css">
 
 <style>
-/* DivTable.com */
-.divTable {
-	display: table;
-	width: 100%;
-}
-
-.divTableRow {
-	display: table-row;
-}
-
-.divTableHeading {
-	background-color: #EEE;
-	display: table-header-group;
-}
-
-.divTableCell, .divTableHead {
-	border: 1px solid #999999;
-	display: table-cell;
-	padding: 3px 10px;
-}
-
-.divTableHeading {
-	background-color: #EEE;
-	display: table-header-group;
-	font-weight: bold;
-}
-
-.divTableFoot {
-	background-color: #EEE;
-	display: table-footer-group;
-	font-weight: bold;
-}
-
-.divTableBody {
-	display: table-row-group;
-}
-
 /* modal CSS */
 .md_top {
 	padding: 1em;
@@ -136,42 +99,6 @@ textarea {
   background-color: #f8f8f8;
   font-size: 16px;
   resize: none;
-}
-
-.divTable {
-	display: table;
-	width: 100%;
-}
-
-.divTableRow {
-	display: table-row;
-}
-
-.divTableHeading {
-	background-color: #EEE;
-	display: table-header-group;
-}
-
-.divTableCell, .divTableHead {
-	border: 1px solid #999999;
-	display: table-cell;
-	padding: 3px 10px;
-}
-
-.divTableHeading {
-	background-color: #EEE;
-	display: table-header-group;
-	font-weight: bold;
-}
-
-.divTableFoot {
-	background-color: #EEE;
-	display: table-footer-group;
-	font-weight: bold;
-}
-
-.divTableBody {
-	display: table-row-group;
 }
 
 /*만족도*/
@@ -289,7 +216,15 @@ textarea {
 	input[type=range]:focus::-ms-fill-upper {
 		background: #ccc;
 	}
-}
+	
+	/* table css*/
+	table {
+	  text-align: center;
+	  margin: 50px auto 0;
+	  border-collapse: collapse;
+	  width: 100%;
+	}
+} 
 </style>
 
 <script
@@ -415,19 +350,14 @@ $(document).ready(function() {
 				<button>X</button>
 			</div>
 			<h1 id="title">강의후기</h1>
-			<div class="divTable">
-				<div class=divTableRow>
-					<div class="divTableCol">
-						<img src="lecture/${lecture.lecture_img}" class="mb-10" alt="강사사진">
-					</div>
-					<div class="divTableCol">
-						<span id="lecutureTitle"><label>강의명 :</label>${lecture.lecture_title}</span><br> 
-						<span><label>강사 :</label> ${lecture.tutor.member.member_id}</span>
-						
-					</div>
-				</div>
+			<table>
+		   		<tbody>
+					<tr><th>강의이미지</th><td class="img"><img id ="lecture_img" src="lecture/${lecture.lecture_img}" class="mb-10" alt="강사사진"> </td></tr>
+					<tr><th>강의명</th><td class="title">${lecture.lecture_title}</td></tr>
+					<tr><th>강사명</th><td class="tutorId">${lecture.tutor.member.member_id}</td></tr>
+				</tbody>
+			</table>
 
-			</div>
 			<!--review-->
 			<div class="modal_text">
 				<form class="form-contact comment_form" id="commentForm">
@@ -454,7 +384,6 @@ $(document).ready(function() {
 				</form>
 			</div>
 			<!-- end of modal_text -->
-
 		</div>
 		<!-- end of md_content -->
 	</div>
