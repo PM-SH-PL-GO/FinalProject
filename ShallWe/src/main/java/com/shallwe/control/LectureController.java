@@ -98,10 +98,15 @@ public class LectureController {
 
 	// 강사 강의 등록 : 동일
 	@PostMapping(value = "/insert")
-	public ModelAndView insertLecture(Tutor tutor, HttpSession session, LectureDetail lectDe, MultipartFile lecture_img) throws AddException {
+//	@RequestMapping(value = "/insert", method = {RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView insertLecture(LectureDetail lectDe, HttpSession session, MultipartFile lecture_img) throws AddException {
+		System.out.println(1);
+		System.out.println(lectDe);
+		System.out.println(2);
 		ModelAndView mnv = new ModelAndView();
 		String tutor_id = (String)session.getAttribute("loginInfo");
 		Member m = new Member();
+		Tutor tutor = new Tutor();
 		m.setMember_id(tutor_id);
 		String lect_img = saveLectFile(lecture_img);
 		tutor.setMember(m);

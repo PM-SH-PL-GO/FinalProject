@@ -51,29 +51,26 @@
 		}
 	}
 	$(function () {
-		$('#insertBtn')
-			.on(
-				"click",
+		$('#insertBtn').on("click",
 				function () {
-					let form = $("#formLectureRegistration")[0];
-					let formData = new FormData(form);
-					formData.append("lecture_img", $("#lectureImgFile")[0].files[0]);
+// 					let form = $("#formLectureRegistration")[0];
+// 					let formData = new FormData(form);
+// 					alert(formData);
+// 					formData.append("lecture_img", $("#lectureImgFile")[0].files[0]);
 // 					formData.append("name", "id")[0].files[0];
-					
 					let lectureTitleValue = $("#lectureTitle").val();
 					let lectureIntroValue = $("#lectureIntro").val();
-// 					let curiculumValue = $("#curiculum").val();
-// 					let locationValue = $("input[name=lecture_location]").val();
-// 					let firstDateValue = $("#firstDate").val();
-// 					let lastDateValue = $("#lastDate").val();
-// 					let pMinValue = $("#pMin").val();
-// 					let pMaxValue = $("#pMax").val();
-// 					let preparedValue = $("#prepared").val();
-// 					let cautionValue = $("#caution").val();
-// 					let priceValue = $("#price").val();
-// 					let cateValue = $("#lectCate option:selected").val();
-// 					let lectureImgFileValue = $("#lectureImgFile").val();
-					alert(lectureImgFileValue);
+					let curiculumValue = $("#curiculum").val();
+					let locationValue = $("input[name=lecture_location]").val();
+					let firstDateValue = $("#firstDate").val();
+					let lastDateValue = $("#lastDate").val();
+					let pMinValue = $("#pMin").val();
+					let pMaxValue = $("#pMax").val();
+					let preparedValue = $("#prepared").val();
+					let cautionValue = $("#caution").val();
+					let priceValue = $("#price").val();
+					let cateValue = $("#lectCate option:selected").val();
+					let lectureImgFileValue = $("#lectureImgFile")[0].files[0];
 					if (lectureTitleValue == "") {
 						alert("제목을 입력하세요.");
 						$("lectureTitleValue").focus();
@@ -81,32 +78,12 @@
 						alert("강의 소개를 입력하세요.");
 						$("lectureIntroValue").focus();
 					} else {
-						console.log($("#formLectureRegistration").serialize());
 						$.ajax({
-								url: "/shallwe/insert",
+								url: "/shallwe/lectures/insert",
 								method: "POST",
-								data: formData
-								
-// 								$("#formLectureRegistration").serialize() + "&lecture.lecture_img=" + lectureImgFileValue
-								
-// 								{
-// 									'lecture.lecture_title': lectureTitleValue,
-// 									'lecture_introduce': lectureIntroValue,
-// 									'lecture_curriculum': curiculumValue,
-// 									'lecture_location': locationValue,
-// 									'lecture.lecture_start_dt': firstDateValue,
-// 									'lecture.lecture_end_dt': lastDateValue,
-// 									'lecture.lecture_min': pMinValue,
-// 									'lecture.lecture_max': pMaxValue,
-// 									'lecture_prepared': preparedValue,
-// 									'lecture_caution': cautionValue,
-// 									'lecture.lecture_price': priceValue,
-// 									'lecture.lectureCategory.lecture_category_id': cateValue,
-// 									'lecture.tutor.member.member_id': 'member2',
-// 									'lecture.lecture_img': lectureImgFileValue,
-// 									'lecture.lecture_state': '승인대기'
-// 								}
-							,
+								data:
+									$("#formLectureRegistration").serialize() + "&lecture.lecture_img=" + lectureImgFileValue
+									,
 								success: function (data) {
 									let responseObj = JSON
 										.parse(data);
