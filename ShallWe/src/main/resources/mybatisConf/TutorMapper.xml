@@ -17,6 +17,9 @@
 		
 		<association property="member" javaType="Member" autoMapping="true">
 			<id property="member_id" column="tutor_id"/>
+			<result property="member_name" column="member_name"/>
+			<result property="member_email" column="member_email"/>
+			<result property="member_phone" column="member_phone"/>
 		</association>
 		<association property="lectureCategory" javaType="LectureCategory" autoMapping="true">
 			<id property="lecture_category_id" column="tutor_category_id"/>
@@ -39,13 +42,25 @@
 				VALUES(#{member.member_id},UPPER(#{lectureCategory.lecture_category_id}),#{tutor_img},
 				#{tutor_career_file},#{tutor_introduce},#{tutor_link},#{tutor_score},#{tutor_nickname})
 	</insert>
-	<select id="selectTutorInfo" resultType="tutor">
 	
-		SELECT ME.MEMBER_NAME, TU.*,ME.MEMBER_EMAIL,ME.MEMBER_PHONE
-		FROM TUTOR TU JOIN MEMBER ME ON(TU.TUTOR_ID = ME.MEMBER_ID)
-		WHERE TU.TUTOR_ID = #{tutor_id}
+	<select id="selectTutorInfo" resultMap="tutor">
+	
+		SELECT m.member_name, tu.*, m.member_email, m.member_phone ,lc.category_name, m.tutor_YN
+		FROM tutor tu 
+		JOIN member m ON(tu.tutor_id = m.member_id)
+		JOIN lecture_category lc ON (tu.tutor_category_id = lc.category_id)
+		WHERE tu.tutor_id = #{tutor_id}
 
 	</select>
 	
+	<select id="checkNickName" resultType="int">
+			SELECT COUNT(*) 
+			FROM TUTOR
+			WHERE TUTOR_NICKNAME = #{tutor_nickname}			
+	</select>
+	
+	<delete id="deltutor" parameterType="Tutor">
+	DELETE FROM TUTOR WHERE TUTOR_ID = #{tutor_id}
+	</delete>
 	
 </mapper>

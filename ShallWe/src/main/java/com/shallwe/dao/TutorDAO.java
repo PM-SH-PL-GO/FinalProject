@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
+import com.shallwe.exception.RemoveException;
 import com.shallwe.vo.LectureCategory;
 import com.shallwe.vo.Member;
 import com.shallwe.vo.Tutor;
@@ -55,15 +56,64 @@ public class TutorDAO {
 			session.insert("TutorMapper.insertTutor",tutor);
 			
 		}
+		session.close();
 		
 	}
 	
-	//강의상세보기: 경찬
-	public List<Tutor> TutorInfo(Tutor tutor_id) {
+	//강사상세보기: 경찬
+	public List<Tutor> TutorInfo(String tutor_id)throws FindException {
 		
 		SqlSession session = null;
 		session = sqlSessionFactory.openSession();
-		return session.selectList("TutorMapper.selectTutorInfo",tutor_id);
+		List<Tutor> list = null;
+		try {
+			list =session.selectList("TutorMapper.selectTutorInfo",tutor_id);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		} finally {
+		
+			session.close();
+		}
+		
+		return list;
+	}
+	
+	//강사닉네임중복체크: 경찬
+	public int checkNickName(String tutor_nickName) throws FindException {
+		SqlSession session = null;
+		session = sqlSessionFactory.openSession();
+		 int nickNameCheck = 0;
+		try {
+			
+			 nickNameCheck = session.selectOne("TutorMapper.checkNickName",tutor_nickName);
+			 
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		}finally {
+			
+			 session.close();
+		}
+		return nickNameCheck;
+	}
+	//강사등록취소: 경찬
+	public void dellTutor(String tutor_id) throws RemoveException{
+		SqlSession session = null;
+		session = sqlSessionFactory.openSession();
+		
+		try {
+			session.delete("TutorMapper.deltutor",tutor_id);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RemoveException(e.getMessage());
+		} finally {
+			session.close();
+		}
+		
 		
 	}
+	
 }
