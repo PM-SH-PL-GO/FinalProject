@@ -25,3 +25,4 @@ servers/
 *.class
 # Log file
 *.log
+ShallWe/.settings/

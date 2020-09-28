@@ -9,6 +9,12 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.shallwe.exception.AddException;
+import com.shallwe.exception.FindException;
+import com.shallwe.exception.ModifyException;
+import com.shallwe.vo.StudyBoard;
 
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
@@ -22,6 +28,7 @@ public class StudyBoardDAO {
 	SqlSessionFactory sqlSessionFactory;
 	// 게시글 전체 조회(+페이징) : 성운
 	public List<StudyBoard> selectAll(Map<String, Object> map) throws FindException{
+		System.out.println("selectAllDAO");
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
 		List<StudyBoard> list = session.selectList("StudyBoardMapper.selectAll", map);
@@ -57,8 +64,8 @@ public class StudyBoardDAO {
 	public void insert(StudyBoard board) throws AddException {
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
-		session.selectOne("StudyBoardMapper.insert", board);
-			if(board.getStudy_m().getMember_id()==null) {
+		session.insert("StudyBoardMapper.insert", board);
+			if(board.getMember().getMember_id()==null) {
 				throw new AddException("해당하는 주문이 없습니다.");
 			}
 		}catch (Exception e) {
@@ -72,7 +79,7 @@ public class StudyBoardDAO {
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
 		session.update("StudyBoardMapper.update", board);
-			if(board.getStudy_m().getMember_id()==null) {
+			if(board.getMember().getMember_id()==null) {
 				throw new ModifyException("수정할 데이터가 없습니다.");
 			}
 		}catch (Exception e) {
@@ -85,7 +92,7 @@ public class StudyBoardDAO {
 	public void delete(int studyBoard_id) throws RemoteException {
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
-		session.delete("StudyBoardMapper.delete", studyBoard_id);
+			session.update("StudyBoardMapper.delete", studyBoard_id);
 		if(studyBoard_id == 0) {
 			throw new RemoteException("삭제할 게시물이 존재하지않습니다.");
 		}		
@@ -99,14 +106,39 @@ public class StudyBoardDAO {
 	//게시글 수 조회 : 성운
 	public int selectCount() {
 		SqlSession session = sqlSessionFactory.openSession();
-		int selectcount = session.selectOne("StudyBoardMapper.selectCount");
-		return selectcount;
+		try {
+			int selectcount = session.selectOne("StudyBoardMapper.selectCount");
+			return selectcount;
+		}finally {
+			session.close();	
+		}
 	}
 	
-	//조회수 삽입 : 성운
-	public void insertViews(int studyBoard_id) {
+	//검색 게시글 수 조회 : 성운
+	public int SearchSelectCount(Map<String, Object> map) {
 		SqlSession session = sqlSessionFactory.openSession();
-		session.selectOne("StudyBoardMapper.insertViews", studyBoard_id);
+		try {
+			int selectcount = session.selectOne("StudyBoardMapper.SerachSelectCount",map);
+			return selectcount;
+		}finally {
+			session.close();	
+		}
+	}
+	
+	
+	//게시글 번호로 조회
+	@Transactional(rollbackFor = FindException.class)
+	public StudyBoard selectByNo(int studyBoard_id) throws FindException {
+		SqlSession session = sqlSessionFactory.openSession();
+		try {
+		session.insert("StudyBoardMapper.insertViews", studyBoard_id);
+		StudyBoard studBoard = session.selectOne("selectByNo", studyBoard_id);
+		return studBoard;
+		}catch (Exception e) {
+			throw new FindException("게시글을 찾기못했습니다.");
+		}finally {
+			session.close();
+		}
 	}
 	
 	

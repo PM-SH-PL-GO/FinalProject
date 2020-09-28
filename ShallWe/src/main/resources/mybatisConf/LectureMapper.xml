@@ -3,5 +3,200 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="LectureMapper">
+	<!-- 강의 추가 : 동일 -->
+	<insert id="insert" parameterType="Lecture">
+		INSERT INTO
+		lecture(LECTURE_ID, LECTURE_CATEGORY_ID, LECTURE_TUTOR_ID,
+		LECTURE_IMG, LECTURE_TITLE, LECTURE_PRICE, LECTURE_STATE,
+		LECTURE_START_DT, LECTURE_END_DT, LECTURE_MAX, LECTURE_MIN,
+		LECTURE_CURRENT)
+		VALUES(lecture_seq.nextVal,
+		#{lectureCategory.lecture_category_id},
+		#{tutor.member.member_id},
+		#{lecture_img}, #{lecture_title},
+		#{lecture_price}, #{lecture_state},
+		#{lecture_start_dt},
+		#{lecture_end_dt},
+		#{lecture_max}, #{lecture_min}, 0)
+	</insert>
+	<!-- 강의 수정 : 동일 -->
+	<update id="update" parameterType="Lecture">
+		UPDATE lecture
+		SET
+		LECTURE_IMG =
+		#{lecture_img}, LECTURE_TITLE = #{lecture_title},
+		LECTURE_PRICE =
+		#{lecture_price}
+		, LECTURE_START_DT =
+		#{lecture_start_dt},
+		LECTURE_END_DT = #{lecture_end_dt},
+		LECTURE_MAX =
+		#{lecture_max},
+		LECTURE_MIN = #{lecture_min}
+		WHERE LECTURE_ID =
+		#{lecture_id}
+	</update>
+	<!-- 강의 취소 요청 : 동일 -->
+	<update id="cancelRequest" parameterType="Lecture">
+		UPDATE lecture
+		SET
+		LECTURE_STATE = #{lecture_state}
+		WHERE LECTURE_ID = #{lecture_id}
+	</update>
+
+	<resultMap id="LectureSearchMap" type="Lecture"
+		autoMapping="true">
+		<id property="lecture_id" column="lecture_id" />
+		<id property="lecture_img" column="lecture_img" />
+		<id property="lecture_title" column="lecture_title" />
+		<id property="lecture_price" column="lecture_price" />
+		<id property="lecture_state" column="lecture_state" />
+		<id property="lecture_start_dt" column="lecture_start_dt" />
+		<id property="lecture_end_dt" column="lecture_end_dt" />
+		<id property="lecture_max" column="lecture_max" />
+		<id property="lecture_min" column="lecture_min" />
+		<id property="lecture_current" column="lecture_current" />
+		<association property="lectureCategory"
+			javaType="LectureCategory" autoMapping="true">
+			<id property="lecture_category_id" column="category_id" />
+			<id property="lecture_category_name" column="category_name" />
+		</association>
+		<association property="tutor" javaType="Tutor"
+			autoMapping="true">
+			<id property="tutor_nickname" column="tutor_nickname" />
+			<id property="tutor_score" column="tutor_score" />
+		</association>
+	</resultMap>
+
+	<!-- lecture 검색 -->
+	<select id="selectLectureListBySearch" parameterType="hashMap"
+		resultMap="LectureSearchMap">
+		SELECT
+		lec.lecture_id, lecture_img, lecture_title, lecture_price,
+		lecture_price,
+		lecture_state
+		, lecture_start_dt, lecture_end_dt,
+		lecture_max, lecture_min,
+		lecture_current
+		, lecc.category_id,
+		lecc.category_name
+		, tutor_nickname, tutor_score
+		FROM LECTURE lec
+		JOIN
+		TUTOR tut ON (lec.LECTURE_CATEGORY_ID = tut.TUTOR_CATEGORY_ID AND
+		lec.LECTURE_TUTOR_ID = tut.TUTOR_ID)
+		JOIN LECTURE_CATEGORY lecc ON
+		(tut.TUTOR_CATEGORY_ID= lecc.CATEGORY_ID)
+		JOIN LECTURE_DETAIL lecd ON
+		(lec.lecture_id = lecd.LECTURE_ID AND
+		lec.LECTURE_CATEGORY_ID =
+		lecd.LECTURE_CATEGORY_ID)
+		WHERE lec.LECTURE_STATE = '승인'
+		AND (
+		<choose>
+			<when test="searchKey == 'all'">
+				TUTOR_NICKNAME LIKE '%' || #{searchText} || '%'
+				OR
+				LECTURE_TITLE LIKE '%' || #{searchText} || '%'
+				OR CATEGORY_NAME LIKE
+				'%' || #{searchText} || '%'
+			</when>
+			<when test="searchKey == 'tutor_name'">
+				TUTOR_NICKNAME LIKE '%' || #{searchText} || '%'
+			</when>
+			<when test="searchKey == 'lecture_title'">
+				LECTURE_TITLE LIKE '%' || #{searchText} || '%'
+			</when>
+			<when test="searchKey == 'category'">
+				CATEGORY_NAME LIKE '%' || #{searchText} || '%'
+			</when>
+		</choose>
+		)
+
+	</select>
+	<!-- 강사 강의 리스트 : 동일 -->
+	<resultMap type="Lecture" id="lectResultMap"
+		autoMapping="true">
+		<id property="lecture_id" column="lecture_id" />
+		<id property="lectureCategory.lecture_category_id"
+			column="lecture_category_id" />
+		<association property="lectureCategory"
+			javaType="LectureCategory" autoMapping="true">
+			<id property="lecture_category_id" column="lecture_category_id" />
+		</association>
+		<association property="tutor" javaType="Tutor"
+			autoMapping="true">
+			<id property="member.member_id" column="member_id" />
+			<association property="member" javaType="Member"
+				autoMapping="true">
+			</association>
+		</association>
+	</resultMap>
+
+	<select id="tutorMyClassList" resultMap="lectResultMap">
+		SELECT le.lecture_id,
+		le.lecture_img, le.lecture_title, le.lecture_price,
+		le.lecture_state,
+		le.lecture_category_id, lc.category_name
+		,
+		le.lecture_start_dt,
+		le.lecture_end_dt, le.lecture_max,
+		le.lecture_current
+		,
+		tu.tutor_nickname
+		FROM lecture le
+		JOIN tutor tu ON
+		(tu.tutor_id =
+		le.lecture_tutor_id AND
+		tu.TUTOR_CATEGORY_ID =
+		le.LECTURE_CATEGORY_ID)
+		JOIN member m ON (m.member_id = tu.tutor_id)
+		JOIN lecture_category lc
+		ON (le.lecture_category_id = lc.category_id)
+		WHERE le.LECTURE_TUTOR_ID
+		= #{tutor.member.member_id} AND m.tutor_yn =
+		'Y'
+	</select>
+
+	<!-- 강의신청 후 결제 프로시저 : 수정 -->
+	<insert id="insertMemberLectureHistory" parameterType="hashMap"
+		statementType="CALLABLE">
+		{ call INSERT_MEMBER_LECTURE_HISTORY (
+		#{lecture_category_id}
+		, #{member_id}
+		, #{lecture_id}
+		)}
+	</insert>
+
+
+	<!-- 강의결제취소 프로시저 : 수정 -->
+	<update id="updateMemberLectureHistory" parameterType="hashMap"
+		statementType="CALLABLE">
+		{ call update_member_lecture_history (
+		#{lectureCategoryId}
+		, #{memberId}
+		, #{lectureId}
+		)}
+	</update>
+
+	<!-- admin(jun6) : 강의 전체 조회 -->
+	<select id="selectAllLectures" resultMap="lectResultMap">
+		SELECT le.*,
+		lc.category_name "lecture_category_name", le.lecture_tutor_id
+		"member_id"
+		FROM lecture le
+		JOIN lecture_category lc
+		ON(le.lecture_category_id = lc.category_id)
+		ORDER
+		BY lecture_id DESC
+	</select>
+
+	<!-- admin(jun6) : 강의 승인/반려 -->
+	<update id="updateLectureStateByIdAndStatus" parameterType="Map">
+		UPDATE lecture
+		SET lecture_state = #{status}
+		WHERE lecture_id =
+		#{lecture_id}
+	</update>
 
 </mapper>

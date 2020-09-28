@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 public class StudyReply {
 	private int studyreply_rowNum;
 	private int studyreply_id;
-	private StudyBoard studyreply_b;
-	private Member studyreply_m;
+	private StudyBoard studyboard;
+	private Member member;
 	private String studyreply_content;
 	private Date studyreply_dt;
 }

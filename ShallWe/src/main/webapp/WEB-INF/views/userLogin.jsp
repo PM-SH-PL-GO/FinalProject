@@ -18,11 +18,11 @@
  body {
   font-family: 'Open Sans',sans-serif;
   font-weight: 500;
-  color:#fff
+  color:#fff 
 }
 .info p {
   text-align:center;
-  color: #999;
+ 
   text-transform:none;
   font-weight:600;
   font-size:15px;
@@ -35,7 +35,7 @@
 
 h1 {
   text-align:center; 
-  color: #666;
+  
   text-shadow: 1px 1px 0px #FFF;
   margin:50px 0px 0px 0px
 }
@@ -71,14 +71,20 @@ hr {
 .content {
 
   position: absolute;
-  top: -30px;
+  
   right: 0;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 900px;
-  background: #f2f2f2;
-  z-index:-1;
+ /*  background: #f2f2f2; */
+  z-index:3;
+  background-image: url('https://images.unsplash.com/photo-1599687266197-6c66c083b39c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1268&q=80');
+  background-repeat : no-repeat;
+  background-size: 100%;
+  background-position: center;
+  background-origin: content-box;
+  
 }
 
 .container {
@@ -90,12 +96,14 @@ hr {
   margin-top: 180px; 
   box-shadow: 1px 5px 10px 1px #333;
   overflow:hidden;
+  
 }
 
 img.bg-img {
   display: block;
   position: absolute;
   margin: auto;
+  overflow: auto;
 }
 
 .menu {
@@ -149,7 +157,7 @@ a:not(.active2) {
     margin-top: 20px;
     text-align: center;
     color: #ffffff;
-    opacity: 0.3;
+  /*   opacity: 0.3; */
 }
 
 .connexion h4:hover {
@@ -163,25 +171,30 @@ label {
     padding: 5px 10px;
     font-size: 15px;
     font-weight: 600;
-   
     
 }
 
 input {
+
     display: block;
-    width: 93%;
+    width: 100%;
     margin: auto;
     padding: 13px;
-    border: 0;
+    border: 3px;
     border-radius: 20px;
-    font-family: "Roboto",sans-serif;
-    opacity: 0.15;
-   
+    font-family: "Roboto",sans-serif; 
+    opacity: 0.5;
+   	font-size: 25px;
+   	font-style: oblique;
+    font-weight: bold;
+  	
+
 }
 
 input p {
-    color: #fff;
-    opacity: 1;
+
+  /*  color: #fff; */
+/*     opacity: 3; */
 }
 
 input.submit {
@@ -271,6 +284,7 @@ input.submit {
     position: absolute;
     left: 500px;
 }
+
  </style>
  
  <script>
@@ -296,8 +310,8 @@ input.submit {
 	//아이디 비밀번호 에러 메세지//
 		let $msgMail = $("span.mailR");
 		let $msgPwd = $("span.pwdChk");
-		let $msgId = $("span.idR")
-		let $msgIdFor = $("span.idFor")
+		let $msgId = $("span.idR");
+		let $msgIdFor = $("span.idFor");
 		
    // 정규식 아이디 비밀번호 체크
 		let nameR = /^[가-힣]{2,16}$/;
@@ -306,14 +320,12 @@ input.submit {
 	    let mailR= /^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/i;
 	    let telR =/^01([0|1|6|7|8|9])?([0-9]{3,4})?([0-9]{4})$/;
 
-
-	    
 //로그인-------
 			
 		 $('input#signin').click(function(){
 			 
-			 let idVal = $("input#userName").val();
-			 let pwdVal = $("input#userPassword").val();
+			 let $idVal = $("input#userName").val();
+			 let $pwdVal = $("input#userPassword").val();
 			 
 			if($("input#userName").val() == "") {
 				$("span#one_help").slideDown(2000); //0.1초 동안 슬라이드로 내려오면서 보이기
@@ -321,7 +333,7 @@ input.submit {
 				$("span#one_help").css("color","red"); 
 				return false;
 				
-			} else if(idR.test(idVal) == false){
+			} else if(idR.test($idVal) == false){
 			//아이디 [영어/숫자/언더바 사용가능/4~16자] 맞지 않으면 에러메세지
 				$("input#userName").select();
 				$msgId.show();
@@ -334,60 +346,113 @@ input.submit {
 				return false;
 				
 			} /* else if(pwdR.test(pwdVal) == false){
-				// 비밀번호 맞지 않으면 비밀번호가 일치하지 않습니다 에러메세지
+				// 비밀번호 맞지 않으면 비밀번호가 일치하지 않습니다 에러메세지 
 				$("input#userPassword").select();
 				$msgPwd.show();
 			} */ else {
 
 				$.ajax({
-					url:"/shallwe/memberLogin"
+					url:"/shallwe/member/memberLogin"
 				   ,method:"POST"
-				   ,data:{member_id:idVal, member_pwd:pwdVal}
+				   ,data:{member_id:$idVal,member_pwd:$pwdVal}
 				   ,success:function(data){
-					   if(data.success == "success"){
+					   let responseObj = JSON.parse(data);
+					   if(responseObj.status == "success"){
 						   
-						   location.href="/shallwe/index.jsp"
+						   alert('로그인성공');
+						   let $url = "/shallwe/?member_id="+$idVal+"&member_pwd="+$pwdVal;
+						   location.href= $url;
+						   
 						   } else{
-							   alert("로그인실패")
+							   
+							   alert("로그인실패");
 							   location.reload();
-							   }
-					   }
-					});
-				}
-		 });
-//로그인-------END
+							   
+						   }
+					   }//end of success
+					});// end of ajax
+				}//end of else
+		 }); // end of click
+
+//로그인-------END----------------
 		 
-// 		 비밀번호 찾기
+// 		 비밀번호 찾기 이메일
 		 
-		 $("input#forPassword").click(function(){
+		 $("input#Password").click(function(){
 			 
-			 let idValCheck = $("input#idInsert").val();
-		     let mailCheck = $("input#emailInsert").val();
+			 let $idValCheck = $("input#idInsert").val();
+		     let $mailCheck = $("input#emailInsert").val();
 		     
-			 //아이디 유효성검사
+		
 			 if($("input#idInsert").val()==""){
 				
 				 $("span#one_id").slideDown(2000);
 				 $("span#one_id").slideUp(2000);
 				 $("span#one_id").css("color","red");
 				 
-			 } else if(idR.test(idValCheck) == false){
+			 } else if(idR.test($idValCheck) == false){
 				 
 				 $("input#idInsert").select();
 				 $msgIdFor.show();
-			//이메일 유효성검사	 
+				 
+			
 			 } else if($("input#emailInsert").val()==""){
 		
 				 $("span#one_email").slideDown(2000);
 				 $("span#one_email").slideUp(2000);
 				 $("span#one_email").css("color","red");
 				 
-			 } else if(mailR.test(mailCheck) == false){
+			 } else if(mailR.test($mailCheck) == false){
 				 
 				 $("input#emailInsert").select();
 				 $msgMail.show();
-			 }
-		 });
+			 } else {
+
+				 $.ajax({
+						
+						url:"/shallwe/email/pwdEmailCheck"
+					   ,method:'POST'
+					   ,data:{member_name:$idValCheck,member_email:$mailCheck}
+					   ,success:function(data){
+							let responseObj = JSON.parse(data)
+							console.log(data);
+							if(responseObj.status == 'success'){
+								 
+										alert("이메일이 전송되었습니다.");
+										location.href = "/shallwe/userLogin";
+									
+							}else{
+		
+								alert("정보를 다시 입력해주세요");
+						}
+				      }	//end of success 
+				   });// end of ajax
+				 } //end of else
+		 }); //end of email click
+
+		// 임시비밀번호발급
+		 $("input#RandomPassword").click(function(){
+			 let $idValCheck = $("input#idInsert").val();
+		     let $mailCheck = $("input#emailInsert").val();
+		     
+		     $.ajax({
+					
+					url:"/shallwe/email/randomPwd"
+				   ,method:'POST'
+				   ,data:{member_name:$idValCheck,member_email:$mailCheck}
+				   ,success:function(data){
+						let responseObj = JSON.parse(data)
+						console.log(data);
+						if(responseObj.status == 'success'){
+							 
+									alert("임시비밀번호가 발급되었습니다");
+						}else{
+	
+							alert("정보를 다시 입력해주세요");
+					}
+			      }	//end of success
+			   });// end of ajax
+			 });//end of click 
 
 
 //아이디 찾기 페이지 이동
@@ -397,6 +462,8 @@ input.submit {
 			location.href = $url;
 			 
 		 });
+
+		
  });
  </script>
 </head>
@@ -409,7 +476,7 @@ input.submit {
   
 <div class="content">
 	<div class="container">
-		 <img class="bg-img" src="https://mariongrandvincent.github.io/HTML-Personal-website/img-codePen/bg.jpg" alt="">	
+	
 			<div class="menu">
 				<a href="#connexion" class="btn-connexion"><h2>SIGN IN</h2></a>
 				 <a href="#enregistrer" class="btn-enregistrer active" id = PWDCHECK><h2>Forgot Password?</h2></a>
@@ -423,7 +490,7 @@ input.submit {
 					
 					<label>PASSWORD</label>
 					<span hidden="hidden" class="pwdChk" style="color: red; font-size: 0.8em;"><i>비밀번호가 일치하지 않습니다</i></span>
-					<input placeholder="password" name="member_pwd" type="text" id="userPassword">
+					<input placeholder="password" name="member_pwd" type="password" id="userPassword">
 					<span hidden="hidden" id="one_Password">Password must be filled out!</span>
 					
 					<div class="check">
@@ -441,12 +508,6 @@ input.submit {
 					<input class="submit" value="ID CHECK" type="submit" id ="idCheck">
 				</div>
 				
-			<!-- 	<hr> -->
-				
-			<!-- 	<a href="https://www.grandvincent-marion.fr/" target="_blank" class="forgot"><h4>Forgot password?</h4></a>
-				
-				<a href="https://www.grandvincent-marion.fr/" target="_blank"class="forgot"><h4>ID CHECK</h4></a> -->
-				
 			</div>
 			
 			<div class="enregistrer active-section">
@@ -459,19 +520,12 @@ input.submit {
 					<span hidden="hidden" class="mailR" style="color: red; font-size: 0.8em;"><i>이메일 형식이 맞지 않습니다</i></span>
 					<input placeholder="" type="text" id="emailInsert"><span hidden="hidden" id="one_email">Email must be filled out!</span>
 					<div class="check">
-						<!-- <label>				
-							<input id="check" type="checkbox" class="checkbox">
-								<svg xmlns="http://www.w3.org/2000/svg" width="26px" height="23px">
-									<path class="path-back"  d="M1.5,6.021V2.451C1.5,2.009,1.646,1.5,2.3,1.5h18.4c0.442,0,0.8,0.358,0.8,0.801v18.398c0,0.442-0.357,0.801-0.8,0.801H2.3c-0.442,0-0.8-0.358-0.8-0.801V6"/>
-									<path class="path-moving" d="M24.192,3.813L11.818,16.188L1.5,6.021V2.451C1.5,2.009,1.646,1.5,2.3,1.5h18.4c0.442,0,0.8,0.358,0.8,0.801v18.398c0,0.442-0.357,0.801-0.8,0.801H2.3c-0.442,0-0.8-0.358-0.8-0.801V6"/>
-								</svg>
-						</label>
-						<h3>I agree</h3> -->
-						
-					</div>
-					<input class="submit" value="Password Check" type="submit" id="forPassword">	
 						
 				</div>
+					<input class="submit" value="RandomPassword" type="submit" id="RandomPassword">	
+				</div>
+					<input class="submit" value="Password Check" type="submit" id="Password">
+					
 			
 			</div>
 	</div>

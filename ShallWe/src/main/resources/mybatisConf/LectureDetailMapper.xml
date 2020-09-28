@@ -3,9 +3,100 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="LectureDetailMapper">
-  <select id="selectAllLectures" resultType="LectureDetail">
-  	SELECT * 
-  	FROM lecture lec 
-  		JOIN lecture_detail lec_d On (lec.lecture_id = lec_d.lecture_id)
-  </select>
+	<select id="selectAllLectures" resultType="LectureDetail">
+		SELECT *
+		FROM lecture
+		lec
+		JOIN lecture_detail lec_d On (lec.lecture_id = lec_d.lecture_id)
+	</select>
+<!-- 	강의추가 : 서동일 -->
+	<insert id="insertDetail" parameterType="LectureDetail">
+		INSERT
+		INTO
+		lecture_detail(LECTURE_ID, LECTURE_CATEGORY_ID, LECTURE_INTRODUCE,
+		LECTURE_CURRICULUM, LECTURE_PREPARED, LECTURE_CAUTION,
+		LECTURE_FILENAME, LECTURE_LOCATION)
+		VALUES(lecture_seq.currVal,
+		#{lecture.lectureCategory.lecture_category_id}, #{lecture_introduce},
+		#{lecture_curriculum}, #{lecture_prepared}, #{lecture_caution},
+		#{lecture_fileName}, #{lecture_location})
+	</insert>
+<!-- 	강의 수정: 서동일 -->
+	<update id="updateDetail" parameterType="LectureDetail">
+		UPDATE lecture_detail
+		SET LECTURE_INTRODUCE = #{lecture_introduce}, LECTURE_CURRICULUM =
+		#{lecture_curriculum}, LECTURE_PREPARED
+		= #{lecture_prepared},
+		LECTURE_CAUTION = #{lecture_caution}, LECTURE_FILENAME =
+		#{lecture_fileName},
+		LECTURE_LOCATION = #{lecture_location}
+		WHERE
+		LECTURE_ID = #{lecture.lecture_id}
+	</update>
+	<!-- 강의 상세 보기 : 서동일 -->
+	<resultMap type="LectureDetail" id="lectDeResultMap"
+		autoMapping="true">
+		<id property="lecture.lecture_id" column="lecture_id" />
+		<id property="lecture.lectureCategory.lecture_category_id"
+			column="lecture_category_id" />
+		<association property="lecture" javaType="Lecture"
+			autoMapping="true">
+			<association property="lectureCategory"
+				javaType="LectureCategory" autoMapping="true">
+			</association>
+			<association property="tutor" javaType="Tutor"
+				autoMapping="true">
+				<id property="member.member_id" column="tutor_id" />
+				<id property="lectureCategory.lecture_category_id"
+					column="tutor_category_id" />
+				<association property="member" javaType="Member"
+					autoMapping="true">
+				</association>
+			</association>
+		</association>
+	</resultMap>
+	<select id="lectureDetailView" resultMap="lectDeResultMap">
+		SELECT le.lecture_id,
+		le.lecture_img, le.lecture_category_id
+		, le.lecture_title,
+		le.lecture_price, le.lecture_state
+		,
+		le.lecture_start_dt,
+		le.lecture_end_dt, le.lecture_max,
+		le.lecture_min, le.lecture_current
+		,
+		ld.lecture_introduce,
+		ld.lecture_curriculum, ld.lecture_prepared,
+		ld.lecture_caution,
+		ld.lecture_filename, ld.lecture_location
+		,
+		tu.tutor_id,
+		tu.tutor_category_id, tu.tutor_nickname, tu.tutor_img,
+		tu.tutor_score
+		FROM lecture le
+		JOIN lecture_detail ld ON (ld.lecture_id
+		=
+		le.lecture_id AND
+		ld.LECTURE_CATEGORY_ID = le.LECTURE_CATEGORY_ID)
+		JOIN
+		tutor tu ON (tu.tutor_id = le.lecture_tutor_id AND
+		tu.TUTOR_CATEGORY_ID = le.LECTURE_CATEGORY_ID)
+		WHERE le.lecture_id =
+		#{lecture_id}
+	</select>
+	
+	<!-- admin(jun6) : 강의 취소/반려사유 조회 -->
+	<select id="selectLectureReasonById" parameterType="String" resultType="Map">
+		SELECT ld.lecture_reject_reason "reject_reason", ld.lecture_cancel_reason "cancel_reason", tu.tutor_nickname
+		FROM lecture_detail ld
+			JOIN tutor tu ON(ld.lecture_tutor_id = tu.tutor_id)
+		WHERE lecture_id = #{lecture_id}
+	</select>
+	
+	<!-- admin(jun6) : 강의 반려 사유 설정 -->
+	<update id="updateLectureRejectReason" parameterType="Map">
+		UPDATE lecture_detail
+		SET lecture_reject_reason = #{reject_reason}
+		WHERE lecture_id = #{lecture_id}
+	</update>
 </mapper>

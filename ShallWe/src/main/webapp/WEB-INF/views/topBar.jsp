@@ -1,11 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="memberId" value="${sessionScope.loginInfo}"/>
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Shallwe-함께 배우는 교육공간</title>
+     <script
+  src="https://code.jquery.com/jquery-3.5.1.min.js"
+  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+  crossorigin="anonymous"></script>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="manifest" href="site.webmanifest">
@@ -52,7 +58,91 @@ background : #00dbd5;
 	
 }
 
+a.community{
+cursor: pointer;
+}
 </style>
+<script>
+$(function(){
+	//----------로그인 버튼 CLICK START---------
+	$("a#login").click(function(){
+		location.href = "/shallwe/userLogin";
+	});
+	//----------로그인 버튼 CLICK END---------
+	
+	//----------FAQ CLICK START---------
+	$("#faq").click(function(){
+		location.href = "/shallwe/board/faqList";
+	});
+	//----------FAQ CLICK END---------
+	
+	//----------강의등록 버튼 CLICK START---------	
+	$("#tutorSetBtn").click(function(){
+		if("${sessionScope.loginInfo}" == null ||"${sessionScope.loginInfo}" == ""){
+			alert("로그인 후 강의 등록이 가능합니다.");
+		}else{
+			location.href = "/shallwe/instructor";		
+		}
+	});
+	//----------강의등록 버튼 CLICK END---------	
+	
+	//----------강사 강의등록 버튼 CLICK START---------		
+	$("#tutorLectureBtn").click(function(){
+		location.href = "/shallwe/tutorLectureList";		
+	});
+	//----------강사 강의등록 버튼 CLICK START---------		
+	
+	//----------스터디게시판 CLICK START---------	
+	$("#studBoard").click(function(){
+		location.href = "/shallwe/board/studyBoard";
+	});
+	//----------스터디게시판 CLICK END---------	
+
+	//----------자유게시판 CLICK START---------	
+	$("#freeBoard").click(function(){
+		location.href = "/shallwe/freeBoard";
+	});
+	//----------자유게시판 CLICK END---------	
+
+	//----------회원가입 CLICK START---------		
+	$("#signUp").click(function(){
+		location.href = "/shallwe/member/signup";
+	});
+	//----------회원가입 CLICK END---------		
+	
+	//----------내 정보보기 CLICK START---------	
+	$("#myInfo").click(function(){
+		location.href = "/shallwe/myinfoTutorInfo";
+	});
+	//----------내 정보보기 CLICK END---------	
+
+	//----------내 강의보기 CLICK START---------	
+	$("#myLecture").click(function(){
+		location.href = "/shallwe/lectures/memberLecture";
+	});
+	//----------내 강의보기 CLICK END---------	
+
+	//----------로그아웃 CLICK START---------	
+	$("#signOut").click(function(){
+		$.ajax({
+			url:"/shallwe/member/memberLogout"
+			,method:"POST"
+			,success:function(data){
+				var responseObj = JSON.parse(data);
+				if(responseObj.status =="success"){
+					alert("로그아웃");
+					location.reload();
+					
+				}else{
+					alert("로그아웃 실패");
+				}
+			}
+		});
+	});
+	//----------로그아웃 CLICK END---------	
+});
+
+</script>
 </head>
 <body>
   <!-- topbar Start -->
@@ -73,9 +163,9 @@ background : #00dbd5;
 								<ul id="navigation">
 									<li><a href="#">커뮤니티</a>
 										<ul class="submenu">
-											<li><a href="#">공부 게시판</a></li>
-											<li><a href="#">자유게시판</a></li>
-											<li><a href="#">FAQ</a></li>
+											<li><a id="studBoard" class="community">공부 게시판</a></li>
+											<li><a id="freeBoard" class="community">자유게시판</a></li>
+											<li><a id="faq" class="community">FAQ</a></li>
 										</ul></li>
 								</ul>
 							</nav>
@@ -88,17 +178,33 @@ background : #00dbd5;
 					<div class="menu-wrapper d-flex align-items-center justify-content-between" style="float: right; margin-right: 100px">
 						<!-- Header-btn -->
 						<div class="header-btns d-none d-lg-block f-right">
-							<a href="#" class="btn">전문가 등록</a>
-							<!--                             <a href="#" class="mr-40"><i class="ti-user"></i></a> -->
+							<c:choose>
+								<c:when test="${empty tutorId}">
+									<a class="btn" id="tutorSetBtn">강사 등록</a>
+								</c:when>
+								<c:otherwise>
+									<a class="btn" id="tutorLectureBtn">내 강의보기(강사)</a>
+								</c:otherwise>
+							</c:choose>
 						</div>
 						<div class="main-menu f-right d-none d-lg-block ">
 							<nav>
 								<ul id="navigation">
 									<li><a href="#"><i class="ti-user"></i></a>
 										<ul class="submenu">
-											<li><a href="#">로그인</a></li>
-											<li><a href="#">회원가입</a></li>
-										</ul></li>
+										<c:choose>
+											<c:when test="${empty memberId}">
+												<li><a id ="login" class="community">로그인</a></li>
+												<li><a id ="signUp" class="community">회원가입</a></li>
+											</c:when>
+											<c:otherwise>
+												<li><a id ="myInfo" class="community">내 정보보기</a></li>
+												<li><a id ="myLecture" class="community">내 수강목록</a></li>
+												<li><a id ="signOut" class="community">로그아웃</a></li>
+											</c:otherwise>
+										</c:choose>
+										</ul>
+									</li>
 								</ul>
 							</nav>
 						</div>

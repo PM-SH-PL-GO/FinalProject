@@ -52,7 +52,7 @@ footer > div .left p span { padding: 0 13px 0 0;}
 .noti:before { content: ""; display: inline-block; margin: 0 3px 0 0; width: 15px; height: 15px; background: url("../images/icon.png") no-repeat -336px -5px; vertical-align: -3px;}
 
 input.type2{ position: absolute; left: -4000%;}
-input.type2 + label { font-size: 14px; color:#222; line-height: 27px; padding: 0 35px 0 0;}
+input.type2 + label { font-size: 14px; color:#222; line-height: 27px; padding: 0 25px 0 0;}
 input.type2 + label:before { content: ""; display: inline-block; margin: 0 8px 0 0; width: 12px; height: 12px; background: url("/shallwe/assets/img/elements/icon.png") no-repeat -49px -60px;}
 input.type2:checked + label:before { background-position:-66px -60px ;}
 

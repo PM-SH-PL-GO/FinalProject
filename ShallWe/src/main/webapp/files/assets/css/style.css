@@ -3455,6 +3455,15 @@ transition
 	transition: .4s;
 	height: 350px;
 }
+
+.popular-directorya-area .properties__cardseo {
+	box-shadow: 0px 6px 6px 2px rgba(2, 25, 65, 0.08);
+	border-radius: 15px;
+	-webkit-transition: .4s;
+	-moz-transition: .4s;
+	-o-transition: .4s;
+	transition: .4s;
+}
 .btn_center{
 	text-align:center}
 .infobutton{
@@ -3491,6 +3500,9 @@ table.type1 td{
 .popular-directorya-area .properties__card:hover {
 	box-shadow: 0px 8px 8px 0px rgba(2, 25, 65, 0.08)
 }
+.popular-directorya-area .properties__cardseo:hover {
+	box-shadow: 0px 8px 8px 0px rgba(2, 25, 65, 0.08)
+}
 .kopular-directorya-area .properties__card:hover {
 	box-shadow: 0px 8px 8px 0px rgba(2, 25, 65, 0.08);
 	margin-bottom: 15px
@@ -3502,6 +3514,11 @@ table.type1 td{
 	border-radius: 10px 10px 0 0;
 	position: relative;
 }
+.popular-directorya-area .properties__imgseo img {
+	width: 100%;
+	border-radius: 10px 10px 0 0;
+	position: relative;
+}
 
 .popular-directorya-area .properties__img .img-text {
 	position: absolute;
@@ -3509,6 +3526,13 @@ table.type1 td{
 	left: 28px;
 	z-index: 2
 }
+.popular-directorya-area .properties__imgseo .img-text {
+	position: absolute;
+	top: 32px;
+	left: 28px;
+	z-index: 2
+}
+
 
 .popular-directorya-area .properties__img .img-text span {
 	color: #fff;
@@ -3519,18 +3543,33 @@ table.type1 td{
 	text-transform: uppercase;
 	border: 1px solid rgba(255, 255, 255, 0.5)
 }
-
+.popular-directorya-area .properties__imgseo .img-text span {
+	color: #fff;
+	font-size: 13px;
+	font-weight: 500;
+	padding: 7px 15px;
+	border-radius: 5px;
+	text-transform: uppercase;
+	border: 1px solid rgba(255, 255, 255, 0.5)
+}
 .popular-directorya-area .properties__img .icon {
 	position: absolute;
 	bottom: -29px;
 	left: 32px
 }
-
+.popular-directorya-area .properties__imgseo .icon {
+	position: absolute;
+	bottom: -29px;
+	left: 32px
+}
 .popular-directorya-area .properties__img .icon img {
 	width: 56px;
 	height: 56px
 }
-
+.popular-directorya-area .properties__imgseo .icon img {
+	width: 56px;
+	height: 56px
+}
 .popular-directorya-area .properties__caption {
 	padding: 47px 18px 16px 22px;
 	border-bottom: 1px solid #ebeff4
@@ -3550,6 +3589,11 @@ table.type1 td{
 
 .popular-directorya-area .properties__caption h3 a:hover,
 	.popular-directorya-area .properties__caption h3 .properties__card {
+	color: #ff5757
+}
+
+.popular-directorya-area .properties__caption h3 a:hover,
+	.popular-directorya-area .properties__caption h3 .properties__cardseo {
 	color: #ff5757
 }
 
@@ -4387,7 +4431,7 @@ table.type1 td{
 	box-shadow: none;
 	outline: 0;
 	color: #fff;
-	background: #bebebe
+	background: #00DBD5
 }
 
 .pagination-area .page-link {

@@ -31,6 +31,7 @@ form {
   padding: 10px 20px;
   background: #f4f7f8;
   border-radius: 8px;
+  margin-top: 120px;
 }
 
 h1 {
@@ -136,36 +137,63 @@ label.light {
 <script>
 $(function(){
 	
-	$('.resume').on('click', function() {
-	    var $this = $(this);
-	  $this.button('loading');
-	    setTimeout(function() {
-	       $this.button('reset');
-	   }, 2000);
-	});
+
+	let mailR= /^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/i;
+	let $msgMail = $("span.mailR");
+
+	$("button#load2").click(function(){
+			let $nameVal = $("input#name").val();
+			let $emailVal = $("input#email").val();
+			
+			if(mailR.test($emailVal) == false){
+				 
+				 $("input#email").select();
+				 $msgMail.show();
+				 
+			 } else {
+					$.ajax({
+						
+						url:"/shallwe/email/idEmailCheck"
+					   ,method:'POST'
+					   ,data:{member_name:$nameVal,member_email:$emailVal}
+					   ,success:function(data){
+							let responseObj = JSON.parse(data)
+							console.log(data);
+							if(responseObj.status == 'success'){
+								 
+										alert("이메일이 전송되었습니다.");
+										location.href = "/shallwe/userLogin";
+									
+							}else{
+		
+								alert("정보를 다시 입력해주세요");
+
+						}
+				   }	   
+
+				});
+			 }
+		});
+
+	
 });
 
 </script>  
     </head>
-    
-    
-    
     <body>
-      <form action="index.html" method="post">
+      <form action="idEmailCheck" method="post">
+      <jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
         <h1>ID CHECK</h1>
         
         <fieldset>	
           <legend><span class="number">1</span> Your basic info</legend>
-          
-          
           <label for="name">Name:</label>
           <input type="text" id="name" name="user_name">
           
           <label for="email">Email:</label>
+          <span hidden="hidden" class="mailR" style="color: red; font-size: 0.8em;"><i>이메일 형식이 맞지 않습니다</i></span>
           <input type="email" id="email" name="user_email">
-     
         </fieldset>
-        
           <div style="margin:3em;">
 			  <br>
 			<button type="button" class="btn btn-primary btn-lg resume" 

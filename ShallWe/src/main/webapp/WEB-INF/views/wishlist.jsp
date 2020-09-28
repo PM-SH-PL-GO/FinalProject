@@ -6,6 +6,8 @@
 <meta charset="UTF-8">
 <title>WishList</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <!-- CSS here -->
 	<link rel="stylesheet" href="/shallwe/assets/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/shallwe/assets/css/style.css">
@@ -130,10 +132,14 @@
 						<th">선택</th>	
 					</tr>
 					</thead>
-				<tbody>
-					<tr style="height: 90px; background-color: #fff;">
+				<tbody> 
+<!-- 				id="calculationtbody"> -->
+<%-- 				<c:if test="${not empty requestScope.wishList}"> --%>
+<%-- 					<c:forEach var="item" items="${requestScope.wishList}" varStatus="status"> --%>
+					<tr class="calculationtr" style="height: 90px; background-color: #fff;">
 						<td style="text-align: left; text-align:center; border-right:none;">
-							<input type="checkbox" name="checkbox"/>
+							<input type="checkbox" id="cbtr${status.index}" name="checkbox"/>
+<%-- 							<input type="hidden" class="buypd${status.index}" value="${item.}"/> --%>
 						</td>
 						<td style="border-left: none; border-right: none;"><img style="width: 80%;" src="/shallwe/assets/img/logo/03.jpg"></td>
 						
@@ -148,10 +154,10 @@
 							<button class="bttn default" style="border-radius:3px; width:90px; margin-bottom: 3px; font-size:11px; ">관심수업등록</button>
 							<button class="bttn default" style="border-radius:3px; width:90px; margin-bottom: 3px; font-size:11px; ">x삭제</button>
 						</td>
-						</tr>
-												
+					</tr>
+<%-- 					</c:forEach>									 --%>
+<%-- 				</c:if> --%>
 				</tbody>
-
 				<tfoot>
 					<tr style="height: 60px;">
 						<td colspan="5"	style="border-right:none; text-align: left; padding-left:10px;">

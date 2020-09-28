@@ -12,16 +12,18 @@
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven>
-		<message-converters>
-			<!-- @ResponseBody로 String 처리할때 한글처리 -->
-			<beans:bean class="org.springframework.http.converter.StringHttpMessageConverter">
-			    <beans:property name="supportedMediaTypes">
-                	<beans:list>
-                    	<beans:value>text/html;charset=UTF-8</beans:value>
-                	</beans:list>
-            	</beans:property> 
-            </beans:bean>
-		</message-converters>
+	   
+ 		<message-converters> 
+<!--  			@ResponseBody로 String 처리할때 한글처리  -->
+ 			<beans:bean class="org.springframework.http.converter.StringHttpMessageConverter"> 
+ 			    <beans:property name="supportedMediaTypes"> 
+                 	<beans:list> 
+                    	<beans:value>text/html;charset=UTF-8</beans:value> 
+                    	<beans:value>application/json;charset=UTF-8</beans:value> 
+                 	</beans:list> 
+             	</beans:property> 
+             </beans:bean> 
+ 		</message-converters>
 	</annotation-driven>
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
@@ -45,15 +47,14 @@
 
 	<!-- html이 필요할땐 여기로(/shallwe/resources/~.html)-->
 	<resources mapping="/resources/**" location="/html/" />
-
-	<!-- admin 입장 시 -->
-	<resources mapping="/admin" location="/WEB-INF/views/admin.jsp" />
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<!-- 뷰 리졸버의 전두사 접미사 붙여주기 (컨트롤러에서 반환되는 view정보 혹은 void에서  -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
+	
+	
 	
 <!-- spring context(engine, container) 내에 선언한 component류 @들 검색해주는 친구 -->		
 	<context:component-scan base-package="com.shallwe.control" />

@@ -10,7 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="manifest" href="site.webmanifest">
     <link rel="shortcut icon" type="image/x-icon" href="/shallwe/assets/img/favicon.ico">
-
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	
 	<!-- CSS here -->
 	<link rel="stylesheet" href="/shallwe/assets/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/shallwe/assets/css/owl.carousel.min.css">

@@ -3,9 +3,152 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="MemberMapper">
-	<select id="selectById" parameterType="String" resultType="MemberInfoBean">
-	select select member_id, member_name, member_sex, member_email, member_phone, member_favorite1, member_favorite2, member_favorite3, tutor_yn
-	from member
-	where member_id='member1'; <!-- #{id} -->
+
+	<select id="memberLogin" resultType="com.shallwe.vo.Member">
+		SELECT MEMBER_ID,MEMBER_PWD FROM MEMBER
+		WHERE MEMBER_ID = #{MEMBER_ID}
+
 	</select>
+
+	 <select id="IdCheck" parameterType="java.util.HashMap" resultType="String">
+
+		SELECT MEMBER_ID
+		FROM MEMBER
+		WHERE MEMBER_NAME = #{member_name} AND MEMBER_EMAIL = #{member_email}
+
+	</select>
+	
+	 <select id="pwdCheck" parameterType="java.util.HashMap" resultType="String">
+		SELECT MEMBER_PWD
+		FROM MEMBER
+		WHERE MEMBER_NAME = #{member_name} AND MEMBER_EMAIL = #{member_email}
+	</select>
+	
+	<update id="randomPassword" parameterType="java.util.HashMap">
+	
+		UPDATE MEMBER
+		SET MEMBER_PWD = #{member_pwd}
+		WHERE MEMBER_NAME = #{member_name} AND MEMBER_EMAIL = #{member_email}
+	
+	</update>
+	
+	
+	 <update id="pwdUpdate" parameterType="java.util.HashMap">
+		UPDATE MEMBER
+		SET MEMBER_PWD = #{member_pwd}
+		WHERE MEMBER_ID = #{member_id} AND MEMBER_PHONE = #{member_phone} AND MEMBER_PWD = #{member_pwd}
+	</update>
+
+
+	<resultMap type="MemberInfoBean" id="MemberInfoMap">
+		<id column="member_id" property="memberId"/>
+		<result column="member_pwd" property="memberPwd"/>
+		<result column="member_name" property="memberName"/>
+		<result column="member_email" property="memberEmail"/>
+		<result column="member_phone" property="memberPhone"/>
+		<result column="member_sex" property="memberSex"/>
+		<result column="tutor_yn" property="tutorYN"/>
+	<association property="favorite1" javaType="LectureCategory" autoMapping="true">
+		<id column="fav1id" property="lecture_category_id"/> 
+		<result column="fav1name" property="lecture_category_name"/>
+	</association>		
+	<association property="favorite2" javaType="LectureCategory" autoMapping="true">
+		<id column="fav2Id" property="lecture_category_id"/> 
+		<result column="fav2Name" property="lecture_category_name"/>
+	</association>		
+	<association property="favorite3" javaType="LectureCategory" autoMapping="true">
+		<id column="fav3Id" property="lecture_category_id"/> 
+		<result column="fav3Name" property="lecture_category_name"/>
+	</association>		
+	</resultMap>
+	
+	<select id="selectById" parameterType="String" resultMap="MemberInfoMap">
+	SELECT m.member_id , m.member_pwd, m.member_name, m.member_sex, m.member_email, m.member_phone,
+			lc1.category_id fav1Id, lc1.category_name fav1Name
+            ,lc2.category_id fav2Id, lc2.category_name fav2Name
+            ,lc3.category_id fav3Id, lc3.category_name fav3Name
+	FROM member m LEFT OUTER
+	JOIN lecture_category lc1 ON(m.member_favorite1=lc1.category_id)LEFT OUTER
+    JOIN lecture_category lc2 ON(m.member_favorite2=lc2.category_id)LEFT OUTER
+    JOIN lecture_category lc3 ON(m.member_favorite3=lc3.category_id)
+	where member_id= #{memberId}<!-- #{memberId} -->
+	</select>
+	
+	<update id="updatePassword" parameterType="Map">
+	UPDATE member set member_pwd = #{memberPwd} where member_id = #{memberId}
+	</update>
+	<update id="updateEmail" parameterType="Map">
+	UPDATE member set member_email = #{memberEmail} where member_id = #{memberId}
+	</update>
+	<update id="updatePhone" parameterType="Map">
+	UPDATE member set member_phone = #{memberPhone} where member_id = #{memberId}
+	</update>
+
+	
+<!-- 	<resultMap type="Member" id ="updateCategoFav"> -->
+<!-- 		<id property= "member_id" column="member_id"/> -->
+<!-- 		<collection property="favorite_list" javaType="LectureCategory" autoMapping="true" resultMap="lecca"> -->
+<!-- 		</collection> -->
+<!-- 	</resultMap> -->
+<!-- 	<resultMap type="LectureCategory" id="lecca" autoMapping="true"> -->
+<!-- 		<id property= "lecture_category_id1" column="fav1"/> -->
+<!-- 		<id property= "lecture_category_id2" column="fav2"/> -->
+<!-- 		<id property= "lecture_category_id3" column="fav3"/> -->
+	
+<!-- 	</resultMap> -->
+<!-- 	<update id="updateFavorites" parameterType="Map"> -->
+<!-- 	UPDATE member set member_favorite1 = #{favorite_list.favorite1.lecture_category_id},  -->
+<!-- 					  member_favorite2 = #{favorite_list.favorite2.lecture_category_id}, -->
+<!-- 					  member_favorite3 = #{favorite_list.favorite3.lecture_category_id}  -->
+<!-- 	WHERE member_id = #{member_id} -->
+<!-- 	</update> -->
+
+<!-- ==================================================================	 -->
+
+<!-- 	<update id="updateFavorites" parameterType="Map" resultMap="updateCategoFav"> -->
+<!-- 	UPDATE member set member_favorite1 fav1 = #{favorite_list.favorite1.lecture_category_id},  -->
+<!-- 					  member_favorite2 fav2 = #{favorite_list.favorite2.lecture_category_id}, -->
+<!-- 					  member_favorite3 fav3 = #{favorite_list.favorite3.lecture_category_id}  -->
+<!-- 	WHERE member_id = #{member_id} -->
+<!-- 	</update> -->
+
+<!-- member(SH) : 회원가입 -->	
+	<insert id="joinMember" parameterType="MemberInfoBean">
+	INSERT INTO member(member_id, member_pwd, member_name, member_email, member_phone, member_favorite1, member_favorite2, member_favorite3, member_sex, tutor_yn)
+	VALUES(#{memberId}, #{memberPwd}, #{memberName}, #{memberEmail}, #{memberPhone} ,#{favorite1.lecture_category_id}, #{favorite2.lecture_category_id}, #{favorite3.lecture_category_id} , #{memberSex}, 'N')
+	</insert>
+<!-- 	#{favorite1.lecture_category_id}, #{favorite2.lecture_category_id}, #{favorite3.lecture_category_id} 
+#{memberPhone}-->
+<!-- member(SH) : 아이디 중복체크 -->	
+	<select id="checkId" resultType="MemberInfoBean">
+	select member_id from member
+	<if test="memberId!=null">
+	where member_id=#{memberId};
+	</if>
+	</select>
+
+<!-- admin(jun6) : 예비강사 승인/반려 -->
+	<update id="updateTutorState" parameterType="map">
+		UPDATE member
+	 	SET tutor_yn = #{status}
+ 		WHERE member_id = #{id}
+	</update>
+
+<!-- admin(jun6) : 전체 회원 목록 조회 -->
+	<select id="selectAllMember" resultMap="MemberInfoMap">
+		SELECT m.member_id , m.member_pwd, m.member_name, m.member_sex, m.member_email, m.member_phone, m.tutor_YN,
+				lc1.category_id fav1Id, lc1.category_name fav1Name
+	            ,lc2.category_id fav2Id, lc2.category_name fav2Name
+	            ,lc3.category_id fav3Id, lc3.category_name fav3Name
+		FROM member m LEFT OUTER
+		JOIN lecture_category lc1 ON(m.member_favorite1=lc1.category_id)LEFT OUTER
+	    JOIN lecture_category lc2 ON(m.member_favorite2=lc2.category_id)LEFT OUTER
+	    JOIN lecture_category lc3 ON(m.member_favorite3=lc3.category_id)
+	</select>
+
+<!-- admin(jun6) : 회원 삭제 -->
+<!-- 	<delete id="deleteMemberById"> -->
+<!-- 		DELETE member -->
+<!-- 		WHERE member_id = #{} -->
+<!-- 	</delete> -->
 </mapper>
