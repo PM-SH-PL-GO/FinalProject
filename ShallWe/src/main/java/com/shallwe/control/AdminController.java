@@ -25,6 +25,7 @@ import com.shallwe.exception.ModifyException;
 import com.shallwe.service.AdminService;
 import com.shallwe.vo.Faq;
 import com.shallwe.vo.Lecture;
+import com.shallwe.vo.LectureDetail;
 import com.shallwe.vo.Member;
 import com.shallwe.vo.Tutor;
 
@@ -177,22 +178,6 @@ public class AdminController {
 	}
 	
 	/**
-	 * 특정 강의 상세정보 조회하기 - 동일이꺼 가져다 쓰기
-	 * @author jun6
-	 * @param lecture_id
-	 * @return
-	 */
-//	@RequestMapping(value ="/lectureDetail/{lectureId}", method = RequestMethod.GET)
-//	public ResponseEntity<LectureDetail> lectureDetailList(@PathVariable(name = "lectureId") String lecture_id){
-//		try{
-//			LectureDetail lectureDetail = adminService.showLectureDetailById(lecture_id);
-//			return ResponseEntity.status(HttpStatus.OK).body(lectureDetail);
-//		}catch(FindException e) {
-//			return ResponseEntity.status(HttpStatus.OK).body(null);
-//		}
-//	}
-	
-	/**
 	 * 강의 승인/반려/취소 하기
 	 * @author jun6
 	 * @param lecture_id
@@ -233,16 +218,23 @@ public class AdminController {
 	 * @return
 	 */
 	@GetMapping(value = "/reason/{lectureId}")
-	public ResponseEntity<String> showLectureReason(@PathVariable(name = "lectureId") String lecture_id, String rejectOrCancel){
+	public ResponseEntity<LectureDetail> showLectureReason(@PathVariable(name = "lectureId") String lecture_id, String rejectOrCancel){
 		try {
-			String reason = adminService.showLectureReason(lecture_id, rejectOrCancel);
-			return ResponseEntity.status(HttpStatus.OK).body("{ \"reason\" : \"" + reason + "\" }");
+			LectureDetail lectureDetail = adminService.showLectureReason(lecture_id, rejectOrCancel);
+			return ResponseEntity.status(HttpStatus.OK).body(lectureDetail);
 		}catch(FindException e) {
 			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.OK).body("{ \"errMsg\" : \"" + e.getMessage() + "\"}");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 	}
 	
+	/**
+	 * 신청 온 강의 반려 하기
+	 * @param lecture_id
+	 * @param status
+	 * @param reject_reason
+	 * @return
+	 */
 	@PatchMapping(value = "/reason/{lectureId}")
 	public ResponseEntity<String> rejectLecture(@PathVariable(name = "lectureId")String lecture_id, String status, String reject_reason){
 		try {

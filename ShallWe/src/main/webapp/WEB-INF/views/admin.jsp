@@ -166,7 +166,7 @@
             	if (isTrue == true){
 	            	let approve = $(this).attr('value');		// 예비강사 ID
 					
-	            	if ($status == "승인"){	 //승인시
+	            	if ($tatus == "승인"){	 //승인시
 		            	$.ajax({
 		            		dataType: "json",														// 응답 결과의 형식 -> 다른 형식이 응답된다면 error로 간다
 		            		beforeSend : function(xhr){												// 요청을 보내기 전 헤더 값을 설정
@@ -190,6 +190,7 @@
 		            	});
 	            	}else{	//반려시
 	            		// tutor에서 삭제 후 반려 메세지 email로 보내기
+	            		alert("tutor에서 삭제 후 반려 메세지 email로 보내기 : 아직 준비중입니다");
 	            	}
             	}
             	
@@ -474,7 +475,7 @@
             // 강의 상세정보 보기 (새창 띄우기)
             $cont.on("click", ".lecture-detail", function(){
             	let $lectureId = $(this).attr("value");
-            	window.open("${contextPath}/lectures/detail?lectureId=" + $lectureId, "_blank");
+            	window.open("${contextPath}/lectures/detail?lecture_id=" + $lectureId, "_blank");
             	
             });
             
@@ -574,29 +575,31 @@
             // 취소/반려 사유 보기
             $cont.on("click", ".lecutre-reason", function(){
             	let lectureId = $(this).attr('value');	// 강의 번호
-            	let reasonType = $(this).html();
+            	let reasonType = $(this).html();		// 취소사유인지 반려사유인지
             	
             	$.ajax({
             		url: "$contextPath/admin/reason/" + lectureId,
             		method: "GET",
             		data: { rejectOrCancel : reasonType },
-            		success: function(data){
+            		success: function(lectureDetail){
             			let modal = '<div class="tutor-lecture-list"><div class="tutor-lecture-content">';
-                    	modal += '<div>' + data.tutor.tutor_nickname' 강사의 ' + data.lecture_title + '강의 ' + reasonType + '</div>';
+                    	modal += '<div>' + lectureDetail.lecture.tutor.tutor_nickname + ' 강사의 ' + lectureDetail.lecture.lecture_title;
+                    	modla += '강의 ' + reasonType + '</div>';
             			modal += '<button class="tutor-lecture-close">닫기</button>';
             			modal += '<h5>사유 :</h5><br><p>';
-            			modal += data.reason + '</p>';
+            			if (reasonType == "취소사유")
+            				modal += lectureDetail.lecture_cancel_reason + '</p>';
+           				else
+            				modal += lectureDetail.lecture_reject_reason + '</p>';
 		    			modal += '<div class="tutor-lecture-layer"></div></div>';
+		    			
 		    			let cont = $cont.html() + modal;
 		    			$cont.html(cont);
             		},
             		error: function(data){
             			let modal = '<div class="tutor-lecture-list"><div class="tutor-lecture-content">';
-                    	////////////////////
-                    	modal += '<div>강사의 ' + reasonType + '목록</div>';
-                    	/////////////////////
+                    	modal += '<div>' + reasonType + '목록을 불러오는데 실패했습니다</div>';
             			modal += '<button class="tutor-lecture-close">닫기</button>';
-            			modal += '<p>' + data.errMsg + '</p>';
 		    			modal += '<div class="tutor-lecture-layer"></div></div>';
 		    			let cont = $cont.html() + modal;
 		    			$cont.html(cont);
@@ -626,9 +629,9 @@
             			faqList.forEach(function(faq){
             				$lot += '<tr><td>' + faq.faq_id + '</td>';
             				$lot += '<td>' + faq.faq_question + '</td>';
-            				$lot += '<td>' + faq.faq_answer + '</td></tr>';
+            				$lot += '<td>' + faq.faq_answer + '</td>';
             				$lot += '<td><button class="faq_change" value="' + faq.faq_id + '">관리하기</button></td>';
-            				$lot += '<td><button class="faq_delete" value="' + faq.faq_id + '">삭제하기</button></td>';
+            				$lot += '<td><button class="faq_delete" value="' + faq.faq_id + '">삭제하기</button></td></tr>';
             			});
             			
             			$lot += '</tbody>';
@@ -712,41 +715,41 @@
           <div class="text">Shall We?</div>
           
           <ul>
-              <li><a href="#" class="home"><i class="fas fa-home"></i>홈페이지</a></li>
+              <li><a href="${contextPath }" class="home"><i class="fas fa-home"></i>홈페이지</a></li>
               <li>
-                <a href="#" class="a-btn"><i class="fas fa-address-book"></i>회원관리
+                <a  class="a-btn"><i class="fas fa-address-book"></i>회원관리
                     <span class="fas fa-caret-down first"></span>
                 </a>
                 <ul class="tog">
-                    <li><a href="#" class="member">회원목록</a></li>
+                    <li><a class="member">회원목록</a></li>
                 </ul>
               </li>
 
               <li>
-                <a href="#" class="a-btn tutor"><i class="fas fa-user"></i>강사관리
+                <a class="a-btn tutor"><i class="fas fa-user"></i>강사관리
                     <span class="fas fa-caret-down second"></span>
                 </a>
                 <ul class="tog">
-                    <li><a href="#" class="pre-tutor">예비강사목록</a></li>
-                    <li><a href="#" class="tutor-list">강사목록</a></li>
+                    <li><a class="pre-tutor">예비강사목록</a></li>
+                    <li><a class="tutor-list">강사목록</a></li>
                 </ul>
               </li>
 
               <li>
-                <a href="#" class="a-btn lecture"><i class="fas fa-stream"></i>강의관리
+                <a class="a-btn lecture"><i class="fas fa-stream"></i>강의관리
                     <span class="fas fa-caret-down third"></span>
                 </a>
                 <ul class="tog">
-                    <li><a href="#" class="lecture-list">강의목록</a></li>
+                    <li><a class="lecture-list">강의목록</a></li>
                 </ul>
               </li>
 
               <li>
-              	<a href="#" class="a-btn config"><i class="fas fa-cog"></i>설정
+              	<a class="a-btn config"><i class="fas fa-cog"></i>설정
               		<span class="fas fa-caret-down forth"></span>
               	</a>
               	<ul class="tog">
-              		<li><a href="#" class="faq">FAQ</a></li>
+              		<li><a class="faq">FAQ</a></li>
               	</ul>
          	  </li>
           </ul>

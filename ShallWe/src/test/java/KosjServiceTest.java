@@ -123,14 +123,14 @@ class KosjServiceTest {
 //		map.put("lectureId", lectureId);
 		
 		List<Lecture> lectureList = new ArrayList<Lecture>();
-		try {
-			int result = lectureService.insertMemberLectureHistory(lectureList);
-			log.info("lectureService : " + result);
-			
-		} catch (AddException e) {
-			e.printStackTrace();
-			log.info(e.getMessage());
-		}
+//		try {
+//			int result = lectureService.insertMemberLectureHistory(lectureList);
+//			log.info("lectureService : " + result);
+//			
+//		} catch (AddException e) {
+//			e.printStackTrace();
+//			log.info(e.getMessage());
+//		}
 	} // end insertMemberLectureHistory();
 	
 	/**
