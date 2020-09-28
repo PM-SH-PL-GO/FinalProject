@@ -214,7 +214,23 @@ $(function(){
 	//----------댓글 삭제 버튼 CLICK START---------	
 	$('#replyList').on("click","#replyDelete",function(){
 		console.log("딜리트도?");
-		var $replyIdVal = $(this).siblings('.replyId').val();
+		var $replyIdVal = $(this).parents('.reply-btn').siblings('.replyId') .val();
+		$.ajax({
+			url:"/shallwe/reply/delete/"+$replyIdVal
+			,method:"DELETE"
+			,data:{"reply_id":$replyIdVal}
+			,success:function(data){
+				alert(data);
+				alert("성공");
+				location.reload();
+			}
+			,error: function(data){
+				alert(data);
+				alert("실패");
+				location.reload();
+			}
+		});
+		console.log($replyIdVal);
 		
 	});
 	//----------댓글 삭제 버튼 CLICK END---------	
@@ -228,7 +244,10 @@ function formatDate(date) {
 </head>
 
 <body>
-
+	<!-- topbar Start -->
+	<div class="topMenu">
+		<jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
+	</div>
 	<!--? Blog Area Start -->
 	<section class="blog_area single-post-area section-padding">
 			<div class="row">
