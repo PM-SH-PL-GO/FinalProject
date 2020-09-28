@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:set var="contextPath" value="${pageContext.request.contextPath }" />
+<c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+<c:set var="lecture" value="${requestScope['lecture']}"/>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -417,12 +418,12 @@ $(document).ready(function() {
 			<div class="divTable">
 				<div class=divTableRow>
 					<div class="divTableCol">
-						<img src="assets/img/gallery/gallery1.png" class="mb-10" alt="강사사진">
+						<img src="lecture/${lecture.lecture_img}" class="mb-10" alt="강사사진">
 					</div>
 					<div class="divTableCol">
-						<span id="lecutureTitle"><label>강의명 :</label>빡빡이 아저씨와 배우는 인성 기초</span><br> 
-						<span><label>강사 :</label> 빡빡이 아저씨</span>
-						<input type="hidden" />
+						<span id="lecutureTitle"><label>강의명 :</label>${lecture.lecture_title}</span><br> 
+						<span><label>강사 :</label> ${lecture.tutor.member.member_id}</span>
+						
 					</div>
 				</div>
 
