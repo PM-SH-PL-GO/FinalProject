@@ -44,8 +44,7 @@ public class TutorController {
 	@GetMapping(value="showTutor")
 	public ModelAndView showTutorInfo(HttpSession session) throws FindException {
 		
-		//String member_id = (String)session.getAttribute("loginInfo");
-		String member_id = "championcom";
+		String member_id = (String)session.getAttribute("loginInfo");
 		ModelAndView model = new ModelAndView();
 		List<Tutor> tutor = new ArrayList<>();	
 		if (member_id == null) {
