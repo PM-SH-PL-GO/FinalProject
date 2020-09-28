@@ -248,12 +248,10 @@ public class kosjController {
 		
 		try {
 			reviewService.removeReview(map);
-			modelAndView.addObject("status", "success");
 			modelAndView.setViewName("/success");
 			
 		} catch (RemoveException e) {
 			e.printStackTrace();
-			modelAndView.addObject("status", "fail");
 			modelAndView.addObject("errMsg", e.getMessage());
 			modelAndView.setViewName("/fail");
 		}

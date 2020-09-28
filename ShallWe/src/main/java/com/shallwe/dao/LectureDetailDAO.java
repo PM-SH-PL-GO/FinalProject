@@ -1,7 +1,10 @@
 package com.shallwe.dao;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -66,8 +69,8 @@ public class LectureDetailDAO {
 
 	/**
 	 * admin - 강의 전체 조회
-	 * 
 	 * @author Jun6
+	 * @return 전체 강의 목록
 	 */
 	public List<LectureDetail> selectAll() throws FindException {
 		SqlSession session = null;
@@ -85,7 +88,39 @@ public class LectureDetailDAO {
 
 		return lectureList;
 	}
-
-	// 강의 승인/반려(admin) : 준식
+	
+	/**
+	 * 반려/취소 이유 반환
+	 * @author jun6
+	 * @param map
+	 * @throws ModifyException
+	 */
+	public String selectLectureReasonById(String lecture_id, String rejectOrCancel) throws FindException {
+		SqlSession session = null;
+		String reason = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			reason = session.selectMap("LectureDetail.selectLectureReasonById", lecture_id, rejectOrCancel).get(rejectOrCancel).toString();
+		}catch(DataAccessException e) {
+			throw new FindException("");
+		}finally {
+			session.close();
+		}
+		
+		return reason;
+	}
+	
 	// 강의 취소 승인하기(admin) : 준식
+	public void updateLectureRejectReason(Map<String, String> map) throws ModifyException{
+		SqlSession session = null;
+		
+		try {
+			session = sqlSessionFactory.openSession();
+			session.update("LectureDetail.updateLectureRejectReason", map);
+		}catch(DataAccessException e) {
+			throw new ModifyException("");
+		}finally {
+			session.close();
+		}
+	}
 }

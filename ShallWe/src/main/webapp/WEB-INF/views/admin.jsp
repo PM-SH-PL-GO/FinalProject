@@ -167,20 +167,24 @@
 	            	let approve = $(this).attr('value');		// 예비강사 ID
 	
 	            	$.ajax({
+	            		dataType: "json",														// 응답 결과의 형식 -> 다른 형식이 응답된다면 error로 간다
+	            		beforeSend : function(xhr){												// 요청을 보내기 전 헤더 값을 설정
+	            			xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");		// -> csrf 헤더와 토큰을 헤더에 넣어 놔야 403에러가 발생하지 않는다
+	            		},																		// 2차 403에러의 주된 원인
 	            		url: "${contextPath}/admin/tutor/status/" + approve,
 	            		method: "PATCH",
-// 	            		contentType: 'application/json; charset=utf-8', "${_csrf.parameterName}" : '${_csrf.token}'
-	            		contentType: 'application/json-patch+json; charset=utf-8',
+	            		contentType: 'application/json-patch+json; charset=utf-8',				// 1차 에러의 주된 원인
 	            		data: JSON.stringify({"status" : $tatus}),
+	            		
 	            		success: function(data){
-	            			console.log(data);
-	            			alert(data);
+	            			alert(data.status);
 	            			$(".pre-tutor").trigger("click")
 	            		},
-	            		error: function(data){
-// 	            			alert(xhttr.status);
-	            			alert(data);
-	            			
+	            		error: function(xhttr){
+	            			if (xhttr.status == 200)
+	            				location.replace('${contextPath}/login');
+	            			else
+	            				alert(xhttr.status);
 	            		}
 	            	});
             	}
@@ -271,11 +275,11 @@
             		},
             		error: function(){
             			let $tutor_Lecture = '<div class="tutor-lecture-list"><div class="tutor-lecture-content">';
-            			$tutor_Lecture += '<h3>' + lectures[0].tutor.tutor_nickname + '강사의 강의목록</h3><br>';
+//             			$tutor_Lecture += '<h3>' + lectures[0].tutor.tutor_nickname + '강사의 강의목록</h3><br>';
             			$tutor_Lecture += '<button class="tutor-lecture-close">닫기</button><hr>';
             			$tutor_Lecture += '<table class="table">';
             			$tutor_Lecture += '<tr><thead><th>순서</th><th>강의번호</th><th>강의명</th><th>상태</th></tr></thead>';
-           				$tutor_Lecture += '<tbody><tr>신청한 강의가 존재하지 않습니다</tr></tbody></table>'
+           				$tutor_Lecture += '<tbody><tr>등록한 강의가 존재하지 않습니다</tr></tbody></table>'
             			let cont = $cont.html() + $tutor_Lecture;
             			$cont.html(cont);
             		}
@@ -299,7 +303,7 @@
                     method: "GET",
                     success: function(lectures){
                     	let preparedCnt = 0;
-                    	let prepared = '<h3 class="lecture-list-title">승인대기</h3>';
+                    	let prepared = '<h3 class="lecture-list-title">등록 요청</h3>';
                     	prepared += '<table class="table prepared"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th>';
                     	prepared += '<th>강의 가격</th><th>강의 상태</th><th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th>';
                     	prepared += '<th>현재 수강 인원</th><th colspan="2">관리하기</th></tr></thead><tbody>';
@@ -316,11 +320,17 @@
                     	finish += '<th>강의 가격</th><th>강의 상태</th><th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th>';
                     	finish += '<th>현재 수강 인원</th><th>후기</th></tr></thead><tbody>';
                     	
+                    	let cancelRequestCnt = 0;
+                    	let cancelRequest = '<h3 class="lecture-list-title">취소 요청</h3>';
+                    	cancelRequest += '<table class="table cancel-Request"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th>';
+                    	cancelRequest += '<th>강의 가격</th><th>강의 상태</th><th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th>';
+                    	cancelRequest += '<th>현재 수강 인원</th><th>취소사유</th><th colspan="2">관리하기</th></tr></thead><tbody>';
+                    	
                     	let cancelCnt = 0;
-                    	let cancel = '<h3 class="lecture-list-title">취소 대기 / 취소</h3>';
+                    	let cancel = '<h3 class="lecture-list-title">반려 / 취소</h3>';
                     	cancel += '<table class="table finish"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th>';
                     	cancel += '<th>강의 가격</th><th>강의 상태</th><th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th>';
-                    	cancel += '<th>현재 수강 인원</th><th colspan="2">관리하기</th></tr></thead><tbody>';
+                    	cancel += '<th>현재 수강 인원</th><th>사유보기</th></tr></thead><tbody>';
                     	
                     	lectures.forEach(function(lecture){
                     		let idNumber = '' + lecture.lecture_id;
@@ -333,8 +343,8 @@
                     		
                     		if (lecture.lecture_state == '승인대기'){
                     			preparedCnt++;
-                    			
-                    			prepared += '<tr class="lecture-detail"><td>' + lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
+                    			prepared += '<tr class="lecture-detail" value="' + lecture.lecture_id + '"><td>';
+                    			prepared += lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
                     			prepared += '<td><img src="${contextPath}/lecture/' + lecture.lecture_img + '"></td>';
                     			prepared += '<td>' + lecture.lectureCategory.lecture_category_name + '</td>';
                     			prepared += '<td>' + lecture.lecture_title + '</td>';
@@ -346,11 +356,13 @@
                     			prepared += '<td>' + lecture.lecture_min + '</td>';
                     			prepared += '<td>' + lecture.lecture_current + '</td>';
                     			prepared += '<td><button class="lecture-edit" value="' + lecture.lecture_id + '">승인</button></td>';
-                    			prepared += '<td><button class="lecture-edit" value="' + lecture.lecture_id + '">반려</button></td>';
+                    			prepared += '<td><button class="lecture-reject" value="' + lecture.lecture_id + '">반려</button></td>';
+                    			
                     		}else if(lecture.lecture_state == '승인' && end > today){
                     			// 승인(진행중 + 시작 전 모집 중)
                     			processCnt++;
-                    			process += '<tr class="lecture-detail"><td>' + lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
+                    			process += '<tr class="lecture-detail" value="' + lecture.lecture_id + '"><td>';
+                    			process += lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
                     			process += '<td><img src="${contextPath}/lecture/' + lecture.lecture_img + '"></td>';
                     			process += '<td>' + lecture.lectureCategory.lecture_category_name + '</td>';
                     			process += '<td>' + lecture.lecture_title + '</td>';
@@ -364,7 +376,8 @@
                     		}else if(lecture.lecture_state == '승인' && today >= end){
                     			// 완료
                     			finishCnt++;
-                    			finish += '<tr class="lecture-detail"><td>' + lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
+                    			finish += '<tr class="lecture-detail" value="' + lecture.lecture_id + '"><td>';
+                    			finish += lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
                     			finish += '<td><img src="${contextPath}/lecture/' + lecture.lecture_img + '"></td>';
                     			finish += '<td>' + lecture.lectureCategory.lecture_category_name + '</td>';
                     			finish += '<td>' + lecture.lecture_title + '</td>';
@@ -376,10 +389,32 @@
                     			finish += '<td>' + lecture.lecture_min + '</td>';
                     			finish += '<td>' + lecture.lecture_current + '</td>';
                     			finish += '<td><button class="lecture-review" value="' + lecture.lecture_id + '">후기보기</button></td>';
+                    		}else if(lecture.lecture_state == '취소대기'){
+                    			// 취소 요청
+                    			cancelRequestCnt++;
+                    			cancelRequest += '<tr class="lecture-detail" value="' + lecture.lecture_id + '"><td>';
+                    			cancelRequest += lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
+                    			cancelRequest += '<td><img src="${contextPath}/lecture/' + lecture.lecture_img + '"></td>';
+                    			cancelRequest += '<td>' + lecture.lectureCategory.lecture_category_name + '</td>';
+                    			cancelRequest += '<td>' + lecture.lecture_title + '</td>';
+                    			cancelRequest += '<td>' + lecture.lecture_price + '원</td>';
+                    			cancelRequest += '<td>' + lecture.lecture_state + '</td>';
+                    			cancelRequest += '<td>' + start + '</td>';
+                    			cancelRequest += '<td>' + end + '</td>';
+                    			cancelRequest += '<td>' + lecture.lecture_max + '</td>';
+                    			cancelRequest += '<td>' + lecture.lecture_min + '</td>';
+                    			cancelRequest += '<td>' + lecture.lecture_current + '</td>';
+                    			cancelRequest += '<td><button class="lecture-reason" value="' + lecture.lecture_id + '">취소사유</button></td>';
+                    			
+                    			if (lecture.lecture_state == '취소대기'){
+                    				cancelRequest += '<td><button class="lecture-edit" value="' + lecture.lecture_id + '">취소승인</button></td>';
+                    				cancelRequest += '<td><button class="lecture-edit" value="' + lecture.lecture_id + '">복구</button></td>';
+                    			}	
                     		}else{
-                    			//취소 or 취소대기
+                    			//취소 or 반려
                     			cancelCnt++;
-                    			cancel += '<tr class="lecture-detail"><td>' + lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
+                    			cancel += '<tr class="lecture-detail" value="' + lecture.lecture_id + '"><td>'
+                    			cancel += lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
                     			cancel += '<td><img src="${contextPath}/lecture/' + lecture.lecture_img + '"></td>';
                     			cancel += '<td>' + lecture.lectureCategory.lecture_category_name + '</td>';
                     			cancel += '<td>' + lecture.lecture_title + '</td>';
@@ -390,12 +425,11 @@
                     			cancel += '<td>' + lecture.lecture_max + '</td>';
                     			cancel += '<td>' + lecture.lecture_min + '</td>';
                     			cancel += '<td>' + lecture.lecture_current + '</td>';
-                    			if (lecture.lecture_state == '취소대기'){
-                    				cancel += '<td><button class="lecture-edit" value="' + lecture.lecture_id + '">취소승인</button></td>';
-                    				cancel += '<td><button class="lecture-edit" value="' + lecture.lecture_id + '">복구</button></td>';
-                    			}
-//                     			else
-//                     				cancel += '<td><button class="lecture-review">후기보기</button></td>';
+
+								if (lecture.lecture_state == '취소')
+                    				cancel += '<td><button class="lecture-reason" value="' + lecture.lecture_id + '">취소사유</button></td>';
+                   				else if (lecture.lecture_state == '반려')
+                    				cancel += '<td><button class="lecture-reason" value="' + lecture.lecture_id + '">반려사유</button></td>';
                     		}
                     	 });
                     	
@@ -411,9 +445,10 @@
                     	prepared += '</tbody></table><hr>';
                     	process += '</tbody></table><hr>';
                     	finish += '</tbody></table><hr>';
+                    	cancelRequest += '</tbody></table><hr>';
                     	cancel += '</tbody></table>';
                     	
-                    	$lot = prepared + process + finish + cancel;
+                    	$lot = prepared + process + finish + cancelRequest + cancel;
                     	$cont.html($lot);
                     },
                     error: function(){
@@ -452,34 +487,88 @@
 //             	});
             });
             
-            // 강의 신청 대기 상태 변동하기(강의 승인/반려)
+            // 강의 신청 대기 상태 변동하기(강의 승인/취소 승인)
             $cont.on("click", ".lecture-edit", function(){
-            	let $tatus = $(this).html();					// 승인/반려 상태
+            	let $tatus = $(this).html();					// 변경할 강의 상태
             	let isTrue = confirm($tatus + " 하시겠습니까?");
             	
-            	if (isTrue == true){
+            	if (isTrue){
 	            	let approve = $(this).attr('value');		// 강의 ID
-	
+	            	let reason;
+					
+	            	if ($(".reject-reason") != null)
+	            		reason = $(".reject-reason").attr('value');
+	            	
+	            	let statusAndReason = {status : $tatus, reject_reason : reason};
+	            	
 	            	$.ajax({
+	            		dataType: "json",													
+	            		beforeSend : function(xhr){
+	            			xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");		
+	            		},																		
 	            		url: "${contextPath}/admin/lecture/status/" + approve,
-	            		method: "patch",
+	            		method: "PATCH",
 	            		contentType: 'application/json-patch+json; charset=utf-8',
-	            		data: JSON.stringify({"status" : $tatus}),
+	            		data: JSON.stringify(statusAndReason),
+	            		
 	            		success: function(data){
-	            			console.log(data);
-	            			alert(data);
+	            			alert(data.status);
 	            			$(".lecture-list").trigger("click")
 	            		},
-	            		error: function(data){
-	            			alert(data);
-	            			
+	            		error: function(xhttr){
+	            			if (xhttr.status == 200)
+	            				location.replace('${contextPath}/login');
+	            			else
+	            				alert(xhttr.status);
 	            		}
 	            	});
             	}
             	
             	return false;
             });
+            
+            // 강의 반려하기 버튼 클릭시
+            $cont.on("click", ".lecture-reject", function(){
+    			// 모달창(반려 사유 작성) 생성 후 화면에 추가
+            	alert("아직 준비중입니다")
+            	return false;
+            });
 			
+            // 취소/반려 사유 보기
+            $cont.on("click", ".lecutre-reason", function(){
+            	let lectureId = $(this).attr('value');	// 강의 번호
+            	let reasonType = $(this).html();
+            	
+            	$.ajax({
+            		url: "$contextPath/admin/reason/" + lectureId,
+            		method: "GET",
+            		data: { rejectOrCancel : reasonType },
+            		success: function(data){
+            			let modal = '<div class="tutor-lecture-list"><div class="tutor-lecture-content">';
+                    	modal += '<div>' + ' 강사의 ' + reasonType + '</div>';
+            			modal += '<button class="tutor-lecture-close">닫기</button>';
+            			modal += '<h5>사유 :</h5><br><p>';
+            			modal += data.reason + '</p>';
+		    			modal += '<div class="tutor-lecture-layer"></div></div>';
+		    			let cont = $cont.html() + modal;
+		    			$cont.html(cont);
+            		},
+            		error: function(data){
+            			let modal = '<div class="tutor-lecture-list"><div class="tutor-lecture-content">';
+                    	////////////////////
+                    	modal += '<div>강사의 ' + reasonType + '목록</div>';
+                    	/////////////////////
+            			modal += '<button class="tutor-lecture-close">닫기</button>';
+            			modal += '<p>' + data.errMsg + '</p>';
+		    			modal += '<div class="tutor-lecture-layer"></div></div>';
+		    			let cont = $cont.html() + modal;
+		    			$cont.html(cont);
+            		}
+            	});
+            	
+            	return false;
+            });
+            
             // 종료된 강의 후기보기
             $cont.on("click", ".lecture-review", function(){
             	alert("아직 준비중입니다");
@@ -492,8 +581,23 @@
             	$.ajax({
             		url: "${contextPath}/admin/faq/list",
             		method: "GET",
-            		success: function(views){
-            			$cont.html(views);
+            		success: function(faqList){
+            			let $lot = '<button class="faq_insert">FAQ 추가하기</button><br>';
+            			$lot += '<table class="table"><thead><tr><th>번호</th><th>질문</th><th>답변</th><th>관리</th><th>삭제</th></tr></thead>';
+            			$lot += '<tbody>';
+						
+            			faqList.forEach(function(faq){
+            				$lot += '<tr><td>' + faq.faq_id + '</td>';
+            				$lot += '<td>' + faq.faq_question + '</td>';
+            				$lot += '<td>' + faq.faq_answer + '</td></tr>';
+            				$lot += '<td><button class="faq_change" value="' + faq.faq_id + '">관리하기</button></td>';
+            				$lot += '<td><button class="faq_delete" value="' + faq.faq_id + '">삭제하기</button></td>';
+            			});
+            			
+            			$lot += '</tbody>';
+            			$lot += '</table>';
+            			
+            			$cont.html($lot);
             		}
             	});
             	

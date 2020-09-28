@@ -9,14 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -135,7 +133,6 @@ public class AdminController {
 	public ResponseEntity<String> tutorStatusChange(@PathVariable(value = "tutorId")String id, @RequestBody String status){
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> map;
-		System.out.println("///////////////////////////" + status + "//////////////////////////////////////////");
 		String tutorStatus = "";
 		try {
 			map = mapper.readValue(status, new TypeReference<Map<String, Object>>() {});
@@ -146,11 +143,21 @@ public class AdminController {
 			e1.printStackTrace();
 		}
 		try{
-			adminService.approvePreTutor(id, tutorStatus);
-			return (ResponseEntity<String>) ResponseEntity.status(HttpStatus.OK).body("정상적으로 설정되었습니다");
+//		HttpHeaders h = new HttpHeaders();
+//		h.setContentType(MediaType.APPLICATION_JSON_UTF8);
+//		return new ResponseEntity<String>("{\"status\" : \"정상적으로 설정되었습니다\"}", h, HttpStatus.OK);
+			
+			
+			if (tutorStatus.equals("승인"))
+				adminService.approvePreTutor(id, tutorStatus);
+			else {
+				
+				
+			}
+			return  ResponseEntity.status(HttpStatus.OK).body("{\"status\" : \"정상적으로 " + tutorStatus + " 처리되었습니다\"}");
 		}catch(ModifyException e) {
 			e.printStackTrace();
-			return (ResponseEntity<String>) ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("설정에 실패하였습니다");
+			return (ResponseEntity<String>) ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("{\"status\" : \"설정에 실패하였습니다\"}");
 		}
 	}
 	
@@ -214,11 +221,15 @@ public class AdminController {
 	 * @param status
 	 * @return
 	 */
-	@PatchMapping(value = "/lecture/status/{lectureId}", produces = {"text/plain; charset=UTF-8;"})
-	public ResponseEntity<String> lectureStatusChange(@PathVariable(name = "lectureId") String lecture_id, @RequestBody String status){
+	@PatchMapping(value = "/lecture/status/{lectureId}")
+	public ResponseEntity<String> lectureStatusChange(@PathVariable(name = "lectureId") String lecture_id
+													, @RequestBody String status
+													, @RequestBody(required = false) String reject_reason)
+	{
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> map;
 		String lectureStatus = "";
+		
 		try {
 			map = mapper.readValue(status, new TypeReference<Map<String, Object>>() {});
 			lectureStatus = map.get("status").toString();
@@ -229,13 +240,25 @@ public class AdminController {
 		}
 		
 		try {
-			adminService.updateLectureStatusByIdAndStatus(lecture_id, lectureStatus);
-			return ResponseEntity.status(HttpStatus.OK).body("정상적으로 설정하였습니다");
+			adminService.updateLectureStatusByIdAndStatus(lecture_id, lectureStatus, reject_reason);
+			return ResponseEntity.status(HttpStatus.OK).body("{ \"status\" : \"정상적으로 " + lectureStatus + " 처리하였습니다\"}");
 		}catch(ModifyException e) {
 			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("설정에 실패하였습니다");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"status\" : \"설정에 실패하였습니다\"}");
 		}
 	}
+	
+	@GetMapping(value = "/reason/{lectureId}")
+	public ResponseEntity<String> updateRejectReason(@PathVariable(name = "lectureId") String lecture_id, String rejectOrCancel){
+		try {
+			String reason = adminService.showLectureReason(lecture_id, rejectOrCancel);
+			return ResponseEntity.status(HttpStatus.OK).body("{ \"reason\" : \"" + reason + "\" }");
+		}catch(FindException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.OK).body("{ \"errMsg\" : \"" + e.getMessage() + "\"}");
+		}
+	}
+	
 	
 	
 	

@@ -98,7 +98,7 @@ $(function(){
 				replyPageData += "	<div class=\"d-flex justify-content-between\">"
 				replyPageData += "		<div class=\"d-flex align-items-center\">"
 				replyPageData += "			<h5>"
-				replyPageData += "				<a><i class=\"fa fa-user\"></i>"+studyReply.member.member_name+"</a>"
+				replyPageData += "				<a><i class=\"fa fa-user\"></i>"+studyReply.member.member_id+"/"+nameMasking(studyReply.member.member_name)+"</a>"
 				replyPageData += "			</h5>"
 				replyPageData += "				<p>"+formatDate(studyReply.studyreply_dt)+"</p>"
 				replyPageData += "		</div>"
@@ -240,6 +240,26 @@ function formatDate(date) {
 	if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; 
 	return [year, month, day].join('-'); 
 }
+
+function nameMasking(str){
+	var originStr = str;
+	var maskingStr;
+	var strLength;
+	
+	if(originStr==null){
+		return originStr;
+	}
+	
+	strLength = originStr.length;
+	
+	if(strLength < 3){ 
+		maskingStr = originStr.replace(/(?<=.{1})./gi, "*"); 
+	}else {
+		maskingStr = originStr.replace(/(?<=.{2})./gi, "*"); 
+	}
+	return maskingStr;
+
+}
 </script>
 </head>
 
@@ -264,7 +284,7 @@ function formatDate(date) {
 							<h2 style="color: #2d2d2d;">${studyBoard.studyBoard_title}
 							</h2>
 							<ul class="blog-info-link mt-3 mb-4">
-								<li><a href="#"><i class="fa fa-user"></i>${studyBoard.member.member_name}</a></li>
+								<li><a href="#"><i class="fa fa-user"></i>${studyBoard.member.member_id}</a></li>
 								<li><a href="#"><i class="fa fa-comments"></i> 조회 수(${studyBoard.studyBoard_view_count})</a></li>
 								<li><a href="#">작성일 ${resultDt}</a></li>
 							</ul>
