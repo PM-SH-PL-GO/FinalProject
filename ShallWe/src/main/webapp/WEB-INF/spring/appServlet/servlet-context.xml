@@ -19,6 +19,7 @@
  			    <beans:property name="supportedMediaTypes"> 
                  	<beans:list> 
                     	<beans:value>text/html;charset=UTF-8</beans:value> 
+                    	<beans:value>application/json;charset=UTF-8</beans:value> 
                  	</beans:list> 
              	</beans:property> 
              </beans:bean> 

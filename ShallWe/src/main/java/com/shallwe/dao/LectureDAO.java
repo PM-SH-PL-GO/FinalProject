@@ -189,10 +189,7 @@ public class LectureDAO {
 		try {
 			session = sqlSessionFactory.openSession();
 			lectureList = session.selectList("LectureMapper.selectAllLectures");
-//			for (Lecture lec : lectureList) {
-//				System.out.println("Start = " + lec.getLecture_start_dt());
-//			}
-		} catch (DataAccessException e) {
+		}catch(DataAccessException e) {
 			e.printStackTrace();
 		} finally {
 			session.close();

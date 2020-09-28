@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.shallwe.dao.FaqDAO;
 import com.shallwe.dao.LectureDAO;
@@ -125,20 +126,34 @@ public class AdminService {
 	 * @param status
 	 * @throws ModifyException
 	 */
-	public void updateLectureStatusByIdAndStatus(String lecture_id, String status) throws ModifyException{
+	@Transactional
+	public void updateLectureStatusByIdAndStatus(String lecture_id, String status, String reject_reason) throws ModifyException{
 		Map<String, String> map = new HashMap<>();
-		map.put("id", lecture_id);
+		map.put("lecture_id", lecture_id);
+		
 		if (status.equals("승인"))
 			map.put("status", status);
-		else if(status.equals("반려") || status.equals("취소승인"))
-			map.put("status", "취소");
+		else if(status.equals("반려")) {
+			map.put("status", "반려");
+			map.put("reject_reason", reject_reason);
+			lectureDetailDAO.updateLectureRejectReason(map);
+		}
 		else if(status.equals("복구"))
-			map.put("status", "승인대기");
+			map.put("status", "승인");
+		else if (status.equals("취소승인"))
+			map.put("status", "취소");
 		else
 			throw new ModifyException("승인/반려 이외의 글자가 전달되었습니다 : " + status);
 		
 		lectureDAO.updateLectureStatusByIdAndStatus(map);
 	}
+	
+	
+	public String showLectureReason(String lecture_id, String rejectOrCancel) throws FindException{
+		return lectureDetailDAO.selectLectureReasonById(lecture_id, rejectOrCancel);
+	}
+	
+	
 	
 	
 	/**
