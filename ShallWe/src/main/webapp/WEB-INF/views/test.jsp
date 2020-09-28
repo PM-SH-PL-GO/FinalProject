@@ -60,7 +60,7 @@ $(document).ready(function() {
 <body>
 
 
-<a href="shallwe/lectures/detail?lecture_id=1"> 강의상세보기 </a>
+<a href="/shallwe/lectures/detail?lecture_id=3"> 강의상세보기 </a>
 <br/>
 <a href="/shallwe/reviewAdd"> 후기등록테스트</a>
 
