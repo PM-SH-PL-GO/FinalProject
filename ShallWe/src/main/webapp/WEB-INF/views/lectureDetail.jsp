@@ -35,6 +35,23 @@
 <link rel="stylesheet" href="/shallwe/assets/css/slick.css">
 <link rel="stylesheet" href="/shallwe/assets/css/nice-select.css">
 <link rel="stylesheet" href="/shallwe/assets/css/style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+	var $reviewAreaObj = $('#reviewArea');
+	console.log($reviewAreaObj);
+	// 강사별, 카테고리별 리뷰 목록 조회
+	$.ajax({
+		url : "/shallwe/reviewList"
+		, data : {"tutor_id": "${lecture.tutor.member.member_id}",
+				  "category_id":"${lecture.lectureCategory.lecture_category_id}"}
+		, success : function (responseData) {
+			console.log(responseData);
+			$reviewAreaObj.append(responseData);
+		}
+	}); // end of ajax 
+}); // end of scriptLoad
+</script>
 </head>
 <script>
 $(function(){
@@ -146,7 +163,7 @@ $(function () {
 							<h4 class="mb-30 mt-30" id="filename">첨부파일</h4>
 							<p>${lectDetail.lecture_fileName}</p>
 							<h4 class="mb-30 mt-30" id="tutorReview">강사후기</h4>
-							<!-- 						후기영역 -->
+							<!-- 후기영역 -->
 							<div class="mb-30 mt-30" id="reviewArea"></div>
 						</div>
 						<div class="col-md-4"

@@ -1,11 +1,14 @@
 package com.shallwe.control;
 
+import java.rmi.RemoteException;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,7 +57,6 @@ public class ReplyController {
 		StudyBoard sb = new StudyBoard();
 		String memberId =(String)session.getAttribute("loginInfo");
 		if(memberId ==null ||memberId =="") {
-			System.out.println("아이디없자나 임마");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("로그인 후 댓글을 작성해주세요");
 		}
 		m.setMember_id(memberId);
@@ -90,6 +92,19 @@ public class ReplyController {
 		} catch (ModifyException e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 작성 실패");
+		}
+		
+	}
+	
+	@RequestMapping(value = "/delete/{reply_id}", produces = "application/text; charset=utf8")
+	@ResponseBody
+	public ResponseEntity<String> delete(@PathVariable(value = "reply_id",required = false)Integer ri){
+		try {
+			service.deleteReply(ri);
+			return ResponseEntity.status(HttpStatus.OK).body("댓글 삭제 완료");
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 삭제 완료");
 		}
 		
 	}

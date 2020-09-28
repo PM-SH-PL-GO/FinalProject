@@ -1,7 +1,6 @@
 package com.shallwe.dao;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,10 +26,11 @@ public class ReviewDAO {
 	// 후기 작성 (수강생) : 수정
 	public void insertReview ( ReviewBean reviewBean ) throws AddException {
 		// DAO 처리결과
+		SqlSession session = null;
 		int result = 0;
 		try {
 			// DB와의 연결
-			SqlSession session = sqlSessionFactory.openSession();
+			session = sqlSessionFactory.openSession();
 			System.out.println("insertReview reviewBean:" + reviewBean);
 			result = session.insert("ReviewMapper.insertReivew", reviewBean);
 //			session.selectList("LectureMapper.tutorMyClassList", "member1");
@@ -40,15 +40,18 @@ public class ReviewDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new AddException(e.getMessage());
+		} finally {
+			session.close();
 		}
 		
 	}
 	// 후기 삭제 (수강생) : 수정
 	public void deleteReivew ( Map<String, String> map ) throws RemoveException {
+		SqlSession session = null;
 		int result = 0;
 		try {
 			// DB와의 연결
-			SqlSession session = sqlSessionFactory.openSession();
+			session = sqlSessionFactory.openSession();
 			result = session.delete("ReviewMapper.deleteReivew", map);
 			if ( result == 0 ) {
 				log.info("강의 리뷰 삭제에 실패했습니다!");
@@ -56,16 +59,19 @@ public class ReviewDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RemoveException(e.getMessage());
+		} finally {
+			session.close();
 		}
 		
 	}
 	
 	// 강사별, 카테고리별 후기 목록조회 : 수정
 	public List<Review> selectReivew (Map<String,String> map ) throws FindException {
+		SqlSession session = null;
 		List<Review> list = new ArrayList<Review>();
 		try {
 			// DB와의 연결
-			SqlSession session = sqlSessionFactory.openSession();
+			session = sqlSessionFactory.openSession();
 			list = session.selectList("ReviewMapper.selectReivewList", map);
 			if ( list.size() == 0 ) {
 				log.info("강사별 후기 목록 조회 결과 없습니다.");
@@ -77,8 +83,10 @@ public class ReviewDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new FindException(e.getMessage());
+		} finally {
+			session.close();
 		}
 		return list;
 	}
 
-}
+} // end of ReviewDAO

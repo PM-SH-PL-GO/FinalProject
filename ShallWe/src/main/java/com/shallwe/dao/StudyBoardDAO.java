@@ -38,10 +38,10 @@ public class StudyBoardDAO {
 		
 	}
 	// 게시글 조건 검색(+페이징) : 성운
-	public List<StudyBoard> selectByTitleAndContent(String titleOrContent) throws FindException{
+	public List<StudyBoard> selectByTitleAndContent(Map<String, Object> map) throws FindException{
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
-			List<StudyBoard> list = session.selectList("StudyBoardMapper.selectByTitleAndContent",titleOrContent);
+			List<StudyBoard> list = session.selectList("StudyBoardMapper.selectByTitleAndContent",map);
 			if(list==null || list.size()==0) {
 				throw new FindException("게시글이 없습니다.");
 			}
@@ -108,11 +108,17 @@ public class StudyBoardDAO {
 		}
 	}
 	
-	//조회수 삽입 : 성운
-//	public void insertViews(int studyBoard_id) {
-//		SqlSession session = sqlSessionFactory.openSession();
-//		session.insert("StudyBoardMapper.insertViews", studyBoard_id);
-//	}
+	//검색 게시글 수 조회 : 성운
+	public int SearchSelectCount(Map<String, Object> map) {
+		SqlSession session = sqlSessionFactory.openSession();
+		try {
+			int selectcount = session.selectOne("StudyBoardMapper.SerachSelectCount",map);
+			return selectcount;
+		}finally {
+			session.close();	
+		}
+	}
+	
 	
 	//게시글 번호로 조회
 	@Transactional(rollbackFor = FindException.class)

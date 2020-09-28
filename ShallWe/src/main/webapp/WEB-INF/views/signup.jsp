@@ -70,9 +70,9 @@
 				<tr>
 					<th><span>필수입력</span>이메일 주소</th>
 					<td>
-						<input id="mEmail" name="memberEmail" type="text" style="width:210px;" pattern="[a-zA-Z0-9]*" required>
+						<input id="memEmail" name="memberEmail1" type="text" style="width:210px;" pattern="[a-zA-Z0-9]*" required>
 						@
-						<input id="domain" name="memberEmail" type="text" style="width:194px; background:#DCDCDC" readonly pattern="[a-z]+[.]+[a-z]+[.]*[a-z]*" required>
+						<input id="domain" name="memberEmail2" type="text" style="width:194px; background:#DCDCDC" readonly pattern="[a-z]+[.]+[a-z]+[.]*[a-z]*" required>
 						<select id="select_domain" name="select_domain" onchange="InsertTitle(this.value)">
 							<option value="gmail.com">gmail.com</option>
 							<option value="naver.com">naver.com</option>
@@ -80,20 +80,21 @@
 							<option value="yahoo.com">yahoo.com</option>
 							<option value="">==직접입력==</option>
 						</select>
+						<input id="memberEmail" name="memberEmail" type="hidden">
 					</td>
 				</tr>
 				
 				<tr>
 					<th><span>필수입력</span>휴대폰번호</th>
 					<td>
-						<select name="memberPhone">
+						<select id="memberPhone1" name="memberPhone1">
 						<option value = "010">010</option>
 						<option value = "011">011</option>
 						<option value = "016">016</option>
 						</select>
-						<input id="mPhone1" name="memberPhone" type="text" style="width:150px;" maxlength="4" pattern="[0-9]" title="숫자를 입력하세요" required>
-					 	<input id="mPhone2" name="memberPhone" type="text" style="width:150px;" maxlength="4" pattern="[0-9]" title="숫자를 입력하세요" required>
-<!-- 						<input name="memberPhone" type="hidden" value=""> -->
+						<input id="mPhone1" name="memberPhone2" type="text" style="width:150px;" maxlength="4" pattern="[0-9]" title="숫자를 입력하세요" required>
+					 	<input id="mPhone2" name="memberPhone3" type="text" style="width:150px;" maxlength="4" pattern="[0-9]" title="숫자를 입력하세요" required>
+						<input id="memberPhone" name="memberPhone" type="hidden" value="">
 					</td>
 				</tr>	
 				<tr>
@@ -169,10 +170,18 @@
 							$('#favorite3').val(checkArray[2]);
 							};
 						});
-// 						$("input[name=memberPhone]").add(function(){
-// 							var memPhone = null;
-// 							memPhone = $("form>[name=memberPhone1]").val() + $("input[name=memberPhone2]").val() + $("input[name=memberPhone3]").val();
-// 						});
+						var memPhone = null;
+						var memPhone1 = $("#memberPhone1").val(); 
+						var memPhone2 = $("input[name=memberPhone2]").val(); 
+						var memPhone3 =  $("input[name=memberPhone3]").val();
+						memPhone =  memPhone1+memPhone2+memPhone3;
+						$("#memberPhone").val(memPhone);
+						
+						var memEmail = $("#memEmail").val();
+						var memDomain = $("#domain").val();
+						var memberEmail = null; 
+						memberEmail = memEmail+"@"+memDomain;
+						$("#memberEmail").val(memberEmail);
 						
 						console.log("회원가입중.....");
 						$.ajax({

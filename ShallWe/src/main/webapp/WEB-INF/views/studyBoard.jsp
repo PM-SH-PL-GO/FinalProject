@@ -34,7 +34,7 @@ $(function(){
 					boardPageData += "<tr>"
 					boardPageData += "	<td class=\"boardId\">"+studyBoard.studyBoard_id+"</td>";
 					boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"</td>";
-					boardPageData += "	<td>"+studyBoard.member.member_name+"</td>";
+					boardPageData += "	<td>"+studyBoard.member.member_id+"/"+nameMasking(studyBoard.member.member_name)+"</td>";
 					boardPageData += "	<td>"+formatDate(studyBoard.studyBoard_write_dt)+"</td>";
 					boardPageData += "	<td>"+studyBoard.studyBoard_view_count+"</td>";
 					boardPageData += "</tr>"
@@ -47,6 +47,7 @@ $(function(){
 			}
 			
 			for(var i=pbObj.startPage; i<=pbObj.totalPage; i++){
+				
 				pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
 			}
 			if(pbObj.endPage < pbObj.totalPage){
@@ -61,9 +62,13 @@ $(function(){
 	});
 	//----------스터디 게시판 LOAD  END---------
 	
-	//----------스터디 게시판 페이지 CLICK  START---------	
+	//----------스터디 게시판 페이징 CLICK  START---------	
 	$pageList.on("click","li>a", function(e){
 		var $etClass = $(e.target).attr('class');
+		var $searchVal = $(this).parents('.pagination-area').siblings('.row').find('#searchBar').val();
+		var urlVal = null;
+		
+		console.log("나와라"+$searchVal);
 		if($etClass == 'prev'){
 			page = ${pb.startPage-1};			
 		}else if($etClass == 'next'){
@@ -71,8 +76,14 @@ $(function(){
 		}else{
 			page = $(e.target).html();
 		}
+		
+		if($searchVal==null ||  $searchVal==""){
+			urlVal = "/shallwe/board/list/"+page;
+		}else{
+			urlVal = "/shallwe/board/search/"+$searchVal+"/"+page;
+		}
 		$.ajax({
-			url:"/shallwe/board/list/"+page
+				url:urlVal
 			,method:"get"
 			,success:function(pbObj){
 			var $boardPage=$("#tbody");
@@ -84,28 +95,45 @@ $(function(){
 						boardPageData += "<tr>"
 						boardPageData += "	<td class=\"boardId\">"+studyBoard.studyBoard_id+"</td>";
 						boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"</td>";
-						boardPageData += "	<td>"+studyBoard.member.member_name+"</td>";
+						boardPageData += "	<td>"+studyBoard.member.member_id+"/"+nameMasking(studyBoard.member.member_name)+"</td>";
 						boardPageData += "	<td>"+formatDate(studyBoard.studyBoard_write_dt)+"</td>";
 						boardPageData += "	<td>"+studyBoard.studyBoard_view_count+"</td>";
 						boardPageData += "</tr>"
 					});
 				$boardPage.html(boardPageData);
+				var $pageList = $("#pageList");
+				var pageListData = "";
+				if(pbObj.startPage > 1){
+					pageListData += '<li class="page-item"><a class="prev"><span class="ti-angle-left"></span></a></li>';
+				}
+				
+				for(var i=pbObj.startPage; i<=pbObj.totalPage; i++){
+					
+					pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
+				}
+				if(pbObj.endPage < pbObj.totalPage){
+					pageListData += '<li class="page-item"><a class="next"><span class="ti-angle-right"></span></a></li>'
+				}
+				
+				$pageList.html(pageListData);
 			}
 			,errer:function(xhr){
 				alert("실패" + xhr.status)
 			}
 		});
 	});
-	//----------스터디 게시판 페이지 CLICK  END---------	
+	//----------스터디 게시판 페이징 CLICK  END---------	
 	
 	//----------스터디 게시판 검색 button CLICK  START---------		
 	$("button#search-btn").click(function(){
 		$searchVal = $("#searchBar").val()
+		var page = 1;
+		console.log("/shallwe/board/serach/"+$searchVal+"/"+page);
 		if($searchVal== null || $searchVal== ""){
 			location.href = "/shallwe/studyBoard";
 		}
 		$.ajax({
-			url:"/shallwe/board/search/" + $searchVal
+			url:"/shallwe/board/search/"+$searchVal+"/"+page
 			,method:"get"
 			,success:function(pbObj){
 				var $boardPage=$("#tbody");
@@ -117,13 +145,28 @@ $(function(){
 					boardPageData += "<tr>"
 					boardPageData += "	<td class=\"boardId\">"+studyBoard.studyBoard_id+"</td>";
 					boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"</td>";
-					boardPageData += "	<td>"+studyBoard.member.member_name+"</td>";
+					boardPageData += "	<td>"+studyBoard.member.member_id+"/"+nameMasking(studyBoard.member.member_name)+"</td>";
 					boardPageData += "	<td>"+formatDate(studyBoard.studyBoard_write_dt)+"</td>";
 					boardPageData += "	<td>"+studyBoard.studyBoard_view_count+"</td>";
 					boardPageData += "</tr>"
 				});
 				$boardPage.empty();
 				$boardPage.html(boardPageData);		
+				var $pageList = $("#pageList");
+				var pageListData = "";
+				if(pbObj.startPage > 1){
+					pageListData += '<li class="page-item"><a class="prev"><span class="ti-angle-left"></span></a></li>';
+				}
+				
+				for(var i=pbObj.startPage; i<=pbObj.totalPage; i++){
+					
+					pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
+				}
+				if(pbObj.endPage < pbObj.totalPage){
+					pageListData += '<li class="page-item"><a class="next"><span class="ti-angle-right"></span></a></li>'
+				}
+				
+				$pageList.html(pageListData);
 				
 			}
 			,  error:function(request,status,error){
@@ -163,6 +206,25 @@ function formatDate(date) {
 	return [year, month, day].join('-'); 
 }
 
+function nameMasking(str){
+	var originStr = str;
+	var maskingStr;
+	var strLength;
+	
+	if(originStr==null){
+		return originStr;
+	}
+	
+	strLength = originStr.length;
+	
+	if(strLength < 3){ 
+		maskingStr = originStr.replace(/(?<=.{1})./gi, "*"); 
+	}else {
+		maskingStr = originStr.replace(/(?<=.{2})./gi, "*"); 
+	}
+	return maskingStr;
+
+}
 
 
 </script>
