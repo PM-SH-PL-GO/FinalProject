@@ -112,7 +112,7 @@ $(function(){
 	
 	//----------내 정보보기 CLICK START---------	
 	$("#myInfo").click(function(){
-		location.href = "/shallwe/myinfo";
+		location.href = "/shallwe/myinfoTutorInfo";
 	});
 	//----------내 정보보기 CLICK END---------	
 

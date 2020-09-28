@@ -9,22 +9,7 @@
 		lec
 		JOIN lecture_detail lec_d On (lec.lecture_id = lec_d.lecture_id)
 	</select>
-	<insert id="insert" parameterType="Lecture">
-		INSERT INTO
-		lecture(LECTURE_ID, LECTURE_CATEGORY_ID, LECTURE_TUTOR_ID,
-		LECTURE_IMG, LECTURE_TITLE, LECTURE_PRICE, LECTURE_STATE,
-		LECTURE_START_DT, LECTURE_END_DT, LECTURE_MAX, LECTURE_MIN,
-		LECTURE_CURRENT)
-		VALUES(lecture_seq.nextVal,
-		#{lectureCategory.lecture_category_id},
-		#{tutor.member.member_id},
-		#{lecture_img}, #{lecture_title},
-		#{lecture_price}, #{lecture_state},
-		#{lecture_start_dt},
-		#{lecture_end_dt},
-		#{lecture_max}, #{lecture_min},
-		0)
-	</insert>
+<!-- 	강의추가 : 서동일 -->
 	<insert id="insertDetail" parameterType="LectureDetail">
 		INSERT
 		INTO
@@ -36,22 +21,7 @@
 		#{lecture_curriculum}, #{lecture_prepared}, #{lecture_caution},
 		#{lecture_fileName}, #{lecture_location})
 	</insert>
-	<update id="update" parameterType="Lecture">
-		UPDATE lecture
-		SET
-		LECTURE_IMG =
-		#{lecture_img}, LECTURE_TITLE = #{lecture_title},
-		LECTURE_PRICE =
-		#{lecture_price}
-		, LECTURE_START_DT =
-		#{lecture_start_dt},
-		LECTURE_END_DT = #{lecture_end_dt},
-		LECTURE_MAX =
-		#{lecture_max},
-		LECTURE_MIN = #{lecture_min}
-		WHERE LECTURE_ID =
-		#{lecture_id}
-	</update>
+<!-- 	강의 수정: 서동일 -->
 	<update id="updateDetail" parameterType="LectureDetail">
 		UPDATE lecture_detail
 		SET LECTURE_INTRODUCE = #{lecture_introduce}, LECTURE_CURRICULUM =
@@ -63,7 +33,7 @@
 		WHERE
 		LECTURE_ID = #{lecture.lecture_id}
 	</update>
-
+	<!-- 강의 상세 보기 : 서동일 -->
 	<resultMap type="LectureDetail" id="lectDeResultMap"
 		autoMapping="true">
 		<id property="lecture.lecture_id" column="lecture_id" />
@@ -85,7 +55,6 @@
 			</association>
 		</association>
 	</resultMap>
-
 	<select id="lectureDetailView" resultMap="lectDeResultMap">
 		SELECT le.lecture_id,
 		le.lecture_img, le.lecture_category_id

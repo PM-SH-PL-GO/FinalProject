@@ -360,44 +360,115 @@ $(function(){
                 readURL(this);
             });
 
-			$('button#addTutor').click(function(){
+			//url 유효성검
+        	let checkUrl = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+			let $msgUrl = $('span.checkUrl');
+			$msgUrl.hide();
+			//url end
+			
+			//체크 갯수 유효성 검사
+			$("input[type='checkBox']").on('click',function(e){
+				let $checkCnt = $("input:checkbox[name='lectureCategory.lecture_category_id']:checked").length;
+				if($checkCnt > 3){
+					$(this).attr("checked",false)
+					$("input:checkbox[name='lectureCategory.lecture_category_id']:checked").prop('checked', false);
+					alert("전공분야는 최대 3개 까지 선택가능합니다");
+					}
+				});
+			//체크 갯수 유효성 검사 end
+			
+			 //---------버튼시작-------------------\\ 
+			$('button#addTutor').click(function(e){
 				
+				//파일 업로드 formdata  
 				 let form = $('#fileUpload')[0];
 	             let formData = new FormData(form);
                  formData.append("tutor_img1", $("input[name=tutor_img1]")[0].files[0]);
                  formData.append("tutor_career_file1", $("input[name=tutor_career_file1]")[0].files[0]);
-            
+                 //파일 업로드 formdata end 
+               	
+               // 최종 submit 버튼
+                let $tutor = confirm('강사등록을 원하십니까?');
+                
+            		// 체크된 값을 넘김  
+            	let totalChecked = 0;
 				let tutor_category_id = [];
-    	        $("input:checkbox[name='category']:checked").each(function (index) {
+    	        $("input:checkbox[type='checkbox']:checked").each(function (index) {
     	        	tutor_category_id.push($(this).val());
-   
-    	        });
-    
-				$.ajax({
+    	        	
+    	    	   });  // 체크된 값을 넘김 end
+    	        
+    	        
+				// url 유효성 검사 
+				let $urlCheck = $('input#link').val();
+
+				//서버통신 시작
+				if(checkUrl.test($urlCheck) == false){
+					
+					 $('input#link').select();
+					alert("주소양식을 맞춰주세요");
+					return false;
+					// url 유효성 검사 end
+
+					//체크 갯수제한 두기
+				}  else if($tutor == true){ 
+					
+				
+					$.ajax({
 					
 					url:'/shallwe/upload/addTutor'
 				   ,method:"POST"
 				   ,processData: false
 				   ,contentType: false
 				   ,data: formData
-					,success:function(){
+				   ,success:function(){
 
-						   let $tutor = confirm('강사등록을 원하십니까?');
-							 
-							 if ($tutor == true ) {
+					alert("강사등록 신청이 완료되었습니다");
+					location.href = "http://localhost/shallwe/"
 								 
-								location.href = "http://localhost/shallwe/"
-								 
-							} else {	
-								alert("취소하셧습니다");
-								location.reload; 
-								
-							}
-					    
+				
 					} // end of success
   		 		 }); // end of ajax
- 		 		 return false;
-	});// end of click
+				} else {
+					alert("등록이 취소되었습니다");
+					location.reload();
+					e.preventDefault();
+
+				} // end of confirm
+				return false;
+	});// tutor_add end of click
+	 //---------버튼 end-------------------\\ 
+	 
+	 
+	 
+    //닉네임중복 확인  
+			$('input.checkNickName').click(function(){
+			let $tutor_nickName = $('input#nickName').val();
+				
+					$.ajax({
+
+						url:'tutor/checkNickName'
+					   ,method:"POST"
+					   ,data:{tutor_nickName:$tutor_nickName}
+					   ,success: function(data){
+						   
+					   		if(data != 0){
+					   			console.log(data);
+						   		alert("중복된아이디입니다");
+						   		
+						   		} else if(data == 0){
+						   			console.log(data);
+									$("input.checkNickName").attr("value","사용가능합니다");
+									alert("사용가능한 아이디입니다");
+							   		
+							   		}
+
+						   }//end of success
+						
+					});// end of ajax
+				return false;
+				});//end of Nicknameclick
+
 });    
 
 </script>
@@ -447,14 +518,12 @@ $(function(){
           <legend><span class="number">1</span>강사 기본정보 </legend>       
           <label for="name">닉네임:</label>
           <input type="text" id="nickName" name="tutor_nickname" placeholder="ex)카드값죠체리">
-          
-          <!-- <label for="email">이메일:</label>
-          <input type="email" id="email" name="user_email" placeholder="ex)newDate@gmail.com" id="gmail"> -->
-          
+          <input type="button" class="checkNickName" value ="닉네임중복확인"><br /><br />
+        
            <label for="email">링크:</label>
-          <input type="text" id="rink" name="tutor_link" placeholder="ex)https://www.instagram.com/">
-          
-           <div style="margin:4em; margin-top:10px;" >
+          <input type="text" id="link" name="tutor_link" placeholder="ex)https://www.instagram.com/">
+         <span hidden="hidden" class="checkUrl" style="color: red; font-size: 0.8em;"><i>[주소양식이 맞지 않습니다]</i></span>
+           <div style="margin:4em; margin-top:10px;">
            <input  class = "file2" type="file" name="tutor_career_file1" accept="imags/*,">
             
 			<br>
@@ -468,63 +537,42 @@ $(function(){
           <legend><span class="number">2</span> 강사 프로필</legend>
           <label for="coment">강사 한마디:</label>
           <textarea id="coment" name="tutor_introduce" placeholder="강사한마디"></textarea>
-          
-          <!-- <label for="job">직업선택:</label>
-          <select id="job" name="user_job">
-            <optgroup label="Web Development">
-              <option value="frontend_developer">Front-End Developer</option>
-              <option value="backend_developer">Back-End Developer</option>
-              <option value="fullstack_developer">Full-Stack Developer</option>
-              <option value="web_designer">Web Designer</option>
-            </optgroup>
-            <optgroup label="Mobile Development">
-              <option value="android_developer">Android Developer</option>
-              <option value="ios_developer">iOS Developer</option>
-              <option value="mobile_designer">Mobile Designer</option>
-            </optgroup>
-            <optgroup label="Business">
-              <option value="business_owner">Business Owner</option>
-              <option value="freelancer">Freelancer</option>
-            </optgroup>
-          </select> -->
-          
           <br><br>
      
           <label>강의 선택:</label>
           <br />
           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="IT">
-          <label class="light" for="development">IT</label>
+          <label class="light" for="development">IT 정보기술</label>
           <br />
             
           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="HO">
-          <label class="light" for="design">HOBBY(취미)</label>
+          <label class="light" for="design">HOBBY 취미</label>
           <br />
             
-          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="DE">
-          <label class="light" for="business">디자인</label>
+          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="MA">
+          <label class="light" for="business">Marketing 마케팅</label>
+           <br />
+           
+           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="DE">
+          <label class="light" for="business">Design 디자인</label>
            <br />
            
            <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="CA">
-          <label class="light" for="business">취업</label>
+          <label class="light" for="business">Employment 취업</label>
            <br />
            
            <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="BU">
-          <label class="light" for="business">비지니스</label>
+          <label class="light" for="business">Business 비지니스</label>
            <br />
          
            <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="LE">
-          <label class="light" for="business">학습</label>
-          
-           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="SP">
-          <label class="light" for="business">스포츠</label>
+          <label class="light" for="business">Learning 학습</label>
           <br />
           
-          <input hidden="hidden" name ="lectureCategory.lecture_category_id1">
-          <input hidden="hidden" name ="lectureCategory.lecture_category_id2">
-          <input hidden="hidden" name ="lectureCategory.lecture_category_id3">
-          
-          
-            
+           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="SP"> 
+           <label class="light" for="business">Sports 스포츠</label> 
+          <br /> 
+             
         </fieldset>
        <div style="margin:3em;">
 			<button type="submit" id="addTutor" class="btn btn-primary btn-lg resume" 
@@ -536,8 +584,6 @@ $(function(){
       </form>
 
 </div>
-
-
 
 </body>
 </html>

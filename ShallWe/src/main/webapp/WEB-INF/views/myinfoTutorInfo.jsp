@@ -66,7 +66,7 @@ $(function(){
 
 		$("button#acceptBtn").click(function(){
 			
-	  	   let $url = "/shallwe/tutor/showTutor"
+	  	   let $url = "/shallwe/tutor/showTutor?tutor_id=championcom"
 		   location.href= $url;
 				   
 				});
@@ -188,7 +188,7 @@ $(function(){
                                     <div class="properties__card">
                                             <h3><a href="#">Urban areas</a></h3>
                                             <p>Let's uncover the best places to eat, drink</p>
-                                            <button id="acceptBtn" type="submit">Accept</button>
+                                            <button id="acceptBtn" type="submit" value="tutor_id">Accept</button>
                                     </div>
                                 </div>
                             </div>

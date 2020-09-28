@@ -42,7 +42,7 @@ public class MemberDAO {
 		}
 	}
 	
-	// 아이디 중복체크
+	// 아이디 중복체크 
 	public MemberInfoBean getMemberId(String usertyped,String col) {
 		SqlSession session = null;
 		Map<String, Object>map = new HashMap<String, Object>();
