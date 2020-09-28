@@ -64,8 +64,8 @@ button {
 }
 
 .md_content {
-	width: 60%;
-	height: 80%;
+	width: 50%;
+	height: 85%;
 	position: inherit;
 	padding: 50px 50px;
 	background-color: white;
@@ -90,8 +90,7 @@ h1 {
 }
 
 textarea {
- width: 100%;
-  height: 150px;
+  width: 100%;
   padding: 12px 20px;
   box-sizing: border-box;
   border: 2px solid #ccc;
@@ -352,7 +351,7 @@ $(document).ready(function() {
 			<h1 id="title">강의후기</h1>
 			<table>
 		   		<tbody>
-					<tr><th>강의이미지</th><td class="img"><img id ="lecture_img" src="lecture/${lecture.lecture_img}" class="mb-10" alt="강사사진"> </td></tr>
+<%-- 					<tr><th>강의이미지</th><td class="img"><img id ="lecture_img" src="lecture/${lecture.lecture_img}" class="mb-10" alt="강사사진"> </td></tr> --%>
 					<tr><th>강의명</th><td class="title">${lecture.lecture_title}</td></tr>
 					<tr><th>강사명</th><td class="tutorId">${lecture.tutor.member.member_id}</td></tr>
 				</tbody>
@@ -364,15 +363,16 @@ $(document).ready(function() {
 					<div class="row">
 						<div class="col-12">
 							<div class="form-group">
-								<textarea name="comment" id="comment" cols="30" rows="10"
+								<textarea name="comment" id="comment" cols="30" rows="5"
 									placeholder="강의 수강 후기를 등록해주세요"></textarea>
 								<span class="remainText">남은글자수 : 50/50자 </span>
 							</div>
 						</div>
 
 						<div class="scoreBar">
-							<input type="text" readonly value="0" class="numValue form-control" step="5" max="100" min="0"><br>
+							<h3>스크롤바를 드래그 하시면 점수를 설정할 수 있습니다</h3>
 							<input id="slider1" type="range" step="5" min="0" max="100" /><br>
+							<input type="text" readonly value="0" class="numValue form-control" step="5" max="100" min="0"><br>
 						</div>
 					</div>
 					<!-- end of row -->
