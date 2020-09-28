@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.shallwe.dao.LectureDAO;
 import com.shallwe.dao.LectureDetailDAO;
 import com.shallwe.dao.MemberLectureHistoryDAO;
+import com.shallwe.dao.WishListDAO;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
@@ -32,7 +33,8 @@ public class LectureService {
 	LectureDetailDAO lectureDetailDAO;
 	@Autowired
 	MemberLectureHistoryDAO memberLectureHistoryDAO;
-
+	@Autowired
+	WishListDAO wishDAO;
 	/**
 	 * @author Soojeong
 	 * @강의 검색 searchKey = {"0:all", "1:tutor_name", "2:lecture_title" , "3:category"
@@ -132,5 +134,9 @@ public class LectureService {
 		return result;
 	}
 	
+	public List<Lecture> findWishListById(String member_id) throws FindException{
+		
+		return wishDAO.selectWishListById(member_id);
+	}
 
 }
