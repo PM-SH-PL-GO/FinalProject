@@ -18,11 +18,11 @@
  body {
   font-family: 'Open Sans',sans-serif;
   font-weight: 500;
-  color:#fff
+  color:#fff 
 }
 .info p {
   text-align:center;
-  color: #999;
+ 
   text-transform:none;
   font-weight:600;
   font-size:15px;
@@ -35,7 +35,7 @@
 
 h1 {
   text-align:center; 
-  color: #666;
+  
   text-shadow: 1px 1px 0px #FFF;
   margin:50px 0px 0px 0px
 }
@@ -71,14 +71,20 @@ hr {
 .content {
 
   position: absolute;
-  top: -30px;
+  
   right: 0;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 900px;
-  background: #f2f2f2;
-  z-index:-1;
+ /*  background: #f2f2f2; */
+  z-index:3;
+  background-image: url('https://images.unsplash.com/photo-1599687266197-6c66c083b39c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1268&q=80');
+  background-repeat : no-repeat;
+  background-size: 100%;
+  background-position: center;
+  background-origin: content-box;
+  
 }
 
 .container {
@@ -90,12 +96,14 @@ hr {
   margin-top: 180px; 
   box-shadow: 1px 5px 10px 1px #333;
   overflow:hidden;
+  
 }
 
 img.bg-img {
   display: block;
   position: absolute;
   margin: auto;
+  overflow: auto;
 }
 
 .menu {
@@ -149,7 +157,7 @@ a:not(.active2) {
     margin-top: 20px;
     text-align: center;
     color: #ffffff;
-    opacity: 0.3;
+  /*   opacity: 0.3; */
 }
 
 .connexion h4:hover {
@@ -163,25 +171,30 @@ label {
     padding: 5px 10px;
     font-size: 15px;
     font-weight: 600;
-   
     
 }
 
 input {
+
     display: block;
-    width: 93%;
+    width: 100%;
     margin: auto;
     padding: 13px;
-    border: 0;
+    border: 3px;
     border-radius: 20px;
-    font-family: "Roboto",sans-serif;
-    opacity: 0.15;
-   
+    font-family: "Roboto",sans-serif; 
+    opacity: 0.5;
+   	font-size: 25px;
+   	font-style: oblique;
+    font-weight: bold;
+  	
+
 }
 
 input p {
-    color: #fff;
-    opacity: 1;
+
+  /*  color: #fff; */
+/*     opacity: 3; */
 }
 
 input.submit {
@@ -271,6 +284,7 @@ input.submit {
     position: absolute;
     left: 500px;
 }
+
  </style>
  
  <script>
@@ -296,8 +310,8 @@ input.submit {
 	//아이디 비밀번호 에러 메세지//
 		let $msgMail = $("span.mailR");
 		let $msgPwd = $("span.pwdChk");
-		let $msgId = $("span.idR")
-		let $msgIdFor = $("span.idFor")
+		let $msgId = $("span.idR");
+		let $msgIdFor = $("span.idFor");
 		
    // 정규식 아이디 비밀번호 체크
 		let nameR = /^[가-힣]{2,16}$/;
@@ -306,8 +320,6 @@ input.submit {
 	    let mailR= /^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/i;
 	    let telR =/^01([0|1|6|7|8|9])?([0-9]{3,4})?([0-9]{4})$/;
 
-
-	    
 //로그인-------
 			
 		 $('input#signin').click(function(){
@@ -357,13 +369,14 @@ input.submit {
 							   location.reload();
 							   
 						   }
-					   }
-					});
-				}
-		 });
-//로그인-------END
+					   }//end of success
+					});// end of ajax
+				}//end of else
+		 }); // end of click
+
+//로그인-------END----------------
 		 
-// 		 비밀번호 찾기
+// 		 비밀번호 찾기 이메일
 		 
 		 $("input#Password").click(function(){
 			 
@@ -377,13 +390,13 @@ input.submit {
 				 $("span#one_id").slideUp(2000);
 				 $("span#one_id").css("color","red");
 				 
-			 } /* else if(idR.test($idValCheck) == false){
+			 } else if(idR.test($idValCheck) == false){
 				 
 				 $("input#idInsert").select();
 				 $msgIdFor.show();
 				 
-			//이메일 유효성검사	 
-			 }  */else if($("input#emailInsert").val()==""){
+			
+			 } else if($("input#emailInsert").val()==""){
 		
 				 $("span#one_email").slideDown(2000);
 				 $("span#one_email").slideUp(2000);
@@ -412,15 +425,12 @@ input.submit {
 		
 								alert("정보를 다시 입력해주세요");
 						}
-				      }	   
+				      }	//end of success 
+				   });// end of ajax
+				 } //end of else
+		 }); //end of email click
 
-				   });
-				 }
-		 });
-
-			let a = document.qu
-
-
+		// 임시비밀번호발급
 		 $("input#RandomPassword").click(function(){
 			 let $idValCheck = $("input#idInsert").val();
 		     let $mailCheck = $("input#emailInsert").val();
@@ -436,15 +446,13 @@ input.submit {
 						if(responseObj.status == 'success'){
 							 
 									alert("임시비밀번호가 발급되었습니다");
-								
-								
 						}else{
 	
 							alert("정보를 다시 입력해주세요");
 					}
-			      }	   
-			   });
-			 });
+			      }	//end of success
+			   });// end of ajax
+			 });//end of click 
 
 
 //아이디 찾기 페이지 이동
@@ -454,6 +462,8 @@ input.submit {
 			location.href = $url;
 			 
 		 });
+
+		
  });
  </script>
 </head>
@@ -466,7 +476,7 @@ input.submit {
   
 <div class="content">
 	<div class="container">
-		 <img class="bg-img" src="https://mariongrandvincent.github.io/HTML-Personal-website/img-codePen/bg.jpg" alt="">	
+	
 			<div class="menu">
 				<a href="#connexion" class="btn-connexion"><h2>SIGN IN</h2></a>
 				 <a href="#enregistrer" class="btn-enregistrer active" id = PWDCHECK><h2>Forgot Password?</h2></a>

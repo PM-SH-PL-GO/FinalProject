@@ -84,12 +84,13 @@ public class BoardController {
 		
 	}
 	
-	@RequestMapping("/search/{searchVal}")
+	@RequestMapping("/search/{searchVal}/{currentPage}")
 	@ResponseBody
-	public ResponseEntity<BoardPageBean<StudyBoard>> searchList(@PathVariable(value = "searchVal",required = false) String sv){
+	public ResponseEntity<BoardPageBean<StudyBoard>> searchList(@PathVariable(value = "searchVal",required = false) String sv, @PathVariable(value = "currentPage",required = false) Integer cp){
+		System.out.println("sv="+sv);
 		BoardPageBean<StudyBoard> pb = null;
 		try {
-			 pb = service.search(sv, 1);
+			 pb = service.search(sv, cp);
 			return (ResponseEntity<BoardPageBean<StudyBoard>>)ResponseEntity.status(HttpStatus.OK).body(pb);
 		} catch (FindException e) {
 			e.printStackTrace();

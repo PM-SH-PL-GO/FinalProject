@@ -80,6 +80,7 @@ function formatDate(date) {
 
 $(function(){
 	//----------댓글 로드 START---------
+// 	console.log("${studyBoard.member.member_id}" == "${loginId}");
 	$.ajax({
 		url:"/shallwe/reply/"+${studyBoard.studyBoard_id}
 		,method:"get"
@@ -103,8 +104,10 @@ $(function(){
 				replyPageData += "		</div>"
 				replyPageData += "	<input type=\"hidden\" class=\"replyId\" value=\""+ studyReply.studyreply_id +"\">" 
 				replyPageData += "	<div class=\"reply-btn\">"
+			if("${loginId}" == studyReply.member.member_id){
 				replyPageData += "			<a class=\"btn-reply text-uppercase\" id=\"replyUpdate\">수정</a>" 
 				replyPageData += "			<a class=\"btn-reply text-uppercase\" id=\"replyDelete\">삭제</a>"
+			}
 				replyPageData += "	</div>"
 				replyPageData += "</div>"
 				replyPageData += "</div>"
@@ -211,7 +214,23 @@ $(function(){
 	//----------댓글 삭제 버튼 CLICK START---------	
 	$('#replyList').on("click","#replyDelete",function(){
 		console.log("딜리트도?");
-		var $replyIdVal = $(this).siblings('.replyId').val();
+		var $replyIdVal = $(this).parents('.reply-btn').siblings('.replyId') .val();
+		$.ajax({
+			url:"/shallwe/reply/delete/"+$replyIdVal
+			,method:"DELETE"
+			,data:{"reply_id":$replyIdVal}
+			,success:function(data){
+				alert(data);
+				alert("성공");
+				location.reload();
+			}
+			,error: function(data){
+				alert(data);
+				alert("실패");
+				location.reload();
+			}
+		});
+		console.log($replyIdVal);
 		
 	});
 	//----------댓글 삭제 버튼 CLICK END---------	
@@ -225,7 +244,10 @@ function formatDate(date) {
 </head>
 
 <body>
-
+	<!-- topbar Start -->
+	<div class="topMenu">
+		<jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
+	</div>
 	<!--? Blog Area Start -->
 	<section class="blog_area single-post-area section-padding">
 			<div class="row">
@@ -266,7 +288,6 @@ function formatDate(date) {
 										<div class="form-group">
 											<button type="button"
 												class="button button-contactForm btn_1 boxed-btn" id="replyBtn">댓글 쓰기</button>
-												
 										</div>
 									</div>
 									<div class="col-12"></div>
