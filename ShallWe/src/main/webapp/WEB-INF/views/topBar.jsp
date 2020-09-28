@@ -199,7 +199,7 @@ $(function(){
 											</c:when>
 											<c:otherwise>
 												<li><a id ="myInfo" class="community">내 정보보기</a></li>
-												<li><a id ="myLecture" class="community">내 강의보기</a></li>
+												<li><a id ="myLecture" class="community">내 수강목록</a></li>
 												<li><a id ="signOut" class="community">로그아웃</a></li>
 											</c:otherwise>
 										</c:choose>

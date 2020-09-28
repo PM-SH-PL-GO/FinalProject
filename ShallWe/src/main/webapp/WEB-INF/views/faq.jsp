@@ -72,6 +72,11 @@ $(function(){
 </head>
 <body>
 	<main>
+	<!-- topbar Start -->
+	<div class="topMenu">
+		<jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
+	</div>
+	<div class="listing-area pt-150">
 		<ul class="faq_ul">
 			<c:forEach items="${faqList}" var="fl" varStatus="stats" >
 				<li class="collapsible">
@@ -82,6 +87,7 @@ $(function(){
 				</li>
 			</c:forEach>
 		</ul>
+	</div>
 	</main>
 <jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 

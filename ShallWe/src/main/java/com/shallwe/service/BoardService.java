@@ -40,7 +40,6 @@ public class BoardService {
 		map.put("startRow", startRow);
 		map.put("endRow", endRow);
 		List<StudyBoard> list = studyBoardDAO.selectAll(map);
-
 		int rowCnt = studyBoardDAO.selectCount();
 		int totalPage = (rowCnt % boardPageBean.CNT_PER_PAGE <= 0)? rowCnt/boardPageBean.CNT_PER_PAGE : rowCnt/boardPageBean.CNT_PER_PAGE+1;
 		
@@ -67,12 +66,19 @@ public class BoardService {
 			throw new FindException(page+"페이지가 존재하지 않습니다.");
 		}
 		BoardPageBean<StudyBoard> boardPageBean = new BoardPageBean(page);
+		Map<String, Object> map = new HashMap<String, Object>();
 		String toc = "%"+titleOrContent+"%";
-		List<StudyBoard> list = studyBoardDAO.selectByTitleAndContent(toc);
-
-		int rowCnt = list.size();
+		
+		int startRow = boardPageBean.getStartRow();
+		int endRow = boardPageBean.getEndRow();
+		map.put("studyBoard_title", toc);
+		map.put("startRow", startRow);
+		map.put("endRow", endRow);
+		List<StudyBoard> list = studyBoardDAO.selectByTitleAndContent(map);
+		
+		int rowCnt = studyBoardDAO.SearchSelectCount(map);
 		int totalPage = (rowCnt % boardPageBean.CNT_PER_PAGE <= 0)? rowCnt/boardPageBean.CNT_PER_PAGE : rowCnt/boardPageBean.CNT_PER_PAGE+1;
-				
+			
 		boardPageBean.setTotalPage(totalPage);
 		boardPageBean.setList(list);
 		boardPageBean.setCurrentPage(page);
