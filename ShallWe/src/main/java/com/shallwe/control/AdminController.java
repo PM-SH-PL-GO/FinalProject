@@ -201,8 +201,7 @@ public class AdminController {
 	 */
 	@PatchMapping(value = "/lecture/status/{lectureId}")
 	public ResponseEntity<String> lectureStatusChange(@PathVariable(name = "lectureId") String lecture_id
-													, @RequestBody String status
-													, @RequestBody(required = false) String reject_reason)
+													, @RequestBody String status)
 	{
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> map;
@@ -218,16 +217,23 @@ public class AdminController {
 		}
 		
 		try {
-			adminService.updateLectureStatusByIdAndStatus(lecture_id, lectureStatus, reject_reason);
-			return ResponseEntity.status(HttpStatus.OK).body("{ \"status\" : \"정상적으로 " + lectureStatus + " 처리하였습니다\"}");
+			adminService.updateLectureStatusByIdAndStatus(lecture_id, lectureStatus, null);
+			return ResponseEntity.status(HttpStatus.OK).body("{ \"success\" : \"정상적으로 " + lectureStatus + " 처리하였습니다\"}");
 		}catch(ModifyException e) {
 			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"status\" : \"설정에 실패하였습니다\"}");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"errMsg\" : \"설정에 실패하였습니다\"}");
 		}
 	}
 	
+	/**
+	 * 강의 취소/반려 사유 조회
+	 * @author jun6
+	 * @param 강의 ID
+	 * @param 반려인지 취소인지
+	 * @return
+	 */
 	@GetMapping(value = "/reason/{lectureId}")
-	public ResponseEntity<String> updateRejectReason(@PathVariable(name = "lectureId") String lecture_id, String rejectOrCancel){
+	public ResponseEntity<String> showLectureReason(@PathVariable(name = "lectureId") String lecture_id, String rejectOrCancel){
 		try {
 			String reason = adminService.showLectureReason(lecture_id, rejectOrCancel);
 			return ResponseEntity.status(HttpStatus.OK).body("{ \"reason\" : \"" + reason + "\" }");
@@ -237,7 +243,16 @@ public class AdminController {
 		}
 	}
 	
-	
+	@PatchMapping(value = "/reason/{lectureId}")
+	public ResponseEntity<String> rejectLecture(@PathVariable(name = "lectureId")String lecture_id, String status, String reject_reason){
+		try {
+			adminService.updateLectureStatusByIdAndStatus(lecture_id, status, reject_reason);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{ \"success\" : \"성공적으로 설정되었습니다\"}");
+		}catch(ModifyException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{ \"errMsg\" : \"" + e.getMessage() + "\"}");
+		}
+	}
 	
 	
 	/////////////////////////FAQ////////////////////////////
@@ -258,18 +273,6 @@ public class AdminController {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
-		
-//		ModelAndView mnv = new ModelAndView();
-//		List<Faq> faqList = new ArrayList<>();
-//		try {
-//			faqList = adminService.showAllFaq();
-//			mnv.addObject("faqList", faqList);
-//			mnv.setViewName("/adminFaq");
-//		}catch(FindException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		return mnv;
 	}
 	
 	

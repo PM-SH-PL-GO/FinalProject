@@ -118,7 +118,7 @@ public class LectureDetailDAO {
 			session = sqlSessionFactory.openSession();
 			session.update("LectureDetail.updateLectureRejectReason", map);
 		}catch(DataAccessException e) {
-			throw new ModifyException("");
+			throw new ModifyException("뭔가 잘못되었습니다");
 		}finally {
 			session.close();
 		}

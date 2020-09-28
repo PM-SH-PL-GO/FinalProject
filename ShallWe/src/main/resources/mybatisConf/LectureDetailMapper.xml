@@ -89,6 +89,7 @@
 	<select id="selectLectureReasonById" parameterType="String" resultType="Map">
 		SELECT lecture_reject_reason "reject_reason", lecture_cancel_reason "cancel_reason"
 		FROM lecture_detail
+		<!-- 강사 이름 연결 -->
 		WHERE lecture_id = #{lecture_id}
 	</select>
 	

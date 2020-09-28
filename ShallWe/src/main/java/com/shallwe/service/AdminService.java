@@ -148,7 +148,14 @@ public class AdminService {
 		lectureDAO.updateLectureStatusByIdAndStatus(map);
 	}
 	
-	
+	/**
+	 * 강의 취소/반려 사유 조회하기
+	 * @author jun6
+	 * @param lecture_id
+	 * @param 취소인지 반려인지
+	 * @return 취소/반려된 사유
+	 * @throws FindException
+	 */
 	public String showLectureReason(String lecture_id, String rejectOrCancel) throws FindException{
 		return lectureDetailDAO.selectLectureReasonById(lecture_id, rejectOrCancel);
 	}
