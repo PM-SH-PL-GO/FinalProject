@@ -134,15 +134,23 @@ public class kosjController {
 		return "/lecturePaid";
 	}
 	
-	@RequestMapping(value = "/insertMemberLectureHistory", method = {RequestMethod.GET,RequestMethod.POST})
-	public ModelAndView insertMemberLectureHistory(@RequestBody List<Lecture> lectureList ) throws AddException {
+	@RequestMapping(value = "/insertMemberLectureHistory", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView insertMemberLectureHistory(@RequestParam(value="lecture_category_id") String lecture_category_id, 
+													@RequestParam(value="lecture_id") String lecture_id
+	) throws AddException {
 		
 		log.info(" insertMemberLectureHistory 호출했어용~");
-		log.info(" lectureList ::: " + lectureList);
+
+		String member_id = "member2";
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("lecture_category_id", lecture_category_id);
+		map.put("lecture_id", lecture_id);
+		map.put("member_id", member_id);
 		
 		ModelAndView modelAndView = new ModelAndView();
 		try { 
-			lectureService.insertMemberLectureHistory(lectureList);
+			lectureService.insertMemberLectureHistory(map);
 			modelAndView.setViewName("/success");
 		
 		} catch (AddException e) {
@@ -150,7 +158,6 @@ public class kosjController {
 			modelAndView.setViewName("/fail");
 			e.printStackTrace();
 		}
-		
 		return modelAndView;
 	}
 	
@@ -161,18 +168,18 @@ public class kosjController {
 		log.info(" updateMemberLectureHistory 호출했어용~");
 		
 		ModelAndView modelAndView = new ModelAndView();
-		try { 
-			lectureService.insertMemberLectureHistory(lectureList);
-			modelAndView.addObject("status", "success");
-			modelAndView.setViewName("/success");
-			
-		} catch (AddException e) {
-			modelAndView.addObject("status", "fail");
-			modelAndView.addObject("errMsg", e.getMessage());
-			modelAndView.setViewName("/fail");
-			e.printStackTrace();
-		}
-		
+//		try { 
+//			lectureService.insertMemberLectureHistory(lectureList);
+//			modelAndView.addObject("status", "success");
+//			modelAndView.setViewName("/success");
+//			
+//		} catch (AddException e) {
+//			modelAndView.addObject("status", "fail");
+//			modelAndView.addObject("errMsg", e.getMessage());
+//			modelAndView.setViewName("/fail");
+//			e.printStackTrace();
+//		}
+//		
 		return modelAndView;
 	}
 	

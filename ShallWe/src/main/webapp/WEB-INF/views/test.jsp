@@ -18,7 +18,7 @@ $(document).ready(function() {
 	console.log($reviewAreaObj);
 	// 강사별, 카테고리별 리뷰 목록 조회
 	$.ajax({
-		url : "/shallwe/reviewList"
+		url : "${contextPath}/reviewList"
 		, data : {"tutor_id": "member3",
 				  "category_id":"MA"}
 		, success : function (responseData) {
@@ -27,6 +27,9 @@ $(document).ready(function() {
 		}
 	}); // end of ajax 
 	
+	
+	
+	//--- 클릭한 후기 삭제이벤트 발생 
 	$reviewAreaObj.on('click', function (e) {
       var tdObj = $(this).find('td');
       var reviewArrObj = new Array();
@@ -41,7 +44,7 @@ $(document).ready(function() {
       var tutor_id = reviewArrObj[5];
       
       $.ajax({
-         url: "/shallwe/removeReview"
+         url: "${contextPath}/removeReview"
          , method : 'POST'
          , data : {"lectureCategoryId" : lecture_category_id
                   , "member_id" : member_id
@@ -53,6 +56,23 @@ $(document).ready(function() {
          }
       }); // end of ajax
    });
+	
+	
+	//-- lecture 객체 조회
+	var lectureAreaObj = $('#lectureArea');
+	$.ajax({
+		url:"${contextPath}/"
+		, method : 'GET' 
+		, data: { }
+	}); //end of ajax;
+
+	//- 강의결제하기 기능 
+	var insertMemberLectureHistroyObj = $('#insertMemberLectureHistroy');
+	insertMemberLectureHistroyObj.on('click' , function () {
+		
+		
+	}); 
+
 }); // end of script
 
 </script>
@@ -60,12 +80,13 @@ $(document).ready(function() {
 <body>
 
 
-<a href="/shallwe/lectures/detail?lecture_id=3"> 강의상세보기 </a>
+<a href="${contextPath}/lectures/detail?lecture_id=3"> 강의상세보기 </a>
 <br/>
-<a href="/shallwe/reviewAdd"> 후기등록테스트</a>
+<a href="${contextPath}/reviewAdd"> 후기등록테스트</a>
 
-<div class="mb-30 mt-30" id="reviewArea">
-
-</div>
+<br/>
+<input type="button" id="insertMemberLectureHistroy" value="강의결제하기"/>
+<div class="mb-30 mt-30" id="reviewArea"> </div>
+<div class="mb-30 mt-30" id="lectureArea"></div>
 </body>
 </html>
