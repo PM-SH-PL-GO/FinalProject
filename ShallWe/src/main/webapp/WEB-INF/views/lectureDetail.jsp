@@ -36,6 +36,61 @@
 <link rel="stylesheet" href="/shallwe/assets/css/nice-select.css">
 <link rel="stylesheet" href="/shallwe/assets/css/style.css">
 </head>
+<script>
+$(function(){
+	let letidValue = $("input[name=listlecture_id]").val();
+	$("div[name=gotoDe]").click(function(){
+		location.href = "/shallwe/lectures/detail?lecture_id=" +letidValue;		
+	});
+	let letidendValue = $("input[name=listendlecture_id]").val();
+	$("div[name=gotoDeend]").click(function(){
+		location.href = "/shallwe/lectures/detail?lecture_id=" +letidendValue;		
+	});
+	return false;
+});
+
+$(function () {
+	$('#applyBtn').on("click", function(){
+		$.ajax({
+			url: "/shallwe/??"
+			, method: "post"
+			, data: 
+			{
+// 				나중에 변수값 이름만 바꾼다.
+				'lecture.lecture_img' : ${lecture.lecture_img},
+				'lecture.lecture_title' : ${lecture.lecture_title},
+				'lecture.lecture_state' : ${lecture.lecture_state},
+				'lectDetail.lecture_location' : ${lectDetail.lecture_location},
+				'lecture.lecture_current' : ${lecture.lecture_current},
+				'lecture.lecture_max' : ${lecture.lecture_max},
+				'lecture.lectureCategory.lecture_category_id' : ${lecture.lectureCategory.lecture_category_id},
+				'lectDetail.lecture_introduce' : ${lectDetail.lecture_introduce},
+				'lectDetail.lecture_curriculum' : ${lectDetail.lecture_curriculum},
+				'lectDetail.lecture_prepared' : ${lectDetail.lecture_prepared},
+				'lectDetail.lecture_caution' : ${lectDetail.lecture_caution},
+				'lectDetail.lecture_fileName' : ${lectDetail.lecture_fileName},
+				'lecture.tutor.tutor_img' : ${lecture.tutor.tutor_img},
+				'lecture.tutor.tutor_nickname' : ${lecture.tutor.tutor_nickname},
+				'lecture.tutor.tutor_score' : ${lecture.tutor.tutor_score},
+				'lecture.lecture_price' : ${lecture.lecture_price},
+				'lecture.lecture_start_dt' : ${lecture.lecture_start_dt},
+				'lecture.lecture_end_dt' : ${lecture.lecture_end_dt}
+			}
+			, success: function(data) {
+				let responseObj = JSON
+				.parse(data);
+				if (responseObj.status == "success") {
+					alert("강의 신청이 정상적으로 되었습니다.");
+				} else {
+					alert("강의 신청에 실패했습니다.");
+					$("#applyBtn").focus();
+				}
+			}
+		});
+		return false;
+	});
+});
+</script>
 <body>
 	<main>
 		<!--? Start Align Area -->
@@ -73,8 +128,7 @@
 						href="#curriculum"><h5 style="margin: 10px;">교육 과정</h5></a> <a
 						href="#prepared"><h5 style="margin: 10px;">준비물</h5></a> <a
 						href="#caution"><h5 style="margin: 10px;">유의사항</h5></a> <a
-						href="#tutorReview"><h5 style="margin: 10px;">첨부파일</h5></a>
-						<a
+						href="#tutorReview"><h5 style="margin: 10px;">첨부파일</h5></a> <a
 						href="#filename"><h5 style="margin: 10px;">강사후기</h5></a>
 				</div>
 				<div class="section-top-border">
@@ -92,7 +146,7 @@
 							<h4 class="mb-30 mt-30" id="filename">첨부파일</h4>
 							<p>${lectDetail.lecture_fileName}</p>
 							<h4 class="mb-30 mt-30" id="tutorReview">강사후기</h4>
-<!-- 						후기영역 -->
+							<!-- 						후기영역 -->
 							<div class="mb-30 mt-30" id="reviewArea"></div>
 						</div>
 						<div class="col-md-4"
@@ -111,17 +165,21 @@
 									<a href="#">${lecture.tutor.tutor_score}</a>
 								</h6>
 							</div>
-							<h4 class="mt-30"><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###"/>원</h4>
-							<a href="#" class="genric-btn primary-border mt-10">신청</a> <a
-								href="#" class="genric-btn primary-border mt-10">찜하기</a>
+							<h4 class="mt-30">
+								<fmt:formatNumber value="${lecture.lecture_price}"
+									pattern="#,###" />
+								원
+							</h4>
+							<a href="#" id="applyBtn" class="genric-btn primary-border mt-10">신청</a>
+							<a href="#" class="genric-btn primary-border mt-10">찜하기</a>
 							<div class="d-flex mt-10">
 								<h6 class="mr-10">수강일시:</h6>
-								<h6 class="date mr-10">${startDt} - ${endDt}</h6>
+								<h6 class="date mr-10">${startDt}-${endDt}</h6>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 	</main>
 	<!-- Scroll Up -->
 	<div id="back-top">

@@ -57,7 +57,7 @@
 				function () {
 					let form = $("#formLectureRegistration")[0];
 					let formData = new FormData(form);
-					formData.append("lecture_img", $("#lectureImgFile"))[0].files[0];
+					formData.append("lecture_img", $("#lectureImgFile")[0].files[0]);
 // 					formData.append("name", "id")[0].files[0];
 					
 					let lectureTitleValue = $("#lectureTitle").val();
