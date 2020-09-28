@@ -23,6 +23,9 @@ th {
   background-color: #3BABE4;
   color: white;
 }
+td.lecture_id , td.tutor_id, td.lectureCategoryId {
+	display:none;
+}
 </style>
 
 <table> 
