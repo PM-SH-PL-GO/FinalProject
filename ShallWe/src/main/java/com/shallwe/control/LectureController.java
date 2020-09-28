@@ -5,8 +5,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,9 +23,14 @@ import com.shallwe.vo.Member;
 import com.shallwe.vo.MemberLectureHistory;
 import com.shallwe.vo.Tutor;
 
+import lombok.extern.log4j.Log4j;
+
 @Controller
-@RequestMapping(value = "/lectures")
+@RequestMapping(value = "/lectures/*")
+@Log4j
 public class LectureController {
+	private static final Logger Logger = LoggerFactory.getLogger(MemberController.class);
+
 	// 회원 : 강의 검색, 강의 세부정보 조회
 	// 강사 : 강의 등록/수정/취소, 등록한 강의 조회
 	@Autowired
@@ -126,5 +134,22 @@ public class LectureController {
 		}
 
 		return mnv;
+	}
+	
+	//장바구니 보기 : 상하
+	
+	@RequestMapping(value= "/wishlist")
+	public String WishView(HttpSession session, Model model)throws FindException {
+		String member_id = (String)session.getAttribute("loginInfo");
+		List<Lecture> wishall = new ArrayList<>();
+		try {
+			service.findWishListById(member_id);
+			return "wishlist";
+		} catch (FindException e) {
+			e.printStackTrace();
+			Logger.info("error");
+			return "fail";
+		}
+		
 	}
 }
