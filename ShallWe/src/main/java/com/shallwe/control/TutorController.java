@@ -105,8 +105,8 @@ public class TutorController {
 											MultipartFile tutor_img,
 											MultipartFile tutor_career_file,
 											String tutor_id)throws FindException{
-		tutor_id = "championcom";
-	//	String tutor_id = (String)session.getAttribute("loginInfo");
+//		tutor_id = "championcom";
+		tutor_id = (String)session.getAttribute("loginInfo");
 		try {
 			
 			service.dellTutor(tutor_id);
