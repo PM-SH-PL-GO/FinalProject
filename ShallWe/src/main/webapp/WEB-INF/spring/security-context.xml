@@ -5,17 +5,43 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+	<bean id="bcryptPasswordEncoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 	<security:http>
-		<security:form-login/>
  			<!-- 로그인하지 않는 사용자도 접근 가능 -->
-<!-- 		<security:intercept-url pattern="/shallwe/admin" access="permitAll"/> -->
+<!-- 		<security:intercept-url pattern="/admin/**" access="permitAll"/> -->
+<!-- 		<security:intercept-url pattern="/admin/preTutor" access="permitAll"/>  -->
+<!-- 		<security:intercept-url pattern="/admin/b.do" access="hasRole('ROLE_ADMIN')"/> -->
+<!-- 		<security:intercept-url pattern="/**/member6" access="hasRole('ROLE_ADMIN')"/> -->
+			<!-- 로그인해야만 접근 가능 -->
+<!-- 		<security:intercept-url pattern="/shallwe/member/*" access="hasRole('ROLE_MEMBER')"/> -->
+			<!-- 강사등록해야만 접근 가능 -->
+<!-- 		<security:intercept-url pattern="/shallwe/tutor/*" access="hasRole('ROLE_TUTOR')"/> -->
+			<!-- admin만 접근 가능 -->
+<!-- 		<security:intercept-url pattern="/shallwe/admin/*" access="hasRole('ROLE_ADMIN')"/> -->
+			
 		
-			<!-- 에러페이지를 위한 핸들러 : 에러페이지를 커스텀 페이지로 지정해줄 수 있다 -->
-<!-- 		<security:access-denied-handler error-page="/accessError"/> -->
+		<security:form-login/>
+<!-- 		<security:form-login login-page="/shallwe/userLogin"/> -->
+
+		<!-- 에러페이지를 위한 핸들러 : 에러페이지를 커스텀 페이지로 지정해줄 수 있다 -->
+<!-- 		<security:access-denied-handler error-page="/shallwe/index"/> -->
 	</security:http>
 	
 	<security:authentication-manager>
-	
+		
+<!-- 		<security:authentication-provider> -->
+<!-- 			<security:jdbc-user-service data-source-ref="dataSource" -->
+<!-- 				 users-by-username-query="SELECT member_id, member_pwd FROM member WHERE member_id = ?" -->
+<!-- 				 /> -->
+<!-- 			<security:password-encoder ref="bcryptPasswordEncoder"/> -->
+<!-- 			<security:user-service> -->
+<!-- 				<security:user name="member1" password="{noop}pw1" authorities="ROLE_MEMBER"/> -->
+<!-- 				<security:user name="member1" password="{noop}pw1" authorities="ROLE_MEMBER, ROLE_TUTOR"/> -->
+<!-- 				<security:user name="admin" password="{noop}nimda" authorities="ROLE_ADMIN"/> -->
+<!-- 			</security:user-service>		 -->
+<!-- 		</security:authentication-provider> -->
+		
 	</security:authentication-manager>
 
 </beans>

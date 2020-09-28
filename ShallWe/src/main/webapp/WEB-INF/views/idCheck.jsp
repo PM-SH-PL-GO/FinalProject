@@ -31,6 +31,7 @@ form {
   padding: 10px 20px;
   background: #f4f7f8;
   border-radius: 8px;
+  margin-top: 120px;
 }
 
 h1 {
@@ -136,14 +137,6 @@ label.light {
 <script>
 $(function(){
 	
-	$('.resume').on('click', function() {
-	    var $this = $(this);
-	  $this.button('loading');
-	    setTimeout(function() {
-	       $this.button('reset');
-	   }, 2000);
-	});
-
 
 	let mailR= /^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/i;
 	let $msgMail = $("span.mailR");
@@ -187,11 +180,9 @@ $(function(){
 
 </script>  
     </head>
-    
-    
-    
     <body>
       <form action="idEmailCheck" method="post">
+      <jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
         <h1>ID CHECK</h1>
         
         <fieldset>	

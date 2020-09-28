@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,11 +41,11 @@ class KosjDAOTest {
 	void insertReviewDAOTest() {
 
 //		파라미터로 전달 받을 값
-		String review_content = "수강후기 내용테스트 1";
-		int review_score = 100;
+		String review_content = "수강후기 내용테스트 2";
+		int review_score = 50;
 		int lecture_id = 1;
 		String lecture_category_id = "SP";
-		String member_id = "member1";
+		String member_id = "member2";
 		
 		ReviewBean reviewBean = new ReviewBean();
 		reviewBean.setLectureCategoryId(lecture_category_id);
@@ -66,17 +67,19 @@ class KosjDAOTest {
 	@DisplayName("ReviewDAO TEST : deleteReviewDAOTest method")
 	void deleteReviewDAOTest() {
 //		파라미터로 전달 받을 값
-		int lecture_id = 1;
+		String lecture_id = "1";
 		String lecture_category_id = "SP";
 		String member_id = "member1";
-		
-		ReviewBean reviewBean = new ReviewBean();
-		reviewBean.setLectureCategoryId(lecture_category_id);
-		reviewBean.setLectureId(lecture_id);
-		reviewBean.setMemberId(member_id);
+		String tutor_id = "member3";
+
+		Map<String, String> map = new HashMap<String, String> ();
+		map.put("lectureCategoryId" , lecture_category_id);
+		map.put("member_id" , member_id);
+		map.put("lecture_id", lecture_id);
+		map.put("tutor_id", tutor_id);
 		
 		try {
-			reviewDAO.deleteReivew(reviewBean);
+			reviewDAO.deleteReivew(map);
 			
 		} catch (RemoveException e) {
 			e.printStackTrace();
@@ -135,7 +138,7 @@ class KosjDAOTest {
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		String lectureCategoryId = "SP";
-		String memberId = "member1";
+		String memberId = "member2";
 		int lectureId =1;
 		map.put("lectureCategoryId", lectureCategoryId);
 		map.put("memberId", memberId);
@@ -154,7 +157,7 @@ class KosjDAOTest {
 	 * @author Soojeong
 	 * 강의결제취소
 	 */
-	@Test
+	//@Test
 	@DisplayName("updateMemberLectureHistoryDAO TEST ")
 	void updateMemberLectureHistory() throws ModifyException {
 		
@@ -170,6 +173,31 @@ class KosjDAOTest {
 			lectureDAO.updateMemberLectureHistory(map);
 			
 		} catch (ModifyException e) {
+			e.printStackTrace();
+			log.info(e.getMessage());
+		}
+	} // end insertMemberLectureHistory();
+
+	
+	/**
+	 * @author Soojeong
+	 * 강사별, 카테고리별 강의목록 조회
+	 */	
+	@Test
+	@DisplayName("selectReviewDAO TEST ")
+	void selectReview() throws FindException {
+		
+		Map<String, String> map = new HashMap<String, String>();
+		
+		String category_id = "MA";
+		String tutor_id = "member3";
+
+		map.put("tutor_id", tutor_id);
+		map.put("category_id", category_id);
+		
+		try {
+			reviewDAO.selectReivew(map);
+		} catch (FindException e) {
 			e.printStackTrace();
 			log.info(e.getMessage());
 		}

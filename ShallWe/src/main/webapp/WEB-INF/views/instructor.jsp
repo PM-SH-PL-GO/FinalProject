@@ -360,13 +360,6 @@ $(function(){
                 readURL(this);
             });
 
-//      	 	$('form').submit(function(){
-//         		return false;
-        		
-//         		});
-    	 
-       //강사등록//
-         
 			$('button#addTutor').click(function(){
 				
 				 let form = $('#fileUpload')[0];
@@ -379,7 +372,7 @@ $(function(){
     	        	tutor_category_id.push($(this).val());
    
     	        });
-    	    
+    
 				$.ajax({
 					
 					url:'/shallwe/upload/addTutor'
@@ -387,11 +380,11 @@ $(function(){
 				   ,processData: false
 				   ,contentType: false
 				   ,data: formData
-					,success:function(data){
+					,success:function(){
 
 						   let $tutor = confirm('강사등록을 원하십니까?');
 							 
-							 if ($travelalert == true ) {
+							 if ($tutor == true ) {
 								 
 								location.href = "http://localhost/shallwe/"
 								 
@@ -441,7 +434,7 @@ $(function(){
   
 <div class="content">
  <h1>강사 등록</h1>
- <form method="post" enctype="multipart/form-data" id="fileUpload">
+ <form method="post" enctype="multipart/form-data" id="fileUpload" accept-charset="">
  <div class="cer" >
     <div style="margin:3em;"> 
 		<br>
@@ -499,29 +492,38 @@ $(function(){
      
           <label>강의 선택:</label>
           <br />
-          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="ma">
-          <label class="light" for="development">마케팅</label>
+          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="IT">
+          <label class="light" for="development">IT</label>
           <br />
             
-          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="wp">
-          <label class="light" for="design">웹 프로그래밍</label>
+          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="HO">
+          <label class="light" for="design">HOBBY(취미)</label>
           <br />
             
-          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="sc">
-          <label class="light" for="business">스터디 카운슬링</label>
+          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="DE">
+          <label class="light" for="business">디자인</label>
            <br />
            
-           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="pb">
-          <label class="light" for="business">웹퍼블리셔</label>
+           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="CA">
+          <label class="light" for="business">취업</label>
            <br />
            
-           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="db">
-          <label class="light" for="business">디비설계자</label>
+           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="BU">
+          <label class="light" for="business">비지니스</label>
            <br />
          
-           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="king">
-          <label class="light" for="business">요리왕</label>
+           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="LE">
+          <label class="light" for="business">학습</label>
+          
+           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="SP">
+          <label class="light" for="business">스포츠</label>
           <br />
+          
+          <input hidden="hidden" name ="lectureCategory.lecture_category_id1">
+          <input hidden="hidden" name ="lectureCategory.lecture_category_id2">
+          <input hidden="hidden" name ="lectureCategory.lecture_category_id3">
+          
+          
             
         </fieldset>
        <div style="margin:3em;">

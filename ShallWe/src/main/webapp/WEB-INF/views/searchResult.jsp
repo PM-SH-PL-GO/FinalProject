@@ -44,18 +44,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 	$(document).ready(function() {
-		
 		//right_menu - 검색결과값 출력부
 		var $rightAreaObj = $("section.right_menu").find("div.container");
-		
-		//강의상세화면으로 이동
-		var $lectureCard = $("section.right_menu > div.container> div.row").find("div.col");
-		console.log($lectureCard);
-		
-		$lectureCard.click(function(e) {
-			var lectureCode = $(this).find('input[name=lecture_code]').val();
-			console.log(lectureCode);
-		});
 		
 		var $formObj = $('form[name=resultList]');
 		$formObj.submit(function e ( ) {
@@ -77,19 +67,50 @@
 		var $searchBtnObj = $("form[name='resultList']").find('button#searchBtn');
 		$searchBtnObj.click (function ( ) {
 			$searchText = $searchTextObj.val();
-			
-			// 검색조건에 따른 검색 요청
-			$.ajax ({
-				url : "/shallwe/search"
-				, method : "post"
-				, data : { "searchKey" : condition , "searchText" : $searchText }
-				, success : function (responseData) {
-					$rightAreaObj.empty();
-					$rightAreaObj.append(responseData);
-				}
-			}); //end of ajax
+			var url = '/shallwe/search?searchKey='+condition+'&searchText='+$searchText ;
+			location.href = url;
 		}); // end of clickEvent
-	});
+		
+		
+		
+		//강의상세화면으로 이동
+// 		var $lectureCard = $("section.right_menu > div.container> div.row").find("div.col");
+// 		console.log($lectureCard);
+		
+// 		$lectureCard.click(function(e) {
+// 			var lectureCode = $(this).find('input[name=lecture_code]').val();
+// 			var url = '/shallwe/lectures/detail?lecture_id='+lectureCode;
+// 			console.log(lectureCode);
+// 			console.log(url);
+// 			location.href = url;
+// 		});
+		
+		var lectureDetail = $('a#lecture_detail');
+		lectureDetail.click(function e () {
+			let lecture_code = $(this).find('input[name=lecture_code]').val();
+			var url = '/shallwe/lectures/detail?lecture_id='+lecture_code;
+			location.href = url;
+		}); 
+		
+		
+		// 강의찜하기
+		var lectureLike = $('div.lecture_Like');
+		$lectureLike.on('click', 'input[name=lecture_code]', function(e){
+			let lecture_code = $(this).find('input[name=lecture_code]').val();
+			var url = '/shallwe/lectures/detail?lecture_id='+lecture_code;
+			location.href = url;
+		} 
+		
+// 		var lectureDetailhrefObj = $('a#lecture_detail');
+// 		lectureDetailhrefObj.click( function (e)  {
+// 			var lectureCode = lectureDetailhrefObj.find('input[name=lecture_code]').val();
+// 			console.log("lecture_code : " + lecture_code);
+// 			var url = '/shallwe/lectures/detail?lecture_id='+lecture_code;
+// 			console.log(url);
+// 			//location.href
+// 		});
+		
+	}); // end of 
 	
 </script>
 </head>
@@ -148,25 +169,25 @@
 				
 				</div>
 
-				<div class="category-img text-center">
-					<a href="#"> <img src="assets/img/gallery/category_icon1.png"
-						alt=""></a> <a href="#"> <img
-						src="assets/img/gallery/category_icon2.png" alt=""></a> <a
-						href="#"> <img src="assets/img/gallery/category_icon3.png"
-						alt=""></a>
-				</div>
-				<div class="category-img text-center">
-					<a href="#"> <img src="assets/img/gallery/category_icon4.png"
-						alt=""></a> <a href="#"> <img
-						src="assets/img/gallery/category_icon6.png" alt=""></a> <a
-						href="#"> <img src="assets/img/gallery/category_icon7.png"
-						alt=""></a>
-				</div>
-				<div class="category-img text-center">
-					<a href="#"> <img src="assets/img/gallery/category_icon8.png"
-						alt=""></a> <a href="#"> <img
-						src="assets/img/gallery/category_icon9.png" alt=""></a>
-				</div>
+<!-- 				<div class="category-img text-center"> -->
+<!-- 					<a href="#"> <img src="assets/img/gallery/category_icon1.png" -->
+<!-- 						alt=""></a> <a href="#"> <img -->
+<!-- 						src="assets/img/gallery/category_icon2.png" alt=""></a> <a -->
+<!-- 						href="#"> <img src="assets/img/gallery/category_icon3.png" -->
+<!-- 						alt=""></a> -->
+<!-- 				</div> -->
+<!-- 				<div class="category-img text-center"> -->
+<!-- 					<a href="#"> <img src="assets/img/gallery/category_icon4.png" -->
+<!-- 						alt=""></a> <a href="#"> <img -->
+<!-- 						src="assets/img/gallery/category_icon6.png" alt=""></a> <a -->
+<!-- 						href="#"> <img src="assets/img/gallery/category_icon7.png" -->
+<!-- 						alt=""></a> -->
+<!-- 				</div> -->
+<!-- 				<div class="category-img text-center"> -->
+<!-- 					<a href="#"> <img src="assets/img/gallery/category_icon8.png" -->
+<!-- 						alt=""></a> <a href="#"> <img -->
+<!-- 						src="assets/img/gallery/category_icon9.png" alt=""></a> -->
+<!-- 				</div> -->
 			</div>
 		</section>
 
@@ -186,11 +207,14 @@
 					<div class="col">
 						<div class="properties pb-20">
 							<div class="properties__card">
-								<a href="#"><img src="/shallwe/assets/img/gallery/properties3.png" alt=""></a><br/><br/>
+								<a href="#"><img src="/shallwe/assets/img/gallery/properties3.png" alt="강의사진"></a><br/><br/>
 								<div class="properties__caption">
 									<p>${stats.count}</p>
 									<h3>
-										<label>강의명: </label><a href="#">${lecture.lecture_title}</a>
+										<label>강의명: </label>
+										<a id="lecture_detail">${lecture.lecture_title}
+											<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>
+										</a>
 									</h3>
 									<h4><label>수강기간: </label>
 										<fmt:formatDate value="${lecture.lecture_start_dt}" pattern="yyyy-MM-dd"/> ~
@@ -198,12 +222,15 @@
 									</h4>
 									<h4><label>강사명: </label>${lecture.tutor.tutor_nickname}</h4>
 									<h4><label>현재인원: </label> ${lecture.lecture_current} <label>/최대인원: </label> ${lecture.lecture_max}</h4>
-									<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>
+									
 								</div>
-								<div
-									class="properties__footer d-flex justify-content-between align-items-center">
+								<div class="properties__footer d-flex justify-content-between align-items-center">
 									<div class="restaurant-name">
 										<h3><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###원"/></h3>
+										<div class="lecture_Like">
+											<img src="/shallwe/assets/img/elements/shopping-cart.png" alt="강의찜하기">
+											<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>
+										</div>
 									</div>
 								</div>
 							</div>

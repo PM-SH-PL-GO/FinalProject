@@ -295,21 +295,8 @@ textarea {
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 $(document).ready(function() {
-	var $reviewCommentObj = $("form#commentForm").find("textarea#comment");
-	$reviewCommentObj.focus();
-
-	// review content 남은 글자수
-	$reviewCommentObj.keydown(function(e) {
-		var content = $(this).val();
-		var count = 50 - content.length;
-		if (content.length > 50) {
-			$(this).val($(this).val().substring(0, 50));
-			count = 0;
-		}
-		$('.remainText').html("남은글자수: " + count + "/50자");
-	});
 	
-
+	/*------------review후기 입력 modal start------------------*/
 	//필요한 엘리먼트들을 선택한다.
 	const openButton = document.getElementById("open");
 	const modal = document.querySelector(".modal");
@@ -326,15 +313,15 @@ $(document).ready(function() {
 	openButton.addEventListener("click", openModal);
 	closeButton.addEventListener("click", closeModal);
 	
+	/*------------review후기 입력 modal end------------------*/
 	
-	//만족도
+	/*------------만족도 점수 매기기  start------------------*/
 	var startValue = 50;
 
 	function updateIt(updateval) {
 	  if (updateval) {
 	      $('.numValue').val(updateval);
 	  }; 
-	
 	  updateval = '';
 	};
 
@@ -348,17 +335,78 @@ $(document).ready(function() {
 	});
 
  	updateIt(startValue);
+	/*------------만족도 점수 매기기  end------------------*/
+ 	
 	
+	/*------------review입력창 후기 입력시 글자수세기   start------------------*/
+	var $reviewFormObj = $("form#commentForm");
+	var $reviewCommentObj = $reviewFormObj.find("textarea#comment");
+	$reviewCommentObj.focus();
+
+	// review content 남은 글자수
+	$reviewCommentObj.keydown(function(e) {
+		var content = $(this).val();
+		var count = 50 - content.length;
+		if (content.length > 50) {
+			$(this).val($(this).val().substring(0, 50));
+			count = 0;
+		}
+		$('.remainText').html("남은글자수: " + count + "/50자");
+	});
+	
+	/*------------review입력창 후기 입력시 글자수세기   end------------------*/
+	/*------------review 후기 데이터 등록   start------------------*/
+ 	// 후기 등록하기 버튼 클릭 시 
+ 	$reviewFormObj.on('submit', function e () {
+/*  		private String memberId;
+ 		private String lectureCategoryId;
+ 		private String reviewContent;
+ 		private int lectureId;
+ 		private int reviewScore; */
+
+ 		
+/*  		var memberId='member2';
+ 		var lectureCategoryId = 'MA';
+ 		var reviewContent = $reviewCommentObj.val();
+ 		var lectureId = 3;
+ 		var reviewScore = $('.numValue').val(); */
+
+ 		var memberId='member1';
+ 		var lectureCategoryId = 'MA';
+ 		var reviewContent = $reviewCommentObj.val();
+ 		var lectureId = 3;
+ 		var reviewScore = $('.numValue').val();
+ 		var tutorId = 'member3';
+ 		
+ 		var reviewBean = new Object(); 
+ 		reviewBean.memberId = memberId;
+ 		reviewBean.lectureId = lectureId;
+ 		reviewBean.lectureCategoryId = lectureCategoryId;
+ 		reviewBean.reviewContent = reviewContent;
+ 		reviewBean.reviewScore = reviewScore;
+ 		reviewBean.tutorId = tutorId;
+ 		var jsonData = JSON.stringify(reviewBean);
+ 		
+ 		
+ 		$.ajax({
+ 			url: "/shallwe/reviewAddmethod"
+ 			, method : 'POST'
+ 			, contentType: 'application/json'
+ 			, data : jsonData
+ 			, success : function ( responseData ) {
+ 				console.log(responseData);
+ 			} // end of success
+ 		}); //end of ajax 
+ 	}); // end of reviewInsert
+	/*------------review 후기 데이터 등록   end------------------*/
 	
 }); // end of load
-
 
 
 </script>
 </head>
 
 <body>
-
 	<button id="open">모달창 열기</button>
 	<div class="modal hidden">
 		<div class="md_content">
@@ -372,15 +420,16 @@ $(document).ready(function() {
 						<img src="assets/img/gallery/gallery1.png" class="mb-10" alt="강사사진">
 					</div>
 					<div class="divTableCol">
-						<span id="lecutureTitle"><label>강의명 : </label>빡빡이 아저씨와 배우는 인성 기초</span><br> 
+						<span id="lecutureTitle"><label>강의명 :</label>빡빡이 아저씨와 배우는 인성 기초</span><br> 
 						<span><label>강사 :</label> 빡빡이 아저씨</span>
+						<input type="hidden" />
 					</div>
 				</div>
 
 			</div>
 			<!--review-->
 			<div class="modal_text">
-				<form class="form-contact comment_form" action="#" id="commentForm">
+				<form class="form-contact comment_form" id="commentForm">
 					<div class="row">
 						<div class="col-12">
 							<div class="form-group">
@@ -391,9 +440,8 @@ $(document).ready(function() {
 						</div>
 
 						<div class="scoreBar">
-							<input type="text" readonly value="0" class="numValue form-control" step="5"
-								max="100" min="0"> <br> <input id="slider1"
-								type="range" step="5" min="0" max="100" /><br>
+							<input type="text" readonly value="0" class="numValue form-control" step="5" max="100" min="0"><br>
+							<input id="slider1" type="range" step="5" min="0" max="100" /><br>
 						</div>
 					</div>
 					<!-- end of row -->

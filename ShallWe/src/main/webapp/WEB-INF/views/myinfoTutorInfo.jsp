@@ -10,8 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="manifest" href="site.webmanifest">
     <link rel="shortcut icon" type="image/x-icon" href="/shallwe/assets/img/favicon.ico">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	
+
 	<!-- CSS here -->
 	<link rel="stylesheet" href="/shallwe/assets/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/shallwe/assets/css/owl.carousel.min.css">
@@ -27,6 +26,53 @@
 	<link rel="stylesheet" href="/shallwe/assets/css/slick.css">
 	<link rel="stylesheet" href="/shallwe/assets/css/nice-select.css">
 	<link rel="stylesheet" href="/shallwe/assets/css/style.css">
+	 <script
+	  src="https://code.jquery.com/jquery-3.5.1.min.js"
+	  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+	  crossorigin="anonymous"></script>
+	<style>
+	.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.center button {
+  margin: 12px;
+}
+button{
+  border: 0;
+  border-radius: 12px;
+  padding: 16px;
+  text-transform: uppercase;
+  animation: fadeout 0.2s ease-out;
+  font-weight: bold;
+  color: white;
+  filter: brightness(85%);
+  outline: none;
+}
+button:hover{
+  animation: fadein 0.2s ease-in;
+  filter: brightness(100%);
+}
+
+#acceptBtn {
+  background-color: #20b358;
+}
+	</style>
+<script type="text/javascript">
+$(function(){
+
+		$("button#acceptBtn").click(function(){
+			
+	  	   let $url = "/shallwe/tutor/showTutor"
+		   location.href= $url;
+				   
+				});
+});
+
+</script>
 </head>
 <body class="myinfobody">
     <!-- ? Preloader Start -->
@@ -142,6 +188,7 @@
                                     <div class="properties__card">
                                             <h3><a href="#">Urban areas</a></h3>
                                             <p>Let's uncover the best places to eat, drink</p>
+                                            <button id="acceptBtn" type="submit">Accept</button>
                                     </div>
                                 </div>
                             </div>

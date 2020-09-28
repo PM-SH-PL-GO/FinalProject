@@ -17,10 +17,23 @@ import lombok.extern.log4j.Log4j;
 @Controller
 public class HomeController {
 
-//	@RequestMapping("/admin")
-//	public void admin() {
-//		System.out.println("admin 입장");
-//	}
+	@RequestMapping({"/index", "/"})
+	public String admin() {
+		System.out.println("index 입장");
+		return "/index";
+	}
+
+	@RequestMapping("/customLogin")
+	public void customLogin(String error, String logout, Model model) {
+		log.info("error : " + error);
+		log.info("logout : " + logout);
+		
+		if (error != null) 
+			model.addAttribute("error", "Login error check your accout");
+		
+		if (logout != null) 
+			model.addAttribute("logout", "Login error check your accout");
+	}
 	
 //	@RequestMapping(value = "/studyBoard", method = RequestMethod.GET)
 //	public void studyBoard(Locale locale, Model model) {
@@ -69,10 +82,7 @@ public class HomeController {
 	public void myinfoModi(Locale locale, Model model) {
 		System.out.println("myinfo");
 	}
-	@RequestMapping(value = "/signup", method = RequestMethod.GET)
-	public void signup(Locale locale, Model model) {
-		System.out.println("signup");
-	}
+	
 	@RequestMapping(value = "/wishlist", method = RequestMethod.GET)
 	public void wishlist(Locale locale, Model model) {
 		System.out.println("wishlist");
@@ -91,5 +101,12 @@ public class HomeController {
 	public void tutorLectureList(Locale locale, Model model) {
 		System.out.println("HOMECONTROL: tutorLectureList");
 	}
-	
+	@RequestMapping(value="/tutorInfo",method = RequestMethod.GET)
+	public void tutorInfo(Locale locale, Model model) {
+		
+	}
+	@RequestMapping(value="/myinfoTutorInfo",method = RequestMethod.GET)
+	public void myinfoTutorInfo(Locale locale, Model model) {
+		System.out.println("myinfoTutorInfo");
+	}
 }

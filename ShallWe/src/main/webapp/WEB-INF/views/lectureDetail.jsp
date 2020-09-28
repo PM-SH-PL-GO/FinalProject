@@ -1,6 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<c:set value="${lectDetail.lecture}" var="lecture" />
+<fmt:formatDate var="startDt" value="${lecture.lecture_start_dt}"
+	pattern="yyyy-MM-dd" />
+<fmt:formatDate var="endDt" value="${lecture.lecture_end_dt}"
+	pattern="yyyy-MM-dd" />
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 <head>
@@ -38,25 +44,26 @@
 				<div class="section-top-border">
 					<div class="row">
 						<div class="col-md-3">
-							<img src="/shallwe/assets/img/elements/d.jpg" alt="" class="img-fluid">
+							<img src="/shallwe/lecture/${lecture.lecture_img}" alt=""
+								class="img-fluid">
 						</div>
 						<div class="col-md-9 mt-sm-20">
-							<h3 class="mb-20">강의 제목</h3>
+							<h3 class="mb-20">${lecture.lecture_title}</h3>
 							<div class="d-flex">
 								<h6 class="mr-10">상태:</h6>
-								<h6>신청가능</h6>
+								<h6>${lecture.lecture_state}</h6>
 							</div>
 							<div class="d-flex">
 								<h6 class="mr-10">장소:</h6>
-								<h6>내용</h6>
+								<h6>${lectDetail.lecture_location}</h6>
 							</div>
 							<div class="d-flex">
 								<h6 class="mr-10">인원:</h6>
-								<h6>현원/총원</h6>
+								<h6>${lecture.lecture_current}/${lecture.lecture_max}</h6>
 							</div>
 							<div class="d-flex">
 								<h6 class="mr-10">카테고리:</h6>
-								<h6>내용</h6>
+								<h6>${lecture.lectureCategory.lecture_category_id}</h6>
 							</div>
 						</div>
 					</div>
@@ -72,52 +79,39 @@
 					<h4 class="mb-30" id="introduce">강의 소개</h4>
 					<div class="row">
 						<div class="col-md-8">
-							<p>강의 소개 내용</p>
+							<p>${lectDetail.lecture_introduce}</p>
 							<h4 class="mb-30 mt-30" id="curriculum">교육 과정</h4>
-							<ul class="unordered-list">
-								<li>교육 과정1</li>
-								<li>교육 과정2</li>
-								<li>교육 과정3
-									<ul>
-										<li>교육 과정3-1</li>
-										<li>교육 과정3-2</li>
-									</ul>
-								</li>
-								<li>교육 과정4</li>
+							<ul class="unordered-list">${lectDetail.lecture_curriculum}
 							</ul>
 							<h4 class="mb-30 mt-30" id="prepared">준비물</h4>
-							<p>준비물 내용</p>
+							<p>${lectDetail.lecture_prepared}</p>
 							<h4 class="mb-30 mt-30" id="caution">유의사항</h4>
-							<p>유의사항 내용</p>
+							<p>${lectDetail.lecture_caution}</p>
 							<h4 class="mb-30 mt-30" id="filename">첨부파일</h4>
-							<p>첨부파일 내용</p>
+							<p>${lectDetail.lecture_fileName}</p>
 						</div>
 						<div class="col-md-4"
 							style="border-radius: 8px; border: 1px solid #eee; padding: 20px">
-							<img src="/shallwe/assets/img/elements/g3.jpg" alt="" class="img-fluid">
+							<img src="/shallwe/tutorImages/${lecture.tutor.tutor_img}" alt=""
+								class="img-fluid">
 							<div class="d-flex mt-10">
 								<h6 class="mr-10">강사:</h6>
 								<h6>
-									<a href="#">이름</a>
+									<a href="#">${lecture.tutor.tutor_nickname}</a>
 								</h6>
 							</div>
 							<div class="d-flex mt-10">
 								<h6 class="mr-10">강사평점:</h6>
 								<h6>
-									<a href="#">100</a>
+									<a href="#">${lecture.tutor.tutor_score}</a>
 								</h6>
 							</div>
-							<h4 class="mt-30">100,000원</h4>
+							<h4 class="mt-30"><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###"/>원</h4>
 							<a href="#" class="genric-btn primary-border mt-10">신청</a> <a
 								href="#" class="genric-btn primary-border mt-10">찜하기</a>
 							<div class="d-flex mt-10">
 								<h6 class="mr-10">수강일시:</h6>
-								<h6 class="date mr-10">2020/06/30</h6>
-								<h6>-</h6>
-							</div>
-							<div class="mt-10">
-								<h6 class="date text-right">2020/07/10</h6>
-							</div>
+								<h6 class="date mr-10">${startDt} - ${endDt}</h6>
 						</div>
 					</div>
 				</div>

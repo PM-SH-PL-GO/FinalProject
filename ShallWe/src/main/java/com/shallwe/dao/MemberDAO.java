@@ -41,6 +41,22 @@ public class MemberDAO {
 			throw new AddException(e.getMessage());
 		}
 	}
+	
+	// 아이디 중복체크
+	public MemberInfoBean getMemberId(String usertyped,String col) {
+		SqlSession session = null;
+		Map<String, Object>map = new HashMap<String, Object>();
+		try {
+			session = sqlSessionFactory.openSession();
+			if(col.equals("memberId")) {
+				map.put("memberId", usertyped);
+			}
+		}catch(Exception e) {
+			e.getMessage();
+		}
+		return session.selectOne("MemberMapper.checkId", usertyped);
+	}
+	
 	// 내 정보 보기(수강생) : 상하
 	public MemberInfoBean selectById(String memberId) throws FindException
 	{

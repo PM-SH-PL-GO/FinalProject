@@ -3,6 +3,7 @@ package com.shallwe.control;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -18,8 +20,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shallwe.dao.LectureDAO;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
+import com.shallwe.exception.RemoveException;
+import com.shallwe.model.ReviewBean;
 import com.shallwe.service.LectureService;
+import com.shallwe.service.ReviewService;
 import com.shallwe.vo.Lecture;
+import com.shallwe.vo.Review;
 
 import lombok.extern.log4j.Log4j;
 
@@ -31,20 +37,28 @@ public class kosjController {
 	LectureService lectureService;
 	
 	@Autowired
+	ReviewService reviewService;
+	
+	@Autowired
 	LectureDAO lectureDAO;
 	
-//	@RequestMapping(value = "/lecturePaid", method = RequestMethod.GET)
-//	public void lecturePaid() {
-//		System.out.println("lecturePaid.jsp 호출");
-//	}
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public void test() {
+		System.out.println("test.jsp 호출");
+	}
 	@RequestMapping(value = "/reviewAdd", method = RequestMethod.GET)
 	public void reviewAdd() {
-		System.out.println("lecturePaid.jsp  호출");
+		System.out.println("reviewAdd.jsp  호출");
 	}
 	@RequestMapping(value = "/searchResult", method = RequestMethod.GET)
 	public void searchResult() {
 		System.out.println("searchResult.jsp  호출");
 	}
+//	@RequestMapping(value = "/reviewList", method = RequestMethod.GET )
+//	public void reviewList() {
+//		System.out.println("reviewList.jsp  호출");
+//		
+//	}
 	
 	@RequestMapping(value = "/search", method = {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView search(@RequestParam(value="searchKey", required=false) String searchKeyParam
@@ -151,4 +165,88 @@ public class kosjController {
 		
 		return modelAndView;
 	}
+	
+	
+	
+	//--- review 등록
+	@RequestMapping(value = "/reviewAddmethod", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView insertReview(@RequestBody ReviewBean reviewBean ) throws AddException {
+		
+		ModelAndView modelAndView = new ModelAndView();
+		try {
+			reviewService.insertReview(reviewBean);
+			modelAndView.addObject("status", "success");
+			modelAndView.setViewName("/success");
+			
+		} catch (AddException e) {
+			e.printStackTrace();
+			modelAndView.addObject("status", "fail");
+			modelAndView.addObject("errMsg", e.getMessage());
+			modelAndView.setViewName("/fail");
+		}
+		return modelAndView;
+	}
+	//--- review 강사별, 카테고리별 후기 조회
+	@RequestMapping(value = "/reviewList", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView selectReviewList() throws AddException {
+		
+		List<Review> list = new ArrayList<Review>();
+		String tutor_id = "member3";
+		String category_id = "MA";
+		/*
+		 * if (tutor_id.equals(null) ) { tutor_id = "member2"; } else if (
+		 * category_id.equals(null) ) { category_id = "SP"; }
+		 */
+		ModelAndView modelAndView = new ModelAndView();
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("tutor_id", tutor_id);
+		map.put("category_id", category_id);
+		try {
+			list = reviewService.selectReview(map);
+			modelAndView.addObject("list", list);
+			modelAndView.addObject("status", "success");
+			modelAndView.setViewName("/reviewList");
+			
+		} catch (FindException e) {
+			e.printStackTrace();
+			modelAndView.addObject("status", "fail");
+			modelAndView.addObject("errMsg", e.getMessage());
+			modelAndView.setViewName("/fail");
+		}
+		return modelAndView;
+	}
+	//--- review 삭제
+	@RequestMapping(value = "/removeReview", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView removeReview(
+			@RequestParam(value="lectureCategoryId", required=false) String lectureCategoryId , 
+			@RequestParam(value="member_id", required=false) String member_id , 
+			@RequestParam(value="lecture_id", required=false) String lecture_id ,
+			@RequestParam(value="tutor_id", required=false) String tutor_id
+			
+			) throws RemoveException {
+		
+		ModelAndView modelAndView = new ModelAndView();
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("lectureCategoryId", lectureCategoryId);
+		map.put("member_id", member_id);
+		map.put("lecture_id", lecture_id);
+		map.put("tutor_id", tutor_id);
+		
+		try {
+			reviewService.removeReview(map);
+			modelAndView.addObject("status", "success");
+			modelAndView.setViewName("/success");
+			
+		} catch (RemoveException e) {
+			e.printStackTrace();
+			modelAndView.addObject("status", "fail");
+			modelAndView.addObject("errMsg", e.getMessage());
+			modelAndView.setViewName("/fail");
+		}
+		return modelAndView;
+	}
+	
 } // end of kosjController

@@ -71,10 +71,15 @@ public class LectureService {
 		}
 	}
 	
-	//수강 강의 조회 : 동일
+	//학생 강의 조회 : 동일
 	public List<MemberLectureHistory> memberLectureList(MemberLectureHistory mlth) throws FindException{
 		return memberLectureHistoryDAO.memberMyClassList(mlth);
 	}
+	
+	//교사 강의 조회 : 동일
+		public List<Lecture> tutorLectureList(Lecture lect) throws FindException{
+			return lectureDAO.tutorMyClassList(lect);
+		}
 	
 	//강의 상세 조회 : 동일
 	public LectureDetail lectureDetailView(Lecture lect) throws FindException {

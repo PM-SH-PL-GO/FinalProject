@@ -106,7 +106,7 @@ $(function(){
 
 	//----------회원가입 CLICK START---------		
 	$("#signUp").click(function(){
-		location.href = "/shallwe/signup";
+		location.href = "/shallwe/member/signup";
 	});
 	//----------회원가입 CLICK END---------		
 	
@@ -118,7 +118,7 @@ $(function(){
 
 	//----------내 강의보기 CLICK START---------	
 	$("#myLecture").click(function(){
-		location.href = "/shallwe/Lectures/memberLecture";
+		location.href = "/shallwe/lectures/memberLecture";
 	});
 	//----------내 강의보기 CLICK END---------	
 
@@ -126,6 +126,7 @@ $(function(){
 	$("#signOut").click(function(){
 		$.ajax({
 			url:"/shallwe/member/memberLogout"
+			,method:"POST"
 			,success:function(data){
 				var responseObj = JSON.parse(data);
 				if(responseObj.status =="success"){

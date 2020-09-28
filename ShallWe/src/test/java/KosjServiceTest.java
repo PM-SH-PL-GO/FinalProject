@@ -37,7 +37,7 @@ class KosjServiceTest {
 	@Autowired
 	LectureService lectureService;
 
-	//@Test
+	@Test
 	@DisplayName("ReviewService TEST : insertReview method")
 	void insertReviewDAOTest() {
 		
@@ -72,7 +72,7 @@ class KosjServiceTest {
 	 * 			String [] searchKey = {"all", "tutor_name", "lecture_title" , "category" };
 	 * 			0 , 1 , 2 , 3 보내면 됨.
 	 */
-	@Test
+	//@Test
 	@DisplayName("lectureSearchService TEST : 메인->검색조건 : all")
 	void selectLectureListTest() throws FindException {
 		

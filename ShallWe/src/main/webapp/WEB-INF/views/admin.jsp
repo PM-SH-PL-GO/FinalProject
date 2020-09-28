@@ -10,6 +10,7 @@
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+<!--     <sec:csrfMetaTags /> -->
     <script>
         $(function(){
             // 삼디다스 누르면 메뉴 나오게 하기
@@ -99,7 +100,7 @@
                     success: function(preTutors){
                     	let $lot = '<table class="table"><thead><tr>';
                     	$lot += '<th>순서</th><th>강사 사진</th><th>아이디</th><th>회원 이름</th><th>강사 별명</th>';
-                    	$lot += '<th>전문 분야</th><th>세부사항</th><th>승인</th><th>반려</th></tr></thead>';
+                    	$lot += '<th>전문 분야</th><th>승인</th><th>반려</th></tr></thead>';
                     	
                     	preTutors.forEach(function(preTutor, index){
                     		let idx = index + 1;
@@ -108,8 +109,7 @@
                     		$lot += '<td>' + preTutor.member.member_id + '</td>';
                     		$lot += '<td>' + preTutor.member.member_name + '</td>';
                     		$lot += '<td>' + preTutor.tutor_nickname + '</td>';
-                    		$lot += '<td>' + preTutor.lecture_category.lecture_category_name + '</td>';
-//                     		$lot += '<td><button class="modal_show" value="tutor' + idx + '">상세정보 보기</button></td>';
+                    		$lot += '<td>' + preTutor.lectureCategory.lecture_category_name + '</td>';
                     		$lot += ' <td><button class="tutor_status" value="' + preTutor.member.member_id + '">승인</button></td>';
                     		$lot += ' <td><button class="tutor_status" value="' + preTutor.member.member_id + '">반려</button></td></tr>';
                     		
@@ -168,14 +168,17 @@
 	
 	            	$.ajax({
 	            		url: "${contextPath}/admin/tutor/status/" + approve,
-	            		method: "patch",
+	            		method: "PATCH",
+// 	            		contentType: 'application/json; charset=utf-8', "${_csrf.parameterName}" : '${_csrf.token}'
 	            		contentType: 'application/json-patch+json; charset=utf-8',
 	            		data: JSON.stringify({"status" : $tatus}),
 	            		success: function(data){
+	            			console.log(data);
 	            			alert(data);
 	            			$(".pre-tutor").trigger("click")
 	            		},
 	            		error: function(data){
+// 	            			alert(xhttr.status);
 	            			alert(data);
 	            			
 	            		}
@@ -201,7 +204,7 @@
                     		$lot += '<td>' + tutor.member.member_id + '</td>';
                     		$lot += '<td>' + tutor.member.member_name + '</td>';
                     		$lot += '<td>' + tutor.tutor_nickname + '</td>';
-                    		$lot += '<td>' + tutor.lecture_category.lecture_category_name + '</td>';
+                    		$lot += '<td>' + tutor.lectureCategory.lecture_category_name + '</td>';
                     		$lot += '<td><button class="tutor_lecture" value="' + tutor.member.member_id + '">강의 목록 보기</button></td>';
                     		$lot += '<td>' + tutor.tutor_score + '</td>';
                     		$lot += '<td><button class="tutor_edit">관리하기</button></td></tr>';
@@ -342,7 +345,6 @@
                     			prepared += '<td>' + lecture.lecture_max + '</td>';
                     			prepared += '<td>' + lecture.lecture_min + '</td>';
                     			prepared += '<td>' + lecture.lecture_current + '</td>';
-//                     			prepared += '<td><button class="lecture-detail" value="' + lecture.lecture_id + '">상세정보</button></td>';
                     			prepared += '<td><button class="lecture-edit" value="' + lecture.lecture_id + '">승인</button></td>';
                     			prepared += '<td><button class="lecture-edit" value="' + lecture.lecture_id + '">반려</button></td>';
                     		}else if(lecture.lecture_state == '승인' && end > today){
@@ -359,7 +361,6 @@
                     			process += '<td>' + lecture.lecture_max + '</td>';
                     			process += '<td>' + lecture.lecture_min + '</td>';
                     			process += '<td>' + lecture.lecture_current + '</td>';
-//                     			process += '<td><button class="lecture-detail" value="' + lecture.lecture_id + '">상세정보</button></td>';
                     		}else if(lecture.lecture_state == '승인' && today >= end){
                     			// 완료
                     			finishCnt++;
@@ -374,7 +375,6 @@
                     			finish += '<td>' + lecture.lecture_max + '</td>';
                     			finish += '<td>' + lecture.lecture_min + '</td>';
                     			finish += '<td>' + lecture.lecture_current + '</td>';
-//                     			finish += '<td><button class="lecture-detail" value="' + lecture.lecture_id + '">상세정보</button></td>';
                     			finish += '<td><button class="lecture-review" value="' + lecture.lecture_id + '">후기보기</button></td>';
                     		}else{
                     			//취소 or 취소대기
@@ -390,7 +390,6 @@
                     			cancel += '<td>' + lecture.lecture_max + '</td>';
                     			cancel += '<td>' + lecture.lecture_min + '</td>';
                     			cancel += '<td>' + lecture.lecture_current + '</td>';
-//                     			cancel += '<td><button class="lecture-detail" value="' + lecture.lecture_id + '">상세정보</button></td>';
                     			if (lecture.lecture_state == '취소대기'){
                     				cancel += '<td><button class="lecture-edit" value="' + lecture.lecture_id + '">취소승인</button></td>';
                     				cancel += '<td><button class="lecture-edit" value="' + lecture.lecture_id + '">복구</button></td>';
@@ -467,6 +466,7 @@
 	            		contentType: 'application/json-patch+json; charset=utf-8',
 	            		data: JSON.stringify({"status" : $tatus}),
 	            		success: function(data){
+	            			console.log(data);
 	            			alert(data);
 	            			$(".lecture-list").trigger("click")
 	            		},
@@ -490,7 +490,7 @@
             // FAQ 조회
             $(".faq").on("click", function(){
             	$.ajax({
-            		url: "${contextPath}/admin/faq",
+            		url: "${contextPath}/admin/faq/list",
             		method: "GET",
             		success: function(views){
             			$cont.html(views);
@@ -505,10 +505,13 @@
             // FAQ 추가
             $cont.on("click", ".faq_insert", function(){
             	$.ajax({
-            		url:"",
+            		url:"${contextPath}/admin/faq",
             		method:"POST",
             		data: {},
             		success: function(){
+            			
+            		},
+            		error: function(){
             			
             		}
             	});
@@ -518,12 +521,32 @@
             
             // FAQ 수정
             $cont.on("click", ".faq_change", function(){
-            	
+            	$.ajax({
+            		url:"${contextPath}/admin/faq" ,
+            		method:"PATCH",
+            		data: {},
+            		success: function(){
+            			
+            		},
+            		error: function(){
+            			
+            		}
+            	});
             });
             
             // FAQ 삭제
 			$cont.on("click", ".faq_delete", function(){
-            	
+				$.ajax({
+            		url:"${contextPath}/admin/faq" ,
+            		method:"DELETE",
+            		data: {},
+            		success: function(){
+            			
+            		},
+            		error: function(){
+            			
+            		}
+            	});
             });
             
             
@@ -589,6 +612,7 @@
       </nav>
 
       <div class="contents">
+      	<h3>Shall we Admin 입니다</h3>
       </div>
   </body>
 </html>

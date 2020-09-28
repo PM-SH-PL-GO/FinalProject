@@ -10,6 +10,7 @@ import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.model.MemberInfoBean;
+import com.shallwe.vo.LectureCategory;
 import com.shallwe.vo.Member;
 
 @Service(value = "memberService")
@@ -49,7 +50,18 @@ public class MemberSerivce {
 
 	//회원가입 : 상하
 	public void memberJoin(MemberInfoBean mib)throws AddException{
-		
+			LectureCategory favorite1 = mib.getFavorite1();
+			LectureCategory favorite2 = mib.getFavorite2();
+			LectureCategory favorite3 = mib.getFavorite3();
+			mib.setFavorite1(favorite1);
+			mib.setFavorite2(favorite2);
+			mib.setFavorite3(favorite3);
+			memberDao.joinMember(mib);
+	}
+	
+	//멤버 아이디중복검사 : 상하
+	public MemberInfoBean getMemberId(String usertyped,String col) {
+		return memberDao.getMemberId(usertyped,col);
 	}
 
 	//내 정보 보기:상하 
@@ -57,7 +69,7 @@ public class MemberSerivce {
 		return memberDao.selectById(memberId);
 	}
 	//비밀번호 수정(로그인 된 상태): 상하 
-	public void updatePwd(String memberId, String memberPassword)throws ModifyException { //
+	public void updatePwd(String memberId, String memberPassword)throws ModifyException { 
 		memberDao.updatePassword(memberId, memberPassword);
 
 	}
