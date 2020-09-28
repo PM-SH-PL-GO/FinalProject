@@ -35,6 +35,23 @@
 <link rel="stylesheet" href="/shallwe/assets/css/slick.css">
 <link rel="stylesheet" href="/shallwe/assets/css/nice-select.css">
 <link rel="stylesheet" href="/shallwe/assets/css/style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+	var $reviewAreaObj = $('#reviewArea');
+	console.log($reviewAreaObj);
+	// 강사별, 카테고리별 리뷰 목록 조회
+	$.ajax({
+		url : "/shallwe/reviewList"
+		, data : {"tutor_id": "${lecture.tutor.member.member_id}",
+				  "category_id":"${lecture.lectureCategory.lecture_category_id}"}
+		, success : function (responseData) {
+			console.log(responseData);
+			$reviewAreaObj.append(responseData);
+		}
+	}); // end of ajax 
+}); // end of scriptLoad
+</script>
 </head>
 <body>
 	<main>
@@ -73,7 +90,9 @@
 						href="#curriculum"><h5 style="margin: 10px;">교육 과정</h5></a> <a
 						href="#prepared"><h5 style="margin: 10px;">준비물</h5></a> <a
 						href="#caution"><h5 style="margin: 10px;">유의사항</h5></a> <a
-						href="#filename"><h5 style="margin: 10px;">첨부파일</h5></a>
+						href="#tutorReview"><h5 style="margin: 10px;">첨부파일</h5></a>
+						<a
+						href="#filename"><h5 style="margin: 10px;">강사후기</h5></a>
 				</div>
 				<div class="section-top-border">
 					<h4 class="mb-30" id="introduce">강의 소개</h4>
@@ -89,6 +108,9 @@
 							<p>${lectDetail.lecture_caution}</p>
 							<h4 class="mb-30 mt-30" id="filename">첨부파일</h4>
 							<p>${lectDetail.lecture_fileName}</p>
+							<h4 class="mb-30 mt-30" id="tutorReview">강사후기</h4>
+							<!-- 후기영역 -->
+							<div class="mb-30 mt-30" id="reviewArea"></div>
 						</div>
 						<div class="col-md-4"
 							style="border-radius: 8px; border: 1px solid #eee; padding: 20px">

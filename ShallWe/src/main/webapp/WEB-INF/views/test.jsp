@@ -9,8 +9,9 @@
 <body>
 
 
-<a href="/shallwe/reviewList"> 강사별,카테고리별 후기 목록 + 후기삭제 </a>
+<a href="shallwe/lectures/detail?lecture_id=1"> 강의상세보기 </a>
+<br/>
+<br/>
 <a href="/shallwe/reviewAdd"> 후기등록테스트</a>
-
 </body>
 </html>

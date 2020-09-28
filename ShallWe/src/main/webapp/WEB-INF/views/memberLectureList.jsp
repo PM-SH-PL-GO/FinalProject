@@ -42,6 +42,7 @@ $(function(){
 	$("div[name=gotoDeend]").click(function(){
 		location.href = "/shallwe/lectures/detail?lecture_id=" +letidendValue;		
 	});
+	
 	return false;
 });
 </script>

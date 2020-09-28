@@ -202,6 +202,5 @@ class KosjDAOTest {
 			log.info(e.getMessage());
 		}
 	} // end insertMemberLectureHistory();
-	
 
-}
+} // end of KosjDAOTest

@@ -25,7 +25,9 @@ import com.shallwe.model.ReviewBean;
 import com.shallwe.service.LectureService;
 import com.shallwe.service.ReviewService;
 import com.shallwe.vo.Lecture;
+import com.shallwe.vo.Member;
 import com.shallwe.vo.Review;
+import com.shallwe.vo.Tutor;
 
 import lombok.extern.log4j.Log4j;
 
@@ -46,19 +48,31 @@ public class kosjController {
 	public void test() {
 		System.out.println("test.jsp 호출");
 	}
+	
 	@RequestMapping(value = "/reviewAdd", method = RequestMethod.GET)
-	public void reviewAdd() {
+	public ModelAndView reviewAdd() {
 		System.out.println("reviewAdd.jsp  호출");
+		ModelAndView modelAndView = new ModelAndView();
+
+		Member member = new Member();
+		member.setMember_id("member3");
+		Tutor tutor = new Tutor();
+		tutor.setMember(member);
+		Lecture lecture = new Lecture();
+		lecture.setLecture_img("lecture_test3.jpg");
+		lecture.setTutor(tutor);
+		lecture.setLecture_title("마케링");
+		
+		modelAndView.addObject("lecture" , lecture);
+		modelAndView.setViewName("/reviewAdd");
+		
+		return modelAndView;
 	}
+	
 	@RequestMapping(value = "/searchResult", method = RequestMethod.GET)
 	public void searchResult() {
 		System.out.println("searchResult.jsp  호출");
 	}
-//	@RequestMapping(value = "/reviewList", method = RequestMethod.GET )
-//	public void reviewList() {
-//		System.out.println("reviewList.jsp  호출");
-//		
-//	}
 	
 	@RequestMapping(value = "/search", method = {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView search(@RequestParam(value="searchKey", required=false) String searchKeyParam
@@ -71,9 +85,6 @@ public class kosjController {
 			searchText = " ";
 		}
 		
-		log.info("searchKeyParam : " +searchKeyParam);
-		log.info("searchText : " +searchText);
-		
 		// 검색조건 요청 잘못 들어온 경우 처리
 		int searchKey = Integer.parseInt(searchKeyParam);
 		String [] searchKeyArr = {"all", "tutor_name", "lecture_title" , "category" };
@@ -85,7 +96,6 @@ public class kosjController {
 		try {
 			modelAndView = lectureService.searchLecture(map);
 			log.info(modelAndView.getModelMap()); 
-			//modelAndView.setViewName("/searchLectureList");
 			modelAndView.setViewName("/searchResult");
 			
 		} catch (FindException e) {
@@ -187,18 +197,19 @@ public class kosjController {
 		}
 		return modelAndView;
 	}
+	
 	//--- review 강사별, 카테고리별 후기 조회
 	@RequestMapping(value = "/reviewList", method = RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView selectReviewList() throws AddException {
+	public ModelAndView selectReviewList(String tutor_id , String category_id) throws AddException {
+		
+		if ( tutor_id == null && "".equals(tutor_id) ) {
+			tutor_id = "member3";
+		} else if (category_id == null && "".equals(category_id)) {
+			category_id = "MA";
+		}
 		
 		List<Review> list = new ArrayList<Review>();
-		String tutor_id = "member3";
-		String category_id = "MA";
-		/*
-		 * if (tutor_id.equals(null) ) { tutor_id = "member2"; } else if (
-		 * category_id.equals(null) ) { category_id = "SP"; }
-		 */
 		ModelAndView modelAndView = new ModelAndView();
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("tutor_id", tutor_id);
