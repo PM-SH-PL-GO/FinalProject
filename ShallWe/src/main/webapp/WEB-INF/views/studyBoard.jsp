@@ -47,7 +47,6 @@ $(function(){
 			}
 			
 			for(var i=pbObj.startPage; i<=pbObj.totalPage; i++){
-				
 				pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
 			}
 			if(pbObj.endPage < pbObj.totalPage){
@@ -68,7 +67,6 @@ $(function(){
 		var $searchVal = $(this).parents('.pagination-area').siblings('.row').find('#searchBar').val();
 		var urlVal = null;
 		
-		console.log("나와라"+$searchVal);
 		if($etClass == 'prev'){
 			page = ${pb.startPage-1};			
 		}else if($etClass == 'next'){
@@ -128,7 +126,6 @@ $(function(){
 	$("button#search-btn").click(function(){
 		$searchVal = $("#searchBar").val()
 		var page = 1;
-		console.log("/shallwe/board/serach/"+$searchVal+"/"+page);
 		if($searchVal== null || $searchVal== ""){
 			location.href = "/shallwe/studyBoard";
 		}
