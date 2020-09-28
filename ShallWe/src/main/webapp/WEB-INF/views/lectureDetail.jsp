@@ -73,7 +73,9 @@
 						href="#curriculum"><h5 style="margin: 10px;">교육 과정</h5></a> <a
 						href="#prepared"><h5 style="margin: 10px;">준비물</h5></a> <a
 						href="#caution"><h5 style="margin: 10px;">유의사항</h5></a> <a
-						href="#filename"><h5 style="margin: 10px;">첨부파일</h5></a>
+						href="#tutorReview"><h5 style="margin: 10px;">첨부파일</h5></a>
+						<a
+						href="#filename"><h5 style="margin: 10px;">강사후기</h5></a>
 				</div>
 				<div class="section-top-border">
 					<h4 class="mb-30" id="introduce">강의 소개</h4>
@@ -89,6 +91,9 @@
 							<p>${lectDetail.lecture_caution}</p>
 							<h4 class="mb-30 mt-30" id="filename">첨부파일</h4>
 							<p>${lectDetail.lecture_fileName}</p>
+							<h4 class="mb-30 mt-30" id="tutorReview">강사후기</h4>
+<!-- 						후기영역 -->
+							<div class="mb-30 mt-30" id="reviewArea"></div>
 						</div>
 						<div class="col-md-4"
 							style="border-radius: 8px; border: 1px solid #eee; padding: 20px">
