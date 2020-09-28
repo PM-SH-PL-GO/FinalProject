@@ -80,6 +80,7 @@ function formatDate(date) {
 
 $(function(){
 	//----------댓글 로드 START---------
+// 	console.log("${studyBoard.member.member_id}" == "${loginId}");
 	$.ajax({
 		url:"/shallwe/reply/"+${studyBoard.studyBoard_id}
 		,method:"get"
@@ -103,8 +104,10 @@ $(function(){
 				replyPageData += "		</div>"
 				replyPageData += "	<input type=\"hidden\" class=\"replyId\" value=\""+ studyReply.studyreply_id +"\">" 
 				replyPageData += "	<div class=\"reply-btn\">"
+			if("${loginId}" == studyReply.member.member_id){
 				replyPageData += "			<a class=\"btn-reply text-uppercase\" id=\"replyUpdate\">수정</a>" 
 				replyPageData += "			<a class=\"btn-reply text-uppercase\" id=\"replyDelete\">삭제</a>"
+			}
 				replyPageData += "	</div>"
 				replyPageData += "</div>"
 				replyPageData += "</div>"
@@ -285,7 +288,6 @@ function formatDate(date) {
 										<div class="form-group">
 											<button type="button"
 												class="button button-contactForm btn_1 boxed-btn" id="replyBtn">댓글 쓰기</button>
-												
 										</div>
 									</div>
 									<div class="col-12"></div>
