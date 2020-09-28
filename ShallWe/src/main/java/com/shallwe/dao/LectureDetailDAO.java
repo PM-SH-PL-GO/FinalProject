@@ -46,21 +46,24 @@ public class LectureDetailDAO {
 	}
 
 	// 강의 상세 보기 : 동일
-			public LectureDetail lectureDetailView(Lecture lect) throws FindException {
-				LectureDetail le = null;
-				SqlSession session = null;
-				try {
-					session = sqlSessionFactory.openSession();
-					le = session.selectOne("LectureDetailMapper.lectureDetailView", lect);
-				} catch (DataAccessException e) {
-					throw new FindException("조회 과정에 오류가 있습니다.");
-				}
-
-				if (le == null)
-					throw new FindException("조회 결과가 없습니다.");
-
-				return le;
+	public LectureDetail lectureDetailView(Lecture lect) throws FindException {
+		LectureDetail le = null;
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			le = session.selectOne("LectureDetailMapper.lectureDetailView", lect);
+			if (le == null) {
+				throw new FindException("조회 결과가 없습니다.");
 			}
+		} catch (DataAccessException e) {
+			throw new FindException("조회 과정에 오류가 있습니다.");
+		} finally {
+			session.close();
+		}
+
+		return le;
+	}
+
 	/**
 	 * admin - 강의 전체 조회
 	 * 
@@ -82,7 +85,7 @@ public class LectureDetailDAO {
 
 		return lectureList;
 	}
-	
+
 	// 강의 승인/반려(admin) : 준식
 	// 강의 취소 승인하기(admin) : 준식
 }

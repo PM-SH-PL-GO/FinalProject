@@ -90,7 +90,7 @@ public class UploadController {
 		log.info("이력서파일:" + tutor_career_file1);
 		
 		String tutor_id = (String)session.getAttribute("loginInfo");
-		// 테스트용 아이디입니다
+
 		
 		if (tutor_id == null) {
 			throw new AddException("예외발생: 로그인 안되서 발생");
