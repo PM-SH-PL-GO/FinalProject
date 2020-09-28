@@ -40,12 +40,7 @@ public class TutorService {
 	//강사닉네임 중복확인:경찬
 	public int checkNickName(String tutor_nickName)throws FindException{
 			int NickName =  dao.checkNickName(tutor_nickName);
-			if (NickName ==1) {
-				throw new FindException("예외발생:중복된아이디");
-			} else {
-				
 				return dao.checkNickName(tutor_nickName);
-			}	
 	}
 	//강사등록취소:경찬
 	public void dellTutor(String tutor_id)throws RemoveException{
