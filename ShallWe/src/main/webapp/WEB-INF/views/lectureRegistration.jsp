@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 
@@ -32,7 +33,6 @@
 
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 </head>
 <script>
 
@@ -53,24 +53,12 @@
 	$(function () {
 		$('#insertBtn').on("click",
 				function () {
-// 					let form = $("#formLectureRegistration")[0];
-// 					let formData = new FormData(form);
-// 					alert(formData);
-// 					formData.append("lecture_img", $("#lectureImgFile")[0].files[0]);
-// 					formData.append("name", "id")[0].files[0];
+					let form = $("#formLectureRegistration")[0];
+					let formData = new FormData(form);
+					formData.append("lecture_img", $("#lectureImgFile")[0].files[0]);
+					formData.append("lecture_filename", $("#lectureCFile")[0].files[0]);
 					let lectureTitleValue = $("#lectureTitle").val();
 					let lectureIntroValue = $("#lectureIntro").val();
-					let curiculumValue = $("#curiculum").val();
-					let locationValue = $("input[name=lecture_location]").val();
-					let firstDateValue = $("#firstDate").val();
-					let lastDateValue = $("#lastDate").val();
-					let pMinValue = $("#pMin").val();
-					let pMaxValue = $("#pMax").val();
-					let preparedValue = $("#prepared").val();
-					let cautionValue = $("#caution").val();
-					let priceValue = $("#price").val();
-					let cateValue = $("#lectCate option:selected").val();
-					let lectureImgFileValue = $("#lectureImgFile")[0].files[0];
 					if (lectureTitleValue == "") {
 						alert("제목을 입력하세요.");
 						$("lectureTitleValue").focus();
@@ -81,8 +69,9 @@
 						$.ajax({
 								url: "/shallwe/lectures/insert",
 								method: "POST",
-								data:
-									$("#formLectureRegistration").serialize() + "&lecture.lecture_img=" + lectureImgFileValue
+								contentType: false,
+								processData: false,
+								data:formData
 									,
 								success: function (data) {
 									let responseObj = JSON
@@ -91,8 +80,7 @@
 										alert("강의 등록이 정상적으로 되었습니다.");
 									} else {
 										alert("강의 등록에 실패했습니다.");
-										$("lectureTitleValue")
-											.focus();
+										$("lectureTitleValue").focus();
 									}
 								}
 							});
@@ -127,12 +115,13 @@
 										class="single-input" id="lectureTitle">
 								</div>
 								<h6 class="mt-10">카테고리</h6>
-								<div class="form-select col-md-3 mt-10">
+								<div class="form-select col-md-4 mt-10">
 									<select id="lectCate"
 										name="lecture.lectureCategory.lecture_category_id">
-										<option value="IT">IT</option>
-										<option value="HO">취미</option>
-										<option value="SP" selected="selected">스포츠</option>
+										<c:forEach items="${tutorlist}" var="tl" varStatus="i">
+										<option value="${tl.lectureCategory.lecture_category_id}">${tl.lectureCategory.lecture_category_name}</option>
+										</c:forEach>
+										<input type="hidden" name="lecture.tutor.member.member_id" value="${tutorlist[0].member.member_id}" />
 									</select>
 								</div>
 								<h6 class="mt-10">강의 소개</h6>
@@ -209,7 +198,8 @@
 										class="single-input-accent col-md-2" id="price">
 									<h5 class="mt-10">원</h5>
 								</div>
-								<a href="#" class="genric-btn primary-border mt-10">첨부파일등록</a>
+								<h6 class="mt-10">첨부파일등록</h6>
+								<input type="file" id="lectureCFile" name="lecture_filename" class = "mt-10" accept="imags/*">
 								<div class="mt-70">
 									<input type="button" class="genric-btn primary-border"
 										id="insertBtn" value="등록"> 
@@ -217,7 +207,6 @@
 										class="genric-btn primary-border" id="updateBtn" value="수정">
 								</div>
 								<input type="hidden" name="lecture.lecture_state" value="승인대기" />
-								<input type="hidden" name="lecture.tutor.member.member_id" value="member2" />
 							</form>
 						</div>
 					</div>
