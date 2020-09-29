@@ -33,7 +33,11 @@ $(function(){
 				arr.forEach(function(studyBoard, index){
 					boardPageData += "<tr>"
 					boardPageData += "	<td class=\"boardId\">"+studyBoard.studyBoard_id+"</td>";
+				if(studyBoard.replylist==null||studyBoard.replylist==""){
 					boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"</td>";
+				}else{
+					boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"  ["+studyBoard.replylist.length+"]</td>";					
+				}
 					boardPageData += "	<td>"+studyBoard.member.member_id+"/"+nameMasking(studyBoard.member.member_name)+"</td>";
 					boardPageData += "	<td>"+formatDate(studyBoard.studyBoard_write_dt)+"</td>";
 					boardPageData += "	<td>"+studyBoard.studyBoard_view_count+"</td>";
@@ -55,8 +59,8 @@ $(function(){
 			
 			$pageList.html(pageListData);
 		}
-		,errer:function(xhr){
-			alert("실패" + xhr.status)
+		,errer:function(data){
+			alert("실패" + data.status)
 		}
 	});
 	//----------스터디 게시판 LOAD  END---------
@@ -92,7 +96,11 @@ $(function(){
 					arr.forEach(function(studyBoard, index){
 						boardPageData += "<tr>"
 						boardPageData += "	<td class=\"boardId\">"+studyBoard.studyBoard_id+"</td>";
-						boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"</td>";
+						if(studyBoard.replylist==null||studyBoard.replylist==""){
+							boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"</td>";
+						}else{
+							boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"  ["+studyBoard.replylist.length+"]</td>";					
+						}
 						boardPageData += "	<td>"+studyBoard.member.member_id+"/"+nameMasking(studyBoard.member.member_name)+"</td>";
 						boardPageData += "	<td>"+formatDate(studyBoard.studyBoard_write_dt)+"</td>";
 						boardPageData += "	<td>"+studyBoard.studyBoard_view_count+"</td>";
@@ -141,7 +149,11 @@ $(function(){
 				arr.forEach(function(studyBoard, index){
 					boardPageData += "<tr>"
 					boardPageData += "	<td class=\"boardId\">"+studyBoard.studyBoard_id+"</td>";
-					boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"</td>";
+					if(studyBoard.replylist==null||studyBoard.replylist==""){
+						boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"</td>";
+					}else{
+						boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"  ["+studyBoard.replylist.length+"]</td>";					
+					}
 					boardPageData += "	<td>"+studyBoard.member.member_id+"/"+nameMasking(studyBoard.member.member_name)+"</td>";
 					boardPageData += "	<td>"+formatDate(studyBoard.studyBoard_write_dt)+"</td>";
 					boardPageData += "	<td>"+studyBoard.studyBoard_view_count+"</td>";

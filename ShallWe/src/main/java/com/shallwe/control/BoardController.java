@@ -27,8 +27,10 @@ import com.fasterxml.jackson.annotation.JacksonInject.Value;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.model.BoardPageBean;
+import com.shallwe.model.MemberInfoBean;
 import com.shallwe.service.BoardService;
 import com.shallwe.service.FaqService;
+import com.shallwe.service.MemberSerivce;
 import com.shallwe.vo.Faq;
 import com.shallwe.vo.Member;
 import com.shallwe.vo.StudyBoard;
@@ -41,6 +43,8 @@ public class BoardController {
 	BoardService service;
 	@Autowired
 	FaqService faqService;
+	@Autowired
+	MemberSerivce memberService;
 	
 	@RequestMapping(value = "/studyBoard", method = RequestMethod.GET)
 	public String studyBoard(Locale locale, Model model) {
@@ -68,6 +72,7 @@ public class BoardController {
 	@RequestMapping("/list/{currentPage}")
 	@ResponseBody
 	public ResponseEntity<BoardPageBean<StudyBoard>> list(@PathVariable(value = "currentPage",required = false) Integer cp, HttpSession session){
+		ModelAndView mnv = new ModelAndView();
 		int currentPage = 1;
 		if(cp != null) {
 			currentPage = cp;
@@ -87,7 +92,6 @@ public class BoardController {
 	@RequestMapping("/search/{searchVal}/{currentPage}")
 	@ResponseBody
 	public ResponseEntity<BoardPageBean<StudyBoard>> searchList(@PathVariable(value = "searchVal",required = false) String sv, @PathVariable(value = "currentPage",required = false) Integer cp){
-		System.out.println("sv="+sv);
 		BoardPageBean<StudyBoard> pb = null;
 		try {
 			 pb = service.search(sv, cp);

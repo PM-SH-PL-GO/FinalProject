@@ -1,6 +1,7 @@
 package com.shallwe.service;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,16 +11,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.shallwe.dao.StudyBoardDAO;
+import com.shallwe.dao.StudyReplyDAO;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.model.BoardPageBean;
 import com.shallwe.vo.StudyBoard;
+import com.shallwe.vo.StudyReply;
 
 @Service(value = "boardService")
 public class BoardService {
 	@Autowired
 	StudyBoardDAO studyBoardDAO;
+	@Autowired
+	StudyReplyDAO studyReplyDAO;
 	
 	/**
 	 * 게시글 전체조회
@@ -28,10 +33,12 @@ public class BoardService {
 	 * @return 페이지 번호에 해당하는 게시글
 	 * @throws FindException
 	 */
+	@Transactional
 	public BoardPageBean<StudyBoard> findAll(int page) throws FindException{
 		if(page<1) {
 			throw new FindException(page+"페이지가 존재하지 않습니다.");
 		}
+		StudyBoard sb = new StudyBoard();
 		BoardPageBean<StudyBoard> boardPageBean = new BoardPageBean(page);
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -40,6 +47,12 @@ public class BoardService {
 		map.put("startRow", startRow);
 		map.put("endRow", endRow);
 		List<StudyBoard> list = studyBoardDAO.selectAll(map);
+		
+		for(StudyBoard s : list) {
+			List<StudyReply> studyReply = studyReplyDAO.selectById(s.getStudyBoard_id());
+			s.setReplylist(studyReply);
+		}
+		
 		int rowCnt = studyBoardDAO.selectCount();
 		int totalPage = (rowCnt % boardPageBean.CNT_PER_PAGE <= 0)? rowCnt/boardPageBean.CNT_PER_PAGE : rowCnt/boardPageBean.CNT_PER_PAGE+1;
 		
@@ -75,6 +88,11 @@ public class BoardService {
 		map.put("startRow", startRow);
 		map.put("endRow", endRow);
 		List<StudyBoard> list = studyBoardDAO.selectByTitleAndContent(map);
+		
+		for(StudyBoard s : list) {
+			List<StudyReply> studyReply = studyReplyDAO.selectById(s.getStudyBoard_id());
+			s.setReplylist(studyReply);
+		}
 		
 		int rowCnt = studyBoardDAO.SearchSelectCount(map);
 		int totalPage = (rowCnt % boardPageBean.CNT_PER_PAGE <= 0)? rowCnt/boardPageBean.CNT_PER_PAGE : rowCnt/boardPageBean.CNT_PER_PAGE+1;
