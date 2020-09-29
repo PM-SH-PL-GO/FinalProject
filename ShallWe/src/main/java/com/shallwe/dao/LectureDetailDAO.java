@@ -3,6 +3,7 @@ package com.shallwe.dao;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureDetail;
+import com.shallwe.vo.Tutor;
 
 @Repository(value = "lectureDetailDAO")
 public class LectureDetailDAO {
@@ -90,24 +92,26 @@ public class LectureDetailDAO {
 	}
 	
 	/**
-	 * 반려/취소 이유 반환
-	 * @author jun6
-	 * @param map
-	 * @throws ModifyException
+	 * 반려/취소 이유 조회
+	 * @param lecture_id
+	 * @param rejectOrCancel
+	 * @return 반려/취소 이유
+	 * @throws FindException
 	 */
-	public String selectLectureReasonById(String lecture_id, String rejectOrCancel) throws FindException {
+	public Map<String, String> selectLectureReasonById(String lecture_id, String rejectOrCancel) throws FindException {
 		SqlSession session = null;
-		String reason = null;
+		Map<String, String> map = null;
+		
 		try {
 			session = sqlSessionFactory.openSession();
-			reason = session.selectMap("LectureDetail.selectLectureReasonById", lecture_id, rejectOrCancel).get(rejectOrCancel).toString();
+			map = session.selectMap("LectureDetail.selectLectureReasonById", lecture_id);
 		}catch(DataAccessException e) {
-			throw new FindException("");
+			throw new FindException("You've got Error!^^");
 		}finally {
 			session.close();
 		}
 		
-		return reason;
+		return map;
 	}
 	
 	// 강의 취소 승인하기(admin) : 준식
@@ -118,7 +122,7 @@ public class LectureDetailDAO {
 			session = sqlSessionFactory.openSession();
 			session.update("LectureDetail.updateLectureRejectReason", map);
 		}catch(DataAccessException e) {
-			throw new ModifyException("");
+			throw new ModifyException("뭔가 잘못되었습니다");
 		}finally {
 			session.close();
 		}

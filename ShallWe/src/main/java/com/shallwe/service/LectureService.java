@@ -35,6 +35,7 @@ public class LectureService {
 	MemberLectureHistoryDAO memberLectureHistoryDAO;
 	@Autowired
 	WishListDAO wishDAO;
+
 	/**
 	 * @author Soojeong
 	 * @강의 검색 searchKey = {"0:all", "1:tutor_name", "2:lecture_title" , "3:category"
@@ -59,10 +60,10 @@ public class LectureService {
 		}
 
 		return modelAndView;
-		
+
 	}
-	
-	//강의 등록 : 동일
+
+	// 강의 등록 : 동일
 	@Transactional
 	public void insertLecture(Lecture lect, LectureDetail lectDe) throws AddException {
 		try {
@@ -72,22 +73,33 @@ public class LectureService {
 			e.printStackTrace();
 		}
 	}
-	
-	//학생 강의 조회 : 동일
-	public List<MemberLectureHistory> memberLectureList(MemberLectureHistory mlth) throws FindException{
+
+	// 강의 수정 : 동일
+	@Transactional
+	public void updateLecture(Lecture lect, LectureDetail lectDe) throws ModifyException {
+		try {
+			lectureDAO.update(lect);
+			lectureDetailDAO.updateDetail(lectDe);
+		} catch (ModifyException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// 학생 강의 조회 : 동일
+	public List<MemberLectureHistory> memberLectureList(MemberLectureHistory mlth) throws FindException {
 		return memberLectureHistoryDAO.memberMyClassList(mlth);
 	}
-	
-	//교사 강의 조회 : 동일
-		public List<Lecture> tutorLectureList(Lecture lect) throws FindException{
-			return lectureDAO.tutorMyClassList(lect);
-		}
-	
-	//강의 상세 조회 : 동일
+
+	// 교사 강의 조회 : 동일
+	public List<Lecture> tutorLectureList(Lecture lect) throws FindException {
+		return lectureDAO.tutorMyClassList(lect);
+	}
+
+	// 강의 상세 조회 : 동일
 	public LectureDetail lectureDetailView(Lecture lect) throws FindException {
 		return lectureDetailDAO.lectureDetailView(lect);
 	}
-	
+
 	/**
 	 * 강의신청 후 결제
 	 * 
@@ -96,25 +108,13 @@ public class LectureService {
 	 * @return
 	 * @throws AddException
 	 */
-	public int  insertMemberLectureHistory(List<Lecture> lectureList) throws AddException {
+	public int insertMemberLectureHistory(Map<String, Object> map) throws AddException {
 		int result = 0;
-		
+		// session 에서 값 받도록 처리할 것
 		String member_id = "member2";
 		try {
-			if ( lectureList.size() > 0 ) {
-				for (Lecture lecture : lectureList ) {
-					Map<String, Object> map = new HashMap<String, Object>();
-					
-					log.info ("memberId : " + member_id + " : lectureCategoryid : " +lecture.getLectureCategory().getLecture_category_id()   ); 
-					map.put("memberId", member_id);
-					map.put("lectureCategoryId", lecture.getLectureCategory().getLecture_category_id());
-					map.put("lectureId", lecture.getLecture_id());
-					result+= lectureDAO.insertMemberLectureHistory(map);
-				}
-			} else { // lectureList 목록이 없을 때  0 값 반환
-				return result;
-			}
-			
+			result = lectureDAO.insertMemberLectureHistory(map);
+
 		} catch (AddException e) {
 			throw new AddException(e.getMessage());
 		}
@@ -138,9 +138,9 @@ public class LectureService {
 		}
 		return result;
 	}
-	
-	public List<Lecture> findWishListById(String member_id) throws FindException{
-		
+
+	public List<Lecture> findWishListById(String member_id) throws FindException {
+
 		return wishDAO.selectWishListById(member_id);
 	}
 

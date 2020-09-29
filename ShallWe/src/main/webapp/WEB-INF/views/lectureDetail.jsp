@@ -1,12 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <c:set value="${lectDetail.lecture}" var="lecture" />
-<fmt:formatDate var="startDt" value="${lecture.lecture_start_dt}"
-	pattern="yyyy-MM-dd" />
-<fmt:formatDate var="endDt" value="${lecture.lecture_end_dt}"
-	pattern="yyyy-MM-dd" />
+<fmt:formatDate var="startDt" value="${lecture.lecture_start_dt}" pattern="yyyy-MM-dd" />
+<fmt:formatDate var="endDt" value="${lecture.lecture_end_dt}" pattern="yyyy-MM-dd" />
+
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 <head>
@@ -15,8 +14,7 @@
 <title>강의 상세 정보</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="shortcut icon" type="image/x-icon"
-	href="/shallwe/assets/img/favicon.ico">
+<link rel="shortcut icon" type="image/x-icon" href="/shallwe/assets/img/favicon.ico">
 
 <!-- CSS here -->
 <link rel="stylesheet" href="/shallwe/assets/css/bootstrap.min.css">
@@ -29,85 +27,60 @@
 <link rel="stylesheet" href="/shallwe/assets/css/animate.min.css">
 <link rel="stylesheet" href="/shallwe/assets/css/animated-headline.css">
 <link rel="stylesheet" href="/shallwe/assets/css/magnific-popup.css">
-<link rel="stylesheet"
-	href="/shallwe/assets/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/shallwe/assets/css/fontawesome-all.min.css">
 <link rel="stylesheet" href="/shallwe/assets/css/themify-icons.css">
 <link rel="stylesheet" href="/shallwe/assets/css/slick.css">
 <link rel="stylesheet" href="/shallwe/assets/css/nice-select.css">
 <link rel="stylesheet" href="/shallwe/assets/css/style.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+<%-- 화면 호출시 바로 조회 해와야할 데이터 처리 영역 --%>
+<%-- 강사-카테고리별 후기 조회--%>
 $(document).ready(function() {
 	var $reviewAreaObj = $('#reviewArea');
-	console.log($reviewAreaObj);
 	// 강사별, 카테고리별 리뷰 목록 조회
 	$.ajax({
-		url : "/shallwe/reviewList"
+		url : "${contextPath}/reviewList"
 		, data : {"tutor_id": "${lecture.tutor.member.member_id}",
 				  "category_id":"${lecture.lectureCategory.lecture_category_id}"}
 		, success : function (responseData) {
-			console.log(responseData);
 			$reviewAreaObj.append(responseData);
 		}
-	}); // end of ajax 
-}); // end of scriptLoad
-</script>
-</head>
-<script>
-$(function(){
-	let letidValue = $("input[name=listlecture_id]").val();
-	$("div[name=gotoDe]").click(function(){
-		location.href = "/shallwe/lectures/detail?lecture_id=" +letidValue;		
-	});
-	let letidendValue = $("input[name=listendlecture_id]").val();
-	$("div[name=gotoDeend]").click(function(){
-		location.href = "/shallwe/lectures/detail?lecture_id=" +letidendValue;		
-	});
-	return false;
-});
-
-$(function () {
-	$('#applyBtn').on("click", function(){
+	}); // end of ajax
+	
+	// 강의신청, 강의결제페이지 호출
+	var $applyBtnObj = $('#applyBtn');
+	$applyBtnObj.on("click", function() {
 		$.ajax({
-			url: "/shallwe/??"
-			, method: "post"
-			, data: 
-			{
-// 				나중에 변수값 이름만 바꾼다.
-				'lecture.lecture_img' : ${lecture.lecture_img},
-				'lecture.lecture_title' : ${lecture.lecture_title},
-				'lecture.lecture_state' : ${lecture.lecture_state},
-				'lectDetail.lecture_location' : ${lectDetail.lecture_location},
-				'lecture.lecture_current' : ${lecture.lecture_current},
-				'lecture.lecture_max' : ${lecture.lecture_max},
-				'lecture.lectureCategory.lecture_category_id' : ${lecture.lectureCategory.lecture_category_id},
-				'lectDetail.lecture_introduce' : ${lectDetail.lecture_introduce},
-				'lectDetail.lecture_curriculum' : ${lectDetail.lecture_curriculum},
-				'lectDetail.lecture_prepared' : ${lectDetail.lecture_prepared},
-				'lectDetail.lecture_caution' : ${lectDetail.lecture_caution},
-				'lectDetail.lecture_fileName' : ${lectDetail.lecture_fileName},
-				'lecture.tutor.tutor_img' : ${lecture.tutor.tutor_img},
-				'lecture.tutor.tutor_nickname' : ${lecture.tutor.tutor_nickname},
-				'lecture.tutor.tutor_score' : ${lecture.tutor.tutor_score},
-				'lecture.lecture_price' : ${lecture.lecture_price},
-				'lecture.lecture_start_dt' : ${lecture.lecture_start_dt},
-				'lecture.lecture_end_dt' : ${lecture.lecture_end_dt}
-			}
-			, success: function(data) {
-				let responseObj = JSON
-				.parse(data);
+			url: "${contextPath}/insertMemberLectureHistory"
+			, method: "POST"
+			, data : {"lecture_category_id" : "${lecture.lectureCategory.lecture_category_id}" ,
+					  "lecture_id" : "${lecture.lecture_id}"}
+			, success: function(responseData) {
+				let responseObj = JSON.parse(responseData);
 				if (responseObj.status == "success") {
 					alert("강의 신청이 정상적으로 되었습니다.");
 				} else {
 					alert("강의 신청에 실패했습니다.");
 					$("#applyBtn").focus();
 				}
-			}
-		});
-		return false;
+			} 
+		}); 
+	}); // end of 강의신청, 강의결제페이지 호출 
+	
+	let letidValue = $("input[name=listlecture_id]").val();
+	$("div[name=gotoDe]").click(function(){
+		location.href = "/shallwe/lectures/detail?lecture_id=" +letidValue;		
 	});
-});
+
+	let letidendValue = $("input[name=listendlecture_id]").val();
+	$("div[name=gotoDeend]").click(function(){
+		location.href = "/shallwe/lectures/detail?lecture_id=" +letidendValue;		
+	});
+	return false;
+}); // end of scriptLoad
 </script>
+</head>
 <body>
 	<main>
 		<!--? Start Align Area -->

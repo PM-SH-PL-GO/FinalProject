@@ -109,17 +109,6 @@ public class AdminService {
 	}
 	
 	/**
-	 * 특정 강의 상세정보 가져오기
-	 * @author jun6
-	 * @param 강의 ID
-	 * @return 강의 상세 정보
-	 * @throws FindException
-	 */
-//	public LectureDetail showLectureDetailById(String lecture_id) throws FindException{
-//		return lectureDetailDAO.selectLectureDetailById(lecture_id);
-//	}
-	
-	/**
 	 * 강의 승인/반려하기
 	 * @author jun6
 	 * @param lecture_id
@@ -148,9 +137,36 @@ public class AdminService {
 		lectureDAO.updateLectureStatusByIdAndStatus(map);
 	}
 	
-	
-	public String showLectureReason(String lecture_id, String rejectOrCancel) throws FindException{
-		return lectureDetailDAO.selectLectureReasonById(lecture_id, rejectOrCancel);
+	/**
+	 * 강의 취소/반려 사유 조회하기
+	 * @author jun6
+	 * @param lecture_id
+	 * @param 취소인지 반려인지
+	 * @return 취소/반려된 사유
+	 * @throws FindException
+	 */
+	public LectureDetail showLectureReason(String lecture_id, String rejectOrCancel) throws FindException{
+		if (rejectOrCancel.equals("반려사유"))
+			rejectOrCancel = "reject_reason";
+		else if(rejectOrCancel.equals("취소사유"))
+			rejectOrCancel = "cancel_reason";
+		
+		Map<String, String> map = lectureDetailDAO.selectLectureReasonById(lecture_id, rejectOrCancel);
+		
+		LectureDetail lectureDetail = new LectureDetail();
+		
+		if (rejectOrCancel.equals("reject_reason"))
+			lectureDetail.setLecture_reject_reason(map.get(rejectOrCancel));
+		else
+			lectureDetail.setLecture_cancel_reason(map.get(rejectOrCancel));
+		
+		Tutor tutor = new Tutor();
+		tutor.setTutor_nickname(map.get(""));
+		Lecture lecture = new Lecture();
+		lecture.setTutor(tutor);
+		lectureDetail.setLecture(lecture);
+		
+		return lectureDetail;
 	}
 	
 	

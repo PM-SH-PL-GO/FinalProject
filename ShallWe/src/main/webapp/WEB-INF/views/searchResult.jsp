@@ -67,7 +67,7 @@
 		var $searchBtnObj = $("form[name='resultList']").find('button#searchBtn');
 		$searchBtnObj.click (function ( ) {
 			$searchText = $searchTextObj.val();
-			var url = '/shallwe/search?searchKey='+condition+'&searchText='+$searchText ;
+			var url = '${contextPath}/search?searchKey='+condition+'&searchText='+$searchText ;
 			location.href = url;
 		}); // end of clickEvent
 		
@@ -88,7 +88,7 @@
 		var lectureDetail = $('a#lecture_detail');
 		lectureDetail.click(function e () {
 			let lecture_code = $(this).find('input[name=lecture_code]').val();
-			var url = '/shallwe/lectures/detail?lecture_id='+lecture_code;
+			var url = '${contextPath}/lectures/detail?lecture_id='+lecture_code;
 			location.href = url;
 		}); 
 		
@@ -97,7 +97,7 @@
 		var lectureLike = $('div.lecture_Like');
 		$lectureLike.on('click', 'input[name=lecture_code]', function(e){
 			let lecture_code = $(this).find('input[name=lecture_code]').val();
-			var url = '/shallwe/lectures/detail?lecture_id='+lecture_code;
+			var url = '${contextPath}/lectures/detail?lecture_id='+lecture_code;
 			location.href = url;
 		} 
 		

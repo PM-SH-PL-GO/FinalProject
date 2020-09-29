@@ -165,28 +165,33 @@
             	
             	if (isTrue == true){
 	            	let approve = $(this).attr('value');		// 예비강사 ID
-	
-	            	$.ajax({
-	            		dataType: "json",														// 응답 결과의 형식 -> 다른 형식이 응답된다면 error로 간다
-	            		beforeSend : function(xhr){												// 요청을 보내기 전 헤더 값을 설정
-	            			xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");		// -> csrf 헤더와 토큰을 헤더에 넣어 놔야 403에러가 발생하지 않는다
-	            		},																		// 2차 403에러의 주된 원인
-	            		url: "${contextPath}/admin/tutor/status/" + approve,
-	            		method: "PATCH",
-	            		contentType: 'application/json-patch+json; charset=utf-8',				// 1차 에러의 주된 원인
-	            		data: JSON.stringify({"status" : $tatus}),
-	            		
-	            		success: function(data){
-	            			alert(data.status);
-	            			$(".pre-tutor").trigger("click")
-	            		},
-	            		error: function(xhttr){
-	            			if (xhttr.status == 200)
-	            				location.replace('${contextPath}/login');
-	            			else
-	            				alert(xhttr.status);
-	            		}
-	            	});
+					
+	            	if ($tatus == "승인"){	 //승인시
+		            	$.ajax({
+		            		dataType: "json",														// 응답 결과의 형식 -> 다른 형식이 응답된다면 error로 간다
+		            		beforeSend : function(xhr){												// 요청을 보내기 전 헤더 값을 설정
+		            			xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");		// -> csrf 헤더와 토큰을 헤더에 넣어 놔야 403에러가 발생하지 않는다
+		            		},																		// 2차 403에러의 주된 원인
+		            		url: "${contextPath}/admin/tutor/status/" + approve,
+		            		method: "PATCH",
+		            		contentType: 'application/json-patch+json; charset=utf-8',				// 1차 에러의 주된 원인
+		            		data: JSON.stringify({"status" : $tatus}),
+		            		
+		            		success: function(data){
+		            			alert(data.status);
+		            			$(".pre-tutor").trigger("click")
+		            		},
+		            		error: function(xhttr){
+		            			if (xhttr.status == 200)
+		            				location.replace('${contextPath}/login');
+		            			else
+		            				alert(xhttr.status);
+		            		}
+		            	});
+	            	}else{	//반려시
+	            		// tutor에서 삭제 후 반려 메세지 email로 보내기
+	            		alert("tutor에서 삭제 후 반려 메세지 email로 보내기 : 아직 준비중입니다");
+	            	}
             	}
             	
            		return false;
@@ -279,7 +284,8 @@
             			$tutor_Lecture += '<button class="tutor-lecture-close">닫기</button><hr>';
             			$tutor_Lecture += '<table class="table">';
             			$tutor_Lecture += '<tr><thead><th>순서</th><th>강의번호</th><th>강의명</th><th>상태</th></tr></thead>';
-           				$tutor_Lecture += '<tbody><tr>등록한 강의가 존재하지 않습니다</tr></tbody></table>'
+           				$tutor_Lecture += '<tbody><tr>등록한 강의가 존재하지 않습니다</tr></tbody></table></div>'
+            			$tutor_Lecture += '<div class="tutor-lecture-layer"></div></div>';
             			let cont = $cont.html() + $tutor_Lecture;
             			$cont.html(cont);
             		}
@@ -356,7 +362,7 @@
                     			prepared += '<td>' + lecture.lecture_min + '</td>';
                     			prepared += '<td>' + lecture.lecture_current + '</td>';
                     			prepared += '<td><button class="lecture-edit" value="' + lecture.lecture_id + '">승인</button></td>';
-                    			prepared += '<td><button class="lecture-reject" value="' + lecture.lecture_id + '">반려</button></td>';
+                    			prepared += '<td><button class="show-reject" value="' + lecture.lecture_id + '">반려</button></td>';
                     			
                     		}else if(lecture.lecture_state == '승인' && end > today){
                     			// 승인(진행중 + 시작 전 모집 중)
@@ -439,6 +445,8 @@
                     		process += '<tr>표시할 데이터가 없습니다</tr>';
                     	if (finishCnt == 0)
                     		finish += '<tr>표시할 데이터가 없습니다</tr>';
+                    	if (cancelRequestCnt == 0)
+                    		cancelRequest += '<tr>표시할 데이터가 없습니다</tr>';
                     	if (cancelCnt == 0)
                     		cancel += '<tr>표시할 데이터가 없습니다</tr>';
                     		
@@ -464,42 +472,20 @@
                 return false;
             });
             
-            // 강의 상세정보 보기 -> 동일이꺼 가져다 새창에 띄워주기 ㅇㅋ?
+            // 강의 상세정보 보기 (새창 띄우기)
             $cont.on("click", ".lecture-detail", function(){
-            	alert("아직 준비중입니다");
             	let $lectureId = $(this).attr("value");
-            	return false;
-//             	$.ajax({
-//             		url: "${contentPath}/admin/lectureDetail/" + $lectureId,
-//             		method: "GET",
-//             		success: function(detail){
-//             			let $lot = '<div class="modal_slot"><div class="modal_content"><table class="table">';
-//             			$lot += '<thead><tr><th>';
-            			
-//             			$lot += '</th></tr></thead>';
-            			
-//             			$lot += '<button class="modal_close"></button>';
-//             			$lot += '<div class="modal_layer"></div></table></div></div>';
-//             		},
-//             		error: function(){
-            			
-//             		}
-//             	});
+            	window.open("${contextPath}/lectures/detail?lecture_id=" + $lectureId, "_blank");
+            	
             });
             
-            // 강의 신청 대기 상태 변동하기(강의 승인/취소 승인)
+            // 강의 승인/취소 승인/복구하기
             $cont.on("click", ".lecture-edit", function(){
             	let $tatus = $(this).html();					// 변경할 강의 상태
             	let isTrue = confirm($tatus + " 하시겠습니까?");
             	
             	if (isTrue){
 	            	let approve = $(this).attr('value');		// 강의 ID
-	            	let reason;
-					
-	            	if ($(".reject-reason") != null)
-	            		reason = $(".reject-reason").attr('value');
-	            	
-	            	let statusAndReason = {status : $tatus, reject_reason : reason};
 	            	
 	            	$.ajax({
 	            		dataType: "json",													
@@ -509,17 +495,17 @@
 	            		url: "${contextPath}/admin/lecture/status/" + approve,
 	            		method: "PATCH",
 	            		contentType: 'application/json-patch+json; charset=utf-8',
-	            		data: JSON.stringify(statusAndReason),
+	            		data: JSON.stringify({ staus : $tatus }),
 	            		
 	            		success: function(data){
-	            			alert(data.status);
+	            			alert(data.success);
 	            			$(".lecture-list").trigger("click")
 	            		},
 	            		error: function(xhttr){
 	            			if (xhttr.status == 200)
 	            				location.replace('${contextPath}/login');
 	            			else
-	            				alert(xhttr.status);
+	            				alert(xhttr.errMsg);
 	            		}
 	            	});
             	}
@@ -528,38 +514,92 @@
             });
             
             // 강의 반려하기 버튼 클릭시
-            $cont.on("click", ".lecture-reject", function(){
+            $cont.on("click", ".show-reject", function(){
     			// 모달창(반려 사유 작성) 생성 후 화면에 추가
-            	alert("아직 준비중입니다")
+    			$lectureId = $(this).attr("value");		// 강의 ID
+    			
+    			let $lot = '<div class="tutor-lecture-list"><div class="tutor-lecture-content">';
+      			$lot += '<h3>강의 반려하기</h3><br>';
+      			
+      			$lot += '<label for="reject-reason">반려 사유 : </label>';
+      			$lot += '<select name="reject-reason" id="reject-reason">';
+      			$lot += '<option value="부적절한 제목/사진 사용">부적절한 제목/사진 사용</option>';
+      			$lot += '<option value="외설적, 폭력적인 내용 포함">외설적, 폭력적인 내용 포함</option>';
+      			$lot += '<option value="불법적이거나 부당한 행위">불법적이거나 부당한 행위</option>';
+      			$lot += '<option value="부족한 내용설명">부족한 내용설명</option>';
+      			$lot += '</select><br><label for="reject-detail">세부 사유</label>';
+      			$lot += '<textarea id="reject-detail" name="reject-detial" rows="15" cols="150"/>';
+      			$lot += '<button class="reject-lecture">전송</button><button class="tutor-lecture-close">취소</button>';
+      			$lot += '<div class="tutor-lecture-layer" value="' + lecture.lecture_id + '"></div></div></div>';
+      			
+      			let cont = $cont.html() + $lot;
+    			$cont.html(cont)
+    			
             	return false;
             });
 			
+            // 강의 반려하기
+            $cont.on("click", ".reject-lecture", function(){
+            	$lectureId = $(this).attr("value");		// 강의 ID
+            	let $tatus = "반려";
+            	let $message = $("#reject-reason").val() + ' \\ ' + $("#reject-detail").val();
+            	
+            	console.log($message);
+            	
+            	$.ajax({
+            		dataType: "json",													
+            		beforeSend : function(xhr){
+            			xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");		
+            		},
+            		url: "$contextPath/admin/reason/" + $lectureId,
+            		method: "PATCH",
+            		contentType: "text/html; charset=UTF-8;",
+            		date: { status : $tatus, reject_reason : $message},
+            		success: function(data){
+            			alert(data.success);
+            				trigger();
+            		},
+            		error: function(xhttr){
+            			if (xhttr.status == 200){
+            				location.replace('${contextPath}/login');
+            				$(".lecture-list").trigger("click")
+            			}
+           				else
+            				alert(xhttr.errMsg);
+            		}
+            		
+            	});
+            })
+            
+            
             // 취소/반려 사유 보기
             $cont.on("click", ".lecutre-reason", function(){
             	let lectureId = $(this).attr('value');	// 강의 번호
-            	let reasonType = $(this).html();
+            	let reasonType = $(this).html();		// 취소사유인지 반려사유인지
             	
             	$.ajax({
             		url: "$contextPath/admin/reason/" + lectureId,
             		method: "GET",
             		data: { rejectOrCancel : reasonType },
-            		success: function(data){
+            		success: function(lectureDetail){
             			let modal = '<div class="tutor-lecture-list"><div class="tutor-lecture-content">';
-                    	modal += '<div>' + ' 강사의 ' + reasonType + '</div>';
+                    	modal += '<div>' + lectureDetail.lecture.tutor.tutor_nickname + ' 강사의 ' + lectureDetail.lecture.lecture_title;
+                    	modla += '강의 ' + reasonType + '</div>';
             			modal += '<button class="tutor-lecture-close">닫기</button>';
             			modal += '<h5>사유 :</h5><br><p>';
-            			modal += data.reason + '</p>';
+            			if (reasonType == "취소사유")
+            				modal += lectureDetail.lecture_cancel_reason + '</p>';
+           				else
+            				modal += lectureDetail.lecture_reject_reason + '</p>';
 		    			modal += '<div class="tutor-lecture-layer"></div></div>';
+		    			
 		    			let cont = $cont.html() + modal;
 		    			$cont.html(cont);
             		},
             		error: function(data){
             			let modal = '<div class="tutor-lecture-list"><div class="tutor-lecture-content">';
-                    	////////////////////
-                    	modal += '<div>강사의 ' + reasonType + '목록</div>';
-                    	/////////////////////
+                    	modal += '<div>' + reasonType + '목록을 불러오는데 실패했습니다</div>';
             			modal += '<button class="tutor-lecture-close">닫기</button>';
-            			modal += '<p>' + data.errMsg + '</p>';
 		    			modal += '<div class="tutor-lecture-layer"></div></div>';
 		    			let cont = $cont.html() + modal;
 		    			$cont.html(cont);
@@ -589,9 +629,9 @@
             			faqList.forEach(function(faq){
             				$lot += '<tr><td>' + faq.faq_id + '</td>';
             				$lot += '<td>' + faq.faq_question + '</td>';
-            				$lot += '<td>' + faq.faq_answer + '</td></tr>';
+            				$lot += '<td>' + faq.faq_answer + '</td>';
             				$lot += '<td><button class="faq_change" value="' + faq.faq_id + '">관리하기</button></td>';
-            				$lot += '<td><button class="faq_delete" value="' + faq.faq_id + '">삭제하기</button></td>';
+            				$lot += '<td><button class="faq_delete" value="' + faq.faq_id + '">삭제하기</button></td></tr>';
             			});
             			
             			$lot += '</tbody>';
@@ -675,41 +715,41 @@
           <div class="text">Shall We?</div>
           
           <ul>
-              <li><a href="#" class="home"><i class="fas fa-home"></i>홈페이지</a></li>
+              <li><a href="${contextPath }" class="home"><i class="fas fa-home"></i>홈페이지</a></li>
               <li>
-                <a href="#" class="a-btn"><i class="fas fa-address-book"></i>회원관리
+                <a  class="a-btn"><i class="fas fa-address-book"></i>회원관리
                     <span class="fas fa-caret-down first"></span>
                 </a>
                 <ul class="tog">
-                    <li><a href="#" class="member">회원목록</a></li>
+                    <li><a class="member">회원목록</a></li>
                 </ul>
               </li>
 
               <li>
-                <a href="#" class="a-btn tutor"><i class="fas fa-user"></i>강사관리
+                <a class="a-btn tutor"><i class="fas fa-user"></i>강사관리
                     <span class="fas fa-caret-down second"></span>
                 </a>
                 <ul class="tog">
-                    <li><a href="#" class="pre-tutor">예비강사목록</a></li>
-                    <li><a href="#" class="tutor-list">강사목록</a></li>
+                    <li><a class="pre-tutor">예비강사목록</a></li>
+                    <li><a class="tutor-list">강사목록</a></li>
                 </ul>
               </li>
 
               <li>
-                <a href="#" class="a-btn lecture"><i class="fas fa-stream"></i>강의관리
+                <a class="a-btn lecture"><i class="fas fa-stream"></i>강의관리
                     <span class="fas fa-caret-down third"></span>
                 </a>
                 <ul class="tog">
-                    <li><a href="#" class="lecture-list">강의목록</a></li>
+                    <li><a class="lecture-list">강의목록</a></li>
                 </ul>
               </li>
 
               <li>
-              	<a href="#" class="a-btn config"><i class="fas fa-cog"></i>설정
+              	<a class="a-btn config"><i class="fas fa-cog"></i>설정
               		<span class="fas fa-caret-down forth"></span>
               	</a>
               	<ul class="tog">
-              		<li><a href="#" class="faq">FAQ</a></li>
+              		<li><a class="faq">FAQ</a></li>
               	</ul>
          	  </li>
           </ul>

@@ -25,6 +25,7 @@ import com.shallwe.exception.ModifyException;
 import com.shallwe.service.AdminService;
 import com.shallwe.vo.Faq;
 import com.shallwe.vo.Lecture;
+import com.shallwe.vo.LectureDetail;
 import com.shallwe.vo.Member;
 import com.shallwe.vo.Tutor;
 
@@ -199,22 +200,6 @@ public class AdminController {
 	}
 	
 	/**
-	 * 특정 강의 상세정보 조회하기 - 동일이꺼 가져다 쓰기
-	 * @author jun6
-	 * @param lecture_id
-	 * @return
-	 */
-//	@RequestMapping(value ="/lectureDetail/{lectureId}", method = RequestMethod.GET)
-//	public ResponseEntity<LectureDetail> lectureDetailList(@PathVariable(name = "lectureId") String lecture_id){
-//		try{
-//			LectureDetail lectureDetail = adminService.showLectureDetailById(lecture_id);
-//			return ResponseEntity.status(HttpStatus.OK).body(lectureDetail);
-//		}catch(FindException e) {
-//			return ResponseEntity.status(HttpStatus.OK).body(null);
-//		}
-//	}
-	
-	/**
 	 * 강의 승인/반려/취소 하기
 	 * @author jun6
 	 * @param lecture_id
@@ -223,8 +208,7 @@ public class AdminController {
 	 */
 	@PatchMapping(value = "/lecture/status/{lectureId}")
 	public ResponseEntity<String> lectureStatusChange(@PathVariable(name = "lectureId") String lecture_id
-													, @RequestBody String status
-													, @RequestBody(required = false) String reject_reason)
+													, @RequestBody String status)
 	{
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> map;
@@ -240,26 +224,49 @@ public class AdminController {
 		}
 		
 		try {
-			adminService.updateLectureStatusByIdAndStatus(lecture_id, lectureStatus, reject_reason);
-			return ResponseEntity.status(HttpStatus.OK).body("{ \"status\" : \"정상적으로 " + lectureStatus + " 처리하였습니다\"}");
+			adminService.updateLectureStatusByIdAndStatus(lecture_id, lectureStatus, null);
+			return ResponseEntity.status(HttpStatus.OK).body("{ \"success\" : \"정상적으로 " + lectureStatus + " 처리하였습니다\"}");
 		}catch(ModifyException e) {
 			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"status\" : \"설정에 실패하였습니다\"}");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"errMsg\" : \"설정에 실패하였습니다\"}");
 		}
 	}
 	
+	/**
+	 * 강의 취소/반려 사유 조회
+	 * @author jun6
+	 * @param 강의 ID
+	 * @param 반려인지 취소인지
+	 * @return
+	 */
 	@GetMapping(value = "/reason/{lectureId}")
-	public ResponseEntity<String> updateRejectReason(@PathVariable(name = "lectureId") String lecture_id, String rejectOrCancel){
+	public ResponseEntity<LectureDetail> showLectureReason(@PathVariable(name = "lectureId") String lecture_id, String rejectOrCancel){
 		try {
-			String reason = adminService.showLectureReason(lecture_id, rejectOrCancel);
-			return ResponseEntity.status(HttpStatus.OK).body("{ \"reason\" : \"" + reason + "\" }");
+			LectureDetail lectureDetail = adminService.showLectureReason(lecture_id, rejectOrCancel);
+			return ResponseEntity.status(HttpStatus.OK).body(lectureDetail);
 		}catch(FindException e) {
 			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.OK).body("{ \"errMsg\" : \"" + e.getMessage() + "\"}");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 	}
 	
-	
+	/**
+	 * 신청 온 강의 반려 하기
+	 * @param lecture_id
+	 * @param status
+	 * @param reject_reason
+	 * @return
+	 */
+	@PatchMapping(value = "/reason/{lectureId}")
+	public ResponseEntity<String> rejectLecture(@PathVariable(name = "lectureId")String lecture_id, String status, String reject_reason){
+		try {
+			adminService.updateLectureStatusByIdAndStatus(lecture_id, status, reject_reason);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{ \"success\" : \"성공적으로 설정되었습니다\"}");
+		}catch(ModifyException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{ \"errMsg\" : \"" + e.getMessage() + "\"}");
+		}
+	}
 	
 	
 	/////////////////////////FAQ////////////////////////////
@@ -280,18 +287,6 @@ public class AdminController {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
-		
-//		ModelAndView mnv = new ModelAndView();
-//		List<Faq> faqList = new ArrayList<>();
-//		try {
-//			faqList = adminService.showAllFaq();
-//			mnv.addObject("faqList", faqList);
-//			mnv.setViewName("/adminFaq");
-//		}catch(FindException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		return mnv;
 	}
 	
 	

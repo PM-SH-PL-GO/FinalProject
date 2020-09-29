@@ -87,8 +87,9 @@
 	
 	<!-- admin(jun6) : 강의 취소/반려사유 조회 -->
 	<select id="selectLectureReasonById" parameterType="String" resultType="Map">
-		SELECT lecture_reject_reason "reject_reason", lecture_cancel_reason "cancel_reason"
-		FROM lecture_detail
+		SELECT ld.lecture_reject_reason "reject_reason", ld.lecture_cancel_reason "cancel_reason", tu.tutor_nickname
+		FROM lecture_detail ld
+			JOIN tutor tu ON(ld.lecture_tutor_id = tu.tutor_id)
 		WHERE lecture_id = #{lecture_id}
 	</select>
 	
