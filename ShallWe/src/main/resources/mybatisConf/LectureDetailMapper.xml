@@ -84,4 +84,19 @@
 		WHERE le.lecture_id =
 		#{lecture_id}
 	</select>
+	
+	<!-- admin(jun6) : 강의 취소/반려사유 조회 -->
+	<select id="selectLectureReasonById" parameterType="String" resultType="Map">
+		SELECT ld.lecture_reject_reason "reject_reason", ld.lecture_cancel_reason "cancel_reason", tu.tutor_nickname
+		FROM lecture_detail ld
+			JOIN tutor tu ON(ld.lecture_tutor_id = tu.tutor_id)
+		WHERE lecture_id = #{lecture_id}
+	</select>
+	
+	<!-- admin(jun6) : 강의 반려 사유 설정 -->
+	<update id="updateLectureRejectReason" parameterType="Map">
+		UPDATE lecture_detail
+		SET lecture_reject_reason = #{reject_reason}
+		WHERE lecture_id = #{lecture_id}
+	</update>
 </mapper>

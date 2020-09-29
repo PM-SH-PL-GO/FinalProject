@@ -162,9 +162,9 @@
 	<insert id="insertMemberLectureHistory" parameterType="hashMap"
 		statementType="CALLABLE">
 		{ call INSERT_MEMBER_LECTURE_HISTORY (
-		#{lectureCategoryId}
-		, #{memberId}
-		, #{lectureId}
+		#{lecture_category_id}
+		, #{member_id}
+		, #{lecture_id}
 		)}
 	</insert>
 

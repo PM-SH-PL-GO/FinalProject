@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.shallwe.dao.FaqDAO;
 import com.shallwe.dao.LectureDAO;
@@ -108,37 +109,67 @@ public class AdminService {
 	}
 	
 	/**
-	 * 특정 강의 상세정보 가져오기
-	 * @author jun6
-	 * @param 강의 ID
-	 * @return 강의 상세 정보
-	 * @throws FindException
-	 */
-//	public LectureDetail showLectureDetailById(String lecture_id) throws FindException{
-//		return lectureDetailDAO.selectLectureDetailById(lecture_id);
-//	}
-	
-	/**
 	 * 강의 승인/반려하기
 	 * @author jun6
 	 * @param lecture_id
 	 * @param status
 	 * @throws ModifyException
 	 */
-	public void updateLectureStatusByIdAndStatus(String lecture_id, String status) throws ModifyException{
+	@Transactional
+	public void updateLectureStatusByIdAndStatus(String lecture_id, String status, String reject_reason) throws ModifyException{
 		Map<String, String> map = new HashMap<>();
-		map.put("id", lecture_id);
+		map.put("lecture_id", lecture_id);
+		
 		if (status.equals("승인"))
 			map.put("status", status);
-		else if(status.equals("반려") || status.equals("취소승인"))
-			map.put("status", "취소");
+		else if(status.equals("반려")) {
+			map.put("status", "반려");
+			map.put("reject_reason", reject_reason);
+			lectureDetailDAO.updateLectureRejectReason(map);
+		}
 		else if(status.equals("복구"))
-			map.put("status", "승인대기");
+			map.put("status", "승인");
+		else if (status.equals("취소승인"))
+			map.put("status", "취소");
 		else
 			throw new ModifyException("승인/반려 이외의 글자가 전달되었습니다 : " + status);
 		
 		lectureDAO.updateLectureStatusByIdAndStatus(map);
 	}
+	
+	/**
+	 * 강의 취소/반려 사유 조회하기
+	 * @author jun6
+	 * @param lecture_id
+	 * @param 취소인지 반려인지
+	 * @return 취소/반려된 사유
+	 * @throws FindException
+	 */
+	public LectureDetail showLectureReason(String lecture_id, String rejectOrCancel) throws FindException{
+		if (rejectOrCancel.equals("반려사유"))
+			rejectOrCancel = "reject_reason";
+		else if(rejectOrCancel.equals("취소사유"))
+			rejectOrCancel = "cancel_reason";
+		
+		Map<String, String> map = lectureDetailDAO.selectLectureReasonById(lecture_id, rejectOrCancel);
+		
+		LectureDetail lectureDetail = new LectureDetail();
+		
+		if (rejectOrCancel.equals("reject_reason"))
+			lectureDetail.setLecture_reject_reason(map.get(rejectOrCancel));
+		else
+			lectureDetail.setLecture_cancel_reason(map.get(rejectOrCancel));
+		
+		Tutor tutor = new Tutor();
+		tutor.setTutor_nickname(map.get(""));
+		Lecture lecture = new Lecture();
+		lecture.setTutor(tutor);
+		lectureDetail.setLecture(lecture);
+		
+		return lectureDetail;
+	}
+	
+	
 	
 	
 	/**
