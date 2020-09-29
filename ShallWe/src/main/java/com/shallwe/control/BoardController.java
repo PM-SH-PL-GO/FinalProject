@@ -126,14 +126,20 @@ public class BoardController {
 		return "studyBoardWrite";
 	}
 	
-	@RequestMapping("writeBoard")
-	public String writeBoard(@RequestBody StudyBoard sb) {
+	@RequestMapping(value = "/writeBoard", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView writeBoard(@RequestBody StudyBoard sb, HttpSession session) {
+		ModelAndView mnv = new ModelAndView();
+		Member member = new Member();
+		String memberId = (String)session.getAttribute("loginInfo");
+		member.setMember_id(memberId);
 		try {
+			sb.setMember(member);
 			service.writeBoard(sb);
-			return "success";
+			return mnv;
 		} catch (AddException e) {
 			e.printStackTrace();
-			return "fail";
+			return mnv;
 		}
 		
 	}

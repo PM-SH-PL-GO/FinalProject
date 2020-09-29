@@ -4,33 +4,15 @@
 <meta charset="utf-8">
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="loginId" value="${sessionScope.loginInfo}"/>
 <c:set var="boardId" value="${studyBoard.member.member_id}"/>
+<c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <fmt:formatDate var="resultDt" value="${studyBoard.studyBoard_write_dt}" pattern="yyyy-MM-dd"/>
-
+    <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <meta http-equiv="x-ua-compatible" content="ie=edge">
-<title>Shallwe-함께 배우는 교육공간</title>
-<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<meta name="description" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="shortcut icon" type="image/x-icon"
-	href="assets/img/favicon.ico">
-
-<!-- CSS here -->
-<link rel="stylesheet" href="/shallwe/assets/css/bootstrap.min.css">
-<link rel="stylesheet" href="/shallwe/assets/css/owl.carousel.min.css">
-<link rel="stylesheet" href="/shallwe/assets/css/slicknav.css">
-<link rel="stylesheet" href="/shallwe/assets/css/animate.min.css">
-<link rel="stylesheet" href="/shallwe/assets/css/hamburgers.min.css">
-<link rel="stylesheet" href="/shallwe/assets/css/magnific-popup.css">
-<link rel="stylesheet"
-	href="/shallwe/assets/css/fontawesome-all.min.css">
-<link rel="stylesheet" href="/shallwe/assets/css/themify-icons.css">
-<link rel="stylesheet" href="/shallwe/assets/css/slick.css">
-<link rel="stylesheet" href="/shallwe/assets/css/nice-select.css">
-<link rel="stylesheet" href="/shallwe/assets/css/style.css">
 <style>
 .btn {
 	background: #00dbd5;
@@ -82,7 +64,7 @@ $(function(){
 	//----------댓글 로드 START---------
 // 	console.log("${studyBoard.member.member_id}" == "${loginId}");
 	$.ajax({
-		url:"/shallwe/reply/"+${studyBoard.studyBoard_id}
+		url:"${contextPath}/reply/"+${studyBoard.studyBoard_id}
 		,method:"get"
 		,success:function(pbObj){
 		var $replyPage=$("#replyList");
@@ -129,7 +111,7 @@ $(function(){
 		var $studyBoard_id = ${studyBoard.studyBoard_id};
 		if(boardYN){
 			$.ajax({
-				url:"/shallwe/board/delete/" +$studyBoard_id
+				url:"${contextPath}/board/delete/" +$studyBoard_id
 				,method:"DELETE"
 				,success:function(){
 					alert($studyBoard_id+"번 게시물이 삭제되었습니다.")	
@@ -144,7 +126,7 @@ $(function(){
 	//----------게시글 수정 START---------
 	$('#update').click(function(){
 		var $studyBoard_id = "${studyBoard.studyBoard_id}";
-		location.href = "/shallwe/board/updateBoard/"+$studyBoard_id
+		location.href = "${contextPath}/board/updateBoard/"+$studyBoard_id
 	});
 	
 	//----------게시글 수정 END---------
@@ -161,7 +143,7 @@ $(function(){
 		var $studyBoard_Id = ${studyBoard.studyBoard_id};
 		
 		$.ajax({
-			url:"/shallwe/reply/write"
+			url:"${contextPath}/reply/write"
 			,method:"POST"
 			,data:{"studyReply_content":$replyContent,"studyBoard_Id":$studyBoard_Id}
 			,success:function(){
@@ -196,7 +178,7 @@ $(function(){
 		var $replyIdVal = $(this).parents('.reply-btn').siblings('.replyId') .val();
 		var $replyContentVal = $(this).parents('.desc').children('#comment').children('.replytext').val();
 		$.ajax({
-			url:"/shallwe/reply/update"
+			url:"${contextPath}/reply/update"
 			,method:"post"
 			,data:{"studyreply_id":$replyIdVal,"studyreply_content":$replyContentVal}
 			,success:function(data){
@@ -216,7 +198,7 @@ $(function(){
 		console.log("딜리트도?");
 		var $replyIdVal = $(this).parents('.reply-btn').siblings('.replyId') .val();
 		$.ajax({
-			url:"/shallwe/reply/delete/"+$replyIdVal
+			url:"${contextPath}/reply/delete/"+$replyIdVal
 			,method:"DELETE"
 			,data:{"reply_id":$replyIdVal}
 			,success:function(data){

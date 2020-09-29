@@ -60,10 +60,10 @@ public class StudyBoardDAO {
 		try {
 		session.insert("StudyBoardMapper.insert", board);
 			if(board.getMember().getMember_id()==null) {
-				throw new AddException("해당하는 주문이 없습니다.");
+				throw new AddException("로그인 정보가 없습니다.");
 			}
 		}catch (Exception e) {
-			throw new AddException("해당하는 주문이 없습니다.");
+			throw new AddException("실패");
 		}finally {
 			session.close();			
 		}

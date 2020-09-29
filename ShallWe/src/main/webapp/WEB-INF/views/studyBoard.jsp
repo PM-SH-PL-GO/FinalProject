@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+<c:set var="loginId" value="${sessionScope.loginInfo}"/>
 <!doctype html>
 <html class="no-js" lang="zxx">
 <head>
@@ -22,7 +24,7 @@ $(function(){
 	
 	//----------스터디 게시판 LOAD START---------
 	$.ajax({
-		url:"/shallwe/board/list/"+page
+		url:"${contextPath}/board/list/"+page
 		,method:"get"
 		,success:function(pbObj){
 		var $boardPage=$("#tbody");
@@ -80,9 +82,9 @@ $(function(){
 		}
 		
 		if($searchVal==null ||  $searchVal==""){
-			urlVal = "/shallwe/board/list/"+page;
+			urlVal = "${contextPath}/board/list/"+page;
 		}else{
-			urlVal = "/shallwe/board/search/"+$searchVal+"/"+page;
+			urlVal = "${contextPath}/board/search/"+$searchVal+"/"+page;
 		}
 		$.ajax({
 				url:urlVal
@@ -135,10 +137,10 @@ $(function(){
 		$searchVal = $("#searchBar").val()
 		var page = 1;
 		if($searchVal== null || $searchVal== ""){
-			location.href = "/shallwe/studyBoard";
+			location.href = "${contextPath}/studyBoard";
 		}
 		$.ajax({
-			url:"/shallwe/board/search/"+$searchVal+"/"+page
+			url:"${contextPath}/board/search/"+$searchVal+"/"+page
 			,method:"get"
 			,success:function(pbObj){
 				var $boardPage=$("#tbody");
@@ -199,12 +201,16 @@ $(function(){
 	//--------- 게시글 CLICK  START---------		
 	$("tbody#tbody").on("click","td.boardTitle",function(){
 		var $boardIdVal = $(this).siblings('td.boardId').html();
-		location.href="/shallwe/board/detail/"+$boardIdVal;
+		location.href="${contextPath}/board/detail/"+$boardIdVal;
 	});
 	//--------- 게시글 CLICK  START---------		
 
 	$("#boardWrite").click(function(){
-		location.href="/shallwe/board/write"
+		if("${loginId}"==""){
+			alert("로그인 후 글쓰기가 가능합니다.");			
+		}else{
+		location.href="${contextPath}/board/write"
+		}
 	});
 });
 
