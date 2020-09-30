@@ -41,17 +41,16 @@
 <script type="text/javascript"
 	src="${contextPath}/smartEditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 <script>
-	$(function() {
-		var oEditors = [];
-		nhn.husky.EZCreator.createInIFrame({
-			oAppRef : oEditors,
-			elPlaceHolder : "weditor",
-			sSkinURI : "${contextPath}/smartEditor/SmartEditor2Skin.html",
-			fCreator : "createSEditor2"
-		});
+$(function() {
+	var oEditors = [];
+	nhn.husky.EZCreator.createInIFrame({
+		oAppRef : oEditors,
+		elPlaceHolder : "weditor",
+		sSkinURI : "${contextPath}/smartEditor/SmartEditor2Skin.html",
+		fCreator : "createSEditor2"
+	});
 
 	$("#writeBtn").click(function(){
-		console.log("들어오나요");
 		var $titleVal = $("#title").val();
 		var $fileLoadtVal = $("#fileLoad").val();
 		var val2 = oEditors.getById["weditor"].exec("UPDATE_CONTENTS_FIELD",[]);
@@ -66,15 +65,14 @@
 			url : "${contextPath}/board/writeBoard"
 			,method: 'post'
 			,contentType: 'application/json'
- 			,data: jsonData
-			,success:function(){
+				,data: jsonData
+			,success:function(board_id){
 				var boardWrite = confirm("글쓰기를 완료했습니다. 작성글을 확인하시겠습니까?");
 				if(boardWrite){
-					location.href="${contextPath}/board/detail/"+$boardIdVal;
+					console.log("작성글 나오세요"+board_id);
+					location.href="${contextPath}/board/detail/"+board_id;
 				}else{
-					
 				}
-				alert("성공");
 			}
 		,error:function(){
 			alert("글작성에 실패했습니다.");
@@ -82,8 +80,41 @@
 		}
 		});		
 	});
-
+	$("#updateBtn").click(function(){
+		var $titleVal = $("#title").val();
+		var $fileLoadtVal = $("#fileLoad").val();
+		var val2 = oEditors.getById["weditor"].exec("UPDATE_CONTENTS_FIELD",[]);
+		this.contents=$('#weditor').val();
+		var studyBoard = new Object();
+		studyBoard.studyBoard_title= $titleVal;
+		studyBoard.studyBoard_content = this.contents;
+		studyBoard.studyBoard_fileName = $fileLoadtVal;
+		if("${sb.studyBoard_id}"==""||"${sb.studyBoard_id}"==null){
+		
+		}else{
+			studyBoard.studyBoard_id = "${sb.studyBoard_id}";
+		}
+		var jsonData = JSON.stringify(studyBoard);
+		
+		$.ajax({
+			url : "${contextPath}/board/updateBoard"
+			,method: 'post'
+			,contentType: 'application/json'
+				,data: jsonData
+			,success:function(board_id){
+				var boardWrite = confirm("수정이 완료했습니다. 작성글을 확인하시겠습니까?");
+				if(boardWrite){
+					location.href="${contextPath}/board/detail/"+board_id;
+				}else{
+				}
+			}
+			,error:function(){
+				alert("글작성에 실패했습니다.");
+				location.reload();
+			}
+		});
 	});
+});
 </script>
 </head>
 <!-- topbar Start -->
@@ -120,18 +151,22 @@
 						</div>
 						<div class="col-sm-6">
 							<h4>파일첨부</h4>
-							<button class="btn">찾아보기</button>
 							<div class="form-group">
-								<input class="form-control valid" name="studyBoard_fileName"
-									id="fileLoad" type="text" onfocus="this.placeholder = ''"
-									onblur="this.placeholder = '파일첨부'" placeholder="파일첨부"
+								<input class="form-control valid" id="fileLoad" type="file" placeholder="파일첨부"
 									value="${sb.studyBoard_fileName}">
 							</div>
 						</div>
 					</div>
 					<div class="form-group mt-3">
-						<button type="button" class="button button-contactForm boxed-btn"
-							id="writeBtn">글쓰기</button>
+						
+							<c:choose>
+								<c:when test="${empty sb.studyBoard_title}">
+									<button type="button" class="button button-contactForm boxed-btn" id="writeBtn">글쓰기</button>
+								</c:when>
+								<c:otherwise>
+									<button type="button" class="button button-contactForm boxed-btn" id="updateBtn">수정하기</button>
+								</c:otherwise>
+							</c:choose>
 						<button type="button" class="button button-contactForm boxed-btn">취소</button>
 					</div>
 				</form>
