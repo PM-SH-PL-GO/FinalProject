@@ -133,7 +133,7 @@ $(function(){
 	
 	//----------게시글 목록보기 START---------
 	$('#list').click(function(){
-		history.back();
+		location.href = "${contextPath}/board/studyBoard"
 	});
 	//----------게시글 목록보기 END---------
 

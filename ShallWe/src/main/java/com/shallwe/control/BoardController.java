@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.annotation.JacksonInject.Value;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
+import com.shallwe.exception.ModifyException;
 import com.shallwe.model.BoardPageBean;
 import com.shallwe.model.MemberInfoBean;
 import com.shallwe.service.BoardService;
@@ -128,19 +130,22 @@ public class BoardController {
 	
 	@RequestMapping(value = "/writeBoard", method = RequestMethod.POST)
 	@ResponseBody
-	public ModelAndView writeBoard(@RequestBody StudyBoard sb, HttpSession session) {
-		ModelAndView mnv = new ModelAndView();
+	@Transactional
+	public ResponseEntity<Integer> writeBoard(@RequestBody StudyBoard sb, HttpSession session) {
 		Member member = new Member();
 		String memberId = (String)session.getAttribute("loginInfo");
 		member.setMember_id(memberId);
 		try {
 			sb.setMember(member);
 			service.writeBoard(sb);
-			return mnv;
-		} catch (AddException e) {
+			BoardPageBean<StudyBoard> studyBoard = service.findAll(1);
+			int board_id = studyBoard.getList().get(0).getStudyBoard_id();
+			System.out.println("첫번째 번호!!"+board_id);
+			return ResponseEntity.status(HttpStatus.OK).body(board_id);
+		} catch (AddException | FindException e) {
 			e.printStackTrace();
-			return mnv;
-		}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(0);
+		} 
 		
 	}
 	@DeleteMapping(value = "/delete/{studyBoard_id}")
@@ -164,6 +169,23 @@ public class BoardController {
 			e.printStackTrace();
 		}
 		return mnv;
+		
+	}
+	
+	@RequestMapping("/updateBoard")
+	@ResponseBody
+	public ResponseEntity<Integer> updateBoard(@RequestBody StudyBoard sb, HttpSession session) {
+		Member member = new Member();
+		String memberId = (String)session.getAttribute("loginInfo");
+		member.setMember_id(memberId);
+		try {
+			sb.setMember(member);
+			service.updateBoard(sb);
+			return ResponseEntity.status(HttpStatus.OK).body(sb.getStudyBoard_id());
+		} catch (ModifyException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(0);
+		}
 		
 	}
 }
