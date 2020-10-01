@@ -162,13 +162,14 @@ public class kosjController {
 	
 	@RequestMapping(value = "/insertMemberLectureHistory", method = RequestMethod.POST)
 	@ResponseBody
-	public ModelAndView insertMemberLectureHistory(@RequestParam(value="lecture_category_id") String lecture_category_id, 
+	public ModelAndView insertMemberLectureHistory( HttpSession session,
+			@RequestParam(value="lecture_category_id") String lecture_category_id, 
 													@RequestParam(value="lecture_id") String lecture_id
 	) throws AddException {
 		
 		log.info(" insertMemberLectureHistory 호출했어용~");
-
-		String member_id = "member2";
+		String member_id = (String)session.getAttribute("loginInfo");
+		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("lecture_category_id", lecture_category_id);
 		map.put("lecture_id", lecture_id);

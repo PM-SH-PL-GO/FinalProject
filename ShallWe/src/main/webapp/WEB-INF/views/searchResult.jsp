@@ -36,8 +36,8 @@
 	text-align: center;
 }
 .right_menu { 
-		float : center;
-		width: 70%;
+	float : center;
+	width: 70%;
 }
 </style>
 <!-- script area -->
@@ -85,7 +85,7 @@
 // 			location.href = url;
 // 		});
 		
-		var lectureDetail = $('a#lecture_detail');
+		var lectureDetail = $('a.lecture_detail');
 		lectureDetail.click(function e () {
 			let lecture_code = $(this).find('input[name=lecture_code]').val();
 			var url = '${contextPath}/lectures/detail?lecture_id='+lecture_code;
@@ -94,21 +94,12 @@
 		
 		
 		// 강의찜하기
-		var lectureLike = $('div.lecture_Like');
+		var lectureLike = $('div.lectureLike');
 		$lectureLike.on('click', 'input[name=lecture_code]', function(e){
 			let lecture_code = $(this).find('input[name=lecture_code]').val();
 			var url = '${contextPath}/lectures/detail?lecture_id='+lecture_code;
 			location.href = url;
-		} 
-		
-// 		var lectureDetailhrefObj = $('a#lecture_detail');
-// 		lectureDetailhrefObj.click( function (e)  {
-// 			var lectureCode = lectureDetailhrefObj.find('input[name=lecture_code]').val();
-// 			console.log("lecture_code : " + lecture_code);
-// 			var url = '/shallwe/lectures/detail?lecture_id='+lecture_code;
-// 			console.log(url);
-// 			//location.href
-// 		});
+		});
 		
 	}); // end of 
 	
@@ -212,7 +203,7 @@
 									<p>${stats.count}</p>
 									<h3>
 										<label>강의명: </label>
-										<a id="lecture_detail">${lecture.lecture_title}
+										<a class="lecture_detail">${lecture.lecture_title}
 											<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>
 										</a>
 									</h3>
@@ -222,15 +213,13 @@
 									</h4>
 									<h4><label>강사명: </label>${lecture.tutor.tutor_nickname}</h4>
 									<h4><label>현재인원: </label> ${lecture.lecture_current} <label>/최대인원: </label> ${lecture.lecture_max}</h4>
-									
 								</div>
 								<div class="properties__footer d-flex justify-content-between align-items-center">
-									<div class="restaurant-name">
-										<h3><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###원"/></h3>
-										<div class="lecture_Like">
-											<img src="/shallwe/assets/img/elements/shopping-cart.png" alt="강의찜하기">
-											<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>
-										</div>
+									<h3><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###원"/></h3>
+									<div class="heart">
+										<img class="shoppingCartImg" src="${contextPath}/assets/img/elements/shopping-cart.png"
+											width="30px" alt="강의찜하기" title="강의찜하기">
+										<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>								
 									</div>
 								</div>
 							</div>

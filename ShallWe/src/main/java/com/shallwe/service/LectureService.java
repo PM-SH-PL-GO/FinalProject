@@ -110,8 +110,6 @@ public class LectureService {
 	 */
 	public int insertMemberLectureHistory(Map<String, Object> map) throws AddException {
 		int result = 0;
-		// session 에서 값 받도록 처리할 것
-		String member_id = "member2";
 		try {
 			result = lectureDAO.insertMemberLectureHistory(map);
 
