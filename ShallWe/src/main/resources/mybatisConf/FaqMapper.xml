@@ -6,4 +6,29 @@
 	<select id="selectAll" resultType="Faq">
 		select *from faq
 	</select>
+	
+	<!-- FAQ 조회(단일) -->
+	<select id="selectById" parameterType="String" resultType="Faq">
+		SELECT *
+		FROM faq
+		WHERE faq_id = #{faq_id}
+	</select>
+	
+	<!-- FAQ 추가 -->
+	<insert id="insertFaq" parameterType="Faq">
+		INSERT INTO FAQ
+		VALUES(faq_seq.nextVal, #{faq_question}, #{faq_answer})
+	</insert>
+	
+	<!-- FAQ 수정 -->
+	<update id="updateFaq" parameterType="Faq">
+		UPDATE faq
+		SET faq_question = #{faq_question}, faq_answer = #{faq_answer}
+		WHERE faq_id = #{faq_id}
+	</update>
+	
+	<delete id="deleteFaq" parameterType="String">
+		DELETE FROM faq
+		WHERE faq_id = #{faq_id}
+	</delete>
 </mapper>

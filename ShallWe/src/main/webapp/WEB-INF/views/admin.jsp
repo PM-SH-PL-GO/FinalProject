@@ -7,6 +7,7 @@
     <title>ShallWe Admin</title>
     <link rel="stylesheet" href="/shallwe/assets/css/admin_style.css">
     <link rel="stylesheet" href="/shallwe/assets/css/faq.css">
+    <link rel="shortcut icon" type="image/x-icon" href="/shallwe/assets/img/favicon.ico">
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
@@ -114,11 +115,14 @@
                     		$lot += ' <td><button class="tutor_status" value="' + preTutor.member.member_id + '">반려</button></td></tr>';
                     		
                     		$lot += '<div class="modal_slot tutor' + idx + '"><div class="modal_content">';
-                      		$lot += '<h3>' + preTutor.tutor_nickname + '강사의 세부정보</h3><hr>';
-                      		$lot += '<h5>자기소개</h5><br><p>' + preTutor.tutor_introduce + '</p><hr>';
-                      		$lot += '<p>이력서 : <a href="${contextPath }/tutorCareer/' +  preTutor.tutor_career_file + '">';
-                      		$lot += preTutor.tutor_career_file + '</a></p><br>';
-                      		$lot += '<p>SNS 링크: <a href="' + preTutor.tutor_link + '">' + preTutor.tutor_link + '</a></p><br>';
+                      		$lot += '<h3>' + preTutor.tutor_nickname + ' 강사의 세부정보</h3><hr>';
+                      		$lot += '<h5>강사 사진</h5><br>';
+                      		$lot += '<div><img class="tutor-detail-img" src="${contextPath}/tutorImages/' + preTutor.tutor_img + '"><div><br>';
+                      		$lot += '<div>신청 분야 : <span>' + preTutor.lectureCategory.lecture_category_name + '<span></div><hr>';
+                      		$lot += '<div>자기소개<br><span>' + preTutor.tutor_introduce + '</span></div><br>';
+                      		$lot += '<div>이력서 : <a href="${contextPath }/tutorCareer/' +  preTutor.tutor_career_file + '">';
+                      		$lot += preTutor.tutor_career_file + '</a></div><hr>';
+                      		$lot += '<div>SNS 링크 : <a href="' + preTutor.tutor_link + '">' + preTutor.tutor_link + '</a></div><br>';
                       		$lot += '<button class="modal_close">닫기</button></div><div class="modal_layer"></div></div>'
                     	});
                     	
@@ -146,7 +150,7 @@
             	let $lotDiv = "." +$(this).attr("value");
             	let $lot = $($lotDiv);
             	$lot.attr("style", "display:block");
-            	
+//             	window.open("", "newWindow");
             	return false;
             });
             
@@ -280,7 +284,6 @@
             		},
             		error: function(){
             			let $tutor_Lecture = '<div class="tutor-lecture-list"><div class="tutor-lecture-content">';
-//             			$tutor_Lecture += '<h3>' + lectures[0].tutor.tutor_nickname + '강사의 강의목록</h3><br>';
             			$tutor_Lecture += '<button class="tutor-lecture-close">닫기</button><hr>';
             			$tutor_Lecture += '<table class="table">';
             			$tutor_Lecture += '<tr><thead><th>순서</th><th>강의번호</th><th>강의명</th><th>상태</th></tr></thead>';
@@ -477,6 +480,7 @@
             	let $lectureId = $(this).attr("value");
             	window.open("${contextPath}/lectures/detail?lecture_id=" + $lectureId, "_blank");
             	
+            	return false;
             });
             
             // 강의 승인/취소 승인/복구하기
@@ -489,13 +493,13 @@
 	            	
 	            	$.ajax({
 	            		dataType: "json",													
-	            		beforeSend : function(xhr){
-	            			xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");		
-	            		},																		
+// 	            		beforeSend : function(xhr){
+// 	            			xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");		
+// 	            		},																		
 	            		url: "${contextPath}/admin/lecture/status/" + approve,
 	            		method: "PATCH",
 	            		contentType: 'application/json-patch+json; charset=utf-8',
-	            		data: JSON.stringify({ staus : $tatus }),
+	            		data: JSON.stringify({ status : $tatus }),
 	            		
 	            		success: function(data){
 	            			alert(data.success);
@@ -527,10 +531,11 @@
       			$lot += '<option value="외설적, 폭력적인 내용 포함">외설적, 폭력적인 내용 포함</option>';
       			$lot += '<option value="불법적이거나 부당한 행위">불법적이거나 부당한 행위</option>';
       			$lot += '<option value="부족한 내용설명">부족한 내용설명</option>';
-      			$lot += '</select><br><label for="reject-detail">세부 사유</label>';
-      			$lot += '<textarea id="reject-detail" name="reject-detial" rows="15" cols="150"/>';
-      			$lot += '<button class="reject-lecture">전송</button><button class="tutor-lecture-close">취소</button>';
-      			$lot += '<div class="tutor-lecture-layer" value="' + lecture.lecture_id + '"></div></div></div>';
+      			$lot += '</select><br><label for="reject-detail">세부 사유</label><br>';
+      			$lot += '<input id="reject-detail" name="reject-detial" placeholder="세부 내용을 작성해주세요"></input><br>';
+      			$lot += '<br><button class="reject-lecture modal-button" value="' + $lectureId + '">전송</button>';
+      			$lot += '<button class="tutor-lecture-close modal-button">취소</button>';
+      			$lot += '<div class="tutor-lecture-layer"></div></div></div>';
       			
       			let cont = $cont.html() + $lot;
     			$cont.html(cont)
@@ -541,60 +546,62 @@
             // 강의 반려하기
             $cont.on("click", ".reject-lecture", function(){
             	$lectureId = $(this).attr("value");		// 강의 ID
-            	let $tatus = "반려";
-            	let $message = $("#reject-reason").val() + ' \\ ' + $("#reject-detail").val();
-            	
-            	console.log($message);
+            	let $message = $("#reject-reason").val() + ' \n ' + $("#reject-detail").val();
             	
             	$.ajax({
             		dataType: "json",													
-            		beforeSend : function(xhr){
-            			xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");		
-            		},
-            		url: "$contextPath/admin/reason/" + $lectureId,
+//             		beforeSend : function(xhr){
+//             			xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");		
+//             		},
+            		url: "${contextPath}/admin/reasons/status/" + $lectureId,
             		method: "PATCH",
-            		contentType: "text/html; charset=UTF-8;",
-            		date: { status : $tatus, reject_reason : $message},
+            		contentType: "application/json-patch+json; charset=utf-8;",
+            		date: { "status" : "반려",  "reject_reason" : $message }),
             		success: function(data){
             			alert(data.success);
-            				trigger();
+            			alter("성공");
+           				$(".lecture-list").trigger("click");
             		},
             		error: function(xhttr){
-            			if (xhttr.status == 200){
-            				location.replace('${contextPath}/login');
-            				$(".lecture-list").trigger("click")
-            			}
-           				else
-            				alert(xhttr.errMsg);
+	//             			if (xhttr.status == 200){
+	//             				location.replace('${contextPath}/login');
+	//             				$(".lecture-list").trigger("click")
+	//             			}
+	//            				else
+            				console.log(xhttr.state);
             		}
             		
             	});
+            	
+            	return false;
             })
             
             
             // 취소/반려 사유 보기
-            $cont.on("click", ".lecutre-reason", function(){
+            $cont.on("click", ".lecture-reason", function(){
             	let lectureId = $(this).attr('value');	// 강의 번호
             	let reasonType = $(this).html();		// 취소사유인지 반려사유인지
-            	
+
             	$.ajax({
-            		url: "$contextPath/admin/reason/" + lectureId,
+            		url: "${contextPath}/admin/reason/" + lectureId,
             		method: "GET",
             		data: { rejectOrCancel : reasonType },
             		success: function(lectureDetail){
             			let modal = '<div class="tutor-lecture-list"><div class="tutor-lecture-content">';
-                    	modal += '<div>' + lectureDetail.lecture.tutor.tutor_nickname + ' 강사의 ' + lectureDetail.lecture.lecture_title;
-                    	modla += '강의 ' + reasonType + '</div>';
-            			modal += '<button class="tutor-lecture-close">닫기</button>';
-            			modal += '<h5>사유 :</h5><br><p>';
+                    	modal += '<div><span class="reason-modal-tutor">' + lectureDetail.lecture.tutor.tutor_nickname;
+                    	modal += '</span>강사의<span class="reason-modal-tutor">' + lectureDetail.lecture.lecture_title;
+                    	modal += '</span>강의<span class="reason-modal-tutor">' + reasonType + '</span>';
+            			modal += '</div>';
+            			modal += '<h4>사유 :</h4><input class="reject-detail" disabled value="';
             			if (reasonType == "취소사유")
-            				modal += lectureDetail.lecture_cancel_reason + '</p>';
+            				modal += lectureDetail.lecture_cancel_reason + '"></input>';
            				else
-            				modal += lectureDetail.lecture_reject_reason + '</p>';
-		    			modal += '<div class="tutor-lecture-layer"></div></div>';
+            				modal += lectureDetail.lecture_reject_reason + '"></input>';
+		    			modal += '<div class="tutor-lecture-layer"></div><button class="tutor-lecture-close modal-button">닫기</button></div>';
 		    			
 		    			let cont = $cont.html() + modal;
 		    			$cont.html(cont);
+		    			
             		},
             		error: function(data){
             			let modal = '<div class="tutor-lecture-list"><div class="tutor-lecture-content">';
@@ -622,7 +629,7 @@
             		url: "${contextPath}/admin/faq/list",
             		method: "GET",
             		success: function(faqList){
-            			let $lot = '<button class="faq_insert">FAQ 추가하기</button><br>';
+            			let $lot = '<button class="faq-insert-modal">FAQ 추가하기</button><br>';
             			$lot += '<table class="table"><thead><tr><th>번호</th><th>질문</th><th>답변</th><th>관리</th><th>삭제</th></tr></thead>';
             			$lot += '<tbody>';
 						
@@ -630,8 +637,8 @@
             				$lot += '<tr><td>' + faq.faq_id + '</td>';
             				$lot += '<td>' + faq.faq_question + '</td>';
             				$lot += '<td>' + faq.faq_answer + '</td>';
-            				$lot += '<td><button class="faq_change" value="' + faq.faq_id + '">관리하기</button></td>';
-            				$lot += '<td><button class="faq_delete" value="' + faq.faq_id + '">삭제하기</button></td></tr>';
+            				$lot += '<td><button class="faq-change-modal" value="' + faq.faq_id + '">관리하기</button></td>';
+            				$lot += '<td><button class="faq-delete" value="' + faq.faq_id + '">삭제하기</button></td></tr>';
             			});
             			
             			$lot += '</tbody>';
@@ -646,51 +653,129 @@
 	            return false;
             });
             
+            // FAQ 추가용 모달 화면에 추가하기
+            $cont.on("click", ".faq-insert-modal", function(){
+            	let $lot = '<div class="modal_slot"><div class="modal_content">';
+    			$lot += '<h3>FAQ 추가하기</h3><hr>';
+    			$lot += '<form id="faq-insert"><div>질문 : <input class="faq-question" name="faq_question"></div><br>';
+    			$lot += '<div>답변 : <input class="faq-answer" name="faq_answer"></div><br>';
+    			$lot += '</form><button class="faq-insert">등록</button><button class="modal_close">닫기</button>';
+    			$lot += '</div><div class="modal_layer"></div></div>';
+          		
+            	let cont = $cont.html();
+            	$cont.html(cont + $lot);
+            	
+            	return false;
+            });
+            
             // FAQ 추가
-            $cont.on("click", ".faq_insert", function(){
+            $cont.on("click", ".faq-insert", function(){
+            	let faq = $("#faq-insert").serializeArray();
+            	
             	$.ajax({
+            		dataType: "json",													
+//             		beforeSend : function(xhr){
+//             			xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+// 					},
             		url:"${contextPath}/admin/faq",
             		method:"POST",
-            		data: {},
-            		success: function(){
-            			
+            		data: faq,
+            		success: function(data){
+            			alert(data.success);
+            			$(".faq").trigger("click");
             		},
-            		error: function(){
-            			
+            		error: function(data){
+            			alert(data.errMsg);
+            			$(".faq").trigger("click");
             		}
             	});
             	
             	return false;
             });
             
-            // FAQ 수정
-            $cont.on("click", ".faq_change", function(){
+            // FAQ 수정 모달 보이기
+            $cont.on("click", ".faq-change-modal", function(){
+            	let $faqId = $(this).attr("value");
+            	
             	$.ajax({
-            		url:"${contextPath}/admin/faq" ,
-            		method:"PATCH",
-            		data: {},
-            		success: function(){
-            			
+            		url: "${contextPath}/admin/faq/" + $faqId,
+            		method: "GET",
+            		success: function(faq){
+            			let $lot = '<div class="modal_slot"><div class="modal_content">';
+            			$lot += '<h3>FAQ 수정하기</h3><hr>';
+            			$lot += '<form id="faq-change"><div>질문 : <input class="faq_question" name="faq_question"';
+            			$lot += 'value="' + faq.faq_question + '"></div><br>';
+            			$lot += '<div>답변 : <input class="faq_answer" name="faq_answer"';
+            			$lot += 'value="' + faq.faq_answer + '"></div><br>';
+//             			$lot += '<input type="hidden" name="faq_id" value="' + faq.faq_id + '"></form>';
+//             			$lot += '<button class="faq-change">등록</button>';
+            			$lot += '</form>';
+            			$lot += '<button class="faq-change" value="' + faq.faq_id + '">등록</button>';
+            			$lot += '<button class="modal_close">닫기</button>';
+            			$lot += '</div><div class="modal_layer"></div></div>';
+                  		
+                    	let cont = $cont.html();
+                    	$cont.html(cont + $lot);
             		},
             		error: function(){
-            			
+            			alert("수정을 시도하던 중 에러가 발생했습니다");
+            			$(".faq").trigger("click");
+            		}
+            		
+            	});
+            	
+            	return false;
+            });
+            
+            // FAQ 수정
+            $cont.on("click", ".faq-change", function(){
+            	let $faqId = $(this).attr("value");
+				let faq = "{ \"faq_question\" : \"" + $("input.faq_question").val() + "\", \"faq_answer\" : \"" + $("input.faq_answer").val() + "\" }";
+
+            	$.ajax({
+            		dataType: "json",													
+//             		beforeSend : function(xhr){
+//         			xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");		
+//         			},
+            		url:"${contextPath}/admin/faq/" + $faqId,
+            		method: "PUT",
+            		contentType: "application/json; charset=utf-8;",
+            		data: faq,
+            		success: function(data){
+            			alert(data.success);
+            			$(".faq").trigger("click");
+            		},
+            		error: function(data){
+            			alert(data.errMsg);
+            			$(".faq").trigger("click");
             		}
             	});
+            	
+            	return false;
             });
             
             // FAQ 삭제
-			$cont.on("click", ".faq_delete", function(){
-				$.ajax({
-            		url:"${contextPath}/admin/faq" ,
-            		method:"DELETE",
-            		data: {},
-            		success: function(){
-            			
-            		},
-            		error: function(){
-            			
-            		}
-            	});
+			$cont.on("click", ".faq-delete", function(){
+				
+				if (confirm("삭제하시겠습니까?")){
+					let $faqId = $(this).attr("value");
+					
+					$.ajax({
+						dataType: "json",
+	            		url:"${contextPath}/admin/faq/" + $faqId,
+	            		method:"DELETE",
+	            		success: function(data){
+	            			alert(data.success);
+	            			$(".faq").trigger("click");
+	            		},
+	            		error: function(data){
+	            			alert(data.errMsg);
+	            			$(".faq").trigger("click");
+	            		}
+	            	});
+				}
+				
+				return false;
             });
             
             

@@ -35,6 +35,8 @@ public class TutorDAO {
 			tutorList = session.selectList("TutorMapper.selectAllTutor", YN);
 		}catch(DataAccessException e) {
 			throw new FindException("검색 과정에 오류가 있습니다");
+		}finally {
+			session.close();
 		}
 		
 		if (tutorList.size() == 0)

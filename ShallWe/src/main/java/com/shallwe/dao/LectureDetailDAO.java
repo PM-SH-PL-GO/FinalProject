@@ -98,20 +98,20 @@ public class LectureDetailDAO {
 	 * @return 반려/취소 이유
 	 * @throws FindException
 	 */
-	public Map<String, String> selectLectureReasonById(String lecture_id, String rejectOrCancel) throws FindException {
+	public LectureDetail selectLectureReasonById(String lecture_id, String rejectOrCancel) throws FindException {
 		SqlSession session = null;
-		Map<String, String> map = null;
+		LectureDetail lectureDetail = null;
 		
 		try {
 			session = sqlSessionFactory.openSession();
-			map = session.selectMap("LectureDetail.selectLectureReasonById", lecture_id);
+			lectureDetail = session.selectOne("LectureDetailMapper.selectLectureReasonById", lecture_id);
 		}catch(DataAccessException e) {
 			throw new FindException("You've got Error!^^");
 		}finally {
 			session.close();
 		}
 		
-		return map;
+		return lectureDetail;
 	}
 	
 	// 강의 취소 승인하기(admin) : 준식

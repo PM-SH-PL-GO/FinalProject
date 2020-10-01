@@ -178,7 +178,24 @@ hr{
     height: 80px;
     width: 80px;
 }
-    
+
+.tutor-detail-img{
+	height: 350px;
+	width: 350px;
+}
+
+.tutor_detail_modal_slot {
+	
+}
+
+.tutor_detail_modal_content{
+	
+}
+
+.tutor_detail_modal_layer{
+	
+}
+
 .modal_slot {
 	display: none;
 	position: absolute;
@@ -187,15 +204,9 @@ hr{
 	z-index: 1;
 }
 
-/* .modal_slot .modal_close{ */
-/* 	display: inline-block; */
-/* 	width: 100%; */
-/* 	margin-left: calc(100% - 100px - 10px); */
-/* } */
-
 .modal_slot .modal_content{
 	position: absolute;
-	width: 500px;
+	width: 50%;
 	height: auto;
 	left: 250px;
 	padding: 20px 10px;
@@ -225,11 +236,14 @@ hr{
 	height: 100%;
 	z-index: 1;
 }
-
-.tutor-lecture-list .tutor-lecture-content{
-	width: 65%;
-    height: 65%;
-    margin: 50px;
+	
+.tutor-lecture-content{
+	position: fixed;
+	width: 50%;
+    height: 50%;
+    transform: translate(30%, 30%);
+    /* margin-left: 175px; */
+    /* margin-top: 100px; */
     padding: 20px 10px;
     background: #fff;
     border: 2px solid #666;
@@ -243,5 +257,22 @@ hr{
 	height: 100%;
 	background: rgba(0, 0, 0, 0.5);
 	z-index: -1;
+}
+
+input[id="reject-detail"]{
+	width: 450px;
+	height: 200px;
+}
+
+.modal-button{
+	
+}
+
+.reason-modal-tutor{
+	font-size: 20px;
+	font-style: italic;
+	font-weight: bold;
+	margin: 5px;
+	
 }
     

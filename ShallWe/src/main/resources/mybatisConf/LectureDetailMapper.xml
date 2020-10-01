@@ -86,11 +86,12 @@
 	</select>
 	
 	<!-- admin(jun6) : 강의 취소/반려사유 조회 -->
-	<select id="selectLectureReasonById" parameterType="String" resultType="Map">
-		SELECT ld.lecture_reject_reason "reject_reason", ld.lecture_cancel_reason "cancel_reason", tu.tutor_nickname
+	<select id="selectLectureReasonById" parameterType="String" resultMap="lectDeResultMap">
+		SELECT ld.lecture_reject_reason, ld.lecture_cancel_reason, tu.tutor_nickname, lec.lecture_title
 		FROM lecture_detail ld
-			JOIN tutor tu ON(ld.lecture_tutor_id = tu.tutor_id)
-		WHERE lecture_id = #{lecture_id}
+		    JOIN lecture lec ON (ld.lecture_id = lec.lecture_id and ld.lecture_category_id = lec.lecture_category_id)
+		    JOIN tutor tu ON(lec.lecture_tutor_id = tu.tutor_id and lec.lecture_category_id = tu.tutor_category_id)
+		WHERE ld.lecture_id = #{lecture_id}	
 	</select>
 	
 	<!-- admin(jun6) : 강의 반려 사유 설정 -->

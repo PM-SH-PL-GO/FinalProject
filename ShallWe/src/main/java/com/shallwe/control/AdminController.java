@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,8 +22,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
+import com.shallwe.exception.RemoveException;
 import com.shallwe.service.AdminService;
 import com.shallwe.vo.Faq;
 import com.shallwe.vo.Lecture;
@@ -29,6 +33,9 @@ import com.shallwe.vo.LectureDetail;
 import com.shallwe.vo.Member;
 import com.shallwe.vo.Tutor;
 
+import lombok.extern.log4j.Log4j;
+
+@Log4j
 @Controller
 @RequestMapping(value="/admin")
 public class AdminController {
@@ -153,7 +160,6 @@ public class AdminController {
 				adminService.approvePreTutor(id, tutorStatus);
 			else {
 				
-				
 			}
 			return  ResponseEntity.status(HttpStatus.OK).body("{\"status\" : \"정상적으로 " + tutorStatus + " 처리되었습니다\"}");
 		}catch(ModifyException e) {
@@ -208,8 +214,13 @@ public class AdminController {
 	 */
 	@PatchMapping(value = "/lecture/status/{lectureId}")
 	public ResponseEntity<String> lectureStatusChange(@PathVariable(name = "lectureId") String lecture_id
+//													, String status
+//													, String reject_reason)
 													, @RequestBody String status)
+//													, @RequestBody(required = false) String reject_reason)
 	{
+		log.info(status + "is not null?");
+		
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> map;
 		String lectureStatus = "";
@@ -257,11 +268,13 @@ public class AdminController {
 	 * @param reject_reason
 	 * @return
 	 */
-	@PatchMapping(value = "/reason/{lectureId}")
+	@PatchMapping(value = "/reasons/{lectureId}")
 	public ResponseEntity<String> rejectLecture(@PathVariable(name = "lectureId")String lecture_id, String status, String reject_reason){
+		log.info("여기로는 오는거니??");
+		System.out.println("///////////////////////////////////////////////////////////////////////////////////////////////");
 		try {
 			adminService.updateLectureStatusByIdAndStatus(lecture_id, status, reject_reason);
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{ \"success\" : \"성공적으로 설정되었습니다\"}");
+			return ResponseEntity.status(HttpStatus.OK).body("{ \"success\" : \"성공적으로 설정되었습니다\"}");
 		}catch(ModifyException e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{ \"errMsg\" : \"" + e.getMessage() + "\"}");
@@ -272,11 +285,11 @@ public class AdminController {
 	/////////////////////////FAQ////////////////////////////
 	
 	/**
-	 * FAQ 조회
+	 * FAQ 전체 조회
 	 * @author jun6
 	 * @return faq 전체 목록
 	 */
-	@RequestMapping(value = "/faq/list")
+	@RequestMapping(value = "/faq/list", method = RequestMethod.GET)
 	public ResponseEntity<List<Faq>> faq() {
 		List<Faq> faqList = null;
 		
@@ -289,5 +302,67 @@ public class AdminController {
 		}
 	}
 	
+	/**
+	 * FAQ 단일 개체 조회
+	 * @param faq_id
+	 * @return
+	 */
+	@GetMapping(value = "/faq/{faqId}")
+	public ResponseEntity<Faq> selectFaqById(@PathVariable(name = "faqId") String faq_id){
+		Faq faq = null;
+		
+		try {
+			faq = adminService.selectFaqById(faq_id);
+			return ResponseEntity.status(HttpStatus.OK).body(faq);
+		}catch(FindException e) {
+			return ResponseEntity.status(HttpStatus.OK).body(null);
+		}
+	}
+	
+	/**
+	 * FAQ 추가하기
+	 * @param faq
+	 * @return
+	 */
+	@PostMapping(value = "/faq")
+	public ResponseEntity<String> addFaq(Faq faq){
+		try {
+			adminService.addFaq(faq);
+			return ResponseEntity.status(HttpStatus.OK).body("{ \"success\" : \"성공적으로 추가했습니다\" }");
+		}catch(AddException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{ \"errMsg\" : \"" + e.getMessage() + "\" }");
+		}
+	}
+	
+	/**
+	 * FAQ 수정하기
+	 * @param faq
+	 * @return
+	 */
+	@PutMapping(value = "/faq/{faqId}", consumes = "application/json; charset=utf-8;")
+	public ResponseEntity<String> putFaq(@PathVariable(name = "faqId") String faq_id, @RequestBody Faq faq){
+		try {
+			faq.setFaq_id(Integer.parseInt(faq_id));
+			adminService.updateFaq(faq);
+			return ResponseEntity.status(HttpStatus.OK).body("{ \"success\" : \"수정에 성공하였습니다\"}");
+		}catch(ModifyException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{ \"errMsg\" : \"" + e.getMessage() + "\"}");
+		}
+	}
+	
+	/**
+	 * FAQ 삭제
+	 * @param faq_id
+	 * @return
+	 */
+	@DeleteMapping(value = "/faq/{faqId}")
+	public ResponseEntity<String> deleteFaq(@PathVariable(name = "faqId") String faq_id){
+		try {
+			adminService.deleteFaq(faq_id);
+			return ResponseEntity.status(HttpStatus.OK).body("{ \"success\" : \"성공적으로 삭제했습니다\" }");
+		}catch(RemoveException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{ \"errMsg\" : \"" + e.getMessage() + "\" }");
+		}
+	}
 	
 }
