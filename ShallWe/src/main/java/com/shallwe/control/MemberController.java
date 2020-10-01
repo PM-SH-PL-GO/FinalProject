@@ -134,7 +134,6 @@ public class MemberController {
 		try {
 			MemberInfoBean mib = service.findById(member_id);
 			String YN = mib.getTutorYN();
-			System.out.println("ynynynynynynyn==========="+YN);
 			return ResponseEntity.status(HttpStatus.OK).body(YN);
 		} catch (FindException e) {
 			e.printStackTrace();
