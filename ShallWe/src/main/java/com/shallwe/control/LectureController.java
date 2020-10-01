@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -25,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.service.LectureService;
+import com.shallwe.service.TutorService;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureDetail;
 import com.shallwe.vo.Member;
@@ -32,7 +34,6 @@ import com.shallwe.vo.MemberLectureHistory;
 import com.shallwe.vo.Tutor;
 
 import lombok.extern.log4j.Log4j;
-
 
 @Log4j
 @Controller
@@ -46,69 +47,83 @@ public class LectureController {
 	LectureService service;
 
 	@Autowired
-	private static final String LECT_UPLOAD_PATH = "/ShallWe/src/main/webapp/files/lecture";
+	TutorService tutoser;
 
+    @Autowired
+    ServletContext context;
+    
 	public String saveLectFile(MultipartFile file) {
 		// 파일 용량은 루트 컨텍스트에서 확인이 가능함
 		UUID uuid = UUID.randomUUID();
-		
-		String saveName = uuid+"_"+ file.getOriginalFilename();
-		//파일 중복 되지 않기 위해 사용함
-		File saveFile = new File(LECT_UPLOAD_PATH,saveName);
-	
-			try {
-				
-				file.transferTo(saveFile);
-				//업로드 파일에 saveFile이라는 껍데기 입힘
-				System.out.println("파일크기:" + saveFile.length() + "파일사이즈:" + file.getSize());
-				
-			} catch (IllegalStateException e) {
-				//즉 브라우져에 보낼 데이터를 버퍼에 쓴 이후로는 redirect나 forward를 할수 없을떄 일어난다(forward나 redirect)
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	
-		log.info( "이 업로드한 파일은" +file);
+
+		String saveName = uuid + "_" + file.getOriginalFilename();
+		String lectUploadPath = context.getRealPath("/files/lecture");
+		// 파일 중복 되지 않기 위해 사용함
+		File saveFile = new File(lectUploadPath, saveName);
+		System.out.println("in controller: saveFile=" + saveFile.getPath());
+		try {
+
+			file.transferTo(saveFile);
+			// 업로드 파일에 saveFile이라는 껍데기 입힘
+			System.out.println("파일크기:" + saveFile.length() + "파일사이즈:" + file.getSize());
+
+		} catch (IllegalStateException e) {
+			// 즉 브라우져에 보낼 데이터를 버퍼에 쓴 이후로는 redirect나 forward를 할수 없을떄 일어난다(forward나 redirect)
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		log.info("이 업로드한 파일은" + file);
 		log.info("이 업로드된 파일이다" + saveName);
-		log.info("업로드된 파일의 경로는 " + LECT_UPLOAD_PATH);
-		
+		log.info("업로드된 파일의 경로는 " + lectUploadPath);
+
 		return saveName;
-		
+
 	}
 	
-	// 파일 배열로 받아와서 집어넣기: 경찬
-		public  ResponseEntity<String> upload(MultipartFile[] uploadFiles) {
-			
-			String lectFile ="";
-			for(MultipartFile f : uploadFiles) {
-				
-				lectFile += saveLectFile(f);
-			}
-			ResponseEntity<String> responseEntity = ResponseEntity.status(HttpStatus.OK).body(lectFile);
-			return responseEntity;
-			
+	public String saveFile(MultipartFile file) {
+		// 파일 용량은 루트 컨텍스트에서 확인이 가능함
+		UUID uuid = UUID.randomUUID();
+
+		String saveName = uuid + "_" + file.getOriginalFilename();
+		String lectUploadPath = context.getRealPath("/files/lectureDetail");
+		File saveFile = new File(lectUploadPath, saveName);
+		System.out.println("in controller: saveFile=" + saveFile.getPath());
+		try {
+			file.transferTo(saveFile);
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		return saveName;
+	}
+
 	// 강사 강의 등록 페이지 : 동일
 	@GetMapping(value = "/insert")
-	public String insertView() {
-		return "/lectureRegistration";
+	public ModelAndView insertView(Tutor tuto, HttpSession session) throws FindException {
+		ModelAndView mnv = new ModelAndView();
+		List<Tutor> tutorlist = new ArrayList<>();
+		String tutor_id = (String) session.getAttribute("loginInfo");
+		try {
+			tutorlist = tutoser.showTutorInfo(tutor_id);
+			mnv.setViewName("/lectureRegistration");
+			mnv.addObject("tutorlist", tutorlist);
+		} catch (FindException e) {
+			e.printStackTrace();
+		}
+		return mnv;
 	}
 
 	// 강사 강의 등록 : 동일
 	@PostMapping(value = "/insert")
-	public ModelAndView insertLecture(Tutor tutor, HttpSession session, LectureDetail lectDe, MultipartFile lecture_img) throws AddException {
+	public ModelAndView insertLecture(LectureDetail lectDe, MultipartFile lecture_img, MultipartFile lecture_filename) throws AddException {
 		ModelAndView mnv = new ModelAndView();
-		String tutor_id = (String)session.getAttribute("loginInfo");
-		Member m = new Member();
-		m.setMember_id(tutor_id);
 		String lect_img = saveLectFile(lecture_img);
-		tutor.setMember(m);
-		Lecture lecture = new Lecture();
-		lecture.setTutor(tutor);
-		lecture.setLecture_img(lect_img);
-		lectDe.setLecture(lecture);
+		String lect_fil = saveFile(lecture_filename);
+		lectDe.getLecture().setLecture_img(lect_img);
+		lectDe.setLecture_fileName(lect_fil);
 		try {
 			service.insertLecture(lectDe.getLecture(), lectDe);
 			mnv.setViewName("/success");
@@ -198,12 +213,12 @@ public class LectureController {
 
 		return mnv;
 	}
-	
-	//장바구니 보기 : 상하
-	
-	@RequestMapping(value= "/wishlist")
-	public String WishView(HttpSession session, Model model)throws FindException {
-		String member_id = (String)session.getAttribute("loginInfo");
+
+	// 장바구니 보기 : 상하
+
+	@RequestMapping(value = "/wishlist")
+	public String WishView(HttpSession session, Model model) throws FindException {
+		String member_id = (String) session.getAttribute("loginInfo");
 		List<Lecture> wishall = new ArrayList<>();
 		try {
 			service.findWishListById(member_id);
@@ -213,6 +228,6 @@ public class LectureController {
 			Logger.info("error");
 			return "fail";
 		}
-		
+
 	}
 }

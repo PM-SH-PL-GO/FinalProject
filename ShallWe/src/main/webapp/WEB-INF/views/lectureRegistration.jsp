@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 
@@ -32,48 +34,34 @@
 
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 </head>
 <script>
-
-	$(function () {
-		$("#lectureImgFile").on('change', function () {
+	$(function() {
+		$("#lectureImgFile").on('change', function() {
 			readURL(this);
 		});
-	});
-	function readURL(input) {
-		if (input.files && input.files[0]) {
-			var reader = new FileReader();
-			reader.onload = function (e) {
-				$('#preImage').attr('src', e.target.result);
+
+		function readURL(input) {
+			if (input.files && input.files[0]) {
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					$('#preImage').attr('src', e.target.result);
+				}
+				reader.readAsDataURL(input.files[0]);
 			}
-			reader.readAsDataURL(input.files[0]);
 		}
-	}
-	$(function () {
-		$('#insertBtn')
-			.on(
+
+		$('#insertBtn').on(
 				"click",
-				function () {
+				function() {
 					let form = $("#formLectureRegistration")[0];
 					let formData = new FormData(form);
-					formData.append("lecture_img", $("#lectureImgFile")[0].files[0]);
-// 					formData.append("name", "id")[0].files[0];
-					
+					formData.append("lecture_img",
+							$("#lectureImgFile")[0].files[0]);
+					formData.append("lecture_filename",
+							$("#lectureCFile")[0].files[0]);
 					let lectureTitleValue = $("#lectureTitle").val();
 					let lectureIntroValue = $("#lectureIntro").val();
-// 					let curiculumValue = $("#curiculum").val();
-// 					let locationValue = $("input[name=lecture_location]").val();
-// 					let firstDateValue = $("#firstDate").val();
-// 					let lastDateValue = $("#lastDate").val();
-// 					let pMinValue = $("#pMin").val();
-// 					let pMaxValue = $("#pMax").val();
-// 					let preparedValue = $("#prepared").val();
-// 					let cautionValue = $("#caution").val();
-// 					let priceValue = $("#price").val();
-// 					let cateValue = $("#lectCate option:selected").val();
-// 					let lectureImgFileValue = $("#lectureImgFile").val();
-					alert(lectureImgFileValue);
 					if (lectureTitleValue == "") {
 						alert("제목을 입력하세요.");
 						$("lectureTitleValue").focus();
@@ -81,44 +69,22 @@
 						alert("강의 소개를 입력하세요.");
 						$("lectureIntroValue").focus();
 					} else {
-						console.log($("#formLectureRegistration").serialize());
 						$.ajax({
-								url: "/shallwe/insert",
-								method: "POST",
-								data: formData
-								
-// 								$("#formLectureRegistration").serialize() + "&lecture.lecture_img=" + lectureImgFileValue
-								
-// 								{
-// 									'lecture.lecture_title': lectureTitleValue,
-// 									'lecture_introduce': lectureIntroValue,
-// 									'lecture_curriculum': curiculumValue,
-// 									'lecture_location': locationValue,
-// 									'lecture.lecture_start_dt': firstDateValue,
-// 									'lecture.lecture_end_dt': lastDateValue,
-// 									'lecture.lecture_min': pMinValue,
-// 									'lecture.lecture_max': pMaxValue,
-// 									'lecture_prepared': preparedValue,
-// 									'lecture_caution': cautionValue,
-// 									'lecture.lecture_price': priceValue,
-// 									'lecture.lectureCategory.lecture_category_id': cateValue,
-// 									'lecture.tutor.member.member_id': 'member2',
-// 									'lecture.lecture_img': lectureImgFileValue,
-// 									'lecture.lecture_state': '승인대기'
-// 								}
-							,
-								success: function (data) {
-									let responseObj = JSON
-										.parse(data);
-									if (responseObj.status == "success") {
-										alert("강의 등록이 정상적으로 되었습니다.");
-									} else {
-										alert("강의 등록에 실패했습니다.");
-										$("lectureTitleValue")
-											.focus();
-									}
+							url : "${contextPath}/lectures/insert",
+							method : "POST",
+							contentType : false,
+							processData : false,
+							data : formData,
+							success : function(data) {
+								let responseObj = JSON.parse(data);
+								if (responseObj.status == "success") {
+									alert("강의 등록이 정상적으로 되었습니다.");
+								} else {
+									alert("강의 등록에 실패했습니다.");
+									$("lectureTitleValue").focus();
 								}
-							});
+							}
+						});
 						return false;
 					}
 				});
@@ -140,9 +106,10 @@
 								enctype="multipart/form-data" name="noticeForm">
 								<img id="preImage"
 									src="${pageContext.request.contextPath}/files/lecture/${noticeVO.lectureImgFile}"
-									width="300px" alt="" class="img-fluid d-block"> 
-								<input type="file" id="lectureImgFile" name="lecture_img" class="mt-10" accept="imags/*">
-								<h6 class="mt-10">강의 제목</h6>
+									width="300px" alt="" class="img-fluid d-block"> <input
+									type="file" id="lectureImgFile" name="lecture_img"
+									class="mt-10" accept="imags/*">
+								<h6 class="mt-10">강의 제목${contextPath}</h6>
 								<div class="mt-10">
 									<input type="text" value="제목ㅎ" name="lecture.lecture_title"
 										placeholder="몇글자 이내" onfocus="this.placeholder = ''"
@@ -150,12 +117,14 @@
 										class="single-input" id="lectureTitle">
 								</div>
 								<h6 class="mt-10">카테고리</h6>
-								<div class="form-select col-md-3 mt-10">
+								<div class="form-select col-md-4 mt-10">
 									<select id="lectCate"
 										name="lecture.lectureCategory.lecture_category_id">
-										<option value="IT">IT</option>
-										<option value="HO">취미</option>
-										<option value="SP" selected="selected">스포츠</option>
+										<c:forEach items="${tutorlist}" var="tl" varStatus="i">
+											<option value="${tl.lectureCategory.lecture_category_id}">${tl.lectureCategory.lecture_category_name}</option>
+										</c:forEach>
+										<input type="hidden" name="lecture.tutor.member.member_id"
+										value="${tutorlist[0].member.member_id}" />
 									</select>
 								</div>
 								<h6 class="mt-10">강의 소개</h6>
@@ -232,15 +201,15 @@
 										class="single-input-accent col-md-2" id="price">
 									<h5 class="mt-10">원</h5>
 								</div>
-								<a href="#" class="genric-btn primary-border mt-10">첨부파일등록</a>
+								<h6 class="mt-10">첨부파일등록</h6>
+								<input type="file" id="lectureCFile" name="lecture_filename"
+									class="mt-10" accept="imags/*">
 								<div class="mt-70">
 									<input type="button" class="genric-btn primary-border"
-										id="insertBtn" value="등록"> 
-									<input type="button"
+										id="insertBtn" value="등록"> <input type="button"
 										class="genric-btn primary-border" id="updateBtn" value="수정">
 								</div>
 								<input type="hidden" name="lecture.lecture_state" value="승인대기" />
-								<input type="hidden" name="lecture.tutor.member.member_id" value="member2" />
 							</form>
 						</div>
 					</div>

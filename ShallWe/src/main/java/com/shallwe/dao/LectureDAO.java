@@ -207,6 +207,8 @@ public class LectureDAO {
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ModifyException("설정을 변경하는 중 에러가 발생했습니다");
+		}finally {
+			session.close();
 		}
 	}
 

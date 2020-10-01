@@ -63,7 +63,7 @@
 	</resultMap>
 	
 	<select id="selectById" parameterType="String" resultMap="MemberInfoMap">
-	SELECT m.member_id , m.member_pwd, m.member_name, m.member_sex, m.member_email, m.member_phone,
+	SELECT m.member_id , m.member_pwd, m.member_name, m.member_sex, m.member_email, m.member_phone,m.TUTOR_YN,
 			lc1.category_id fav1Id, lc1.category_name fav1Name
             ,lc2.category_id fav2Id, lc2.category_name fav2Name
             ,lc3.category_id fav3Id, lc3.category_name fav3Name

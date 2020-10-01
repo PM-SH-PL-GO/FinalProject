@@ -34,7 +34,7 @@
 	</select>
 	<insert id="insert" parameterType="StudyBoard">
 		insert into STUDYBOARD(studyboard_id, studyboard_member_id, studyboard_title, studyboard_content, studyboard_filename, studyboard_viewcount, studyboard_write_dt, studyboard_deleteyn) 
-		VALUES(STUDYBOARD_SEQ.NEXTVAL,#{Study_m.member_id} ,#{studyBoard_title} ,#{studyBoard_content}, #{studyBoard_fileName},0, SYSdate,'N')
+		VALUES(STUDYBOARD_SEQ.NEXTVAL,#{member.member_id} ,#{studyBoard_title} ,#{studyBoard_content}, #{studyBoard_fileName},0, SYSdate,'N')
 	</insert>
 	<update id="update" parameterType="StudyBoard">
 		update STUDYBOARD set studyboard_title= #{studyBoard_title},studyboard_content=#{studyBoard_content}, studyboard_filename=#{studyBoard_fileName}, studyboard_write_dt=sysdate

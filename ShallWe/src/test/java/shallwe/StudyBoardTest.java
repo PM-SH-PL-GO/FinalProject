@@ -13,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.shallwe.dao.StudyBoardDAO;
+import com.shallwe.dao.StudyReplyDAO;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
@@ -33,8 +34,10 @@ public class StudyBoardTest {
 	StudyBoardDAO dao;
 	@Autowired
 	BoardService boardService;
+	@Autowired
+	StudyReplyDAO studyReplyDAO;
 		
-//	@Test
+	@Test
 	@DisplayName("게시글 호출")
 	void selectAll() throws FindException {
 //		Map<String, Object> map = new HashMap<String, Object>();
@@ -45,10 +48,13 @@ public class StudyBoardTest {
 //			System.out.println("board=" +b);
 //		}
 		BoardPageBean<StudyBoard> slist = new BoardPageBean<StudyBoard>();
-		slist = boardService.findAll(2);
+		slist = boardService.findAll(1);
 		for(StudyBoard s : slist.getList()) {
 			System.out.println("게시글 조회="+s);
 		}
+//		studyReplyDAO.selectById(27);
+		
+		
 	}
 	
 //	@Test
@@ -64,7 +70,7 @@ public class StudyBoardTest {
 		System.out.println("보드페이지빈="+bpb);
 	}
 	
-	@Test
+//	@Test
 	@DisplayName("게시판 입력")
 	void insert() throws AddException {
 		StudyBoard studyboard = new StudyBoard();
