@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,9 +27,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.annotation.JacksonInject.Value;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
+import com.shallwe.exception.ModifyException;
 import com.shallwe.model.BoardPageBean;
+import com.shallwe.model.MemberInfoBean;
 import com.shallwe.service.BoardService;
 import com.shallwe.service.FaqService;
+import com.shallwe.service.MemberSerivce;
 import com.shallwe.vo.Faq;
 import com.shallwe.vo.Member;
 import com.shallwe.vo.StudyBoard;
@@ -41,6 +45,8 @@ public class BoardController {
 	BoardService service;
 	@Autowired
 	FaqService faqService;
+	@Autowired
+	MemberSerivce memberService;
 	
 	@RequestMapping(value = "/studyBoard", method = RequestMethod.GET)
 	public String studyBoard(Locale locale, Model model) {
@@ -68,6 +74,7 @@ public class BoardController {
 	@RequestMapping("/list/{currentPage}")
 	@ResponseBody
 	public ResponseEntity<BoardPageBean<StudyBoard>> list(@PathVariable(value = "currentPage",required = false) Integer cp, HttpSession session){
+		ModelAndView mnv = new ModelAndView();
 		int currentPage = 1;
 		if(cp != null) {
 			currentPage = cp;
@@ -87,7 +94,6 @@ public class BoardController {
 	@RequestMapping("/search/{searchVal}/{currentPage}")
 	@ResponseBody
 	public ResponseEntity<BoardPageBean<StudyBoard>> searchList(@PathVariable(value = "searchVal",required = false) String sv, @PathVariable(value = "currentPage",required = false) Integer cp){
-		System.out.println("sv="+sv);
 		BoardPageBean<StudyBoard> pb = null;
 		try {
 			 pb = service.search(sv, cp);
@@ -122,15 +128,24 @@ public class BoardController {
 		return "studyBoardWrite";
 	}
 	
-	@RequestMapping("writeBoard")
-	public String writeBoard(@RequestBody StudyBoard sb) {
+	@RequestMapping(value = "/writeBoard", method = RequestMethod.POST)
+	@ResponseBody
+	@Transactional
+	public ResponseEntity<Integer> writeBoard(@RequestBody StudyBoard sb, HttpSession session) {
+		Member member = new Member();
+		String memberId = (String)session.getAttribute("loginInfo");
+		member.setMember_id(memberId);
 		try {
+			sb.setMember(member);
 			service.writeBoard(sb);
-			return "success";
-		} catch (AddException e) {
+			BoardPageBean<StudyBoard> studyBoard = service.findAll(1);
+			int board_id = studyBoard.getList().get(0).getStudyBoard_id();
+			System.out.println("첫번째 번호!!"+board_id);
+			return ResponseEntity.status(HttpStatus.OK).body(board_id);
+		} catch (AddException | FindException e) {
 			e.printStackTrace();
-			return "fail";
-		}
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(0);
+		} 
 		
 	}
 	@DeleteMapping(value = "/delete/{studyBoard_id}")
@@ -154,6 +169,23 @@ public class BoardController {
 			e.printStackTrace();
 		}
 		return mnv;
+		
+	}
+	
+	@RequestMapping("/updateBoard")
+	@ResponseBody
+	public ResponseEntity<Integer> updateBoard(@RequestBody StudyBoard sb, HttpSession session) {
+		Member member = new Member();
+		String memberId = (String)session.getAttribute("loginInfo");
+		member.setMember_id(memberId);
+		try {
+			sb.setMember(member);
+			service.updateBoard(sb);
+			return ResponseEntity.status(HttpStatus.OK).body(sb.getStudyBoard_id());
+		} catch (ModifyException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(0);
+		}
 		
 	}
 }

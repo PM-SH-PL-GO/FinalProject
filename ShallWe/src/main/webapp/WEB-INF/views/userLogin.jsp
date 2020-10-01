@@ -360,7 +360,7 @@ input.submit {
 					   if(responseObj.status == "success"){
 						   
 						   alert('로그인성공');
-						   let $url = "http://localhost/shallwe/?member_id="+$idVal+"&member_pwd="+$pwdVal;
+						   let $url = "/shallwe/?member_id="+$idVal+"&member_pwd="+$pwdVal;
 						   location.href= $url;
 						   
 						   } else{

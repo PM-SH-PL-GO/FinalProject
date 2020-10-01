@@ -541,27 +541,27 @@ $(function(){
      
           <label>강의 선택:</label>
           <br />
-          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="IT">
+          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="MA">
           <label class="light" for="development">IT 정보기술</label>
           <br />
             
-          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="HO">
+          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="WP">
           <label class="light" for="design">HOBBY 취미</label>
           <br />
             
-          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="MA">
+          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="SC">
           <label class="light" for="business">Marketing 마케팅</label>
            <br />
            
-           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="DE">
+           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="PB">
           <label class="light" for="business">Design 디자인</label>
            <br />
            
-           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="CA">
+           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="DB">
           <label class="light" for="business">Employment 취업</label>
            <br />
            
-           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="BU">
+           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="KING">
           <label class="light" for="business">Business 비지니스</label>
            <br />
          

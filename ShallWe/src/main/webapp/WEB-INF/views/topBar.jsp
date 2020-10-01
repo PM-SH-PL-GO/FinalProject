@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <c:set var="memberId" value="${sessionScope.loginInfo}"/>
 <!DOCTYPE html>
 <html>
@@ -64,68 +65,99 @@ cursor: pointer;
 </style>
 <script>
 $(function(){
+	//----------강사여부 확인 LOAD START---------
+		var $topbarBtn = $('#tutorOrLecture');
+		var topbarBtnData = "";
+		if("${memberId}"==null||"${memberId}"==""){
+			topbarBtnData = "<a class=\"btn\" id=\"tutorSetBtn\">강사 등록</a>"
+			$topbarBtn.html(topbarBtnData);				
+
+			
+		}else{
+			$.ajax({
+				url:"${contextPath}/member/tutorYN"
+				,success:function(data){
+					if(data=='N'){
+						topbarBtnData = "<a class=\"btn\" id=\"tutorSetBtn\">강사 등록</a>"
+						console.log(2);
+					}else{
+						console.log(3);
+						topbarBtnData = "<a class=\"btn\" id=\"tutorLectureBtn\">내 강의보기(강사)</a>"
+					}
+					$topbarBtn.html(topbarBtnData);	
+			
+				}
+				,error:function(data){
+				}
+			});
+			
+		}
+	
+	//----------강사여부 확인 LOAD END---------
 	//----------로그인 버튼 CLICK START---------
 	$("a#login").click(function(){
-		location.href = "/shallwe/userLogin";
+		location.href = "${contextPath}/userLogin";
 	});
 	//----------로그인 버튼 CLICK END---------
 	
 	//----------FAQ CLICK START---------
 	$("#faq").click(function(){
-		location.href = "/shallwe/board/faqList";
+		location.href = "${contextPath}/board/faqList";
 	});
 	//----------FAQ CLICK END---------
 	
 	//----------강의등록 버튼 CLICK START---------	
-	$("#tutorSetBtn").click(function(){
+// 	$("#tutorSetBtn").click(function(){
+	$("#tutorOrLecture").on("click","#tutorSetBtn",function(){
 		if("${sessionScope.loginInfo}" == null ||"${sessionScope.loginInfo}" == ""){
 			alert("로그인 후 강의 등록이 가능합니다.");
 		}else{
-			location.href = "/shallwe/instructor";		
+			location.href = "${contextPath}/instructor";		
 		}
 	});
 	//----------강의등록 버튼 CLICK END---------	
 	
 	//----------강사 강의등록 버튼 CLICK START---------		
-	$("#tutorLectureBtn").click(function(){
-		location.href = "/shallwe/tutorLectureList";		
+// 	$("#tutorLectureBtn").click(function(){
+	$("#tutorOrLecture").on("click","#tutorLectureBtn",function(){
+		location.href = "${contextPath}/tutorLectureList";		
 	});
 	//----------강사 강의등록 버튼 CLICK START---------		
 	
 	//----------스터디게시판 CLICK START---------	
 	$("#studBoard").click(function(){
-		location.href = "/shallwe/board/studyBoard";
+		location.href = "${contextPath}/board/studyBoard";
 	});
 	//----------스터디게시판 CLICK END---------	
 
 	//----------자유게시판 CLICK START---------	
 	$("#freeBoard").click(function(){
-		location.href = "/shallwe/freeBoard";
+		location.href = "${contextPath}/freeBoard";
 	});
 	//----------자유게시판 CLICK END---------	
 
 	//----------회원가입 CLICK START---------		
 	$("#signUp").click(function(){
-		location.href = "/shallwe/member/signup";
+		location.href = "${contextPath}/member/signup";
 	});
 	//----------회원가입 CLICK END---------		
 	
 	//----------내 정보보기 CLICK START---------	
 	$("#myInfo").click(function(){
-		location.href = "/shallwe/myinfo";
+		location.href = "${contextPath}/myinfoTutorInfo";
 	});
 	//----------내 정보보기 CLICK END---------	
 
 	//----------내 강의보기 CLICK START---------	
 	$("#myLecture").click(function(){
-		location.href = "/shallwe/lectures/memberLecture";
+		location.href = "${contextPath}/lectures/memberLecture";
 	});
 	//----------내 강의보기 CLICK END---------	
 
 	//----------로그아웃 CLICK START---------	
 	$("#signOut").click(function(){
 		$.ajax({
-			url:"/shallwe/member/memberLogout"
+			url:"${contextPath}/member/memberLogout"
 			,method:"POST"
 			,success:function(data){
 				var responseObj = JSON.parse(data);
@@ -154,8 +186,8 @@ $(function(){
 						class="menu-wrapper d-flex align-items-center justify-content-between">
 						<!-- Logo -->
 						<div class="logo">
-							<a href="/shallwe"><img
-								src="/shallwe/assets/img/logo/shallwelogo.png" alt=""></a>
+							<a href="${contextPath}"><img
+								src="${contextPath}/assets/img/logo/shallwelogo.png" alt=""></a>
 						</div>
 						<!-- Main-menu -->
 						<div class="main-menu f-right d-none d-lg-block">
@@ -177,15 +209,7 @@ $(function(){
 				<div class="container-fluid">
 					<div class="menu-wrapper d-flex align-items-center justify-content-between" style="float: right; margin-right: 100px">
 						<!-- Header-btn -->
-						<div class="header-btns d-none d-lg-block f-right">
-							<c:choose>
-								<c:when test="${empty tutorId}">
-									<a class="btn" id="tutorSetBtn">강사 등록</a>
-								</c:when>
-								<c:otherwise>
-									<a class="btn" id="tutorLectureBtn">내 강의보기(강사)</a>
-								</c:otherwise>
-							</c:choose>
+						<div class="header-btns d-none d-lg-block f-right" id="tutorOrLecture">
 						</div>
 						<div class="main-menu f-right d-none d-lg-block ">
 							<nav>

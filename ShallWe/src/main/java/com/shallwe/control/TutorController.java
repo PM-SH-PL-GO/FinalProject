@@ -44,8 +44,7 @@ public class TutorController {
 	@GetMapping(value="showTutor")
 	public ModelAndView showTutorInfo(HttpSession session) throws FindException {
 		
-		//String member_id = (String)session.getAttribute("loginInfo");
-		String member_id = "championcom";
+		String member_id = (String)session.getAttribute("loginInfo");
 		ModelAndView model = new ModelAndView();
 		List<Tutor> tutor = new ArrayList<>();	
 		if (member_id == null) {
@@ -105,8 +104,8 @@ public class TutorController {
 											MultipartFile tutor_img,
 											MultipartFile tutor_career_file,
 											String tutor_id)throws FindException{
-		tutor_id = "championcom";
-	//	String tutor_id = (String)session.getAttribute("loginInfo");
+//		tutor_id = "championcom";
+		tutor_id = (String)session.getAttribute("loginInfo");
 		try {
 			
 			service.dellTutor(tutor_id);

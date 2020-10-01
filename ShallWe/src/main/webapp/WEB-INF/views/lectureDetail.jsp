@@ -1,12 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <c:set value="${lectDetail.lecture}" var="lecture" />
-<fmt:formatDate var="startDt" value="${lecture.lecture_start_dt}"
-	pattern="yyyy-MM-dd" />
-<fmt:formatDate var="endDt" value="${lecture.lecture_end_dt}"
-	pattern="yyyy-MM-dd" />
+<fmt:formatDate var="startDt" value="${lecture.lecture_start_dt}" pattern="yyyy-MM-dd" />
+<fmt:formatDate var="endDt" value="${lecture.lecture_end_dt}" pattern="yyyy-MM-dd" />
+
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 <head>
@@ -15,8 +14,7 @@
 <title>강의 상세 정보</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="shortcut icon" type="image/x-icon"
-	href="/shallwe/assets/img/favicon.ico">
+<link rel="shortcut icon" type="image/x-icon" href="/shallwe/assets/img/favicon.ico">
 
 <!-- CSS here -->
 <link rel="stylesheet" href="/shallwe/assets/css/bootstrap.min.css">
@@ -29,27 +27,77 @@
 <link rel="stylesheet" href="/shallwe/assets/css/animate.min.css">
 <link rel="stylesheet" href="/shallwe/assets/css/animated-headline.css">
 <link rel="stylesheet" href="/shallwe/assets/css/magnific-popup.css">
-<link rel="stylesheet"
-	href="/shallwe/assets/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/shallwe/assets/css/fontawesome-all.min.css">
 <link rel="stylesheet" href="/shallwe/assets/css/themify-icons.css">
 <link rel="stylesheet" href="/shallwe/assets/css/slick.css">
 <link rel="stylesheet" href="/shallwe/assets/css/nice-select.css">
 <link rel="stylesheet" href="/shallwe/assets/css/style.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+<%-- 화면 호출시 바로 조회 해와야할 데이터 처리 영역 --%>
+<%-- 강사-카테고리별 후기 조회--%>
 $(document).ready(function() {
 	var $reviewAreaObj = $('#reviewArea');
-	console.log($reviewAreaObj);
 	// 강사별, 카테고리별 리뷰 목록 조회
 	$.ajax({
-		url : "/shallwe/reviewList"
+		url : "${contextPath}/reviewList"
 		, data : {"tutor_id": "${lecture.tutor.member.member_id}",
 				  "category_id":"${lecture.lectureCategory.lecture_category_id}"}
 		, success : function (responseData) {
-			console.log(responseData);
 			$reviewAreaObj.append(responseData);
 		}
-	}); // end of ajax 
+	}); // end of ajax
+	
+	// 강의신청, 강의결제페이지 호출
+	var $applyBtnObj = $('#applyBtn');
+	$applyBtnObj.on("click", function() {
+		$.ajax({
+			url: "${contextPath}/insertMemberLectureHistory"
+			, method: "POST"
+			, data : {"lecture_category_id" : "${lecture.lectureCategory.lecture_category_id}" ,
+					  "lecture_id" : "${lecture.lecture_id}"}
+			, success: function(responseData) {
+				let responseObj = JSON.parse(responseData);
+				if (responseObj.status == "success") {
+					alert("강의 신청이 정상적으로 되었습니다.");
+				} else {
+					alert("강의 신청에 실패했습니다.");
+					$("#applyBtn").focus();
+				}
+			} 
+		}); 
+	}); // end of 강의신청, 강의결제페이지 호출 
+
+	// 강의결제취소, 강의결제취소 처리
+	var $cancelBtnObj = $('#cancelBtn');
+	$cancelBtnObj.on("click", function() {
+		$.ajax({
+			url: "${contextPath}/updateMemberLectureHistory"
+			, method: "POST"
+			, data : {"lecture_category_id" : "${lecture.lectureCategory.lecture_category_id}" ,
+					  "lecture_id" : "${lecture.lecture_id}"}
+			, success: function(responseData) {
+				let responseObj = JSON.parse(responseData);
+				if (responseObj.status == "success") {
+					alert("강의 결제 취소가 정상적으로 처리 되었습니다.");
+				} else {
+					alert("강의 결제 취소가 실패했습니다.");
+					$("#applyBtn").focus();
+				}
+			} 
+		}); 
+	}); // end of 강의신청, 강의결제페이지 호출 
+	
+	let letidValue = $("input[name=listlecture_id]").val();
+	$("div[name=gotoDe]").click(function(){
+		location.href = "/shallwe/lectures/detail?lecture_id=" +letidValue;		
+	});
+
+	let letidendValue = $("input[name=listendlecture_id]").val();
+	$("div[name=gotoDeend]").click(function(){
+		location.href = "/shallwe/lectures/detail?lecture_id=" +letidendValue;		
+	});
+	return false;
 }); // end of scriptLoad
 </script>
 </head>
@@ -90,8 +138,7 @@ $(document).ready(function() {
 						href="#curriculum"><h5 style="margin: 10px;">교육 과정</h5></a> <a
 						href="#prepared"><h5 style="margin: 10px;">준비물</h5></a> <a
 						href="#caution"><h5 style="margin: 10px;">유의사항</h5></a> <a
-						href="#tutorReview"><h5 style="margin: 10px;">첨부파일</h5></a>
-						<a
+						href="#tutorReview"><h5 style="margin: 10px;">첨부파일</h5></a> <a
 						href="#filename"><h5 style="margin: 10px;">강사후기</h5></a>
 				</div>
 				<div class="section-top-border">
@@ -128,17 +175,22 @@ $(document).ready(function() {
 									<a href="#">${lecture.tutor.tutor_score}</a>
 								</h6>
 							</div>
-							<h4 class="mt-30"><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###"/>원</h4>
-							<a href="#" class="genric-btn primary-border mt-10">신청</a> <a
-								href="#" class="genric-btn primary-border mt-10">찜하기</a>
+							<h4 class="mt-30">
+								<fmt:formatNumber value="${lecture.lecture_price}"
+									pattern="#,###" />
+								원
+							</h4>
+							<a href="#" id="applyBtn" class="genric-btn primary-border mt-10">신청</a>
+							<a href="#" id="cancelBtn" class="genric-btn primary-border mt-10">결제취소</a>
+							<a href="#" class="genric-btn primary-border mt-10">찜하기</a>
 							<div class="d-flex mt-10">
 								<h6 class="mr-10">수강일시:</h6>
-								<h6 class="date mr-10">${startDt} - ${endDt}</h6>
+								<h6 class="date mr-10">${startDt}-${endDt}</h6>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 	</main>
 	<!-- Scroll Up -->
 	<div id="back-top">

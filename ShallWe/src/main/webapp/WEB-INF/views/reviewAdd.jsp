@@ -29,43 +29,6 @@
 <link rel="stylesheet" href="assets/css/style.css">
 
 <style>
-/* DivTable.com */
-.divTable {
-	display: table;
-	width: 100%;
-}
-
-.divTableRow {
-	display: table-row;
-}
-
-.divTableHeading {
-	background-color: #EEE;
-	display: table-header-group;
-}
-
-.divTableCell, .divTableHead {
-	border: 1px solid #999999;
-	display: table-cell;
-	padding: 3px 10px;
-}
-
-.divTableHeading {
-	background-color: #EEE;
-	display: table-header-group;
-	font-weight: bold;
-}
-
-.divTableFoot {
-	background-color: #EEE;
-	display: table-footer-group;
-	font-weight: bold;
-}
-
-.divTableBody {
-	display: table-row-group;
-}
-
 /* modal CSS */
 .md_top {
 	padding: 1em;
@@ -101,8 +64,8 @@ button {
 }
 
 .md_content {
-	width: 60%;
-	height: 80%;
+	width: 50%;
+	height: 85%;
 	position: inherit;
 	padding: 50px 50px;
 	background-color: white;
@@ -127,8 +90,7 @@ h1 {
 }
 
 textarea {
- width: 100%;
-  height: 150px;
+  width: 100%;
   padding: 12px 20px;
   box-sizing: border-box;
   border: 2px solid #ccc;
@@ -136,42 +98,6 @@ textarea {
   background-color: #f8f8f8;
   font-size: 16px;
   resize: none;
-}
-
-.divTable {
-	display: table;
-	width: 100%;
-}
-
-.divTableRow {
-	display: table-row;
-}
-
-.divTableHeading {
-	background-color: #EEE;
-	display: table-header-group;
-}
-
-.divTableCell, .divTableHead {
-	border: 1px solid #999999;
-	display: table-cell;
-	padding: 3px 10px;
-}
-
-.divTableHeading {
-	background-color: #EEE;
-	display: table-header-group;
-	font-weight: bold;
-}
-
-.divTableFoot {
-	background-color: #EEE;
-	display: table-footer-group;
-	font-weight: bold;
-}
-
-.divTableBody {
-	display: table-row-group;
 }
 
 /*만족도*/
@@ -289,7 +215,15 @@ textarea {
 	input[type=range]:focus::-ms-fill-upper {
 		background: #ccc;
 	}
-}
+	
+	/* table css*/
+	table {
+	  text-align: center;
+	  margin: 50px auto 0;
+	  border-collapse: collapse;
+	  width: 100%;
+	}
+} 
 </style>
 
 <script
@@ -372,7 +306,7 @@ $(document).ready(function() {
  		var lectureId = 3;
  		var reviewScore = $('.numValue').val(); */
 
- 		var memberId='member1';
+ 		var memberId='member2';
  		var lectureCategoryId = 'MA';
  		var reviewContent = $reviewCommentObj.val();
  		var lectureId = 3;
@@ -415,34 +349,30 @@ $(document).ready(function() {
 				<button>X</button>
 			</div>
 			<h1 id="title">강의후기</h1>
-			<div class="divTable">
-				<div class=divTableRow>
-					<div class="divTableCol">
-						<img src="lecture/${lecture.lecture_img}" class="mb-10" alt="강사사진">
-					</div>
-					<div class="divTableCol">
-						<span id="lecutureTitle"><label>강의명 :</label>${lecture.lecture_title}</span><br> 
-						<span><label>강사 :</label> ${lecture.tutor.member.member_id}</span>
-						
-					</div>
-				</div>
+			<table>
+		   		<tbody>
+<%-- 					<tr><th>강의이미지</th><td class="img"><img id ="lecture_img" src="lecture/${lecture.lecture_img}" class="mb-10" alt="강사사진"> </td></tr> --%>
+					<tr><th>강의명</th><td class="title">${lecture.lecture_title}</td></tr>
+					<tr><th>강사명</th><td class="tutorId">${lecture.tutor.member.member_id}</td></tr>
+				</tbody>
+			</table>
 
-			</div>
 			<!--review-->
 			<div class="modal_text">
 				<form class="form-contact comment_form" id="commentForm">
 					<div class="row">
 						<div class="col-12">
 							<div class="form-group">
-								<textarea name="comment" id="comment" cols="30" rows="10"
+								<textarea name="comment" id="comment" cols="30" rows="5"
 									placeholder="강의 수강 후기를 등록해주세요"></textarea>
 								<span class="remainText">남은글자수 : 50/50자 </span>
 							</div>
 						</div>
 
 						<div class="scoreBar">
-							<input type="text" readonly value="0" class="numValue form-control" step="5" max="100" min="0"><br>
+							<h3>스크롤바를 드래그 하시면 점수를 설정할 수 있습니다</h3>
 							<input id="slider1" type="range" step="5" min="0" max="100" /><br>
+							<input type="text" readonly value="0" class="numValue form-control" step="5" max="100" min="0"><br>
 						</div>
 					</div>
 					<!-- end of row -->
@@ -454,7 +384,6 @@ $(document).ready(function() {
 				</form>
 			</div>
 			<!-- end of modal_text -->
-
 		</div>
 		<!-- end of md_content -->
 	</div>

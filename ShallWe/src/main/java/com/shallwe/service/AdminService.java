@@ -6,12 +6,14 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.shallwe.dao.FaqDAO;
 import com.shallwe.dao.LectureDAO;
 import com.shallwe.dao.LectureDetailDAO;
 import com.shallwe.dao.MemberDAO;
 import com.shallwe.dao.TutorDAO;
+import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.exception.RemoveException;
@@ -108,37 +110,65 @@ public class AdminService {
 	}
 	
 	/**
-	 * 특정 강의 상세정보 가져오기
-	 * @author jun6
-	 * @param 강의 ID
-	 * @return 강의 상세 정보
-	 * @throws FindException
-	 */
-//	public LectureDetail showLectureDetailById(String lecture_id) throws FindException{
-//		return lectureDetailDAO.selectLectureDetailById(lecture_id);
-//	}
-	
-	/**
 	 * 강의 승인/반려하기
 	 * @author jun6
 	 * @param lecture_id
 	 * @param status
 	 * @throws ModifyException
 	 */
-	public void updateLectureStatusByIdAndStatus(String lecture_id, String status) throws ModifyException{
+//	@Transactional
+	public void updateLectureStatusByIdAndStatus(String lecture_id, String status, String reject_reason) throws ModifyException{
 		Map<String, String> map = new HashMap<>();
-		map.put("id", lecture_id);
+		map.put("lecture_id", lecture_id);
+		
 		if (status.equals("승인"))
 			map.put("status", status);
-		else if(status.equals("반려") || status.equals("취소승인"))
-			map.put("status", "취소");
+		else if(status.equals("반려")) {
+			map.put("status", "반려");
+			map.put("reject_reason", reject_reason);
+			lectureDetailDAO.updateLectureRejectReason(map);
+		}
 		else if(status.equals("복구"))
-			map.put("status", "승인대기");
+			map.put("status", "승인");
+		else if (status.equals("취소승인"))
+			map.put("status", "취소");
 		else
 			throw new ModifyException("승인/반려 이외의 글자가 전달되었습니다 : " + status);
 		
 		lectureDAO.updateLectureStatusByIdAndStatus(map);
 	}
+	
+	/**
+	 * 강의 취소/반려 사유 조회하기
+	 * @author jun6
+	 * @param lecture_id
+	 * @param 취소인지 반려인지
+	 * @return 취소/반려된 사유
+	 * @throws FindException
+	 */
+	public LectureDetail showLectureReason(String lecture_id, String rejectOrCancel) throws FindException{
+		if (rejectOrCancel.equals("반려사유"))
+			rejectOrCancel = "reject_reason";
+		else if(rejectOrCancel.equals("취소사유"))
+			rejectOrCancel = "cancel_reason";
+		
+//		LectureDetail lectureDetail = lectureDetailDAO.selectLectureReasonById(lecture_id, rejectOrCancel);
+		
+//		if (rejectOrCancel.equals("reject_reason"))
+//			lectureDetail.setLecture_reject_reason(map.get(rejectOrCancel));
+//		else
+//			lectureDetail.setLecture_cancel_reason(map.get(rejectOrCancel));
+//		
+//		Tutor tutor = new Tutor();
+//		tutor.setTutor_nickname(map.get(""));
+//		Lecture lecture = new Lecture();
+//		lecture.setTutor(tutor);
+//		lectureDetail.setLecture(lecture);
+		
+		return lectureDetailDAO.selectLectureReasonById(lecture_id, rejectOrCancel);
+	}
+	
+	
 	
 	
 	/**
@@ -151,4 +181,40 @@ public class AdminService {
 		return faqDAO.selectAll();
 	}
 	
+	/**
+	 * 특정 FAQ 내용 조회
+	 * @param faq_id
+	 * @return FAQ
+	 * @throws FindException
+	 */
+	public Faq selectFaqById(String faq_id) throws FindException{
+		return faqDAO.selectFaqById(faq_id);
+	}
+	
+	/**
+	 * FAQ 새로 추가
+	 * @param faq
+	 * @throws AddException
+	 */
+	public void addFaq(Faq faq) throws AddException{
+		faqDAO.insertFaq(faq);
+	}
+	
+	/**
+	 * FAQ 수정
+	 * @param faq
+	 * @throws ModifyException
+	 */
+	public void updateFaq(Faq faq) throws ModifyException{
+		faqDAO.updateFaq(faq);
+	}
+	
+	/**
+	 * FAQ 삭제
+	 * @param faq_id
+	 * @throws RemoveException
+	 */
+	public void deleteFaq(String faq_id) throws RemoveException{
+		faqDAO.deleteFaq(faq_id);
+	}
 }

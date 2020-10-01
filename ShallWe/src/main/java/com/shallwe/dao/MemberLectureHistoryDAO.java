@@ -25,12 +25,14 @@ public class MemberLectureHistoryDAO {
 		try {
 			session = sqlSessionFactory.openSession();
 			memberList = session.selectList("MemberLectureHistoryMapper.memberMyClassList", mlth);
+			if (memberList.size() == 0) {
+				throw new FindException("조회 결과가 없습니다.");
+			}
 		} catch (DataAccessException e) {
 			throw new FindException("조회 과정에 오류가 있습니다.");
+		} finally {
+			session.close();
 		}
-
-		if (memberList.size() == 0)
-			throw new FindException("조회 결과가 없습니다.");
 
 		return memberList;
 	}

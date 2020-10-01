@@ -1,7 +1,11 @@
 package com.shallwe.dao;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -14,6 +18,7 @@ import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureDetail;
+import com.shallwe.vo.Tutor;
 
 @Repository(value = "lectureDetailDAO")
 public class LectureDetailDAO {
@@ -46,25 +51,28 @@ public class LectureDetailDAO {
 	}
 
 	// 강의 상세 보기 : 동일
-			public LectureDetail lectureDetailView(Lecture lect) throws FindException {
-				LectureDetail le = null;
-				SqlSession session = null;
-				try {
-					session = sqlSessionFactory.openSession();
-					le = session.selectOne("LectureDetailMapper.lectureDetailView", lect);
-				} catch (DataAccessException e) {
-					throw new FindException("조회 과정에 오류가 있습니다.");
-				}
-
-				if (le == null)
-					throw new FindException("조회 결과가 없습니다.");
-
-				return le;
+	public LectureDetail lectureDetailView(Lecture lect) throws FindException {
+		LectureDetail le = null;
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			le = session.selectOne("LectureDetailMapper.lectureDetailView", lect);
+			if (le == null) {
+				throw new FindException("조회 결과가 없습니다.");
 			}
+		} catch (DataAccessException e) {
+			throw new FindException("조회 과정에 오류가 있습니다.");
+		} finally {
+			session.close();
+		}
+
+		return le;
+	}
+
 	/**
 	 * admin - 강의 전체 조회
-	 * 
 	 * @author Jun6
+	 * @return 전체 강의 목록
 	 */
 	public List<LectureDetail> selectAll() throws FindException {
 		SqlSession session = null;
@@ -83,6 +91,40 @@ public class LectureDetailDAO {
 		return lectureList;
 	}
 	
-	// 강의 승인/반려(admin) : 준식
+	/**
+	 * 반려/취소 이유 조회
+	 * @param lecture_id
+	 * @param rejectOrCancel
+	 * @return 반려/취소 이유
+	 * @throws FindException
+	 */
+	public LectureDetail selectLectureReasonById(String lecture_id, String rejectOrCancel) throws FindException {
+		SqlSession session = null;
+		LectureDetail lectureDetail = null;
+		
+		try {
+			session = sqlSessionFactory.openSession();
+			lectureDetail = session.selectOne("LectureDetailMapper.selectLectureReasonById", lecture_id);
+		}catch(DataAccessException e) {
+			throw new FindException("You've got Error!^^");
+		}finally {
+			session.close();
+		}
+		
+		return lectureDetail;
+	}
+	
 	// 강의 취소 승인하기(admin) : 준식
+	public void updateLectureRejectReason(Map<String, String> map) throws ModifyException{
+		SqlSession session = null;
+		
+		try {
+			session = sqlSessionFactory.openSession();
+			session.update("LectureDetail.updateLectureRejectReason", map);
+		}catch(DataAccessException e) {
+			throw new ModifyException("뭔가 잘못되었습니다");
+		}finally {
+			session.close();
+		}
+	}
 }

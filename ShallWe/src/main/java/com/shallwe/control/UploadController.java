@@ -31,7 +31,8 @@ public class UploadController {
 	@Autowired private TutorService service;
 	
 	@Autowired
-	private static final String UPLOAD_PATH = "/Users/chan/Desktop/Web/FinalProject/ShallWe/src/main/webapp/files/tutorImages";
+	private static final String UPLOAD_PATH = "/home/ec2-user/developer/apache-tomcat-9.0.36/webapps/shallwe/files/tutorImages";
+//	private static final String UPLOAD_PATH = "/Users/chan/Desktop/Web/FinalProject/ShallWe/src/main/webapp/files/tutorImages";
 	
 	//파일 업로드 이메서드는 마지막으로 하는일(업로드일은 여기서 처리한다) 
 	// 랜덤으로 난수값을 정해주고 + 오리지날 파일값을 더해서 저장해주는곳이고
