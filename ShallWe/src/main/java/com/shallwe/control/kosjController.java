@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shallwe.dao.LectureDAO;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
+import com.shallwe.exception.ModifyException;
 import com.shallwe.exception.RemoveException;
 import com.shallwe.model.ReviewBean;
 import com.shallwe.service.LectureService;
@@ -49,13 +52,15 @@ public class kosjController {
 		System.out.println("test.jsp 호출");
 	}
 	
+	
+	// 강의 후기 등록 화면 요청
 	@RequestMapping(value = "/reviewAdd", method = RequestMethod.GET)
-	public ModelAndView reviewAdd() {
-		System.out.println("reviewAdd.jsp  호출");
+	public ModelAndView reviewAdd(HttpSession session) {
+		String member_id = (String)session.getAttribute("loginInfo");
 		ModelAndView modelAndView = new ModelAndView();
 
 		Member member = new Member();
-		member.setMember_id("member3");
+		member.setMember_id(member_id);
 		Tutor tutor = new Tutor();
 		tutor.setMember(member);
 		Lecture lecture = new Lecture();
@@ -66,6 +71,27 @@ public class kosjController {
 		modelAndView.addObject("lecture" , lecture);
 		modelAndView.setViewName("/reviewAdd");
 		
+		return modelAndView;
+	}
+	
+	
+	//--- review 등록
+	@RequestMapping(value = "/reviewAddmethod", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView insertReview(@RequestBody ReviewBean reviewBean ) throws AddException {
+		
+		ModelAndView modelAndView = new ModelAndView();
+		try {
+			reviewService.insertReview(reviewBean);
+			modelAndView.addObject("status", "success");
+			modelAndView.setViewName("/success");
+			
+		} catch (AddException e) {
+			e.printStackTrace();
+			modelAndView.addObject("status", "fail");
+			modelAndView.addObject("errMsg", e.getMessage());
+			modelAndView.setViewName("/fail");
+		}
 		return modelAndView;
 	}
 	
@@ -163,47 +189,39 @@ public class kosjController {
 	
 	
 	@RequestMapping(value = "/updateMemberLectureHistory", method = {RequestMethod.GET,RequestMethod.POST})
-	public ModelAndView updateMemberLectureHistory(@RequestBody List<Lecture> lectureList ) throws AddException {
-		
-		log.info(" updateMemberLectureHistory 호출했어용~");
-		
+	public ModelAndView updateMemberLectureHistory( HttpSession session, @RequestParam(value="lecture_category_id") String lecture_category_id, 
+													@RequestParam(value="lecture_id") String lecture_id
+	) throws ModifyException {
 		ModelAndView modelAndView = new ModelAndView();
-//		try { 
-//			lectureService.insertMemberLectureHistory(lectureList);
-//			modelAndView.addObject("status", "success");
-//			modelAndView.setViewName("/success");
-//			
-//		} catch (AddException e) {
-//			modelAndView.addObject("status", "fail");
-//			modelAndView.addObject("errMsg", e.getMessage());
-//			modelAndView.setViewName("/fail");
-//			e.printStackTrace();
-//		}
-//		
-		return modelAndView;
-	}
-	
-	
-	
-	//--- review 등록
-	@RequestMapping(value = "/reviewAddmethod", method = RequestMethod.POST)
-	@ResponseBody
-	public ModelAndView insertReview(@RequestBody ReviewBean reviewBean ) throws AddException {
+
+		String member_id = (String) session.getAttribute("loginInfo");
+		if ( member_id == null ) { 
+			throw new ModifyException("로그인 되지 않은 사용자의 접근입니다.");
+		}
 		
-		ModelAndView modelAndView = new ModelAndView();
-		try {
-			reviewService.insertReview(reviewBean);
+		Map <String, Object> map = new HashMap<String, Object>();
+		map.put("lectureCategoryId", lecture_category_id);
+		map.put("memberId", member_id);
+		map.put("lectureId", lecture_id);
+		
+		try { 
+			lectureService.updateMemberLectureHistory(map);
 			modelAndView.addObject("status", "success");
 			modelAndView.setViewName("/success");
 			
-		} catch (AddException e) {
-			e.printStackTrace();
+		} catch (ModifyException e) {
 			modelAndView.addObject("status", "fail");
 			modelAndView.addObject("errMsg", e.getMessage());
 			modelAndView.setViewName("/fail");
+			e.printStackTrace();
 		}
+		
 		return modelAndView;
 	}
+	
+	
+	
+
 	
 	//--- review 강사별, 카테고리별 후기 조회
 	@RequestMapping(value = "/reviewList", method = RequestMethod.GET)

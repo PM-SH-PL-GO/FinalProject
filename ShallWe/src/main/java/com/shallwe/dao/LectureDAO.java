@@ -138,7 +138,7 @@ public class LectureDAO {
 	 * @return
 	 * @throws ModifyException
 	 */
-	public int updateMemberLectureHistory(HashMap<String, Object> map) throws ModifyException {
+	public int updateMemberLectureHistory(Map<String, Object> map) throws ModifyException {
 		SqlSession session = null;
 		int result = 0;
 		try {

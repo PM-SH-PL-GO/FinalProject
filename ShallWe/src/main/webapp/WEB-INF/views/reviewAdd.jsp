@@ -306,7 +306,7 @@ $(document).ready(function() {
  		var lectureId = 3;
  		var reviewScore = $('.numValue').val(); */
 
- 		var memberId='member1';
+ 		var memberId='member2';
  		var lectureCategoryId = 'MA';
  		var reviewContent = $reviewCommentObj.val();
  		var lectureId = 3;

@@ -67,6 +67,26 @@ $(document).ready(function() {
 			} 
 		}); 
 	}); // end of 강의신청, 강의결제페이지 호출 
+
+	// 강의결제취소, 강의결제취소 처리
+	var $cancelBtnObj = $('#cancelBtn');
+	$cancelBtnObj.on("click", function() {
+		$.ajax({
+			url: "${contextPath}/updateMemberLectureHistory"
+			, method: "POST"
+			, data : {"lecture_category_id" : "${lecture.lectureCategory.lecture_category_id}" ,
+					  "lecture_id" : "${lecture.lecture_id}"}
+			, success: function(responseData) {
+				let responseObj = JSON.parse(responseData);
+				if (responseObj.status == "success") {
+					alert("강의 결제 취소가 정상적으로 처리 되었습니다.");
+				} else {
+					alert("강의 결제 취소가 실패했습니다.");
+					$("#applyBtn").focus();
+				}
+			} 
+		}); 
+	}); // end of 강의신청, 강의결제페이지 호출 
 	
 	let letidValue = $("input[name=listlecture_id]").val();
 	$("div[name=gotoDe]").click(function(){
@@ -161,6 +181,7 @@ $(document).ready(function() {
 								원
 							</h4>
 							<a href="#" id="applyBtn" class="genric-btn primary-border mt-10">신청</a>
+							<a href="#" id="cancelBtn" class="genric-btn primary-border mt-10">결제취소</a>
 							<a href="#" class="genric-btn primary-border mt-10">찜하기</a>
 							<div class="d-flex mt-10">
 								<h6 class="mr-10">수강일시:</h6>

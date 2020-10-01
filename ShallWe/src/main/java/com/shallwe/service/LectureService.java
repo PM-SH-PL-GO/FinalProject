@@ -117,7 +117,7 @@ public class LectureService {
 	 * @return
 	 * @throws ModifyException
 	 */
-	public int updateMemberLectureHistory(HashMap<String, Object> map) throws ModifyException {
+	public int updateMemberLectureHistory(Map<String, Object> map) throws ModifyException {
 		int result = 0;
 		try {
 			result = lectureDAO.updateMemberLectureHistory(map);
