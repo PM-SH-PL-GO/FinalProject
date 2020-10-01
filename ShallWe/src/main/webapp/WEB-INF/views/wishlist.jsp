@@ -126,35 +126,40 @@
 					<tr>
 						<th><input type="checkbox" name="checkbox" id="check"/></th>
 						<th><span>이미지</span></th>
-						<th style="width:500px;"><span>강의정보</span></th>
+						<th style="width:400px; text-align:center"><span>강의정보</span></th>
+						<th style="width:100px; text-align:center"><span>강사명</span></th>
 						<th style="width:50px">판매가</th>				
-						<th style="width:50px">합계</th>				
-						<th">선택</th>	
+						<th>선택</th>	
 					</tr>
 					</thead>
-				<tbody> 
-<!-- 				id="calculationtbody"> -->
-<%-- 				<c:if test="${not empty requestScope.wishList}"> --%>
-<%-- 					<c:forEach var="item" items="${requestScope.wishList}" varStatus="status"> --%>
+				<tbody id="calculationtbody">
+<%-- 				<c:if test="${not empty wishListVal}"> --%>
+<%-- 					<c:forEach var="item" items="${wishListVal}" varStatus="status"> --%>
 					<tr class="calculationtr" style="height: 90px; background-color: #fff;">
 						<td style="text-align: left; text-align:center; border-right:none;">
 							<input type="checkbox" id="cbtr${status.index}" name="checkbox"/>
-<%-- 							<input type="hidden" class="buypd${status.index}" value="${item.}"/> --%>
+<%-- 							<input type="hidden" class="buypd${status.index}" value="${item.lecs.lecture_id}"/> --%>
+							<input type="hidden" name="listAllCnt" id="listAllCnt"/>
 						</td>
-						<td style="border-left: none; border-right: none;"><img style="width: 80%;" src="/shallwe/assets/img/logo/03.jpg"></td>
+						<td style="border-left: none; border-right: none;"><img style="width: 80%;" src="/shallwe/lecture/${item.lecture_img}"></td>
 						
-						<td style="text-align: left; padding-left:10px; border-left:none; font-weight: bold;">김상하에 대해 알아보겠습니다</td>
+						<td style="text-align: left; padding-left:10px; border-left:none; font-weight: bold;">${item.lecture_title}</td>
 						
-						<td><span style="padding-left: 10px;">0</span>원</td>
+						<td style="text-align: center; padding-left:10px; font-weight: bold;">${item.tutor_name}</td>
 						
-						<td><span>0</span>원</td>
+						<td><span style="padding-left: 10px;" class="lecture_price${status.index}">${item.lecture_price}</span>원</td>
 
 						<td>
 							<button class="bttn default" style="border-radius:3px; width:90px; margin-bottom: 3px; font-size:11px; background-color: #264d73;color:#fff; font-weight:bold;">주문하기</button>
-							<button class="bttn default" style="border-radius:3px; width:90px; margin-bottom: 3px; font-size:11px; ">관심수업등록</button>
+<!-- 							<button class="bttn default" style="border-radius:3px; width:90px; margin-bottom: 3px; font-size:11px; ">관심수업등록</button> -->
 							<button class="bttn default" style="border-radius:3px; width:90px; margin-bottom: 3px; font-size:11px; ">x삭제</button>
 						</td>
 					</tr>
+<%-- 						<c:if test="${empty requestScope.wishListVal}"> --%>
+							<tr id="notproduct" style="background-color: #fff;">
+							<td colspan="10" style="font-size: 20pt; color: gray;"><span>장바구니에 등록된 상품이 없습니다</span></td> 
+							</tr>
+<%-- 						</c:if> --%>
 <%-- 					</c:forEach>									 --%>
 <%-- 				</c:if> --%>
 				</tbody>
@@ -179,7 +184,7 @@
 			<div style="margin:10px 0;">
 				<span style="margin: 0 10px;" class="btnfloat">선택상품을</span>
 				<button class="bttn default btnfloat" style="background-color:gray; color:#fff;">x 삭제하기</button>&nbsp;
-
+			
 				<button class="bttn default backbtn btnfloat2">장바구니 비우기</button>
 				<button class="bttn default backbtn btnfloat2">견적서 출력</button>
 				<span class="clearboth"></span>

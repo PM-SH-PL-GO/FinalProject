@@ -192,7 +192,7 @@ public class SangHtest {
 			e.printStackTrace();
 		}
 	}
-//	@Test
+	@Test
 	 void selectWishListById(){
 		String member_id = "member3";
 		List<Lecture> wishall = new ArrayList<Lecture>();

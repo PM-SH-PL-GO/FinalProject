@@ -140,11 +140,13 @@ public class LectureController {
 	
 	@RequestMapping(value= "/wishlist")
 	public String WishView(HttpSession session, Model model)throws FindException {
-		String member_id = (String)session.getAttribute("loginInfo");
-		List<Lecture> wishall = new ArrayList<>();
+//		String member_id = (String)session.getAttribute("loginInfo");
+		String member_id = "member2"; 
+		List<Lecture> wishall =new ArrayList<>();
 		try {
-			service.findWishListById(member_id);
-			return "wishlist";
+			 wishall = service.findWishListById(member_id);
+			model.addAttribute("wishListVal", wishall);
+			return "/wishlist";
 		} catch (FindException e) {
 			e.printStackTrace();
 			Logger.info("error");
