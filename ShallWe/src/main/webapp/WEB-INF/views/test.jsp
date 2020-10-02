@@ -53,19 +53,12 @@ $(document).ready(function() {
          , success : function ( responseData ) {
         	 console.log("responseData ::: " + responseData);
        		 alert('삭제완료');
+        	 location.reload();
          }
       }); // end of ajax
    });
 	
 	
-	//-- lecture 객체 조회
-	var lectureAreaObj = $('#lectureArea');
-	$.ajax({
-		url:"${contextPath}/"
-		, method : 'GET' 
-		, data: { }
-	}); //end of ajax;
-
 	//- 강의결제하기 기능 
 	var insertMemberLectureHistroyObj = $('#insertMemberLectureHistroy');
 	insertMemberLectureHistroyObj.on('click' , function () {

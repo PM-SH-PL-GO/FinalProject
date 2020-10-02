@@ -49,7 +49,6 @@ $(function(){
 	// 강사후기등록 버튼 클릭시 발생 이벤트
 	$("div.reviewAdd").on('click', function (e) { 
 		var $lectureId = $(this).find('input[name=lectureId]').val();
-		
 		$.ajax({ 
 			url: '${contextPath}/reviewAdd'
 			, method : 'GET'
@@ -60,6 +59,24 @@ $(function(){
 			}
 		}); 
 	}); // end of 강사 후기 등록 버튼
+	
+	// 강사후기삭제 버튼 클릭시 발생 이벤트
+	$("div.reviewRemove").on('click', function (e) { 
+		var $lectureId = $(this).find('input[name=lectureId]').val();
+		$.ajax({
+		    url: "${contextPath}/removeReview"
+		    , method : 'GET'
+		    , data : {"lecture_id" : $lectureId}
+		    , success : function ( responseData ) {
+		  	  if( responseData == 'success') {
+		  		  alert("후기삭제 성공!");
+		  	  } else {
+		  		  alert("후기삭제 실패!")
+		  	  }
+		   	 location.reload();
+		    }
+		}); // end of ajax
+	}); // end of 강사 후기 삭제
 
 	// 강의결제취소 이벤트
 	$("div.lecture_cancle").on('click', function (e) { 
@@ -197,7 +214,11 @@ $(function(){
 										class="properties__footer d-flex justify-content-between align-items-center">
 										<h3><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###"/>원</h3>
 										<div class="heart reviewAdd"">
-											<img src="/shallwe/assets/img/gallery/performance.png" width="30px" alt="강사후기" title="강사후기">
+											<img src="/shallwe/assets/img/gallery/performance.png" width="30px" alt="강사후기등록" title="강사후기등록">
+											<input type="hidden" name="lectureId" value="${lecture.lecture_id}">
+										</div>
+										<div class="heart reviewRemove"">
+											<img src="/shallwe/assets/img/gallery/performance.png" width="30px" alt="강사후기삭제" title="강사후기삭제">
 											<input type="hidden" name="lectureId" value="${lecture.lecture_id}">
 										</div>
 									</div>

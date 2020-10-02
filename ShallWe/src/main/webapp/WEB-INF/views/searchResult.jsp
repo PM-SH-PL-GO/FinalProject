@@ -17,6 +17,7 @@
 	float : center;
 	width: 70%;
 }
+
 </style>
 <!-- script area -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -129,7 +130,7 @@
 										onblur="this.placeholder = 'Search Keyword'" id="searchText">
 								</div>
 							</div>
-							<button id="searchBtn" type="submit">Search</button>
+							<button id="searchBtn" type="submit"  style="cursor: pointer;">Search</button>
 						</form>
 					</aside>
 				</div>
@@ -181,7 +182,7 @@
 									<p>${stats.count}</p>
 									<h3>
 										<label>강의명: </label>
-										<a class="lecture_detail">${lecture.lecture_title}
+										<a class="lecture_detail"  style="cursor: pointer;">${lecture.lecture_title}
 											<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>
 										</a>
 									</h3>
@@ -195,7 +196,7 @@
 								<div class="properties__footer d-flex justify-content-between align-items-center">
 									<h3><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###원"/></h3>
 									<div class="heart">
-										<img class="shoppingCartImg" src="${contextPath}/assets/img/elements/shopping-cart.png"
+										<img class="shoppingCartImg"  style="cursor: pointer;" src="${contextPath}/assets/img/elements/shopping-cart.png"
 											width="30px" alt="강의찜하기" title="강의찜하기">
 										<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>								
 									</div>

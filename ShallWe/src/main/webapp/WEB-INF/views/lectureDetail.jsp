@@ -44,6 +44,7 @@ $(document).ready(function() {
 		, data : {"tutor_id": "${lecture.tutor.member.member_id}",
 				  "category_id":"${lecture.lectureCategory.lecture_category_id}"}
 		, success : function (responseData) {
+			console.log(responseData);
 			$reviewAreaObj.append(responseData);
 		}
 	}); // end of ajax
@@ -72,12 +73,10 @@ $(document).ready(function() {
 	$cancelBtnObj.on("click", function() {
 		$.ajax({
 			url: "${contextPath}/updateMemberLectureHistory"
-			, method: "POST"
-			, data : {"lecture_category_id" : "${lecture.lectureCategory.lecture_category_id}" ,
-					  "lecture_id" : "${lecture.lecture_id}"}
+			, method: "GET"
+			, data : {"lecture_id" : "${lecture.lecture_id}"}
 			, success: function(responseData) {
-				let responseObj = JSON.parse(responseData);
-				if (responseObj.status == "success") {
+				if (responseData == "success") {
 					alert("강의 결제 취소가 정상적으로 처리 되었습니다.");
 				} else {
 					alert("강의 결제 취소가 실패했습니다.");
