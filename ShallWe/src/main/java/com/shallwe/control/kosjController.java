@@ -28,9 +28,7 @@ import com.shallwe.model.ReviewBean;
 import com.shallwe.service.LectureService;
 import com.shallwe.service.ReviewService;
 import com.shallwe.vo.Lecture;
-import com.shallwe.vo.Member;
 import com.shallwe.vo.Review;
-import com.shallwe.vo.Tutor;
 
 import lombok.extern.log4j.Log4j;
 
@@ -55,20 +53,20 @@ public class kosjController {
 	
 	// 강의 후기 등록 화면 요청
 	@RequestMapping(value = "/reviewAdd", method = RequestMethod.GET)
-	public ModelAndView reviewAdd(HttpSession session) {
+	public ModelAndView reviewAdd(HttpSession session, @RequestParam (value="lecture_id") String lecture_id) throws FindException {
 		String member_id = (String)session.getAttribute("loginInfo");
-		ModelAndView modelAndView = new ModelAndView();
-
-		Member member = new Member();
-		member.setMember_id(member_id);
-		Tutor tutor = new Tutor();
-		tutor.setMember(member);
 		Lecture lecture = new Lecture();
-		lecture.setLecture_img("lecture_test3.jpg");
-		lecture.setTutor(tutor);
-		lecture.setLecture_title("마케링");
+
+		try {
+			lecture = lectureService.searchLectureByLectureId(lecture_id);
 		
-		modelAndView.addObject("lecture" , lecture);
+		} catch (FindException e) {
+			e.printStackTrace();
+		}
+		ModelAndView modelAndView = new ModelAndView();
+		log.info("강의후기등록 : " + lecture);
+		modelAndView.addObject("lecture", lecture);
+		modelAndView.addObject("member_id", member_id);
 		modelAndView.setViewName("/reviewAdd");
 		
 		return modelAndView;
@@ -78,19 +76,20 @@ public class kosjController {
 	//--- review 등록
 	@RequestMapping(value = "/reviewAddmethod", method = RequestMethod.POST)
 	@ResponseBody
-	public ModelAndView insertReview(@RequestBody ReviewBean reviewBean ) throws AddException {
+	public ModelAndView insertReview(HttpSession session, @RequestBody ReviewBean reviewBean ) throws AddException {
+		if ( reviewBean.getMemberId() == null ) {
+			String memberId = (String)session.getAttribute("loginInfo");
+			reviewBean.setMemberId(memberId);
+		} 
 		
 		ModelAndView modelAndView = new ModelAndView();
 		try {
 			reviewService.insertReview(reviewBean);
-			modelAndView.addObject("status", "success");
-			modelAndView.setViewName("/success");
+			modelAndView.setViewName("/reviewAdd");
 			
 		} catch (AddException e) {
 			e.printStackTrace();
-			modelAndView.addObject("status", "fail");
 			modelAndView.addObject("errMsg", e.getMessage());
-			modelAndView.setViewName("/fail");
 		}
 		return modelAndView;
 	}
@@ -119,9 +118,11 @@ public class kosjController {
 		
 		ModelAndView modelAndView = new ModelAndView();
 
+		List<Lecture> list = new ArrayList<Lecture>();
 		try {
-			modelAndView = lectureService.searchLecture(map);
+			list = lectureService.searchLecture(map);
 			log.info(modelAndView.getModelMap()); 
+			modelAndView.addObject("list", list);
 			modelAndView.setViewName("/searchResult");
 			
 		} catch (FindException e) {
@@ -162,16 +163,20 @@ public class kosjController {
 	
 	@RequestMapping(value = "/insertMemberLectureHistory", method = RequestMethod.POST)
 	@ResponseBody
-	public ModelAndView insertMemberLectureHistory( HttpSession session,
-			@RequestParam(value="lecture_category_id") String lecture_category_id, 
-													@RequestParam(value="lecture_id") String lecture_id
+	public ModelAndView insertMemberLectureHistory( HttpSession session, @RequestParam(value="lecture_id") String lecture_id
 	) throws AddException {
 		
 		log.info(" insertMemberLectureHistory 호출했어용~");
 		String member_id = (String)session.getAttribute("loginInfo");
+		Lecture lecture = new Lecture();
+		try {
+			lecture = lectureService.searchLectureByLectureId(lecture_id);
+		} catch (FindException e1) {
+			e1.printStackTrace();
+		}
 		
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("lecture_category_id", lecture_category_id);
+		map.put("lecture_category_id", lecture.getLectureCategory().getLecture_category_id());
 		map.put("lecture_id", lecture_id);
 		map.put("member_id", member_id);
 		
@@ -189,31 +194,29 @@ public class kosjController {
 	}
 	
 	
-	@RequestMapping(value = "/updateMemberLectureHistory", method = {RequestMethod.GET,RequestMethod.POST})
-	public ModelAndView updateMemberLectureHistory( HttpSession session, @RequestParam(value="lecture_category_id") String lecture_category_id, 
-													@RequestParam(value="lecture_id") String lecture_id
+	@RequestMapping(value = "/updateMemberLectureHistory", method = RequestMethod.GET)
+	public ModelAndView updateMemberLectureHistory( HttpSession session, @RequestParam(value="lecture_id") String lecture_id
 	) throws ModifyException {
 		ModelAndView modelAndView = new ModelAndView();
 
-		String member_id = (String) session.getAttribute("loginInfo");
-		if ( member_id == null ) { 
-			throw new ModifyException("로그인 되지 않은 사용자의 접근입니다.");
+		String member_id = (String)session.getAttribute("loginInfo");
+		Lecture lecture = new Lecture();
+		try {
+			lecture = lectureService.searchLectureByLectureId(lecture_id);
+		} catch (FindException e1) {
+			e1.printStackTrace();
 		}
 		
 		Map <String, Object> map = new HashMap<String, Object>();
-		map.put("lectureCategoryId", lecture_category_id);
+		map.put("lecture_category_id", lecture.getLectureCategory().getLecture_category_id());
 		map.put("memberId", member_id);
 		map.put("lectureId", lecture_id);
 		
 		try { 
 			lectureService.updateMemberLectureHistory(map);
-			modelAndView.addObject("status", "success");
-			modelAndView.setViewName("/success");
 			
 		} catch (ModifyException e) {
-			modelAndView.addObject("status", "fail");
 			modelAndView.addObject("errMsg", e.getMessage());
-			modelAndView.setViewName("/fail");
 			e.printStackTrace();
 		}
 		

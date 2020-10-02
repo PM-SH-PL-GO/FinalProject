@@ -82,7 +82,7 @@ $(document).ready(function() {
 
 <a href="${contextPath}/lectures/detail?lecture_id=3"> 강의상세보기 </a>
 <br/>
-<a href="${contextPath}/reviewAdd"> 후기등록테스트</a>
+<a href="${contextPath}/reviewAdd?lecture_id=3"> 후기등록테스트</a>
 
 <br/>
 <input type="button" id="insertMemberLectureHistroy" value="강의결제하기"/>
