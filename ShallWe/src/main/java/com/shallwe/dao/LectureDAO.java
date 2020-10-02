@@ -100,6 +100,29 @@ public class LectureDAO {
 			session.close();
 		}
 	} // end of selectLectureListBySearch method
+	
+	/**
+	 * @author Soojeong
+	 * @param String lecture_id
+	 * @return
+	 * @throws FindException
+	 */
+	public Lecture selectLectureByLectureId( String lecture_id) throws FindException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			Lecture lecuture = new Lecture();
+			lecuture = session.selectOne("LectureMapper.selectLectureByLectureId", lecture_id);
+			return lecuture;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+			
+		} finally {
+			session.close();
+		}
+	} // end of selectLectureListBySearch method
 
 	/**
 	 * 강의신청 후 결제
