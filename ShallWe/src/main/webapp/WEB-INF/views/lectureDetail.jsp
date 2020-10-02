@@ -54,8 +54,7 @@ $(document).ready(function() {
 		$.ajax({
 			url: "${contextPath}/insertMemberLectureHistory"
 			, method: "POST"
-			, data : {"lecture_category_id" : "${lecture.lectureCategory.lecture_category_id}" ,
-					  "lecture_id" : "${lecture.lecture_id}"}
+			, data : {"lecture_id" : "${lecture.lecture_id}"}
 			, success: function(responseData) {
 				let responseObj = JSON.parse(responseData);
 				if (responseObj.status == "success") {

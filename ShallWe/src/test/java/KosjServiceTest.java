@@ -94,10 +94,11 @@ class KosjServiceTest {
 		map.put("searchKey", searchKey[searchCondition]);
 		map.put("searchText", searchText);
 		
-		ModelAndView modelAndView = new ModelAndView();
+		List<Lecture> list = new ArrayList<Lecture>();
+		
 		try {
-			modelAndView = lectureService.searchLecture(map);
-			assertNull(modelAndView);
+			list = lectureService.searchLecture(map);
+			assertNull(list);
 			
 		} catch (FindException e) {
 			e.printStackTrace();
