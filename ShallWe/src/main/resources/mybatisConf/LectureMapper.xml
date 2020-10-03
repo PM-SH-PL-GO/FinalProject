@@ -40,7 +40,7 @@
 	<update id="cancelRequest" parameterType="Lecture">
 		UPDATE lecture
 		SET
-		LECTURE_STATE = #{lecture_state}
+		LECTURE_STATE = '취소대기'
 		WHERE LECTURE_ID = #{lecture_id}
 	</update>
 

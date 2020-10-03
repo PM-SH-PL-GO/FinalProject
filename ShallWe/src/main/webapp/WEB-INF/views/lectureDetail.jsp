@@ -70,12 +70,12 @@ $(document).ready(function() {
 	
 	let letidValue = $("input[name=listlecture_id]").val();
 	$("div[name=gotoDe]").click(function(){
-		location.href = "/shallwe/lectures/detail?lecture_id=" +letidValue;		
+		location.href = "${contextPath}/lectures/detail?lecture_id=" +letidValue;		
 	});
 
 	let letidendValue = $("input[name=listendlecture_id]").val();
 	$("div[name=gotoDeend]").click(function(){
-		location.href = "/shallwe/lectures/detail?lecture_id=" +letidendValue;		
+		location.href = "${contextPath}/lectures/detail?lecture_id=" +letidendValue;		
 	});
 	return false;
 }); // end of scriptLoad

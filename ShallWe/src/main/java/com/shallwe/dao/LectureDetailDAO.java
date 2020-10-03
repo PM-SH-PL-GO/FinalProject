@@ -49,7 +49,19 @@ public class LectureDetailDAO {
 			session.close();
 		}
 	}
-
+	
+	// 강의 취소 요청(강사) : 동일
+		public void cancelRequest(LectureDetail lectDe) throws ModifyException {
+			SqlSession session = sqlSessionFactory.openSession();
+			try {
+				session.update("LectureDetailMapper.cancelRequest", lectDe);
+			} catch (DataAccessException e) {
+				throw new ModifyException(e.getMessage());
+			} finally {
+				session.close();
+			}
+		}
+	
 	// 강의 상세 보기 : 동일
 	public LectureDetail lectureDetailView(Lecture lect) throws FindException {
 		LectureDetail le = null;

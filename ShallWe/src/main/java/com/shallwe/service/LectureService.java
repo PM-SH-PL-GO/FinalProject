@@ -85,6 +85,17 @@ public class LectureService {
 		}
 	}
 
+	// 강사 강의 취소 요청: 동일
+	@Transactional
+	public void tutorcancelLecture(Lecture lect, LectureDetail lectDe) throws ModifyException {
+		try {
+			lectureDAO.cancelRequest(lect);
+			lectureDetailDAO.cancelRequest(lectDe);
+		} catch (ModifyException e) {
+			e.printStackTrace();
+		}
+	}
+
 	// 학생 강의 조회 : 동일
 	public List<MemberLectureHistory> memberLectureList(MemberLectureHistory mlth) throws FindException {
 		return memberLectureHistoryDAO.memberMyClassList(mlth);

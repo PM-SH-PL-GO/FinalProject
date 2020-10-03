@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+<c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 
@@ -69,23 +69,27 @@
 						alert("강의 소개를 입력하세요.");
 						$("lectureIntroValue").focus();
 					} else {
-						$.ajax({
-							url : "${contextPath}/lectures/insert",
-							method : "POST",
-							contentType : false,
-							processData : false,
-							data : formData,
-							success : function(data) {
-								let responseObj = JSON.parse(data);
-								if (responseObj.status == "success") {
-									alert("강의 등록이 정상적으로 되었습니다.");
-								} else {
-									alert("강의 등록에 실패했습니다.");
-									$("lectureTitleValue").focus();
+						if (confirm("등록된 강의는 수정할 수 없습니다! 등록하시겠습니까?") == true) {
+							$.ajax({
+								url : "${contextPath}/lectures/insert",
+								method : "POST",
+								contentType : false,
+								processData : false,
+								data : formData,
+								success : function(data) {
+									let responseObj = JSON.parse(data);
+									if (responseObj.status == "success") {
+										alert("강의 등록이 정상적으로 되었습니다.");
+									} else {
+										alert("강의 등록에 실패했습니다.");
+										$("lectureTitleValue").focus();
+									}
 								}
-							}
-						});
-						return false;
+							});
+							return false;
+						} else {
+							return;
+						}
 					}
 				});
 	});

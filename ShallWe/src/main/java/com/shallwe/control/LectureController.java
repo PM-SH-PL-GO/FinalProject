@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
+import com.shallwe.exception.ModifyException;
 import com.shallwe.service.LectureService;
 import com.shallwe.service.TutorService;
 import com.shallwe.vo.Lecture;
@@ -134,7 +135,22 @@ public class LectureController {
 		}
 		return mnv;
 	}
-
+	
+	// 강사 강의 취소 요청 : 동일
+		@PostMapping(value = "/tutorcancelLecture")
+		public ModelAndView tutorcancelLecture(LectureDetail lectDe) throws ModifyException {
+			ModelAndView mnv = new ModelAndView();
+			try {
+				service.tutorcancelLecture(lectDe.getLecture(), lectDe);
+				mnv.setViewName("/success");
+			} catch (ModifyException e) {
+				e.printStackTrace();
+				mnv.setViewName("/fail");
+				mnv.addObject("errorMsg", e.getMessage());
+			}
+			return mnv;
+		}
+	
 	// 학생 강의 조회 : 동일
 	@RequestMapping(value = "/memberLecture")
 	public ModelAndView memberLectureView(HttpSession session, MemberLectureHistory mlth) {
