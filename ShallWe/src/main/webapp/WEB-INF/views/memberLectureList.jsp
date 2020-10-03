@@ -1,8 +1,9 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 <head>
@@ -28,7 +29,7 @@
 <link rel="stylesheet" href="/shallwe/assets/css/style.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-</head>
+
 <script>
 <c:set var="now" value="<%=new java.util.Date()%>" />
 <fmt:formatDate pattern="yyyy-MM-dd" value="${now}" />
@@ -42,10 +43,63 @@ $(function(){
 	$("div[name=gotoDeend]").click(function(){
 		location.href = "/shallwe/lectures/detail?lecture_id=" +letidendValue;		
 	});
-	return false;
-});
+	//return false;
+	
+	
+	// 강사후기등록 버튼 클릭시 발생 이벤트
+	$("div.reviewAdd").on('click', function (e) { 
+		var $lectureId = $(this).find('input[name=lectureId]').val();
+		$.ajax({ 
+			url: '${contextPath}/reviewAdd'
+			, method : 'GET'
+			, data : {"lecture_id" : $lectureId}
+			, success : function (responseData) {
+				var reviewModalObj = $("div.reviewModal");
+				reviewModalObj.append(responseData);
+			}
+		}); 
+	}); // end of 강사 후기 등록 버튼
+	
+	// 강사후기삭제 버튼 클릭시 발생 이벤트
+	$("div.reviewRemove").on('click', function (e) { 
+		var $lectureId = $(this).find('input[name=lectureId]').val();
+		$.ajax({
+		    url: "${contextPath}/removeReview"
+		    , method : 'GET'
+		    , data : {"lecture_id" : $lectureId}
+		    , success : function ( responseData ) {
+		  	  if( responseData == 'success') {
+		  		  alert("후기삭제 성공!");
+		  	  } else {
+		  		  alert("후기삭제 실패!")
+		  	  }
+		   	 location.reload();
+		    }
+		}); // end of ajax
+	}); // end of 강사 후기 삭제
+
+	// 강의결제취소 이벤트
+	$("div.lecture_cancle").on('click', function (e) { 
+		var $lectureId = $(this).find('input[name=lectureId]').val();
+		
+		$.ajax({ 
+			url: '${contextPath}/updateMemberLectureHistory'
+			, method : 'GET'
+			, data : {"lecture_id" : $lectureId}
+			, success : function (responseData) {
+				alert("강의 취소 처리 되었습니다.");
+			}
+		}); 
+	}); // end of 강의결제취소 버튼
+}); // end of jsp load 이벤트
 </script>
+</head>
 <body>
+<!-- topbar Start -->
+<div class="topMenu">
+	<jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
+</div>
+<!-- topbar End -->
 	<main>
 		<!--? 강의목록 Start -->
 		<div class="popular-directorya-area section-padding40 fix">
@@ -96,9 +150,9 @@ $(function(){
 									<div
 										class="properties__footer d-flex justify-content-between align-items-center">
 										<h3><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###"/>원</h3>
-										<div class="heart">
-											<img src="/shallwe/assets/img/gallery/cancel.png"
-												width="30px" alt="수강취소" title="수강취소">
+										<div class="heart lecture_cancle">
+											<img src="/shallwe/assets/img/gallery/cancel.png" width="30px" alt="수강취소" title="수강취소">
+											<input type="hidden" name="lectureId" value="${lecture.lecture_id}">
 										</div>
 									</div>
 								</div>
@@ -159,9 +213,13 @@ $(function(){
 									<div
 										class="properties__footer d-flex justify-content-between align-items-center">
 										<h3><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###"/>원</h3>
-										<div class="heart">
-											<img src="/shallwe/assets/img/gallery/performance.png"
-												width="30px" alt="강사후기" title="강사후기">
+										<div class="heart reviewAdd"">
+											<img src="/shallwe/assets/img/gallery/performance.png" width="30px" alt="강사후기등록" title="강사후기등록">
+											<input type="hidden" name="lectureId" value="${lecture.lecture_id}">
+										</div>
+										<div class="heart reviewRemove"">
+											<img src="/shallwe/assets/img/gallery/performance.png" width="30px" alt="강사후기삭제" title="강사후기삭제">
+											<input type="hidden" name="lectureId" value="${lecture.lecture_id}">
 										</div>
 									</div>
 								</div>
@@ -173,6 +231,8 @@ $(function(){
 			</div>
 		</div>
 		<!--? 완료 End -->
+		<div class= "reviewModal"> </div>
+		
 	</main>
 	<!-- Scroll Up -->
 	<div id="back-top">

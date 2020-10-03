@@ -2,32 +2,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <c:set var="lecture" value="${requestScope['lecture']}"/>
+<c:set var="member_id" value="${requestScope['member_id']}"/>
 
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="utf-8">
-<title>Shallwe-함께 배우는 교육공간</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="shortcut icon" type="image/x-icon"
-	href="/shallwe/assets/img/favicon.ico">
-
-<!-- CSS here -->
-<link rel="stylesheet" href="assets/css/bootstrap.min.css">
-<link rel="stylesheet" href="assets/css/owl.carousel.min.css">
-<link rel="stylesheet" href="assets/css/slicknav.css">
-<link rel="stylesheet" href="assets/css/flaticon.css">
-<link rel="stylesheet" href="assets/css/progressbar_barfiller.css">
-<link rel="stylesheet" href="assets/css/gijgo.css">
-<link rel="stylesheet" href="assets/css/animate.min.css">
-<link rel="stylesheet" href="assets/css/animated-headline.css">
-<link rel="stylesheet" href="assets/css/magnific-popup.css">
-<link rel="stylesheet" href="assets/css/fontawesome-all.min.css">
-<link rel="stylesheet" href="assets/css/themify-icons.css">
-<link rel="stylesheet" href="assets/css/slick.css">
-<link rel="stylesheet" href="assets/css/nice-select.css">
-<link rel="stylesheet" href="assets/css/style.css">
-
 <style>
 /* modal CSS */
 .md_top {
@@ -244,10 +223,10 @@ $(document).ready(function() {
 	const closeModal = () => {
 		modal.classList.add("hidden");
 	}
-	//클릭 이벤트
-	openButton.addEventListener("click", openModal);
-	closeButton.addEventListener("click", closeModal);
 	
+	openModal();
+	//클릭 이벤트
+	closeButton.addEventListener("click", closeModal);
 	/*------------review후기 입력 modal end------------------*/
 	
 	/*------------만족도 점수 매기기  start------------------*/
@@ -292,26 +271,14 @@ $(document).ready(function() {
 	/*------------review입력창 후기 입력시 글자수세기   end------------------*/
 	/*------------review 후기 데이터 등록   start------------------*/
  	// 후기 등록하기 버튼 클릭 시 
- 	$reviewFormObj.on('submit', function e () {
-/*  		private String memberId;
- 		private String lectureCategoryId;
- 		private String reviewContent;
- 		private int lectureId;
- 		private int reviewScore; */
-
- 		
-/*  		var memberId='member2';
- 		var lectureCategoryId = 'MA';
+ 	var $reviewAddButton = $reviewFormObj.find("button[type=button]");
+ 	$reviewAddButton.on('click', function e () {
+ 		var memberId= "${member_id}";
+ 		var lectureCategoryId = "${lecture.lectureCategory.lecture_category_id}";
  		var reviewContent = $reviewCommentObj.val();
- 		var lectureId = 3;
- 		var reviewScore = $('.numValue').val(); */
-
- 		var memberId='member1';
- 		var lectureCategoryId = 'MA';
- 		var reviewContent = $reviewCommentObj.val();
- 		var lectureId = 3;
+ 		var lectureId = "${lecture.lecture_id}";
  		var reviewScore = $('.numValue').val();
- 		var tutorId = 'member3';
+ 		var tutorId = "${lecture.tutor.member.member_id}";
  		
  		var reviewBean = new Object(); 
  		reviewBean.memberId = memberId;
@@ -322,14 +289,14 @@ $(document).ready(function() {
  		reviewBean.tutorId = tutorId;
  		var jsonData = JSON.stringify(reviewBean);
  		
- 		
  		$.ajax({
- 			url: "/shallwe/reviewAddmethod"
+ 			url: "${contextPath}/reviewAddmethod"
  			, method : 'POST'
  			, contentType: 'application/json'
  			, data : jsonData
  			, success : function ( responseData ) {
- 				console.log(responseData);
+ 				alert("후기등록 성공했습니다.");
+ 				location.reload();
  			} // end of success
  		}); //end of ajax 
  	}); // end of reviewInsert
@@ -342,7 +309,7 @@ $(document).ready(function() {
 </head>
 
 <body>
-	<button id="open">모달창 열기</button>
+<!-- 	<button id="open">모달창 열기</button> -->
 	<div class="modal hidden">
 		<div class="md_content">
 			<div class="md_top">
@@ -378,7 +345,7 @@ $(document).ready(function() {
 					<!-- end of row -->
 
 					<div class="form-group">
-						<button type="submit"
+						<button type="button"
 							class="button button-contactForm btn_1 boxed-btn">등록하기</button>
 					</div>
 				</form>

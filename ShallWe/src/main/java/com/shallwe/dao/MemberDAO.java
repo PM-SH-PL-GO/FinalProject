@@ -222,6 +222,8 @@ public class MemberDAO {
 			session.update("MemberMapper.updateTutorState", map);
 		}catch(DataAccessException e) {
 			throw new ModifyException();
+		}finally {
+			session.close();
 		}
 	}
 	//비밀번호(임시비밀번호):경찬

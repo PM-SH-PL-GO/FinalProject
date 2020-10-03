@@ -3,12 +3,15 @@ package com.shallwe.control;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.net.ssl.SSLEngineResult.Status;
 import javax.security.auth.message.callback.PrivateKeyCallback.Request;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -121,6 +124,21 @@ public class MemberController {
 		}
 		
 		return modelAndView;
+		
+	}
+	
+	//강사 여부 확인하기
+	@RequestMapping("/tutorYN")
+	public ResponseEntity<String> myInfo(HttpSession session){
+		String member_id = (String)session.getAttribute("loginInfo");
+		try {
+			MemberInfoBean mib = service.findById(member_id);
+			String YN = mib.getTutorYN();
+			return ResponseEntity.status(HttpStatus.OK).body(YN);
+		} catch (FindException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("null");
+		}
 		
 	}
 	

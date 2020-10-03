@@ -53,19 +53,12 @@ $(document).ready(function() {
          , success : function ( responseData ) {
         	 console.log("responseData ::: " + responseData);
        		 alert('삭제완료');
+        	 location.reload();
          }
       }); // end of ajax
    });
 	
 	
-	//-- lecture 객체 조회
-	var lectureAreaObj = $('#lectureArea');
-	$.ajax({
-		url:"${contextPath}/"
-		, method : 'GET' 
-		, data: { }
-	}); //end of ajax;
-
 	//- 강의결제하기 기능 
 	var insertMemberLectureHistroyObj = $('#insertMemberLectureHistroy');
 	insertMemberLectureHistroyObj.on('click' , function () {
@@ -82,7 +75,7 @@ $(document).ready(function() {
 
 <a href="${contextPath}/lectures/detail?lecture_id=3"> 강의상세보기 </a>
 <br/>
-<a href="${contextPath}/reviewAdd"> 후기등록테스트</a>
+<a href="${contextPath}/reviewAdd?lecture_id=3"> 후기등록테스트</a>
 
 <br/>
 <input type="button" id="insertMemberLectureHistroy" value="강의결제하기"/>

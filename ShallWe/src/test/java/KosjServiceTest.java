@@ -10,8 +10,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.shallwe.control.EmailController;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
@@ -37,7 +39,7 @@ class KosjServiceTest {
 	@Autowired
 	LectureService lectureService;
 
-	@Test
+	//@Test
 	@DisplayName("ReviewService TEST : insertReview method")
 	void insertReviewDAOTest() {
 		
@@ -94,10 +96,11 @@ class KosjServiceTest {
 		map.put("searchKey", searchKey[searchCondition]);
 		map.put("searchText", searchText);
 		
-		ModelAndView modelAndView = new ModelAndView();
+		List<Lecture> list = new ArrayList<Lecture>();
+		
 		try {
-			modelAndView = lectureService.searchLecture(map);
-			assertNull(modelAndView);
+			list = lectureService.searchLecture(map);
+			assertNull(list);
 			
 		} catch (FindException e) {
 			e.printStackTrace();
@@ -157,6 +160,26 @@ class KosjServiceTest {
 			log.info(e.getMessage());
 		}
 	} // end insertMemberLectureHistory();
+
+	
+	
+	/**
+	 * @author Soojeong
+	 * 강의결제 이메일 발송
+	 */
+	@Test
+	@DisplayName("강의결제 이메일 발송 TEST ")
+	void sendEmail()  {
+		EmailController email = new EmailController();
+		Lecture lecture = null;
+		try {
+			lecture = lectureService.searchLectureByLectureId("3");
+		} catch (FindException e) {
+			e.printStackTrace();
+		}
+		email.successLecture(lecture);
+		
+	} // end sendEmail
 	
 
 }

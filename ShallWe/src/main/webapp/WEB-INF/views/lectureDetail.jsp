@@ -44,6 +44,7 @@ $(document).ready(function() {
 		, data : {"tutor_id": "${lecture.tutor.member.member_id}",
 				  "category_id":"${lecture.lectureCategory.lecture_category_id}"}
 		, success : function (responseData) {
+			console.log(responseData);
 			$reviewAreaObj.append(responseData);
 		}
 	}); // end of ajax
@@ -54,14 +55,31 @@ $(document).ready(function() {
 		$.ajax({
 			url: "${contextPath}/insertMemberLectureHistory"
 			, method: "POST"
-			, data : {"lecture_category_id" : "${lecture.lectureCategory.lecture_category_id}" ,
-					  "lecture_id" : "${lecture.lecture_id}"}
+			, data : {"lecture_id" : "${lecture.lecture_id}"}
 			, success: function(responseData) {
 				let responseObj = JSON.parse(responseData);
 				if (responseObj.status == "success") {
 					alert("강의 신청이 정상적으로 되었습니다.");
 				} else {
 					alert("강의 신청에 실패했습니다.");
+					$("#applyBtn").focus();
+				}
+			} 
+		}); 
+	}); // end of 강의신청, 강의결제페이지 호출 
+
+	// 강의결제취소, 강의결제취소 처리
+	var $cancelBtnObj = $('#cancelBtn');
+	$cancelBtnObj.on("click", function() {
+		$.ajax({
+			url: "${contextPath}/updateMemberLectureHistory"
+			, method: "GET"
+			, data : {"lecture_id" : "${lecture.lecture_id}"}
+			, success: function(responseData) {
+				if (responseData == "success") {
+					alert("강의 결제 취소가 정상적으로 처리 되었습니다.");
+				} else {
+					alert("강의 결제 취소가 실패했습니다.");
 					$("#applyBtn").focus();
 				}
 			} 
@@ -161,6 +179,7 @@ $(document).ready(function() {
 								원
 							</h4>
 							<a href="#" id="applyBtn" class="genric-btn primary-border mt-10">신청</a>
+							<a href="#" id="cancelBtn" class="genric-btn primary-border mt-10">결제취소</a>
 							<a href="#" class="genric-btn primary-border mt-10">찜하기</a>
 							<div class="d-flex mt-10">
 								<h6 class="mr-10">수강일시:</h6>

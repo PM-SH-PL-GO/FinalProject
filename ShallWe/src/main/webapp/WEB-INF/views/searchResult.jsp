@@ -4,28 +4,6 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <c:set var="lectureList" value="${requestScope['list']}"/>
 
-<!doctype html>
-<html class="no-js" lang="zxx">
-<head>
-<meta charset="utf-8">
-<meta http-equiv="x-ua-compatible" content="ie=edge">
-<title>Shallwe-함께 배우는 교육공간</title>
-<meta name="description" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
-
-<!-- CSS here -->
-<link rel="stylesheet" href="assets/css/bootstrap.min.css">
-<link rel="stylesheet" href="assets/css/owl.carousel.min.css">
-<link rel="stylesheet" href="assets/css/slicknav.css">
-<link rel="stylesheet" href="assets/css/animate.min.css">
-<link rel="stylesheet" href="assets/css/hamburgers.min.css">
-<link rel="stylesheet" href="assets/css/magnific-popup.css">
-<link rel="stylesheet" href="assets/css/fontawesome-all.min.css">
-<link rel="stylesheet" href="assets/css/themify-icons.css">
-<link rel="stylesheet" href="assets/css/slick.css">
-<link rel="stylesheet" href="assets/css/nice-select.css">
-<link rel="stylesheet" href="assets/css/style.css">
 <style>
 .left_menu {
 	float: left;
@@ -36,9 +14,10 @@
 	text-align: center;
 }
 .right_menu { 
-		float : center;
-		width: 70%;
+	float : center;
+	width: 70%;
 }
+
 </style>
 <!-- script area -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -85,7 +64,7 @@
 // 			location.href = url;
 // 		});
 		
-		var lectureDetail = $('a#lecture_detail');
+		var lectureDetail = $('a.lecture_detail');
 		lectureDetail.click(function e () {
 			let lecture_code = $(this).find('input[name=lecture_code]').val();
 			var url = '${contextPath}/lectures/detail?lecture_id='+lecture_code;
@@ -94,21 +73,12 @@
 		
 		
 		// 강의찜하기
-		var lectureLike = $('div.lecture_Like');
+		var lectureLike = $('div.lectureLike');
 		$lectureLike.on('click', 'input[name=lecture_code]', function(e){
 			let lecture_code = $(this).find('input[name=lecture_code]').val();
 			var url = '${contextPath}/lectures/detail?lecture_id='+lecture_code;
 			location.href = url;
-		} 
-		
-// 		var lectureDetailhrefObj = $('a#lecture_detail');
-// 		lectureDetailhrefObj.click( function (e)  {
-// 			var lectureCode = lectureDetailhrefObj.find('input[name=lecture_code]').val();
-// 			console.log("lecture_code : " + lecture_code);
-// 			var url = '/shallwe/lectures/detail?lecture_id='+lecture_code;
-// 			console.log(url);
-// 			//location.href
-// 		});
+		});
 		
 	}); // end of 
 	
@@ -160,7 +130,7 @@
 										onblur="this.placeholder = 'Search Keyword'" id="searchText">
 								</div>
 							</div>
-							<button id="searchBtn" type="submit">Search</button>
+							<button id="searchBtn" type="submit"  style="cursor: pointer;">Search</button>
 						</form>
 					</aside>
 				</div>
@@ -212,7 +182,7 @@
 									<p>${stats.count}</p>
 									<h3>
 										<label>강의명: </label>
-										<a id="lecture_detail">${lecture.lecture_title}
+										<a class="lecture_detail"  style="cursor: pointer;">${lecture.lecture_title}
 											<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>
 										</a>
 									</h3>
@@ -222,15 +192,13 @@
 									</h4>
 									<h4><label>강사명: </label>${lecture.tutor.tutor_nickname}</h4>
 									<h4><label>현재인원: </label> ${lecture.lecture_current} <label>/최대인원: </label> ${lecture.lecture_max}</h4>
-									
 								</div>
 								<div class="properties__footer d-flex justify-content-between align-items-center">
-									<div class="restaurant-name">
-										<h3><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###원"/></h3>
-										<div class="lecture_Like">
-											<img src="/shallwe/assets/img/elements/shopping-cart.png" alt="강의찜하기">
-											<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>
-										</div>
+									<h3><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###원"/></h3>
+									<div class="heart">
+										<img class="shoppingCartImg"  style="cursor: pointer;" src="${contextPath}/assets/img/elements/shopping-cart.png"
+											width="30px" alt="강의찜하기" title="강의찜하기">
+										<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>								
 									</div>
 								</div>
 							</div>

@@ -1,16 +1,11 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <!doctype html>
 <html class="no-js" lang="zxx">
 <head>
 <meta charset="utf-8">
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<meta http-equiv="x-ua-compatible" content="ie=edge">
-<title>DirectoryListing</title>
-<meta name="description" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="shortcut icon" type="image/x-icon"
-	href="/shallwe/assets/img/favicon.ico">
 <style>
 .btn {
 	background: #00dbd5;
@@ -44,42 +39,100 @@
 <script type="text/javascript"
 	src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script type="text/javascript"
-	src="/shallwe/smartEditor/js/HuskyEZCreator.js" charset="utf-8"></script>
+	src="${contextPath}/smartEditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 <script>
-	$(function() {
-		var oEditors = [];
-		nhn.husky.EZCreator.createInIFrame({
-			oAppRef : oEditors,
-			elPlaceHolder : "weditor",
-			sSkinURI : "/shallwe/smartEditor/SmartEditor2Skin.html",
-			fCreator : "createSEditor2"
-		});
+$(function() {
+	
+	//----------스마트에디터 START---------
+	var oEditors = [];
+	nhn.husky.EZCreator.createInIFrame({
+		oAppRef : oEditors,
+		elPlaceHolder : "weditor",
+		sSkinURI : "${contextPath}/smartEditor/SmartEditor2Skin.html",
+		fCreator : "createSEditor2"
+	});
+	//----------스마트에디터 END---------
 
+	//----------글쓰기 Btn CLICK START---------
 	$("#writeBtn").click(function(){
-		console.log("들어오나요");
-		var $titleVal = $("#title").val();
-		var $contentVal = $("#weditor").val();
-		var $fileLoadtVal = $("#fileLoad").val();
-		var $formObj = $('#writeForm');
-		console.log("$formObj.serialize() ::: " + $formObj.serialize());
-		
-		
+		var form = $("#writeForm")[0];
+		var formData = new FormData(form);
+// 		var $titleVal = $("#title").val();
+		var val2 = oEditors.getById["weditor"].exec("UPDATE_CONTENTS_FIELD",[]);
+		this.contents=$('#weditor').val();
+        formData.set("studyBoard_content", this.contents);
+        formData.append("boardUpload", $("#fileLoad")[0].files[0]);
 		
 		$.ajax({
-			url : "/shallwe/board/writeBoard"
-			,contentType : "application/json; charset=utf-8"
+			url : "${contextPath}/board/writeBoard"
 			,method: 'post'
- 			,data: JSON.stringify($titleVal,$contentVal,$fileLoadtVal)
-			,success:function(data){
-				alert("성공");
+			,processData: false
+			,contentType: false
+			,data: formData
+			,success:function(board_id){
+				console.log("jsp입장!!")
+				var boardWrite = confirm("글쓰기를 완료했습니다. 작성글을 확인하시겠습니까?");
+				if(boardWrite){
+					console.log("작성글 나오세요"+board_id);
+					location.href="${contextPath}/board/detail/"+board_id;
+				}else{
+					console.log("여긴가!!");
+				}
 			}
-		,fail:function(){
-			alert("실패")
+		,error:function(){
+			alert("글작성에 실패했습니다.");
+			console.log("설마실패?!!");
+			location.reload();
 		}
 		});		
 	});
-
+		//----------글쓰기 Btn CLICK END---------
+		
+		//----------수정하기 Btn CLICK START---------
+	$("#updateBtn").click(function(){
+		var form = $("#writeForm")[0];
+		var formData = new FormData(form);
+		var val2 = oEditors.getById["weditor"].exec("UPDATE_CONTENTS_FIELD",[]);
+		this.contents=$('#weditor').val();
+        formData.set("studyBoard_content", this.contents);
+        formData.append("boardUpload", $("#fileLoad")[0].files[0]);		
+// 		if("${sb.studyBoard_id}"==""||"${sb.studyBoard_id}"==null){
+// 		}else{
+// 			studyBoard.studyBoard_id = "${sb.studyBoard_id}";
+// 		}
+		$.ajax({
+			url : "${contextPath}/board/updateBoard"
+			,method: 'post'
+			,processData: false
+			,contentType: false
+			,data: formData
+			,success:function(board_id){
+				var boardWrite = confirm("수정이 완료했습니다. 작성글을 확인하시겠습니까?");
+				if(boardWrite){
+					alert(board_id);
+					location.href="${contextPath}/board/detail/"+board_id;
+				}else{
+				}
+			}
+			,error:function(){
+				alert("글작성에 실패했습니다.");
+				location.reload();
+			}
+		});
 	});
+	//----------수정하기 Btn CLICK END---------
+	
+	//----------글쓰기 취소 Btn CLICK START---------
+	$("#cancelBtn").click(function(){
+		var boardCancel = confirm("글쓰기를 취소하시겠습니까?");
+		if(boardCancel){
+			location.href="${contextPath}/board/studyBoard"
+		}else{
+		}
+	});
+	//----------글쓰기 취소 Btn CLICK END---------
+
+});
 </script>
 </head>
 <!-- topbar Start -->
@@ -90,50 +143,56 @@
 </header>
 <!-- topbar End -->
 <main>
-	<div class="row slider-height1">
-		<div class="col-sm-6">
-			<h2 class="contact-title">글쓰기</h2>
-		</div>
-		<div class="col-lg-8">
-			<form class="form-contact contact_form" id="writeForm">
-				<div class="col-sm-6">
-					<h4>제목</h4>
-					<div class="form-group">
-						<input class="form-control valid" name="studyBoard_title"
-							id="title" type="text" onfocus="this.placeholder = ''"
-							onblur="this.placeholder = '제목을 입력하세요'" placeholder="제목을 입력하세요" value="${sb.studyBoard_title}">
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-12">
-						<h4>내용</h4>
-						<div class="form-group">
-							<textarea name="studyBoard_content" id="weditor" rows="10"
-								cols="100" placeholder="내용을 입력하세요">${sb.studyBoard_content}</textarea>
-						</div>
-					</div>
+	<section class="blog_area single-post-area section-padding">
+		<div class="row slider-height1">
+			<div class="col-sm-6">
+				<h2 class="contact-title">글쓰기</h2>
+			</div>
+			<div class="col-lg-8">
+				<form class="form-contact contact_form" id="writeForm" method="post" enctype="multipart/form-data">
 					<div class="col-sm-6">
-						<h4>파일첨부</h4>
-						<button class="btn">찾아보기</button>
+						<h4>제목</h4>
 						<div class="form-group">
-							<input class="form-control valid" name="studyBoard_fileName"
-								id="fileLoad" type="text" onfocus="this.placeholder = ''"
-								onblur="this.placeholder = '파일첨부'" placeholder="파일첨부" value="${sb.studyBoard_fileName}">
+							<input type="hidden" name="studyBoard_id" value="${sb.studyBoard_id}">
+							<input class="form-control valid" name="studyBoard_title"
+								id="title" type="text" onfocus="this.placeholder = ''"
+								onblur="this.placeholder = '제목을 입력하세요'" placeholder="제목을 입력하세요"
+								value="${sb.studyBoard_title}">
 						</div>
 					</div>
-				</div>
-				<div class="form-group mt-3">
-					<button type="button" class="button button-contactForm boxed-btn"
-						id="writeBtn">글쓰기</button>
-					<button type="button" class="button button-contactForm boxed-btn">취소</button>
-				</div>
-			</form>
+					<div class="row">
+						<div class="col-12">
+							<h4>내용</h4>
+							<div class="form-group">
+								<textarea name="studyBoard_content" id="weditor" rows="10"
+									cols="100" placeholder="내용을 입력하세요">${sb.studyBoard_content}</textarea>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<h4>파일첨부</h4>
+							<div class="form-group">
+								<input class="form-control valid" id="fileLoad" type="file" placeholder="파일첨부"
+									value="${sb.studyBoard_fileName}">
+							</div>
+						</div>
+					</div>
+					<div class="form-group mt-3">
+						
+							<c:choose>
+								<c:when test="${empty sb.studyBoard_title}">
+									<button type="button" class="button button-contactForm boxed-btn" id="writeBtn">글쓰기</button>
+								</c:when>
+								<c:otherwise>
+									<button type="button" class="button button-contactForm boxed-btn" id="updateBtn">수정하기</button>
+								</c:otherwise>
+							</c:choose>
+						<button type="button" class="button button-contactForm boxed-btn" id="cancelBtn">취소</button>
+					</div>
+				</form>
+			</div>
 		</div>
-	</div>
-	</div>
+		</div>
 	</section>
-	<!-- Contact Area End -->
-
 </main>
 <footer>
 	<div class="footer-wrapper pt-30">

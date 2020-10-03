@@ -44,23 +44,33 @@ public class LectureService {
 	 * @return List<Lecture>
 	 * @throws FindException
 	 */
-	public ModelAndView searchLecture(HashMap<String, Object> map) throws FindException {
+	public List<Lecture> searchLecture(HashMap<String, Object> map) throws FindException {
 		List<Lecture> list = new ArrayList<>();
-		ModelAndView modelAndView = new ModelAndView();
-
 		try {
 			list = lectureDAO.selectLectureListBySearch(map);
 
-			modelAndView.addObject("list", list);
-			modelAndView.addObject("status", "success");
-
 		} catch (FindException e) {
-			modelAndView.addObject("status", "fail");
-			modelAndView.addObject("errMsg", e.getMessage());
+			throw new FindException(e.getMessage());
 		}
-
-		return modelAndView;
-
+		return list;
+	}
+	
+	/**
+	 * @author Soojeong
+	 * @강의 검색 lecture_Id로 검색
+	 * @Param String lecture_Id
+	 * @return Lecture
+	 * @throws FindException
+	 */
+	public Lecture searchLectureByLectureId(String lecture_id) throws FindException {
+		Lecture lecture = new Lecture();
+		try {
+			lecture = lectureDAO.selectLectureByLectureId(lecture_id);
+		} catch (FindException e) {
+			throw new FindException(e.getMessage());
+		}
+		return lecture;
+		
 	}
 
 	// 강의 등록 : 동일
@@ -121,8 +131,6 @@ public class LectureService {
 	 */
 	public int insertMemberLectureHistory(Map<String, Object> map) throws AddException {
 		int result = 0;
-		// session 에서 값 받도록 처리할 것
-		String member_id = "member2";
 		try {
 			result = lectureDAO.insertMemberLectureHistory(map);
 
@@ -140,7 +148,7 @@ public class LectureService {
 	 * @return
 	 * @throws ModifyException
 	 */
-	public int updateMemberLectureHistory(HashMap<String, Object> map) throws ModifyException {
+	public int updateMemberLectureHistory(Map<String, Object> map) throws ModifyException {
 		int result = 0;
 		try {
 			result = lectureDAO.updateMemberLectureHistory(map);

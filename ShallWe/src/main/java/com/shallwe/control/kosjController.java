@@ -5,7 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,14 +24,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shallwe.dao.LectureDAO;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
+import com.shallwe.exception.ModifyException;
 import com.shallwe.exception.RemoveException;
+import com.shallwe.model.BoardPageBean;
 import com.shallwe.model.ReviewBean;
 import com.shallwe.service.LectureService;
 import com.shallwe.service.ReviewService;
 import com.shallwe.vo.Lecture;
-import com.shallwe.vo.Member;
 import com.shallwe.vo.Review;
-import com.shallwe.vo.Tutor;
+import com.shallwe.vo.StudyBoard;
 
 import lombok.extern.log4j.Log4j;
 
@@ -44,28 +49,54 @@ public class kosjController {
 	@Autowired
 	LectureDAO lectureDAO;
 	
+	@Autowired
+	EmailController emailController;
+	
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	public void test() {
 		System.out.println("test.jsp 호출");
 	}
 	
+	
+	// 강의 후기 등록 화면 요청
 	@RequestMapping(value = "/reviewAdd", method = RequestMethod.GET)
-	public ModelAndView reviewAdd() {
-		System.out.println("reviewAdd.jsp  호출");
-		ModelAndView modelAndView = new ModelAndView();
-
-		Member member = new Member();
-		member.setMember_id("member3");
-		Tutor tutor = new Tutor();
-		tutor.setMember(member);
+	public ModelAndView reviewAdd(HttpSession session, @RequestParam (value="lecture_id") String lecture_id) throws FindException {
+		String member_id = (String)session.getAttribute("loginInfo");
 		Lecture lecture = new Lecture();
-		lecture.setLecture_img("lecture_test3.jpg");
-		lecture.setTutor(tutor);
-		lecture.setLecture_title("마케링");
+
+		try {
+			lecture = lectureService.searchLectureByLectureId(lecture_id);
 		
-		modelAndView.addObject("lecture" , lecture);
+		} catch (FindException e) {
+			e.printStackTrace();
+		}
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("lecture", lecture);
+		modelAndView.addObject("member_id", member_id);
 		modelAndView.setViewName("/reviewAdd");
 		
+		return modelAndView;
+	}
+	
+	
+	//--- review 등록
+	@RequestMapping(value = "/reviewAddmethod", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView insertReview(HttpSession session, @RequestBody ReviewBean reviewBean ) throws AddException {
+		if ( reviewBean.getMemberId() == null ) {
+			String memberId = (String)session.getAttribute("loginInfo");
+			reviewBean.setMemberId(memberId);
+		} 
+		
+		ModelAndView modelAndView = new ModelAndView();
+		try {
+			reviewService.insertReview(reviewBean);
+			modelAndView.setViewName("/reviewAdd");
+			
+		} catch (AddException e) {
+			e.printStackTrace();
+			modelAndView.addObject("errMsg", e.getMessage());
+		}
 		return modelAndView;
 	}
 	
@@ -93,13 +124,14 @@ public class kosjController {
 		
 		ModelAndView modelAndView = new ModelAndView();
 
+		List<Lecture> list = new ArrayList<Lecture>();
 		try {
-			modelAndView = lectureService.searchLecture(map);
+			list = lectureService.searchLecture(map);
 			log.info(modelAndView.getModelMap()); 
+			modelAndView.addObject("list", list);
 			modelAndView.setViewName("/searchResult");
 			
 		} catch (FindException e) {
-			modelAndView.setViewName("/fail");
 			e.printStackTrace();
 		}
 		return modelAndView;
@@ -136,15 +168,20 @@ public class kosjController {
 	
 	@RequestMapping(value = "/insertMemberLectureHistory", method = RequestMethod.POST)
 	@ResponseBody
-	public ModelAndView insertMemberLectureHistory(@RequestParam(value="lecture_category_id") String lecture_category_id, 
-													@RequestParam(value="lecture_id") String lecture_id
+	public ModelAndView insertMemberLectureHistory( HttpSession session, @RequestParam(value="lecture_id") String lecture_id
 	) throws AddException {
 		
 		log.info(" insertMemberLectureHistory 호출했어용~");
-
-		String member_id = "member2";
+		String member_id = (String)session.getAttribute("loginInfo");
+		Lecture lecture = new Lecture();
+		try {
+			lecture = lectureService.searchLectureByLectureId(lecture_id);
+		} catch (FindException e1) {
+			e1.printStackTrace();
+		}
+		
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("lecture_category_id", lecture_category_id);
+		map.put("lecture_category_id", lecture.getLectureCategory().getLecture_category_id());
 		map.put("lecture_id", lecture_id);
 		map.put("member_id", member_id);
 		
@@ -162,60 +199,44 @@ public class kosjController {
 	}
 	
 	
-	@RequestMapping(value = "/updateMemberLectureHistory", method = {RequestMethod.GET,RequestMethod.POST})
-	public ModelAndView updateMemberLectureHistory(@RequestBody List<Lecture> lectureList ) throws AddException {
-		
-		log.info(" updateMemberLectureHistory 호출했어용~");
-		
-		ModelAndView modelAndView = new ModelAndView();
-//		try { 
-//			lectureService.insertMemberLectureHistory(lectureList);
-//			modelAndView.addObject("status", "success");
-//			modelAndView.setViewName("/success");
-//			
-//		} catch (AddException e) {
-//			modelAndView.addObject("status", "fail");
-//			modelAndView.addObject("errMsg", e.getMessage());
-//			modelAndView.setViewName("/fail");
-//			e.printStackTrace();
-//		}
-//		
-		return modelAndView;
-	}
-	
-	
-	
-	//--- review 등록
-	@RequestMapping(value = "/reviewAddmethod", method = RequestMethod.POST)
-	@ResponseBody
-	public ModelAndView insertReview(@RequestBody ReviewBean reviewBean ) throws AddException {
-		
-		ModelAndView modelAndView = new ModelAndView();
+	@RequestMapping(value = "/updateMemberLectureHistory", method = RequestMethod.GET)
+	public ResponseEntity<String> updateMemberLectureHistory( HttpSession session, @RequestParam(value="lecture_id") String lecture_id
+	) throws ModifyException {
+		//ModelAndView modelAndView = new ModelAndView();
+
+		String member_id = (String)session.getAttribute("loginInfo");
+		Lecture lecture = new Lecture();
 		try {
-			reviewService.insertReview(reviewBean);
-			modelAndView.addObject("status", "success");
-			modelAndView.setViewName("/success");
-			
-		} catch (AddException e) {
-			e.printStackTrace();
-			modelAndView.addObject("status", "fail");
-			modelAndView.addObject("errMsg", e.getMessage());
-			modelAndView.setViewName("/fail");
+			lecture = lectureService.searchLectureByLectureId(lecture_id);
+		} catch (FindException e1) {
+			e1.printStackTrace();
 		}
-		return modelAndView;
+		
+		Map <String, Object> map = new HashMap<String, Object>();
+		map.put("lecture_category_id", lecture.getLectureCategory().getLecture_category_id());
+		map.put("memberId", member_id);
+		map.put("lectureId", lecture_id);
+		
+		try { 
+			lectureService.updateMemberLectureHistory(map);
+			return ResponseEntity.status(HttpStatus.OK).body("success");
+			
+		} catch (ModifyException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail : "+e.getMessage());
+		}
 	}
+	
 	
 	//--- review 강사별, 카테고리별 후기 조회
 	@RequestMapping(value = "/reviewList", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView selectReviewList(String tutor_id , String category_id) throws AddException {
-		
 		if ( tutor_id == null && "".equals(tutor_id) ) {
 			tutor_id = "member3";
 		} else if (category_id == null && "".equals(category_id)) {
 			category_id = "MA";
 		}
-		
 		List<Review> list = new ArrayList<Review>();
 		ModelAndView modelAndView = new ModelAndView();
 		Map<String, String> map = new HashMap<String, String>();
@@ -224,45 +245,41 @@ public class kosjController {
 		try {
 			list = reviewService.selectReview(map);
 			modelAndView.addObject("list", list);
-			modelAndView.addObject("status", "success");
 			modelAndView.setViewName("/reviewList");
 			
 		} catch (FindException e) {
 			e.printStackTrace();
-			modelAndView.addObject("status", "fail");
-			modelAndView.addObject("errMsg", e.getMessage());
-			modelAndView.setViewName("/fail");
 		}
 		return modelAndView;
 	}
+	
 	//--- review 삭제
-	@RequestMapping(value = "/removeReview", method = RequestMethod.POST)
-	@ResponseBody
-	public ModelAndView removeReview(
-			@RequestParam(value="lectureCategoryId", required=false) String lectureCategoryId , 
-			@RequestParam(value="member_id", required=false) String member_id , 
-			@RequestParam(value="lecture_id", required=false) String lecture_id ,
-			@RequestParam(value="tutor_id", required=false) String tutor_id
-			
-			) throws RemoveException {
+	@RequestMapping(value = "/removeReview", method = RequestMethod.GET)
+//	public ModelAndView removeReview(
+	public ResponseEntity<String> removeReview(HttpSession session, @RequestParam(value="lecture_id") String lecture_id	) throws RemoveException {
+		Lecture lecture = null;
+		try {
+			lecture = lectureService.searchLectureByLectureId(lecture_id);
+		} catch (FindException e1) {
+			e1.printStackTrace();
+		}
+		String member_id = (String)session.getAttribute("loginInfo");
 		
-		ModelAndView modelAndView = new ModelAndView();
 		Map<String, String> map = new HashMap<String, String>();
-		map.put("lectureCategoryId", lectureCategoryId);
+		map.put("lectureCategoryId", lecture.getLectureCategory().getLecture_category_id());
 		map.put("member_id", member_id);
 		map.put("lecture_id", lecture_id);
-		map.put("tutor_id", tutor_id);
+		map.put("tutor_id", lecture.getTutor().getMember().getMember_id());
 		
 		try {
 			reviewService.removeReview(map);
-			modelAndView.setViewName("/success");
+			return ResponseEntity.status(HttpStatus.OK).body("success");
 			
 		} catch (RemoveException e) {
 			e.printStackTrace();
-			modelAndView.addObject("errMsg", e.getMessage());
-			modelAndView.setViewName("/fail");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail : "+e.getMessage());
 		}
-		return modelAndView;
+		//return modelAndView;
 	}
 	
 } // end of kosjController

@@ -56,15 +56,16 @@
 		<id property="lecture_max" column="lecture_max" />
 		<id property="lecture_min" column="lecture_min" />
 		<id property="lecture_current" column="lecture_current" />
-		<association property="lectureCategory"
-			javaType="LectureCategory" autoMapping="true">
+		<association property="lectureCategory" javaType="LectureCategory" autoMapping="true">
 			<id property="lecture_category_id" column="category_id" />
 			<id property="lecture_category_name" column="category_name" />
 		</association>
-		<association property="tutor" javaType="Tutor"
-			autoMapping="true">
+		<association property="tutor" javaType="Tutor" autoMapping="true">
 			<id property="tutor_nickname" column="tutor_nickname" />
 			<id property="tutor_score" column="tutor_score" />
+			<association property="member" javaType="Member" autoMapping="true">
+				<id property="member_id" column="tutor_id" />
+			</association>
 		</association>
 	</resultMap>
 
@@ -80,7 +81,7 @@
 		lecture_current
 		, lecc.category_id,
 		lecc.category_name
-		, tutor_nickname, tutor_score
+		, tutor_nickname, tutor_score, tut.tutor_id
 		FROM LECTURE lec
 		JOIN
 		TUTOR tut ON (lec.LECTURE_CATEGORY_ID = tut.TUTOR_CATEGORY_ID AND
@@ -111,6 +112,36 @@
 				CATEGORY_NAME LIKE '%' || #{searchText} || '%'
 			</when>
 		</choose>
+		)
+
+	</select>
+	
+	
+	<!-- lecture By lecture_id 검색 -->
+	<select id="selectLectureByLectureId" parameterType="String" resultMap="LectureSearchMap">
+		SELECT
+		lec.lecture_id, lecture_img, lecture_title, lecture_price,
+		lecture_price,
+		lecture_state
+		, lecture_start_dt, lecture_end_dt,
+		lecture_max, lecture_min,
+		lecture_current
+		, lecc.category_id,
+		lecc.category_name
+		, tutor_nickname, tutor_score , tut.tutor_id
+		FROM LECTURE lec
+		JOIN
+		TUTOR tut ON (lec.LECTURE_CATEGORY_ID = tut.TUTOR_CATEGORY_ID AND
+		lec.LECTURE_TUTOR_ID = tut.TUTOR_ID)
+		JOIN LECTURE_CATEGORY lecc ON
+		(tut.TUTOR_CATEGORY_ID= lecc.CATEGORY_ID)
+		JOIN LECTURE_DETAIL lecd ON
+		(lec.lecture_id = lecd.LECTURE_ID AND
+		lec.LECTURE_CATEGORY_ID =
+		lecd.LECTURE_CATEGORY_ID)
+		WHERE lec.LECTURE_STATE = '승인'
+		AND (
+			lec.Lecture_ID = #{lecture_id} 
 		)
 
 	</select>
@@ -173,7 +204,7 @@
 	<update id="updateMemberLectureHistory" parameterType="hashMap"
 		statementType="CALLABLE">
 		{ call update_member_lecture_history (
-		#{lectureCategoryId}
+		#{lecture_category_id}
 		, #{memberId}
 		, #{lectureId}
 		)}
