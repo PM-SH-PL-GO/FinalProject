@@ -48,4 +48,15 @@
 		WHERE mlh.MEMBER_ID =
 		#{member.member_id}
 	</select>
+	
+		<!-- admin(jun6) : 특정 강의를 수강하고 있는 member 목록 조회 -->
+	<select id="selectMemberHistoryByLectureId" parameterType="String" resultMap="MLHResultMap">
+		SELECT mem.member_id, mem.member_name, his.payment_dt, his.lecture_category_id, his.cancel_dt
+		FROM member mem
+		    JOIN member_lecture_history his ON(mem.member_id = his.member_id)
+		    JOIN lecture lec ON(his.lecture_id = lec.lecture_id)
+		WHERE his.lecture_id = #{lecture_id}
+		    AND his.cancel_dt is null
+		ORDER BY his.payment_dt
+	</select>
 </mapper>

@@ -127,12 +127,28 @@
 	</if>
 	</select>
 
-<!-- admin(jun6) : 예비강사 승인/반려 -->
+<!-- admin(jun6) : 회원 삭제 -->
+<!-- 	<delete id="deleteMemberById"> -->
+<!-- 		DELETE member -->
+<!-- 		WHERE member_id = #{} -->
+<!-- 	</delete> -->
+
+<!-- admin(jun6) : 예비강사 승인 -->
 	<update id="updateTutorState" parameterType="map">
 		UPDATE member
 	 	SET tutor_yn = #{status}
  		WHERE member_id = #{id}
 	</update>
+	
+<!-- admin(jun6) : 예비강사 반려 -->
+	<insert id="rejectPretutor" parameterType="TutorReject" statementType="CALLABLE">
+		{ call 	REJECT_PRETUTOR (
+			#{tutor.member.member_id} 
+			, #{tutor.tutor_category_id}
+			, #{rejectCategory.reject_category_id}
+			, #{rejectCategory.reject_reason} 
+		)}
+	</insert>
 
 <!-- admin(jun6) : 전체 회원 목록 조회 -->
 	<select id="selectAllMember" resultMap="MemberInfoMap">
@@ -146,9 +162,4 @@
 	    JOIN lecture_category lc3 ON(m.member_favorite3=lc3.category_id)
 	</select>
 
-<!-- admin(jun6) : 회원 삭제 -->
-<!-- 	<delete id="deleteMemberById"> -->
-<!-- 		DELETE member -->
-<!-- 		WHERE member_id = #{} -->
-<!-- 	</delete> -->
 </mapper>

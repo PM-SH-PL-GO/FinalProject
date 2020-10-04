@@ -177,7 +177,7 @@ class KosjServiceTest {
 		} catch (FindException e) {
 			e.printStackTrace();
 		}
-		email.successLecture(lecture);
+		//email.successLecture(lecture);
 		
 	} // end sendEmail
 	

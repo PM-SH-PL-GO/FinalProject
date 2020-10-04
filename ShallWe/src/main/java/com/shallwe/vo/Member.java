@@ -3,8 +3,10 @@ package com.shallwe.vo;
 import java.util.List;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(of = {"member_id"})
 public class Member {
 	private String member_id;
 	private String member_pwd;
