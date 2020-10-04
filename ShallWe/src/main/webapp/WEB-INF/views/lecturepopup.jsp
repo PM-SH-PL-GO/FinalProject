@@ -135,10 +135,12 @@ $(document).ready(function() {
 		 				let responseObj = JSON.parse(data);
 						if (responseObj.status == "success") {
 							alert("강의 취소 요청이 정상적으로 되었습니다.");
+							opener.parent.location.reload();
 							window.close();
 						} else {
 							alert("강의 등록에 실패했습니다.");
 							$("$cancelCommentObj").focus();
+							opener.parent.location.reload();
 							window.close();
 						}
 		 			} // end of success

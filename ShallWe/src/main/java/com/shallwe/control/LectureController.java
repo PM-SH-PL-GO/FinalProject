@@ -138,7 +138,7 @@ public class LectureController {
 	
 	// 강사 강의 취소 요청 : 동일
 		@GetMapping(value = "/tutorcancelLecture")
-		public ModelAndView tutorcancelview(HttpSession session, @RequestParam Integer lecture_id) throws FindException {
+		public ModelAndView tutorcancelview(HttpSession session, @RequestParam(value = "lecture_id", required = false) Integer lecture_id) throws FindException {
 			ModelAndView mnv = new ModelAndView();
 			String id = (String) session.getAttribute("loginInfo");
 			Member mem = new Member();
@@ -149,7 +149,6 @@ public class LectureController {
 			tutor.setMember(mem);
 			lect.setTutor(tutor);
 			lect.setLecture_id(lecture_id);
-			System.out.println("뭐가 뜨는 거야??!");
 			try {
 			lectDetail = service.lectureDetailView(lect);
 			mnv.setViewName("/lecturepopup");
