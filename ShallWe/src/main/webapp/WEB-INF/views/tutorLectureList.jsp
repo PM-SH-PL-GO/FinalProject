@@ -3,7 +3,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+<c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 <head>
@@ -19,7 +19,8 @@
 <link rel="stylesheet" href="/shallwe/assets/css/owl.carousel.min.css">
 <link rel="stylesheet" href="/shallwe/assets/css/slicknav.css">
 <link rel="stylesheet" href="/shallwe/assets/css/flaticon.css">
-<link rel="stylesheet" href="/shallwe/assets/css/progressbar_barfiller.css">
+<link rel="stylesheet"
+	href="/shallwe/assets/css/progressbar_barfiller.css">
 <link rel="stylesheet" href="/shallwe/assets/css/gijgo.css">
 <link rel="stylesheet" href="/shallwe/assets/css/animate.min.css">
 <link rel="stylesheet" href="/shallwe/assets/css/animated-headline.css">
@@ -33,160 +34,43 @@
 <link rel="stylesheet" href="/shallwe/assets/css/style.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<style>
-.md_top {
-	padding: 1em;
-	display: inline;
-}
-
-button {
-	all: unset;
-	background-color: #990000;
-	color: white;
-	padding: 15px 25px;
-	border-radius: 6px;
-	cursor: pointer;
-	float: right;
-}
-
-.modal {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.md_content {
-	width: 95%;
-	min-width:315px;
-	height: 65%;
-	position: inherit;
-	padding: 50px 50px;
-	background-color: white;
-	text-align: center;
-	border-radius: 6px;
-	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.20), 0 6px 6px
-		rgba(0, 0, 0, 0.20);
-	overflow: auto;
-}
-
-h1 {
-	margin: 0;
-	padding: 5px;
-}
-
-.hidden {
-	display: none;
-}
-
-.modal_text {
-	padding: 16px;
-}
-
-textarea {
-  width: 100%;
-  padding: 12px 20px;
-  box-sizing: border-box;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  background-color: #f8f8f8;
-  font-size: 16px;
-  resize: none;
-}
-</style>
 </head>
 <script>
 <c:set var="now" value="<%=new java.util.Date()%>" />
 <fmt:formatDate pattern="yyyy-MM-dd" value="${now}" />
 <fmt:parseNumber value="${now.time/(1000*60*60*24)}" integerOnly="true" var="nowDate" />
 $(function(){
-	let letidValue = $("input[name=listlecture_id]").val();
-	$("div[name=gotoDe]").click(function(){
-		location.href = "${contextPath}/lectures/detail?lecture_id=" +letidValue;		
-	});
-	let letidendValue = $("input[name=listendlecture_id]").val();
-	$("div[name=gotoDeend]").click(function(){
-		location.href = "${contextPath}/lectures/detail?lecture_id=" +letidendValue;		
-	});
+	let $cont = $(".listcontents");
+	let $conte = $(".listendcontents");
+
+	$cont.on("click", "div[name=gotoDe]", function(){
+    	let letidValue = $(this).attr("value");
+    	
+    	location.href = "${contextPath}/lectures/detail?lecture_id=" +letidValue;
+    	return false;
+    });
 	
-	$(document).ready(function() {
-		
-		/*------------review후기 입력 modal start------------------*/
-		//필요한 엘리먼트들을 선택한다.
-		const openButton = document.getElementById("openCancelre");
-		const modal = document.getElementById("cancelmodal");
-		const closeButton = modal.querySelector("button");
-		//동작함수
-		const openModal = () => {
-			modal.classList.remove("hidden");
-		}
-		const closeModal = () => {
-			modal.classList.add("hidden");
-		}
-		//클릭 이벤트
-		openButton.addEventListener("click", openModal);
-		closeButton.addEventListener("click", closeModal);
-		
-		/*------------review후기 입력 modal end------------------*/
-		
-		/*------------review입력창 후기 입력시 글자수세기   start------------------*/
-		var $cancelFormObj = $("form#commentForm");
-		var $cancelCommentObj = $cancelFormObj.find("textarea#cancelcomment");
-		console.log($cancelCommentObj);
-		$cancelCommentObj.focus();
-		// review content 남은 글자수
-		$cancelCommentObj.keydown(function(e) {
-			var content = $(this).val();
-			var count = 50 - content.length;
-			if (content.length > 50) {
-				$(this).val($(this).val().substring(0, 50));
-				count = 0;
-			}
-			$('.remainText').html("남은글자수: " + count + "/50자");
+	$conte.on("click", "div[name=gotoDeend]", function(){
+    	let letidendValue = $(this).attr("value");
+    	
+    	location.href = "${contextPath}/lectures/detail?lecture_id=" +letidendValue;
+    	return false;
+    });
+	$cont.on("click", "img[name=openCancelre]", 
+		function showPopup(frm) { 
+		let letidimgValue = $(this).attr("value");
+		windowObj = window.open("tutorcancelLecture?lecture_id="+letidimgValue, "강의 취소 요청", "width=500px, height=500px, left=100, top=50"); 
+
+		return false;
 		});
-		
-		/*------------review입력창 후기 입력시 글자수세기   end------------------*/
-		/*------------review 후기 데이터 등록   start------------------*/
-	 	// 후기 등록하기 버튼 클릭 시 
-	 	$cancelFormObj.on('submit', function e () {
-	 		var cancelContent = $("#cancelcomment").val();	
-	 		$.ajax({
-	 			url: "${contextPath}/lectures/tutorcancelLecture"
-	 			, method : 'POST'
-	 			, data : 
-	 			{
-	 				'lecture.lecture_id' : letidValue,
-	 				'lecture_cancel_reason' : cancelContent
-	 			}
-	 			, success : function ( data ) {
-	 				let responseObj = JSON.parse(data);
-					if (responseObj.status == "success") {
-						alert("강의 취소 요청이 정상적으로 되었습니다.");
-					} else {
-						alert("강의 등록에 실패했습니다.");
-						$("$cancelCommentObj").focus();
-					}
-	 			} // end of success
-	 		}); //end of ajax 
-	 	}); // end of reviewInsert
-		/*------------review 후기 데이터 등록   end------------------*/
-		
-	});
 	
-	
-	
-	
-	return false;
 });
 </script>
 <body>
 	<main>
 		<!--? 강의목록 Start -->
-		<div class="popular-directorya-area section-padding40 fix">
+		<div
+			class="listcontents popular-directorya-area section-padding40 fix">
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-12">
@@ -212,22 +96,21 @@ $(function(){
 							<!-- Single -->
 							<div class="properties pb-20">
 								<div class="properties__cardseo">
-									<div name="gotoDe" style="cursor: pointer;">
+									<div name="gotoDe" style="cursor: pointer;"
+										value="${lecture.lecture_id}">
 										<div class="properties__imgseo overlay1">
 											<img src="/shallwe/lecture/${lecture.lecture_img}" alt=""
 												style="cursor: pointer;">
 
 										</div>
 										<div class="properties__caption">
-											<h3>
-												<a href="#">${lecture.lecture_title}</a>
-											</h3>
+											<h3>${lecture.lecture_title}</h3>
 											<h6>${startDt}~${endDt}</h6>
 											<h6>${tutor.tutor_nickname}</h6>
 											<h6>현재인원: ${lecture.lecture_current} / 최대인원:
 												${lecture.lecture_max}</h6>
 										</div>
-										<input type="text" name="listlecture_id"
+										<input type="hidden" name="listlecture_id"
 											value="${lecture.lecture_id}" />
 									</div>
 									<div
@@ -238,47 +121,9 @@ $(function(){
 											원
 										</h3>
 										<div class="heart">
-											<img id="openCancelre"
+											<img name="openCancelre"
 												src="/shallwe/assets/img/gallery/cancel.png" width="30px"
-												alt="강의취소요청" title="강의취소요청">
-											<!-- 											강의취소요청 모달 -->
-											<div class="modal hidden" id="cancelmodal">
-												<div class="md_content">
-													<div class="md_top">
-														<button>X</button>
-													</div>
-													<h2 id="title">강의 취소 요청</h2>
-													<table>
-														<tbody>
-															<tr>
-																<th>강의명</th>
-																<td>${lecture.lecture_title}</td>
-															</tr>
-														</tbody>
-													</table>
-
-													<div class="modal_text">
-														<form class="form-contact comment_form" id="commentForm">
-															<div class="row">
-																<div class="col-12">
-																	<div class="form-group">
-																		<textarea name="lecture_cancel_reason" id="cancelcomment" cols="30"
-																			rows="5" placeholder="강의 취소 이유를 입력해주세요"></textarea>
-																		<span class="remainText">남은글자수 : 50/50자 </span>
-																	</div>
-																</div>
-															</div>
-
-															<div class="form-group">
-																<button type="submit"
-																	class="button button-contactForm btn_1 boxed-btn">요청등록</button>
-															</div>
-														</form>
-													</div>
-													<!-- end of modal_text -->
-												</div>
-												<!-- end of md_content -->
-											</div>
+												alt="강의취소요청" title="강의취소요청" value="${lecture.lecture_id}" onclick="showPopup();">
 										</div>
 									</div>
 								</div>
@@ -293,7 +138,7 @@ $(function(){
 
 		<!--? 완료 Start -->
 		<div
-			class="popular-directorya-area border-bottom section-padding40 fix">
+			class="listendcontents popular-directorya-area border-bottom section-padding40 fix">
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-12">
@@ -319,7 +164,8 @@ $(function(){
 							<!-- Single -->
 							<div class="properties pb-20">
 								<div class="properties__cardseo">
-									<div name="gotoDeend" style="cursor: pointer;">
+									<div name="gotoDeend" style="cursor: pointer;"
+										value="${lecture.lecture_id}">
 										<div class="properties__imgseo overlay1">
 											<img src="/shallwe/lecture/${lecture.lecture_img}" alt="">
 										</div>

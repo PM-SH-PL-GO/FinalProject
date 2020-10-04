@@ -137,6 +137,31 @@ public class LectureController {
 	}
 	
 	// 강사 강의 취소 요청 : 동일
+		@GetMapping(value = "/tutorcancelLecture")
+		public ModelAndView tutorcancelview(HttpSession session, @RequestParam Integer lecture_id) throws FindException {
+			ModelAndView mnv = new ModelAndView();
+			String id = (String) session.getAttribute("loginInfo");
+			Member mem = new Member();
+			Tutor tutor = new Tutor();
+			Lecture lect = new Lecture();
+			LectureDetail lectDetail = new LectureDetail();
+			mem.setMember_id(id);
+			tutor.setMember(mem);
+			lect.setTutor(tutor);
+			lect.setLecture_id(lecture_id);
+			System.out.println("뭐가 뜨는 거야??!");
+			try {
+			lectDetail = service.lectureDetailView(lect);
+			mnv.setViewName("/lecturepopup");
+			mnv.addObject("lectDetail", lectDetail);
+			} catch (FindException e) {
+				e.printStackTrace();
+				mnv.setViewName("/lecturepopup");
+			}
+			return mnv;
+		}
+	
+	// 강사 강의 취소 요청 : 동일
 		@PostMapping(value = "/tutorcancelLecture")
 		public ModelAndView tutorcancelLecture(LectureDetail lectDe) throws ModifyException {
 			ModelAndView mnv = new ModelAndView();

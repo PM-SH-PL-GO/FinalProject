@@ -35,15 +35,21 @@
 <fmt:formatDate pattern="yyyy-MM-dd" value="${now}" />
 <fmt:parseNumber value="${now.time/(1000*60*60*24)}" integerOnly="true" var="nowDate" />
 $(function(){
-	let letidValue = $("input[name=listlecture_id]").val();
-	$("div[name=gotoDe]").click(function(){
-		location.href = "/shallwe/lectures/detail?lecture_id=" +letidValue;		
-	});
-	let letidendValue = $("input[name=listendlecture_id]").val();
-	$("div[name=gotoDeend]").click(function(){
-		location.href = "/shallwe/lectures/detail?lecture_id=" +letidendValue;		
-	});
-	//return false;
+	let $cont = $(".listcontents");
+	let $conte = $(".listendcontents");
+
+	$cont.on("click", "div[name=gotoDe]", function(){
+    	let letidValue = $(this).attr("value");
+    	location.href = "${contextPath}/lectures/detail?lecture_id=" +letidValue;
+    	return false;
+    });
+	
+	$conte.on("click", "div[name=gotoDeend]", function(){
+    	let letidendValue = $(this).attr("value");
+    	location.href = "${contextPath}/lectures/detail?lecture_id=" +letidendValue;
+    	return false;
+    });
+	
 	
 	
 	// 강사후기등록 버튼 클릭시 발생 이벤트
@@ -102,7 +108,7 @@ $(function(){
 <!-- topbar End -->
 	<main>
 		<!--? 강의목록 Start -->
-		<div class="popular-directorya-area section-padding40 fix">
+		<div class="listcontents popular-directorya-area section-padding40 fix">
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-12">
@@ -129,7 +135,7 @@ $(function(){
 							<!-- Single -->
 							<div class="properties pb-20">
 								<div class="properties__cardseo">
-									<div name="gotoDe" style="cursor: pointer;">
+									<div name="gotoDe" style="cursor: pointer;" value="${lecture.lecture_id}">
 										<div class="properties__imgseo overlay1">
 											<img src="/shallwe/lecture/${lecture.lecture_img}" alt=""
 												style="cursor: pointer;">
@@ -167,7 +173,7 @@ $(function(){
 
 		<!--? 완료 Start -->
 		<div
-			class="popular-directorya-area border-bottom section-padding40 fix">
+			class="listendcontents popular-directorya-area border-bottom section-padding40 fix">
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-12">
@@ -194,7 +200,7 @@ $(function(){
 							<!-- Single -->
 							<div class="properties pb-20">
 								<div class="properties__cardseo">
-									<div name="gotoDeend" style="cursor: pointer;">
+									<div name="gotoDeend" style="cursor: pointer;" value="${lecture.lecture_id}">
 										<div class="properties__imgseo overlay1">
 											<img src="/shallwe/lecture/${lecture.lecture_img}" alt="">
 										</div>
