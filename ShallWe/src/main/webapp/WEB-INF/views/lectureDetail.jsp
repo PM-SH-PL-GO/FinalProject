@@ -92,7 +92,7 @@ $(document).ready(function() {
 		}); 
 	}); // end of 강의신청, 강의결제페이지 호출 
 	
-	// 강의결제취소, 강의결제취소 처리
+	// 찜목록 추가 요청
 	var $favoriteLectureBtnObj = $('#favoriteLectureBtn');
 	$favoriteLectureBtnObj.on("click", function() {
 		if(confirm("찜목록에 추가 하시겠습니까?")){
@@ -109,41 +109,7 @@ $(document).ready(function() {
 				}
 			}); // end of ajax
 		}
-	}); // end of 강의신청, 강의결제페이지 호출 
-	
-	
-	
-	
-	//_--\
-		var $lectureLike = $('span.insertCart');
-		$lectureLike.on('click', function(e){
-			let lecture_code = $(this).find('input[name=lecture_code]').val();
-			console.log(lecture_code);
-			var url = '${contextPath}/member/wishlist/addWish?lecture_id='+lecture_code;
-			if(confirm("찜목록에 추가 하시겠습니까?")){
-				$.ajax( { 
-					url : '${contextPath}/member/wishlist/addWish'
-					, method : "GET"
-					, data : {"lecture_id" : lecture_code}
-					, success : function () {
-						if(confirm("찜목록으로 이동하시겠습니까")){
-							location.href = "${contextPath}/member/wishlist";
-						} else {
-							location.reload();
-						}
-					}
-				}); // end of ajax
-			}
-		});
-	
-	
-	
-	//_--\
-	
-	
-	
-	
-	
+	}); // end of 찜목록 추가 요청
 	
 	let letidValue = $("input[name=listlecture_id]").val();
 	$("div[name=gotoDe]").click(function(){
