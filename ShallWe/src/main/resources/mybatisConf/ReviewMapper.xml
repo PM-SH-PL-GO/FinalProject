@@ -62,5 +62,15 @@
 		WHERE lec.lecture_tutor_id = #{tutor_id} AND review.lecture_category_id = #{category_id}
 	</select>
 	
+	<!-- 멤버아이디로 강의후기 목록조회 -->
+	<select id="selectReviewByMemberId" parameterType="String" resultMap= "ReviewMap">
+		SELECT lecture_category_id
+		, member_id
+		, lecture_id
+		, review_content
+		, review_dt
+		 FROM REVIEW review
+		 WHERE review.member_id = #{member_id}
+	</select>
 </mapper>
 

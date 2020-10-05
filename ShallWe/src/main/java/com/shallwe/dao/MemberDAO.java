@@ -40,6 +40,8 @@ public class MemberDAO {
 			session.insert("MemberMapper.joinMember", mib);
 		}catch(Exception e){
 			throw new AddException(e.getMessage());
+		}finally {
+			session.close();
 		}
 	}
 	
@@ -54,6 +56,8 @@ public class MemberDAO {
 			}
 		}catch(Exception e) {
 			e.getMessage();
+		}finally {
+			session.close();
 		}
 		return session.selectOne("MemberMapper.checkId", usertyped);
 	}

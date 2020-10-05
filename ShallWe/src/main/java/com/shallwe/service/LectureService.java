@@ -176,4 +176,9 @@ public class LectureService {
 	public void deleteAllWishList(String member_id) throws RemoveException{
 			wishDAO.deleteAllFavLec(member_id);
 	}
+	
+	// 찜목록 추가 : 상하
+	public void addWishOne(Map<String, Object>map)throws AddException{
+			wishDAO.addWishByLecId(map);
+	}
 }

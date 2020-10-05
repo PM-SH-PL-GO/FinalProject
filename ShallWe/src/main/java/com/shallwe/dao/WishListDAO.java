@@ -23,7 +23,7 @@ public class WishListDAO {
 	SqlSessionFactory sqlSessionFactory;
 	
 	// 찜 목록에 추가(수강생) : 상하
-	public void addFavLec(Map<String,Object> map)throws AddException{
+	public void addWishByLecId(Map<String,Object> map)throws AddException{
 		SqlSession session = null;
 		log.info(map.get("member_id"));
 		log.info(map.get("lecture"));
@@ -85,6 +85,5 @@ public class WishListDAO {
 		}finally {
 			session.close();
 		}
-		
 	}
 }

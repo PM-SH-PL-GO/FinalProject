@@ -253,6 +253,26 @@ public class kosjController {
 		return modelAndView;
 	}
 	
+	//--- member별 review 조회
+	@RequestMapping(value = "/member/memberReviewList", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView selectMemberReviewLsist(HttpSession session) throws AddException {
+
+		String member_id = (String)session.getAttribute("loginInfo");
+		List<Review> list = new ArrayList<Review>();
+		ModelAndView modelAndView = new ModelAndView();
+	
+		try {
+			list = reviewService.selectReviewByMemberId(member_id);
+			modelAndView.addObject("list", list);
+			modelAndView.setViewName("/reviewList");
+			
+		} catch (FindException e) {
+			e.printStackTrace();
+		}
+		return modelAndView;
+	}
+	
 	//--- review 삭제
 	@RequestMapping(value = "/removeReview", method = RequestMethod.GET)
 //	public ModelAndView removeReview(
