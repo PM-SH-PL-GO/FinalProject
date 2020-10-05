@@ -109,7 +109,7 @@ public class LectureController {
 
 	// 강사 강의 등록 페이지 : 동일
 	@GetMapping(value = "/insert")
-	public ModelAndView insertView(Tutor tuto, HttpSession session) throws FindException {
+	public ModelAndView insertView(HttpSession session) throws FindException {
 		ModelAndView mnv = new ModelAndView();
 		List<Tutor> tutorlist = new ArrayList<>();
 		String tutor_id = (String) session.getAttribute("loginInfo");
@@ -247,11 +247,13 @@ public class LectureController {
 		mem.setMember_id(id);
 		List<MemberLectureHistory> mlthlist = new ArrayList<>();
 		tuto.setMember(mem);
+		List<Tutor> tutorlist = new ArrayList<>();
 		lecttuto.setTutor(tuto);
 		List<Lecture> lectlist = new ArrayList<>();
 		mlth.setMember(mem);
 		lect.setLecture_id(lecture_id);
 		lectDetail.setLecture(lect);
+		List<Lecture> wishlist = new ArrayList<>();
 		try {
 			lectDetail = service.lectureDetailView(lect);
 			mnv.addObject("lectDetail", lectDetail);
@@ -259,6 +261,10 @@ public class LectureController {
 			mnv.addObject("mlthlist", mlthlist);
 			lectlist = service.tutorLectureList(lecttuto);
 			mnv.addObject("lectlist", lectlist);
+			wishlist = service.findWishListById(id);
+			mnv.addObject("wishlist", wishlist);
+			tutorlist = tutoser.showTutorInfo(id);
+			mnv.addObject("tutorlist", tutorlist);
 			mnv.setViewName("/lectureDetail");
 		} catch (FindException e) {
 			e.printStackTrace();

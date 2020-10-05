@@ -241,8 +241,6 @@ $(function(){
 										<c:set var="rel" value="${relist[i.index]}" />
 											<c:set var="rlecture_id"
 												value="${rel.member_lecture_history.lecture.lecture_id}" />
-											<c:if test="${rlecture_id ne lecture.lecture_id}">
-											</c:if>
 											<c:if test="${rlecture_id eq lecture.lecture_id}">
 												<c:set var="eqfalse" value="false"/>
 												<c:set var="eqtrue" value="true"/>

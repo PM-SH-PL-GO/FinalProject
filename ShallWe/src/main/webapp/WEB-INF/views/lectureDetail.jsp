@@ -1,17 +1,21 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+<c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <c:set value="${lectDetail.lecture}" var="lecture" />
-<fmt:formatDate var="startDt" value="${lecture.lecture_start_dt}" pattern="yyyy-MM-dd" />
-<fmt:formatDate var="endDt" value="${lecture.lecture_end_dt}" pattern="yyyy-MM-dd" />
+<fmt:formatDate var="startDt" value="${lecture.lecture_start_dt}"
+	pattern="yyyy-MM-dd" />
+<fmt:formatDate var="endDt" value="${lecture.lecture_end_dt}"
+	pattern="yyyy-MM-dd" />
+<fmt:parseDate var="endDat" value="${endDt}" pattern="yyyy-MM-dd" />
+<fmt:parseNumber value="${endDat.time/(1000*60*60*24)}"
+	integerOnly="true" var="endDate" />
 <c:forEach items="${mlthlist}" var="ml" varStatus="i">
-<c:set var="m" value="${mlthlist[i.index]}"/>
-<c:set var="mtutor" value="${lecture.tutor}" />
-<c:if test="${m.lecture.lecture_id eq lecture.lecture_id}" var="lleq"/>
-<c:if test="${m.lecture.lecture_id ne lecture.lecture_id}" var="llne"/>
+	<c:set var="m" value="${mlthlist[i.index]}" />
+	<c:set var="mtutor" value="${lecture.tutor}" />
+	<c:if test="${m.lecture.lecture_id eq lecture.lecture_id}" var="lleq" />
+	<c:if test="${m.lecture.lecture_id ne lecture.lecture_id}" var="llne" />
 </c:forEach>
-
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 <head>
@@ -20,7 +24,8 @@
 <title>강의 상세 정보</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="shortcut icon" type="image/x-icon" href="/shallwe/assets/img/favicon.ico">
+<link rel="shortcut icon" type="image/x-icon"
+	href="/shallwe/assets/img/favicon.ico">
 
 <!-- CSS here -->
 <link rel="stylesheet" href="/shallwe/assets/css/bootstrap.min.css">
@@ -33,13 +38,18 @@
 <link rel="stylesheet" href="/shallwe/assets/css/animate.min.css">
 <link rel="stylesheet" href="/shallwe/assets/css/animated-headline.css">
 <link rel="stylesheet" href="/shallwe/assets/css/magnific-popup.css">
-<link rel="stylesheet" href="/shallwe/assets/css/fontawesome-all.min.css">
+<link rel="stylesheet"
+	href="/shallwe/assets/css/fontawesome-all.min.css">
 <link rel="stylesheet" href="/shallwe/assets/css/themify-icons.css">
 <link rel="stylesheet" href="/shallwe/assets/css/slick.css">
 <link rel="stylesheet" href="/shallwe/assets/css/nice-select.css">
 <link rel="stylesheet" href="/shallwe/assets/css/style.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+<c:set var="now" value="<%=new java.util.Date()%>" />
+<fmt:formatDate pattern="yyyy-MM-dd" value="${now}" />
+<fmt:parseNumber value="${now.time/(1000*60*60*24)}" integerOnly="true" var="nowDate" />
 <%-- 화면 호출시 바로 조회 해와야할 데이터 처리 영역 --%>
 <%-- 강사-카테고리별 후기 조회--%>
 $(document).ready(function() {
@@ -138,7 +148,7 @@ $(document).ready(function() {
 						<div class="col-md-9 mt-sm-20">
 							<h3 class="mb-20">${lecture.lecture_title}</h3>
 							<div class="d-flex">
-								<h6 class="mr-10">상태:</h6>
+								<h6 class="mr-10">상태${wishlist}${tutorlist}</h6>
 								<h6>${lecture.lecture_state}</h6>
 							</div>
 							<div class="d-flex">
@@ -203,13 +213,18 @@ $(document).ready(function() {
 									pattern="#,###" />
 								원
 							</h4>
-							<c:if test="${lleq}">
-							<a href="#" id="applyBtn" class="genric-btn primary-border mt-10">신청</a>
-							</c:if>							
-							<c:if test="${llne}">
-							<a href="#" id="cancelBtn" class="genric-btn primary-border mt-10">결제취소</a>
+							<c:if test="${endDate-nowDate>=0 && ((tutorlist[0].member.member_id || empty tutorlist) ne lecture.tutor.member.member_id)}">
+								<c:if test="${llne}">
+									<a href="#" id="applyBtn"
+										class="genric-btn primary-border mt-10">신청</a>
+								</c:if>
+								<c:if test="${lleq}">
+									<a href="#" id="cancelBtn"
+										class="genric-btn primary-border mt-10">결제취소</a>
+								</c:if>
+								<a href="#" id="favoriteLectureBtn"
+									class="genric-btn primary-border mt-10">찜하기</a>
 							</c:if>
-							<a href="#" id="favoriteLectureBtn" class="genric-btn primary-border mt-10">찜하기</a>
 							<div class="d-flex mt-10">
 								<h6 class="mr-10">수강일시:</h6>
 								<h6 class="date mr-10">${startDt}-${endDt}</h6>
