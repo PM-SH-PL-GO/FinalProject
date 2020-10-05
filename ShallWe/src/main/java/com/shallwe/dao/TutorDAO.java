@@ -9,6 +9,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
@@ -60,6 +61,7 @@ public class TutorDAO {
 		
 	}
 	
+	
 	//강사상세보기: 경찬
 	public List<Tutor> TutorInfo(String tutor_id)throws FindException {
 		
@@ -100,12 +102,13 @@ public class TutorDAO {
 	}
 	//강사등록취소: 경찬
 	public void dellTutor(Map<String,Object> tutor) throws RemoveException{
+		
 		SqlSession session = null;
 		session = sqlSessionFactory.openSession();
 		
 		try {
 			session.delete("TutorMapper.deltutor",tutor);
-			
+			System.out.println("@@@@@@@@@@@@@@@@@@@@@@@: " + tutor);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RemoveException(e.getMessage());
@@ -116,27 +119,24 @@ public class TutorDAO {
 	}
 	
 	//강사수정: 경찬
-	public void tutorUpdate(Tutor tutor,String[] category) throws ModifyException{
-		SqlSession session = null;
-		session = sqlSessionFactory.openSession();
-		LectureCategory lectureCategory = new LectureCategory();
+	@Transactional(rollbackFor = RemoveException.class)
+	public void tutorUpdate(Map<String,Object> tutor,String[] category,Tutor tutor1) throws AddException{
 		
-		try {	
-				for(String t:category) {
-					
-					lectureCategory.setLecture_category_id(t);
-					tutor.setLectureCategory(lectureCategory);
-			        session.update("TutorMapper.tutorUpdate",tutor);
-				}
-					
-		} catch (Exception e) {
+	
+		try {
+			
+			dellTutor(tutor);
+			System.out.println("@@@@@@@@@@@@@@@@@@@@@@:" + tutor.get("tutor_id"));
+			insertTutor(tutor1,category);
+				
+		} catch (AddException e) {
 			e.printStackTrace();
-			throw new ModifyException(e.getMessage());
-		}finally {
-			session.close();
-		}
-		
+		} catch (RemoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 	}
+	
 	//강사사진수정: 경찬
 	public void tutorImage(Tutor tutor)throws ModifyException{
 		SqlSession session = null;
@@ -170,5 +170,7 @@ public class TutorDAO {
 			session.close();
 		}
 	}
+	
+	
 	
 }

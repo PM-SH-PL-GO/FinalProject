@@ -319,7 +319,7 @@ width: 100%;
 
 
 }
-
+iframe{display: none;}
 
     </style>
 <script>
@@ -349,13 +349,19 @@ $(function(){
 	  }
 	}); // end of buttonClick
 
-	$('button.career').click(function(e){
-		console.log($(this));
-		var file = $(this).attr("id");
-		 let $url = "/shallwe/upload/pdf?f=" + file;
-		//location.href=$url;
-		return false;
+	$("button.career").click(function(e){
+
+		let $pdf = $('input#pdfId').val();
+		
+		/* console.log($(this)); */
+		let id = $(this).attr("id");
+		$iframe = $("iframe");
+		 let url = "${contextPath}/upload/pdf.do?tutor_id=" + $pdf + "&fileName=" + id;
+		 console.log(url);
+		 $iframe.attr("src", url).show();
+			
 		});
+
 	
 	$('a#ModifyTutor').click(function(){
 			
@@ -363,15 +369,12 @@ $(function(){
 		    location.href= $url;
 		
 		});
-
-
 	
 	
 });
 </script>
   </head>
-  
- <form method="post" enctype="multipart/form-data" id="fileUpload" action="${contextPath}/upload/changeImg">
+
   <body>
    <c:forEach var ="t" items ="${tutor}" begin="0" end="0">
     <div class="body-center">
@@ -392,16 +395,8 @@ $(function(){
           </div>
           <br />
           <div class="filebox">
-         <!--  <label for="ex_file" style ="width: 80px; position: relative; left: 80px;">이미지변경</label> -->
-          <input class="uploadImage" type="file" name="tutor_img1" accept="imags/*" id="ex_file"/>
-          <br />
-          <br />
-          <input type="submit" value="업로드"style ="width: 80px; position: relative; left: 70px;">
           </div>
-           </div>
-           </form>
-           
-          <br />
+           </div> 
           <div class="title">
           <br />
             <h6>profile</h6>
@@ -425,19 +420,22 @@ $(function(){
           </div>
           <div class="education">
             <p>
-            <form method="post" enctype="multipart/form-data" id="fileUpload" action="${contextPath}/upload/changeCareer">
-                  <label id="tutor_craeer">강사활동:</label>
-             	  <button class = "career" id="${t.tutor_career_file}"><span>강사커리어</span></button>
-               <%--  <a href="${contextPath}/tutorImages/${t.tutor_career_file}"><li>강사커리어</li></a></p><br> --%>
-            	 <br />
-            	 <label>PDF 파일변경:</label>
-		         
+            </p>
+            
+             <label id="tutor_craeer">강사활동:</label>
+             	  <button class = "career" id="${t.tutor_career_file}"><span>PDF 보기</span></button>
+             	  <input hidden="hidden" id="pdfId" value="${t.member.member_id}">
+             	  <iframe></iframe>
+            
+            <form method="post" enctype="multipart/form-data" id="fileUpload" action="${contextPath}/upload/changeCareer">      
+                 <%-- <a href="${contextPath}/tutorImages/${t.tutor_career_file}"><li>강사커리어</li></a></p><br> --%>       
+           	 <br />
+            	 <label>PDF 파일변경:</label>		         
 		           <input  class = "file2" type="file" name="tutor_career_file1" accept="imags/*," id ="PDF">
 		           <br />
-	        	    <input type="submit" value="업로드" style ="width: 80px; position: relative; left: 90px;">
+	        	    <input type="submit" value="업로드" style ="width: 70px; position: relative; left: 95px;">
 	        </form>	    
-             </p><br>
-          
+             </p><br>         
            	<label id="tutor_craeer">SNS:</label>
            	<li>${t.tutor_link}</li><br />
            	<label id="tutor_introduce">강사한마디:</label>

@@ -345,7 +345,7 @@ label.light {
 
 	position: fixed;
 	right: 300px;
-	bottom:120px;
+	bottom:175px;
 
 
 }
@@ -423,19 +423,23 @@ $(function(){
 				});
 			//체크 갯수 유효성 검사 end
 			
+			
 			 //---------버튼시작-------------------\\ 
 			$('button#addTutor').click(function(e){
 				
 				//파일 업로드 formdata  
 				 let form = $('#fileUpload')[0];
 	             let formData = new FormData(form);
-//                  formData.append("tutor_img1", $("input[name=tutor_img1]")[0].files[0]);
-//                  formData.append("tutor_career_file1", $("input[name=tutor_career_file1]")[0].files[0]);
+                 formData.append("tutor_img1", $("input[name=tutor_img1]")[0].files[0]);
+                 formData.append("tutor_career_file1", $("input[name=tutor_career_file1]")[0].files[0]);
                  //파일 업로드 formdata end 
                	
                // 최종 submit 버튼
-                let $tutor = confirm('강사신청서 수정을 진행하시겠습니까?');
+                let $tutor = confirm('강사신청서 수정을 진행하시겠습니까?(주의)기존의 있던 정보들은 삭제됩니다.');
                 let $nickName = $('input#nickName').val();
+                
+                let $fileCheck = $("input[name=tutor_img1]").val();
+              
             		// 체크된 값을 넘김  
             	let totalChecked = 0;
 				let tutor_category_id = [];
@@ -455,12 +459,16 @@ $(function(){
 					return false;
 					// url 유효성 검사 end
 
-					//체크 갯수제한 두기
-				} else if ($nickName == '') {
-					alert("닉네임을 입력해주세요");
-					return false;
+				}else if($fileCheck == ""){
+					  
+                    alert("사진을 올려주세요");
+                    return false;
+		             
+				}else if ($nickName == '') {
+				alert("닉네임을 입력해주세요");
+				return false;
 
-			   }else if($tutor == true){ 
+			    }else if($tutor == true){ 
 					
 				
 					$.ajax({
@@ -471,7 +479,7 @@ $(function(){
 				   ,contentType: false
 				   ,data: formData
 				   ,success:function(){
-
+				
 					alert("강사등록 신청을 수정되었습니다");
 					location.href = "http://localhost/shallwe/"
 								 
@@ -563,17 +571,18 @@ $(function(){
     </div>
   
 <div class="content">
- <h1>강사 신청 정보 수정</h1>
+ <h1>강사신청 정보 수정</h1>
  <form method="post" enctype="multipart/form-data" id="fileUpload" accept-charset="">
  <c:forEach var ="t" items ="${tutor}" begin="0" end="0">
  <div class="cer" >
     <div style="margin:3em;"> 
 		<br>
 		<div class="filebox">
-		<label for="ex_file">등록된 이미지</label>
+		<label for="ex_file">강사님의 사진을 등록해주세요</label>
+         <input hidden="hidden" class="uploadImage" type="file" name="tutor_img1" accept="imags/*"id="ex_file"/>
          <br>
          </div>
-			 <img  id="select_img" name="dell_imags" src="${contextPath}/tutorImages/${t.tutor_img}" style="width:100%;max-width:100%;"/>
+			 <img id="select_img" name="dell_imags" src="#" style="width:100%;max-width:100%;"/>
 			 <br />
 		 </div> 
         <fieldset> 	 
@@ -585,24 +594,21 @@ $(function(){
            <label for="email">링크:</label>
           <input type="text" id="link" name="tutor_link" placeholder="ex)https://www.instagram.com/" value="${t.tutor_link}">
          <span hidden="hidden" class="checkUrl" style="color: red; font-size: 0.8em;"><i>[주소양식이 맞지 않습니다]</i></span>
-           <div style="margin:4em; margin-top:10px;">
-			<br>
-		 </div>
+          
         </fieldset>
 	</div>
 </c:forEach>
 
 
-		<div class="form2" id = "tutor_info" style="width: 500px">
+		<div class="form2" id = "tutor_info">
         <fieldset>
         <c:forEach var ="t" items ="${tutor}" begin="0" end="0">
           <legend><span class="number">2</span> 강사 프로필</legend>
           <label for="coment">강사 한마디:</label>
-          <textarea id="coment" name="tutor_introduce" placeholder="강사한마디">${t.tutor_introduce}</textarea>
+          <textarea id="coment" name="tutor_introduce" placeholder="강사한마디" value="${t.tutor_introduce}"></textarea>
           <br><br>
   		</c:forEach>
           <label>강의 선택:</label>
-       
           <br />
           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="IT">
           <label class="light" for="development">IT 정보기술</label>
@@ -635,11 +641,11 @@ $(function(){
            <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="SP"> 
            <label class="light" for="business">Sports 스포츠</label> 
           <br /> 
-            
+             
         </fieldset>
        <div style="margin:3em;">
 			<button type="submit" id="addTutor" class="btn btn-primary btn-lg resume" 
-			id="load1" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing Order">수정이완료 되셨나요??</button>
+			id="load1" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing Order">준비되셨다면 등록해주세요</button>
 			<br>
 			
 			</div>

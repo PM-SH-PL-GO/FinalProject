@@ -17,5 +17,5 @@ public class Tutor {
 	private String tutor_introduce;				// 강사 자기소개
 	private String tutor_link;					// 강사 소개 link
 	private float tutor_score;					// 강사 평점
-	
+	private String newCategoryId;
 }

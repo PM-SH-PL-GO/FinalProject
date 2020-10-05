@@ -1,24 +1,27 @@
 package com.shallwe.control;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 import java.util.UUID;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.shallwe.exception.AddException;
@@ -31,11 +34,23 @@ import lombok.extern.log4j.Log4j;
 
 @Log4j
 @Controller
-@RequestMapping(value="upload")
+@RequestMapping(value="/upload/*")
 public class UploadController {
 	
 	@Autowired private TutorService service;
 	@Autowired private ServletContext application;
+	@Autowired private ServletContext c;
+	@Autowired private TutorController tutorController;
+	
+	
+	
+	private String realPath;
+	   
+	   @PostConstruct
+	   public void initController() {
+		   
+	      this.realPath = c.getRealPath("/files/tutorCareer/");
+	  }
 	
 	//파일 업로드 이메서드는 마지막으로 하는일(업로드일은 여기서 처리한다) 
 	// 랜덤으로 난수값을 정해주고 + 오리지날 파일값을 더해서 저장해주는곳이고
@@ -96,61 +111,31 @@ public class UploadController {
 	log.info("업로드된 파일의 경로는 " + uploadPath);
 	
 	return saveName;
+	
 	}
 	
-	//PDF파일 이미지로 변환 : 경찬
-	@RequestMapping(value="/pdf",method=RequestMethod.GET)	
-	public void pdf(HttpServletRequest request, HttpServletResponse response ,String f) {
+	
+	//pdf 파일 뷰어
+	@RequestMapping(value="/pdf.do",produces = "application/pdf;charset=utf-8")	
+	@ResponseBody
+	public ResponseEntity<Byte[]> showPdf(String fileName)throws IOException{
+		
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + fileName);
+		
+		String path = realPath + fileName;
+		log.info("sfsfsdfs@@@@@@@@@@@@@@@@@@@@@@@@: " + path);
+		
+		File file =  new File((path));
+		FileInputStream fis = new FileInputStream(file);
+		InputStreamResource inputStreamResource = new InputStreamResource(fis);
+		HttpHeaders headers = new HttpHeaders();
+		
+		headers.setContentLength(file.length());
+		headers.add("Content-Disposition", "inline");
+		
+		return new ResponseEntity(inputStreamResource, headers, HttpStatus.OK);
 
-		FileInputStream fis = null;
-		BufferedOutputStream bos = null;
-		 
-		try{
-			
-//			 String fileName = "/files/tutorCareer";
-			 String uploadPath = application.getRealPath("/files/tutorCareer/"+f);
-			 log.info("보여줄 pdf:" + uploadPath);
-			 File file = new File(((HttpSession) request).getServletContext().getRealPath(uploadPath));
-			 log.info("보여줄 pdf 파일:" + file);
-		    // 보여주기
-			 response.setContentType("application/pdf");
-			 response.setHeader("Content-Description", "JSP Generated Data");
-		    // 다운로드
-		    //response.addHeader("Content-Disposition", "attachment; filename = " + file.getName() + ".pdf");
-		 
-		    fis = new FileInputStream(file);
-		    int size = fis.available();
-		    
-		    byte[] buf = new byte[size];
-		    int readCount = fis.read(buf);
-		 
-		    response.flushBuffer();
-		 
-		    bos = new BufferedOutputStream(response.getOutputStream());
-		    bos.write(buf, 0, readCount);
-		    bos.flush();
-		} catch(Exception e) {
-			e.printStackTrace();
-		    response.setContentType("text/html;charset=euc-kr");
-		    PrintWriter out;
-			try {
-				out = response.getWriter();
-				out.println("<script language='javascript'>");
-			    out.println("alert('파일 오픈 중 오류가 발생하였습니다.');");
-			    out.println("</script>");
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		} finally{
-		    try{
-		        if(fis != null) fis.close();
-		        if(bos != null) bos.close();
-		    } catch(IOException e){
-		        e.printStackTrace();
-		    }    
-		}
 	}
-
 	
 	// 파일 배열로 받아와서 집어넣기: 경찬
 	public  ResponseEntity<String> upload(MultipartFile[] uploadFiles) {
@@ -169,7 +154,8 @@ public class UploadController {
 	@PostMapping(value="/addTutor")
 	public ResponseEntity<String> addTutor(Tutor tutor,
 											  MultipartFile tutor_img1,
-											  MultipartFile tutor_career_file1,HttpSession session) 
+											  MultipartFile tutor_career_file1,HttpSession session
+											 ) 
 											  throws AddException{
 		
 		System.out.println("jsp넘어온 데이터:" + tutor);
@@ -186,11 +172,13 @@ public class UploadController {
 		m.setMember_id(tutor_id);
 		
 		String tutor_fileName = saveFile(tutor_img1);
-		String tutor_careerfile = saveFile(tutor_career_file1);
+		String tutor_careerfile = craeerFiles(tutor_career_file1);
 		
 		tutor.setMember(m);
 		tutor.setTutor_img(tutor_fileName);
 		tutor.setTutor_career_file(tutor_careerfile);
+		
+		
 		
 		try {
 			
@@ -210,23 +198,40 @@ public class UploadController {
 	//강사신청정보 수정: 경찬
 	@PostMapping(value="updateTutor")
 	public ResponseEntity<String> updateTutor(HttpSession session,
-											 Tutor tutor
+											 Tutor tutor1,
+											 MultipartFile tutor_img1,
+											 MultipartFile tutor_career_file1,
+											 @RequestParam Map<String,Object> tutor
 											)throws ModifyException{
 		
-		String member_id = (String) session.getAttribute("loginInfo");
+		System.out.println("jsp넘어온 데이터:" + tutor);
+		log.info("이미지파일:" + tutor_img1);
+		log.info("이력서파일:" + tutor_career_file1);
+		
+		
+		String tutor_id = (String)session.getAttribute("loginInfo");	
 		Member member = new Member();
-		member.setMember_id(member_id);	
-		tutor.setMember(member);
-		log.info("@@@@@@@@@@@@@강사정보:" + tutor);
+		member.setMember_id(tutor_id);
+		tutor.put("tutor_id", tutor_id);
+				
+		String tutor_img = saveFile(tutor_img1);
+		String tutor_career_file = craeerFiles(tutor_career_file1);
+		
+		tutor1.setMember(member);
+		tutor1.setTutor_img(tutor_img);
+		tutor1.setTutor_career_file(tutor_career_file);
+		
 		try {
 			
-			service.tutorUpdate(tutor);
-			return ResponseEntity.status(HttpStatus.OK).body("수정완료되었습니다");
+			service.tutorUpdate(tutor1,tutor);
+			
+			return ResponseEntity.status(HttpStatus.OK).body("수정완료");
+			
 		} catch (Exception e) {
-			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("수정이실패하였습니다");
-		} 
-		
+
+		}
+	
 	}
 	
 	//강사사진 수정
@@ -302,7 +307,7 @@ public class UploadController {
 		return ResponseEntity.status(HttpStatus.OK).body("파일변경완료");
 	}
 	
-		
+
 		
 	
 }

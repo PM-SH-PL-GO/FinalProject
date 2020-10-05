@@ -35,14 +35,14 @@
 		    JOIN lecture_category lc ON (tu.tutor_category_id = lc.category_id)
 		WHERE me.tutor_YN = #{YN}
 	</select>
-<!-- 	강사등록:경찬 -->
+<!-- 	강사등록 and 수정 :경찬 -->
 	<insert id="insertTutor" parameterType="Tutor">
 	INSERT INTO TUTOR
 				(TUTOR_ID,TUTOR_CATEGORY_ID,TUTOR_IMG,TUTOR_CAREER_FILE,tutor_introduce,TUTOR_LINK,TUTOR_SCORE,TUTOR_NICKNAME) 
 				VALUES(#{member.member_id},UPPER(#{lectureCategory.lecture_category_id}),#{tutor_img},
 				#{tutor_career_file},#{tutor_introduce},#{tutor_link},#{tutor_score},#{tutor_nickname})
 	</insert>
-<!-- 	강사정보조회:경찬 -->
+<!-- 	강사정보조회 :경찬 -->
 	<select id="selectTutorInfo" resultMap="tutor">
 	
 		SELECT m.member_name, tu.*, m.member_email, m.member_phone ,lc.category_name, m.tutor_YN
@@ -59,25 +59,12 @@
 			WHERE TUTOR_NICKNAME = #{tutor_nickname}			
 	</select>
 	
-<!-- 	강사신청취소:경찬 -->
+<!-- 	강사신청취소 and 수정 :경찬 -->
 	<delete id="deltutor">
 	 DELETE FROM TUTOR T WHERE T.TUTOR_ID = #{tutor_id}
 	</delete>
 	
-<!-- 	강사정보수정:경찬 -->
-	<update id="tutorUpdate" resultMap="tutor">
 	
-		UPDATE TUTOR 
-		SET TUTOR_CATEGORY_ID=#{lectureCategory.lecture_category_id}
-		,TUTOR_NICKNAME=#{tutor_nickname}
-<!-- 	,TUTOR_IMG=#{tutor_img} -->
-<!-- 	,TUTOR_CAREER_FILE=#{tutor_career_file} -->
-		,TUTOR_INTRODUCE=#{tutor_introduce}
-		,TUTOR_LINK=#{tutor_link}
-		 WHERE TUTOR_ID=#{member.member_id}
-		 AND EXISTS(SELECT 1 FROM LECTURE_CATEGORY  WHERE TUTOR.TUTOR_CATEGORY_ID = LECTURE_CATEGORY.CATEGORY_ID)
-		 
-	</update>
 <!-- 	강사사진 수정 -->
 	<update id="tutorImage" parameterType="Tutor">
 		UPDATE TUTOR

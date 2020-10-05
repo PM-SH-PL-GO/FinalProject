@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +14,7 @@ import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.exception.RemoveException;
-import com.shallwe.vo.LectureCategory;
+import com.shallwe.vo.Member;
 import com.shallwe.vo.Tutor;
 
 import lombok.extern.log4j.Log4j;
@@ -51,11 +53,14 @@ public class TutorService {
 		
 	}
 	//강사정보 수정: 경찬
-	public void tutorUpdate(Tutor tutor)throws ModifyException{
+	public void tutorUpdate(Tutor tutor1,Map<String,Object> tutor) throws AddException{
 		
-		String lec = tutor.getLectureCategory().getLecture_category_id();
+		HttpSession session = null; 
+		String lec = tutor1.getLectureCategory().getLecture_category_id();
 		String [] category = lec.split(",");
-		dao.tutorUpdate(tutor,category);
+		
+			dao.tutorUpdate(tutor,category,tutor1);
+			
 	}
 	
 	//강사사진 수정:경찬
@@ -70,4 +75,5 @@ public class TutorService {
 		
 		dao.tutorCareer(tutor);
 	}
+	
 }
