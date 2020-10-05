@@ -46,14 +46,14 @@
 			JOIN member me ON (tu.tutor_id = me.member_id)
 		WHERE me.tutor_YN = #{YN}
 	</select>
-	
+<!-- 	강사등록 and 수정 :경찬 -->
 	<insert id="insertTutor" parameterType="Tutor">
 	INSERT INTO TUTOR
 				(TUTOR_ID,TUTOR_CATEGORY_ID,TUTOR_IMG,TUTOR_CAREER_FILE,tutor_introduce,TUTOR_LINK,TUTOR_SCORE,TUTOR_NICKNAME) 
 				VALUES(#{member.member_id},UPPER(#{lectureCategory.lecture_category_id}),#{tutor_img},
 				#{tutor_career_file},#{tutor_introduce},#{tutor_link},#{tutor_score},#{tutor_nickname})
 	</insert>
-	
+<!-- 	강사정보조회 :경찬 -->
 	<select id="selectTutorInfo" resultMap="tutor">
 	
 		SELECT m.member_name, tu.*, m.member_email, m.member_phone ,lc.category_name, m.tutor_YN
@@ -63,15 +63,31 @@
 		WHERE tu.tutor_id = #{tutor_id}
 
 	</select>
-	
+<!-- 	강사닉네음중복체크:경찬 -->
 	<select id="checkNickName" resultType="int">
 			SELECT COUNT(*) 
 			FROM TUTOR
 			WHERE TUTOR_NICKNAME = #{tutor_nickname}			
 	</select>
 	
-	<delete id="deltutor" parameterType="Tutor">
-	DELETE FROM TUTOR WHERE TUTOR_ID = #{tutor_id}
+<!-- 	강사신청취소 and 수정 :경찬 -->
+	<delete id="deltutor">
+	 DELETE FROM TUTOR T WHERE T.TUTOR_ID = #{tutor_id}
 	</delete>
+	
+	
+<!-- 	강사사진 수정 -->
+	<update id="tutorImage" parameterType="Tutor">
+		UPDATE TUTOR
+		SET TUTOR_IMG =#{tutor_img}
+		WHERE TUTOR_ID =#{member.member_id}
+	</update>
+	
+	<update id="tutorCareer">
+			UPDATE TUTOR
+			SET TUTOR_CAREER_FILE = #{tutor_career_file}
+			WHERE TUTOR_ID= #{member.member_id}
+	
+	</update>
 	
 </mapper>
