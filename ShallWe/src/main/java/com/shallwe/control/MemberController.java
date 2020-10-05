@@ -1,5 +1,6 @@
 package com.shallwe.control;
 
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.model.MemberInfoBean;
 import com.shallwe.service.MemberSerivce;
+import com.shallwe.vo.Member;
 
 import lombok.extern.log4j.Log4j;
 
@@ -142,5 +144,32 @@ public class MemberController {
 		
 	}
 	
+	// myInfo 정보 조회
+	@RequestMapping(value = "/myinfo", method = RequestMethod.GET)
+	public ModelAndView myinfo(HttpSession session) {
+		String member_id = (String)session.getAttribute("loginInfo");
+		MemberInfoBean myInfo = new MemberInfoBean();
+		ModelAndView modelAndView = new ModelAndView();
+		try {
+			myInfo = service.findById(member_id);
+			modelAndView.addObject("myInfo", myInfo);
+			log.info(myInfo);
+			
+		} catch (FindException e) {
+			e.printStackTrace();
+		} finally {
+			modelAndView.setViewName("/myinfo");
+		}
+		return modelAndView;
+	}
 	
+	// myInfo 정보 조회
+	@RequestMapping(value = "/myinfoLectureList", method = RequestMethod.GET)
+	public ModelAndView myinfoLectureList(HttpSession session) {
+		String member_id = (String)session.getAttribute("loginInfo");
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("member_id", member_id);
+
+		return modelAndView;
+	}
 }

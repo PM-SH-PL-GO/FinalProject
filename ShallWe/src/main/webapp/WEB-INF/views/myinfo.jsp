@@ -1,94 +1,73 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"    pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath }" />
+<c:set var="myInfo" value="${requestScope['myInfo']}"/>
 <!doctype html>
-<html class="no-js" lang="zxx">
+<!-- <html class="no-js" lang="zxx"> -->
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>DirectoryListing</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="manifest" href="site.webmanifest">
-    <link rel="shortcut icon" type="image/x-icon" href="/shallwe/assets/img/favicon.ico">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!--     <meta charset="utf-8"> -->
+<!--     <meta http-equiv="x-ua-compatible" content="ie=edge"> -->
+<!--     <title>DirectoryListing</title> -->
+<!--     <meta name="description" content=""> -->
+<!--     <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+<!--     <link rel="manifest" href="site.webmanifest"> -->
+<!--     <link rel="shortcut icon" type="image/x-icon" href="/shallwe/assets/img/favicon.ico"> -->
+<!-- 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
 	
-	<!-- CSS here -->
-	<link rel="stylesheet" href="/shallwe/assets/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/owl.carousel.min.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/slicknav.css">
-    <link rel="stylesheet" href="/shallwe/assets/css/flaticon.css">
-    <link rel="stylesheet" href="/shallwe/assets/css/progressbar_barfiller.css">
-    <link rel="stylesheet" href="/shallwe/assets/css/gijgo.css">
-    <link rel="stylesheet" href="/shallwe/assets/css/animate.min.css">
-    <link rel="stylesheet" href="/shallwe/assets/css/animated-headline.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/magnific-popup.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/fontawesome-all.min.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/themify-icons.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/slick.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/nice-select.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/style.css">
+<!-- 	<!-- CSS here -->
+<%-- 	<link rel="stylesheet" href="${contextPath}/assets/css/bootstrap.min.css"> --%>
+<%-- 	<link rel="stylesheet" href="${contextPath}/assets/css/owl.carousel.min.css"> --%>
+<%-- 	<link rel="stylesheet" href="${contextPath}/assets/css/slicknav.css"> --%>
+<%--     <link rel="stylesheet" href="${contextPath}/assets/css/flaticon.css"> --%>
+<%--     <link rel="stylesheet" href="${contextPath}/assets/css/progressbar_barfiller.css"> --%>
+<%--     <link rel="stylesheet" href="${contextPath}/assets/css/gijgo.css"> --%>
+<%--     <link rel="stylesheet" href="${contextPath}/assets/css/animate.min.css"> --%>
+<%--     <link rel="stylesheet" href="${contextPath}/assets/css/animated-headline.css"> --%>
+<%-- 	<link rel="stylesheet" href="${contextPath}/assets/css/magnific-popup.css"> --%>
+<%-- 	<link rel="stylesheet" href="${contextPath}/assets/css/fontawesome-all.min.css"> --%>
+<%-- 	<link rel="stylesheet" href="${contextPath}/assets/css/themify-icons.css"> --%>
+<%-- 	<link rel="stylesheet" href="${contextPath}/assets/css/slick.css"> --%>
+<%-- 	<link rel="stylesheet" href="${contextPath}/assets/css/nice-select.css"> --%>
+<%-- 	<link rel="stylesheet" href="${contextPath}/assets/css/style.css"> --%>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+
+	// 내정보 수정하기 버튼 클릭 이벤트
+	var $myinfoModiBtnObj = $('#myinfoModi');
+	$myinfoModiBtnObj.on('click', function (e) {
+		let url = "${contextPath}/myinfoModi";
+		if ( confirm("내 정보를 수정하시겠습니까?") ) {
+			location.href=url;
+		}
+	}); // end of 내강의 수정 event
+	
+	
+	// 내가 수강하고 있는 강의 목록보기 
+	$.ajax( { 
+		url : '${contextPath}/myinfoLectureList'
+		, method : "GET"
+		, data : {"lecture_id" : lecture_code}
+		, success : function () {
+			if(confirm("찜목록으로 이동하시겠습니까")){
+				location.href = "${contextPath}/member/wishlist";
+			} else {
+				location.reload();
+			}
+		}
+	}); // end of ajax
+	
+	
+}); // end of load();
+</script>
 </head>
 <body class="myinfobody">
-    <!-- ? Preloader Start -->
-    <div id="preloader-active">
-        <div class="preloader d-flex align-items-center justify-content-center">
-            <div class="preloader-inner position-relative">
-                <div class="preloader-circle"></div>
-                <div class="preloader-img pere-text">
-                    <img src="/shallwe/assets/img/logo/loder.png" alt="">
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Preloader Start -->
-    <header>
-        <!-- Header Start -->
-        <div class="header-area header-transparent">
-            <div class="main-header header-sticky">
-                <div class="container-fluid">
-                    <div class="menu-wrapper d-flex align-items-center justify-content-between">
-                        <!-- Logo -->
-                        <div class="logo">
-                            <a href="index.html"><img src="/shallwe/assets/img/logo/logo.png" alt=""></a>
-                        </div>
-                        <!-- Main-menu -->
-                        <div class="main-menu f-right d-none d-lg-block">
-                            <nav>
-                                <ul id="navigation">
-                                    <li><a href="index.html">Home</a></li>
-                                    <li><a href="listing.html">Catagories</a></li> 
-                                    <li><a href="#">Pages</a>
-                                        <ul class="submenu">
-                                            <li><a href="/shallwe/assets/directory_details.html">listing Details</a></li>
-                                            <li><a href="listing.html">Catagories</a></li> 
-                                        </ul>
-                                    </li>
-                                    <li><a href="blog.html">Blog</a>
-                                        <ul class="submenu">
-                                            <li><a href="blog.html">Blog</a></li>
-                                            <li><a href="blog_details.html">Blog Details</a></li>
-                                            <li><a href="elements.html">Elements</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="contact.html">Contact</a></li>
-                                </ul>
-                            </nav>
-                        </div>          
-                        <!-- Header-btn -->
-                        <div class="header-btns d-none d-lg-block f-right">
-                            <a href="#" class="mr-40"><i class="ti-user"></i> Log in</a>
-                            <a href="#" class="btn">Add Listing</a>
-                        </div>
-                        <!-- Mobile Menu -->
-                        <div class="col-12">
-                            <div class="mobile_menu d-block d-lg-none"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Header End -->
-    </header>
+    <!-- topbar Start -->
+	<div class="topMenu">
+		<jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
+	</div>
     <main>
     <!-- top bar-->
     <div class="slider-area hero-bg2 hero-overly">
@@ -96,8 +75,6 @@
         </div>
     </div>
    
-
-
   <!-- myinfo Area Start -->
   <div class="listing-area pt-70 pb-70"> 
     <div class="container">
@@ -124,14 +101,15 @@
                                 <div class="properties properties2 mb-30">
                                     <div class="properties__card">
                                             <table class="type1">
-											<tr><th>이름 :</th><td>꽁병지</td></tr>                                            
-											<tr><th>닉네임 :</th><td>꽁병지TV</td></tr>                                            
-											<tr><th>이메일 :</th><td>ggong@gmail.com</td></tr>                                            
-											<tr><th>H.P :</th><td>010-1223-1234</td></tr>                                            
-											<tr><th>관심분야 :</th><td>IT</td><td>스포츠</td></tr>                                            
+											<tr><th><label>이름 :</label></th><td>${myInfo.memberName}</td></tr>                                            
+											<tr><th><label>이메일 :</label></th><td>${myInfo.memberEmail}</td></tr>                                            
+											<tr><th><label>H.P :</label></th><td>${myInfo.memberPhone}</td></tr>                                            
+											<tr><th><label>관심분야1 :</label></th><td>${myInfo.favorite1.lecture_category_name}</td></tr>                                            
+											<tr><th><label>관심분야2 :</label></th><td>${myInfo.favorite2.lecture_category_name}</td></tr>                                            
+											<tr><th><label>관심분야3 :</label></th><td>${myInfo.favorite3.lecture_category_name}</td></tr>                                            
                                             </table>
                                     <div class="btn_center">
-                                    	<a href="http://localhost/shallwe/myinfoModi" class="infobutton">내 정보 수정</a>
+                                    	<a id="myinfoModi" class="infobutton">내 정보 수정</a>
                                     </div>
                                     </div>
                                 </div>

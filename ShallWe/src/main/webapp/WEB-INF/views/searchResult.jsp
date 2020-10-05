@@ -6,6 +6,7 @@
 
 <style>
 .left_menu {
+	padding-left: 10%;
 	float: left;
 	width: 30%;
 }
@@ -14,8 +15,8 @@
 	text-align: center;
 }
 .right_menu { 
-	float : center;
-	width: 70%;
+/* 	float : center; */
+	width: 60%;
 }
 
 </style>
@@ -86,7 +87,7 @@
 				}); // end of ajax
 			}
 		});
-	}); // end of 
+	}); // end of load
 	
 </script>
 </head>
@@ -114,7 +115,8 @@
 		</div>
 
 		<!--카테고리 내 검색-->
-		<section class="left_menu section-padding">
+		<section class="left_menu">
+<!-- 		<section class="left_menu section-padding"> -->
 			<div class="col-lg-10">
 				<div class="blog_right_sidebar">
 					<aside class="single_sidebar_widget search_widget">
@@ -170,7 +172,8 @@
 		</section>
 
 		<!--검색결과 : searchLectureList.jsp   -->
-		<section class="right_menu section-padding">
+<!-- 		<section class="right_menu section-padding"> -->
+		<section class="right_menu">
 			<div class="container">
 			
 				<div class="row">

@@ -78,6 +78,5 @@ public class MemberSerivce {
 		memberDao.randomPassword(member1,member);
 		
 	}
-		
 }
 	
