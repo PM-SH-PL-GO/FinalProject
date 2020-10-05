@@ -114,7 +114,7 @@ $(function(){
 					<div class="col-lg-12">
 						<!-- Section Tittle -->
 						<div class="section-tittle text-center mb-80">
-							<h2>수강 목록</h2>
+							<h2>수강 목록${rev}</h2>
 						</div>
 					</div>
 				</div>
