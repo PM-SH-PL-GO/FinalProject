@@ -34,8 +34,8 @@
 		//검색 입력 left_menu
 		var $searchTextObj = $("section.left_menu").find("input#searchText");
 		var $searchKeyObj = $("section.left_menu").find("select#searchKey");
-		var condition ="";
-		var $searchText ="";
+		var condition =0;
+		var $searchText =" ";
 		
 		$searchTextObj.focus();
 		
@@ -58,7 +58,8 @@
 		});
 		
 		// 강의상세보기
-		var lectureDetail = $('a.lecture_detail');
+		//var lectureDetail = $('a.lecture_detail');
+		var lectureDetail = $('div.properties__caption');
 		lectureDetail.click(function e () {
 			let lecture_code = $(this).find('input[name=lecture_code]').val();
 			var url = '${contextPath}/lectures/detail?lecture_id='+lecture_code;
@@ -69,8 +70,9 @@
 		var $lectureLike = $('div.lectureLike');
 		$lectureLike.on('click', 'input[name=lecture_code]', function(e){
 			let lecture_code = $(this).find('input[name=lecture_code]').val();
-			var url = '${contextPath}/lectures/detail?lecture_id='+lecture_code;
-			location.href = url;
+			console.log(lecture_code);
+			//var url = '${contextPath}/member/wishlist/addWish?lecture_id='+lecture_code;
+			//location.href = url;
 		});
 	}); // end of 
 	
@@ -170,13 +172,13 @@
 					<c:forEach items="resultList.Lecture" var="lec" varStatus="lec_count">
 					<div class="col">
 						<div class="properties pb-20">
-							<div class="properties__card">
-								<a href="#"><img src="/shallwe/assets/img/gallery/properties3.png" alt="강의사진"></a><br/><br/>
+							<div class="properties__card" style="cursor: pointer;">
+								<a href="#"><img src="${contextPath}/assets/img/gallery/properties3.png" alt="강의사진"></a><br/><br/>
 								<div class="properties__caption">
 									<p>${stats.count}</p>
 									<h3>
 										<label>강의명: </label>
-										<a class="lecture_detail"  style="cursor: pointer;">${lecture.lecture_title}
+										<a class="lecture_detail" style="cursor: pointer;">${lecture.lecture_title}
 											<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>
 										</a>
 									</h3>
@@ -185,7 +187,10 @@
 										<fmt:formatDate value="${lecture.lecture_end_dt}" pattern="yyyy-MM-dd"/> 
 									</h4>
 									<h4><label>강사명: </label>${lecture.tutor.tutor_nickname}</h4>
-									<h4><label>현재인원: </label> ${lecture.lecture_current} <label>/최대인원: </label> ${lecture.lecture_max}</h4>
+									<c:if test="${lecture.lecture_current} ==  ${lecture.lecture_max}" >
+										<h4 style="color: red;"><span>정원초과</span></h4>
+									</c:if>
+									<h4><label>현재인원:</label> ${lecture.lecture_current} <label>/최대인원: </label> ${lecture.lecture_max}</h4>
 								</div>
 								<div class="properties__footer d-flex justify-content-between align-items-center">
 									<h3><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###원"/></h3>
