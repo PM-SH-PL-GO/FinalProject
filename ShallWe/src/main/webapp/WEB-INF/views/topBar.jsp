@@ -37,8 +37,6 @@
 .menu-wrapper
 {float:left;}
 
- .header-btns
-{margin-left: 410px} 
 .mr-40
 {margin-left: 20px}
 .mr-40

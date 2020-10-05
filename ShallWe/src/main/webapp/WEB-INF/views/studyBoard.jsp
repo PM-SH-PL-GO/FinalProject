@@ -19,7 +19,7 @@ tr td.boardTitle:hover {
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 $(function(){
-	var page ="1";
+	var page =1;
 	var $pageList=$("#pageList");
 	
 	//----------스터디 게시판 LOAD START---------
@@ -54,9 +54,14 @@ $(function(){
 			if(pbObj.startPage > 1){
 				pageListData += '<li class="page-item"><a class="prev page-link"><span class="ti-angle-left"></span></a></li>';
 			}
-			
-			for(var i=pbObj.startPage; i<=pbObj.endPage; i++){
+			if(pbObj.endPage<=pbObj.totalPage){
+				for(var i=pbObj.startPage; i<=pbObj.endPage; i++){
 				pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
+				}
+			}else{
+				for(var i=pbObj.startPage; i<=pbObj.totalPage; i++){
+					pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
+				}
 			}
 			if(pbObj.endPage < pbObj.totalPage){
 				pageListData += '<li class="page-item"><a class="next page-link"><span class="ti-angle-right"></span></a></li>'
@@ -72,20 +77,19 @@ $(function(){
 	
 	//----------스터디 게시판 페이징 CLICK  START---------	
 	$pageList.on("click","li>a", function(e){
-// 		console.log("pbObj.startPage11111======="+${pb.startPage});
-// 		console.log("pbObj.endPage1111111111111111====="+${pb.endPage});
-// 		console.log("pbObj.totalPage1111111111======="+${pb.totalPage});
 		var $etClass = $(e.target).attr('class');
 		var $searchVal = $(this).parents('.pagination-area').siblings('.row').find('#searchBar').val();
 		var urlVal = null;
 		if($etClass == 'prev page-link'||$etClass =='ti-angle-left'){
-			page = ${pb.startPage-10};			
+			page=$(this).parents('.page-item').next().find('a.page-link').html();
+			page=Number(page)-10;	
 		}else if($etClass == 'next page-link'||$etClass =='ti-angle-right'){
-			page = ${pb.endPage+1};
+			page=$(this).parents('.page-item').prev().find('a.page-link').html();
+			page=Number(page)+1;
 		}else{
 			page = $(e.target).html();
 		}
-		
+		console.log("페이지이ㅣㅈ이"+page);
 		if($searchVal==null ||  $searchVal==""){
 			urlVal = "${contextPath}/board/list/"+page;
 		}else{
@@ -119,9 +123,14 @@ $(function(){
 				if(pbObj.startPage > 1){
 					pageListData += '<li class="page-item"><a class="prev page-link"><span class="ti-angle-left"></span></a></li>';
 				}
-				
-				for(var i=pbObj.startPage; i<=pbObj.totalPage; i++){
+				if(pbObj.endPage<=pbObj.totalPage){
+					for(var i=pbObj.startPage; i<=pbObj.endPage; i++){
 					pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
+					}
+				}else{
+					for(var i=pbObj.startPage; i<=pbObj.totalPage; i++){
+						pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
+					}
 				}
 				if(pbObj.endPage < pbObj.totalPage){
 					pageListData += '<li class="page-item"><a class="next page-link"><span class="ti-angle-right"></span></a></li>'
@@ -139,6 +148,12 @@ $(function(){
 	//----------스터디 게시판 검색 button CLICK  START---------		
 	$("button#search-btn").click(function(){
 		$searchVal = $("#searchBar").val()
+		console.log($searchVal);
+		if($searchVal==""){
+// 			$("#studBoard").trigger("click");
+			alert("키워드를 입력해주세요");
+			return;
+		}
 		var page = 1;
 		if($searchVal== null || $searchVal== ""){
 			location.href = "${contextPath}/studyBoard";
@@ -172,9 +187,14 @@ $(function(){
 				if(pbObj.startPage > 1){
 					pageListData += '<li class="page-item"><a class="prev page-link"><span class="ti-angle-left"></span></a></li>';
 				}
-				
-				for(var i=pbObj.startPage; i<=pbObj.endPage; i++){
+				if(pbObj.endPage<=pbObj.totalPage){
+					for(var i=pbObj.startPage; i<=pbObj.endPage; i++){
 					pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
+					}
+				}else{
+					for(var i=pbObj.startPage; i<=pbObj.totalPage; i++){
+						pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
+					}
 				}
 				if(pbObj.endPage < pbObj.totalPage){
 					pageListData += '<li class="page-item"><a class="next page-link"><span class="ti-angle-right"></span></a></li>'
