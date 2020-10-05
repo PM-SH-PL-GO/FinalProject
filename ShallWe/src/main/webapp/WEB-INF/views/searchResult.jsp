@@ -66,7 +66,7 @@
 		}); 
 		
 		// 강의찜하기
-		var $lectureLike = $('div.heart');
+		var $lectureLike = $('span.insertCart');
 		$lectureLike.on('click', function(e){
 			let lecture_code = $(this).find('input[name=lecture_code]').val();
 			console.log(lecture_code);
@@ -187,8 +187,14 @@
 							<div class="properties__card" style="cursor: pointer;">
 								<a href="#"><img src="${contextPath}/assets/img/gallery/properties3.png" alt="강의사진"></a><br/><br/>
 								<div class="properties__caption">
-									<p>${stats.count}</p>
+									<c:if test="${lecture.lecture_current eq lecture.lecture_max}" >
+										<h2><span style="background-color: red; color: white;font-size: large; padding: 2.5px;">정원초과</span></h2>
+									</c:if>
+									<c:if test="${lecture.lecture_current ne lecture.lecture_max}" >
+										<span style="background-color: #3BABE4; color: white; font-size: large;  padding: 2.5px;">신청가능</span>
+									</c:if>
 									<h3>
+										<br>
 										<label>강의명: </label>
 										<a class="lecture_detail" style="cursor: pointer;">${lecture.lecture_title}
 											<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>
@@ -199,21 +205,18 @@
 										<fmt:formatDate value="${lecture.lecture_end_dt}" pattern="yyyy-MM-dd"/> 
 									</h4>
 									<h4><label>강사명: </label>${lecture.tutor.tutor_nickname}</h4>
-									<c:if test="${lecture.lecture_current eq lecture.lecture_max}" >
-										<h4 style="color: red;"><span>정원초과</span></h4>
-									</c:if>
 									<h4><label>현재인원:</label> ${lecture.lecture_current} <label>/최대인원: </label> ${lecture.lecture_max}</h4>
 								</div>
-								<div class="properties__footer d-flex justify-content-between align-items-center">
-									<h3><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###원"/></h3>
-									<c:if test="${lecture.lecture_current ne lecture.lecture_max}" >
-									<div class="heart">
+								<h3 style="text-align: center"><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###원"/>
+								<c:if test="${lecture.lecture_current ne lecture.lecture_max}" >
+									<span class="insertCart" style="text-align: left">
 										<img class="shoppingCartImg"  style="cursor: pointer;" src="${contextPath}/assets/img/elements/shopping-cart.png"
 											width="30px" alt="강의찜하기" title="강의찜하기">
 										<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>								
-									</div>
-									</c:if>
-								</div>
+									</span>
+								</c:if>
+								</h3>
+
 							</div>
 						</div>
 					</div>
