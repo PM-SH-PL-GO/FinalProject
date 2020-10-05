@@ -47,8 +47,12 @@
 	VALUES( #{lecture.lecture_id},#{member_id}, #{lecture.lectureCategory.lecture_category_id})
 	</insert>
 	
-	<delete id ="deleteFavLec" parameterType="Map">
+	<delete id ="deleteOneFavLec" parameterType="Map">
 	DELETE from WishList where member_id=#{member_id} AND lecture_id=#{lecture_id}
+	</delete>
+	
+	<delete id ="deleteAllFavLec" parameterType="String">
+	DELETE from WishList where member_id=#{member_id}
 	</delete>
 	
 </mapper>

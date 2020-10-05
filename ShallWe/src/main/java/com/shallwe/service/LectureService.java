@@ -17,6 +17,7 @@ import com.shallwe.dao.WishListDAO;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
+import com.shallwe.exception.RemoveException;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureDetail;
 import com.shallwe.vo.MemberLectureHistory;
@@ -136,10 +137,22 @@ public class LectureService {
 		}
 		return result;
 	}
-
+	
+	// 찜목록 가져오기 : 상하
 	public List<Lecture> findWishListById(String member_id) throws FindException {
-
 		return wishDAO.selectWishListById(member_id);
 	}
 
+	// 찜목록 개별 삭제 : 상하
+	public void deleteOneWishList(Map<String, Object>map) throws RemoveException{
+		try { 
+			wishDAO.deleteOneFavLec(map);
+		}catch(RemoveException e){
+			e.printStackTrace();
+		}
+	}
+	// 찜목록 전체 삭제 : 상하
+	public void deleteAllWishList(String member_id) throws RemoveException{
+			wishDAO.deleteAllFavLec(member_id);
+	}
 }

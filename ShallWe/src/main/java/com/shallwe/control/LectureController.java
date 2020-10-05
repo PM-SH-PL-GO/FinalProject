@@ -3,7 +3,9 @@ package com.shallwe.control;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
@@ -12,8 +14,6 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
+import com.shallwe.exception.RemoveException;
 import com.shallwe.service.LectureService;
 import com.shallwe.service.TutorService;
 import com.shallwe.vo.Lecture;
@@ -214,22 +215,4 @@ public class LectureController {
 		return mnv;
 	}
 
-	// 장바구니 보기 : 상하
-
-	@RequestMapping(value = "/wishlist")
-	public String WishView(HttpSession session, Model model) throws FindException {
-//		String member_id = (String) session.getAttribute("loginInfo");
-		String member_id = "member2"; 
-		List<Lecture> wishall = new ArrayList<>();
-		try {
-			 wishall = service.findWishListById(member_id);
-			model.addAttribute("wishListVal", wishall);
-			return "/wishlist";
-		} catch (FindException e) {
-			e.printStackTrace();
-			Logger.info("error");
-			return "fail";
-		}
-
-	}
 }

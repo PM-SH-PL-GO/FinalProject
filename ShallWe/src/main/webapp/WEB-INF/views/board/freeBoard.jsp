@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"    pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <!doctype html>
 <html class="no-js" lang="zxx">
 <head>
@@ -29,103 +32,43 @@
 </head>
 <body>
     <header>
-        <!-- Header Start -->
-        <div class="header-area header-transparent">
-            <div class="main-header header-sticky">
-                <div class="container-fluid">
-                    <div class="menu-wrapper d-flex align-items-center justify-content-between">
-                        <!-- Logo -->
-                        <div class="logo">
-                            <a href="index.html"><img src="/shallwe/assets/img/logo/logo.png" alt=""></a>
-                        </div>
-                        <!-- Main-menu -->
-                        <div class="main-menu f-right d-none d-lg-block">
-                            <nav>
-                                <ul id="navigation">
-                                    <li><a href="index.html">Home</a></li>
-                                    <li><a href="listing.html">Catagories</a></li> 
-                                    <li><a href="#">Pages</a>
-                                        <ul class="submenu">
-                                            <li><a href="/shallwe/assets/directory_details.html">listing Details</a></li>
-                                            <li><a href="listing.html">Catagories</a></li> 
-                                        </ul>
-                                    </li>
-                                    <li><a href="blog.html">Blog</a>
-                                        <ul class="submenu">
-                                            <li><a href="blog.html">Blog</a></li>
-                                            <li><a href="blog_details.html">Blog Details</a></li>
-                                            <li><a href="elements.html">Elements</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="contact.html">Contact</a></li>
-                                </ul>
-                            </nav>
-                        </div>          
-                        <!-- Header-btn -->
-                        <div class="header-btns d-none d-lg-block f-right">
-                            <a href="#" class="mr-40"><i class="ti-user"></i> Log in</a>
-                            <a href="#" class="btn">Add Listing</a>
-                        </div>
-                        <!-- Mobile Menu -->
-                        <div class="col-12">
-                            <div class="mobile_menu d-block d-lg-none"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Header End -->
+       <div class="topMenu">
+       		<jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
+       </div>
     </header>
     <main>
-  <!-- top bar-->
-    <div class="slider-area hero-bg2 hero-overly">
-        <div class="single-slider hero-overly topbar-height d-flex align-items-center">
-        </div>
-    </div>
-
-	<!--ê¸ ëª©ë¡ Start -->
   <div class="listing-area pt-120 pb-120">
     <div class="container">
         <div class="row">
-        
-		
+        	<div class="box-header with-border">
+        	<h3 class="box-title">게시글 목록</h3>
+			</div>
 	<div class="container">
 		<div class="row">
 			<table class="table table-striped" style="text-align: center; border:1px solid #dddddd">
 				<thead>
 					<tr>
-						<th style="background-color: #eeeeee; text-algin:center">번호</th>
-						<th style="background-color: #eeeeee; text-algin:center">제목</th>
-						<th style="background-color: #eeeeee; text-algin:center">작성자</th>
-						<th style="background-color: #eeeeee; text-algin:center">작성일</th>
-						<th style="background-color: #eeeeee; text-algin:center">조회수</th>
+						<th style="background-color: #eeeeee; text-algin:center; width:50px">번호</th>
+						<th style="background-color: #eeeeee; text-algin:center;">제목</th>
+						<th style="background-color: #eeeeee; text-algin:center; width:100px">작성자</th>
+						<th style="background-color: #eeeeee; text-algin:center; width:150px">작성일</th>
+						<th style="background-color: #eeeeee; text-algin:center; width:75px">조회수</th>
 					</tr>
 				</thead>
+				
 				<tbody>
+				<c:forEach items="${freeboard}" var="freelist">
 					<tr>
-						<td>3</td>
-						<td>안녕하시오</td>
-						<td>고길동</td>
-						<td>2020-09-10</td>
-						<td>38</td>
+						<td>${freelist.freeboard_id}</td>
+						<td><a style="color:black" href="${path}/board/read?freeboard_id=${freelist.freeboard_id}">${freelist.freeboard_title}</a></td>
+						<td>${freelist.member.member_id}</td>
+						<td><fmt:formatDate value="${freelist.freeboard_write_dt}" pattern="yyyy-MM-dd"/></td>
+						<td><span class="badge bg-red">${freelist.freeboard_view_count}</span></td>
 					</tr>
-					<tr>
-						<td>2</td>
-						<td>우린 고씨가문의</td>
-						<td>고준식</td>
-						<td>2020-08-29</td>
-						<td>1032</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>영광이올시다</td>
-						<td>고수정</td>
-						<td>2020-05-05</td>
-						<td>348</td>
-					</tr>
+				</c:forEach>
 				</tbody>
 			</table>
-			
+		</div>
 			<div class="freeboard_related_search">
 				<aside class="serach_form search_btn">
 						<input type="text" class= "searchbar" placeholder='키워드를 입력하세요...' onfocus="this.placeholder=''" onblur="this.placeholder='키워드를 입력하세요...''">
@@ -134,10 +77,13 @@
 					</div>
 				</aside>
 			</div>
-			</div>
 <!-- 			<button type="submit" class="button-write">검색</button> -->
-			<div class="col-xl-12">
-			<a href="board_write.jsp" class="button button-write f-right">글쓰기</a>
+			<div class="box-footer">
+				<div class="pull-right">
+					<button type="button" class="btn btn-success btn-flat" id="writeBtn">
+						<i class="fa fa-write"></i>글쓰기
+					</button>
+				</div>
 			</div>
 	</div>
 	</div>
@@ -169,59 +115,7 @@
          	   </div>
         </div>
   
-    <!--? Want To work 02-->
-    <section class="wantToWork-area">
-        <div class="container">
-            <div class="wants-wrapper w-padding2">
-                <div class="row justify-content-between">
-                    <div class="col-xl-8 col-lg-8 col-md-7">
-                        <div class="wantToWork-caption wantToWork-caption2">
-                            <img src="/shallwe/assets/img/logo/logo2_footer.png" alt="" class="mb-20">
-                            <p>Users and submit their own items. You can create different packages and by connecting with your
-                                PayPal or Stripe account charge users for registration to your directory portal.</p>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-4 col-md-5">
-                        <div class="footer-social f-right sm-left">
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="https://bit.ly/sai4ull"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-pinterest-p"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Want To work End -->
-    <!--? Want To work 01-->
-    <section class="wantToWork-area">
-        <div class="container">
-            <div class="wants-wrapper">
-                <div class="row align-items-center justify-content-between">
-                    <div class="col-xl-7 col-lg-9 col-md-8">
-                        <div class="wantToWork-caption wantToWork-caption2">
-                            <div class="main-menu2">
-                                <nav>
-                                    <ul>
-                                        <li><a href="index.html">Home</a></li>
-                                        <li><a href="explore.html">Explore</a></li> 
-                                        <li><a href="pages.html">Pages</a></li>
-                                        <li><a href="blog.html">Blog</a></li>
-                                        <li><a href="contact.html">Contact</a></li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-3 col-md-4">
-                        <a href="#" class="btn f-right sm-left">Add Listing</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Want To work End -->
+  
     </main>
     <footer>
         <div class="footer-wrapper pt-30">
@@ -290,7 +184,18 @@
     <!-- Jquery Plugins, main Jquery -->	
     <script src="/shallwe/assets/js/plugins.js"></script>
     <script src="/shallwe/assets/js/main.js"></script>
-
+	
+	<script>
+	var result ="${msg}";
+	if(result=="registrySuccess"){
+		alert("게시글 등록이 완료되었습니다.");
+	}else if(result == "modifySuccess"){
+		alert("게시글 수정이 완료되었습니다.");	
+	}else if(result == "deleteSuccess"){
+		alert("게시글 삭제가 완료되었습니다");
+	}
+	
+	</script>
 	
     </body>
 </html>

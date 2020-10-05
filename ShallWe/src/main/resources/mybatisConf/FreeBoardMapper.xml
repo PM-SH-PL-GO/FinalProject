@@ -4,5 +4,50 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="FreeBoardMapper">
 
- 
+	<resultMap id ="readOneMap" type="FreeBoard" autoMapping="true">
+		<id property="freeboard_id" column="freeboard_id"/>
+		<result property="freeboard_title" column="freeboard_title"/>
+		<result property="freeboard_content" column="freeboard_content"/>
+		<result property="freeboard_filename" column="freeboard_filename"/>
+		<result property="freeboard_write_dt" column="freeboard_write_dt"/>
+		<result property="freeboard_view_count" column="freeboard_view_count"/>
+		<association property="member" javaType="Member" autoMapping="true">
+			<id property="member_id" column ="freeboard_member_id"/>
+			<result property="member_name" column="freeboard_member_name"/>
+		</association>
+	</resultMap>
+	
+	<select id="listAll" resultMap="readOneMap">
+		<![CDATA[
+  		select f.freeboard_id freeboard_id, f.freeboard_title freeboard_title, f.freeboard_member_id freeboard_member_id, m.member_name freeboard_member_name, f.freeboard_content freeboard_content, f.freeboard_write_dt freeboard_write_dt, f.freeboard_view_count freeboard_view_count 
+ 		from freeboard f join member m on(f.freeboard_member_id = m.member_id) 
+ 		where freeboard_id > 0 
+  		order by freeboard_id desc, freeboard_write_dt desc  
+  		]]>  
+	</select>
+	
+	<select id ="readOneBoard" resultMap="readOneMap">
+		select f.freeboard_id freeboard_id, f.freeboard_title freeboard_title, f.freeboard_member_id freeboard_member_id, m.member_name freeboard_member_name, f.freeboard_content freeboard_content, f.freeboard_write_dt freeboard_write_dt, f.freeboard_view_count freeboard_view_count 
+		from freeboard f join member m on(f.freeboard_member_id = m.member_id) 
+ 		where freeboard_id = #{freeboard_id}
+	</select> 
+	
+	<insert id="writeBoard">
+		insert into freeboard(freeboard_id, freeboard_member_id, freeboard_title, freeboard_content, freeboard_filename, freeboard_write_dt, freeboard_view_count, freeboard_deleteyn)
+		values(#{freeboard_id}, #{freeboard_member_id} ,#{freeboard_title},#{freeboard_content}, #{freeboard_filename}, #{freeboard_write_dt}, #{freeboard_view_count}, 'N')
+	</insert>
+	
+	
+	<update id = "updateBoard">
+		update freeboard
+		set freeboard_title=#{freeboard_title}
+			,freeboard_content=#{freeboard_content}
+		where
+			freeboard_id=#{freeboard_id}
+	</update>
+		
+	<delete id = "deleteBoard">
+		delete from freeboard
+		where freeboard_id =#{freeboard_id}	
+	</delete>
 </mapper>
