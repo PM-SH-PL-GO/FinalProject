@@ -137,11 +137,9 @@ $(document).ready(function() {
 							alert("강의 취소 요청이 정상적으로 되었습니다.");
 							opener.parent.location.reload();
 							window.close();
+							self.close();
 						} else {
-							alert("강의 등록에 실패했습니다.");
-							$("$cancelCommentObj").focus();
-							opener.parent.location.reload();
-							window.close();
+							self.close();
 						}
 		 			} // end of success
 		 		}); //end of ajax 

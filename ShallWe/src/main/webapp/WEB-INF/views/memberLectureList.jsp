@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+<c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 <head>
@@ -101,20 +101,21 @@ $(function(){
 </script>
 </head>
 <body>
-<!-- topbar Start -->
-<div class="topMenu">
-	<jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
-</div>
-<!-- topbar End -->
+	<!-- topbar Start -->
+	<div class="topMenu">
+		<jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
+	</div>
+	<!-- topbar End -->
 	<main>
 		<!--? 강의목록 Start -->
-		<div class="listcontents popular-directorya-area section-padding40 fix">
+		<div
+			class="listcontents popular-directorya-area section-padding40 fix">
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-12">
 						<!-- Section Tittle -->
 						<div class="section-tittle text-center mb-80">
-							<h2>수강 목록</h2>
+							<h2>수강 목록${rev}</h2>
 						</div>
 					</div>
 				</div>
@@ -130,40 +131,51 @@ $(function(){
 						<fmt:parseDate var="endDat" value="${endDt}" pattern="yyyy-MM-dd" />
 						<fmt:parseNumber value="${endDat.time/(1000*60*60*24)}"
 							integerOnly="true" var="endDate" />
+						<fmt:formatDate var="cancelDt" value="${m.cancel_dt}"
+							pattern="yyyy-MM-dd" />
 						<c:if
-							test="${endDate-nowDate>=0 && lecture.lecture_state eq '승인'}">
-							<!-- Single -->
-							<div class="properties pb-20">
-								<div class="properties__cardseo">
-									<div name="gotoDe" style="cursor: pointer;" value="${lecture.lecture_id}">
-										<div class="properties__imgseo overlay1">
-											<img src="/shallwe/lecture/${lecture.lecture_img}" alt=""
-												style="cursor: pointer;">
+							test="${endDate-nowDate>=0 && lecture.lecture_state eq '승인' && cancelDt eq ''}">
 
+								<!-- Single -->
+								<div class="properties pb-20">
+									<div class="properties__cardseo">
+										<div name="gotoDe" style="cursor: pointer;"
+											value="${lecture.lecture_id}">
+											<div class="properties__imgseo overlay1">
+												<img src="/shallwe/lecture/${lecture.lecture_img}" alt=""
+													style="cursor: pointer;">
+
+											</div>
+											<div class="properties__caption">
+												<h3>
+													<a href="#">${lecture.lecture_title}</a>
+												</h3>
+												<h6>${startDt}~${endDt}</h6>
+												<h6>${tutor.tutor_nickname}</h6>
+												<h6>현재인원: ${lecture.lecture_current} / 최대인원:
+													${lecture.lecture_max}</h6>
+											</div>
+											<input type="hidden" name="listlecture_id"
+												value="${lecture.lecture_id}" />
 										</div>
-										<div class="properties__caption">
+										<div
+											class="properties__footer d-flex justify-content-between align-items-center">
 											<h3>
-												<a href="#">${lecture.lecture_title}</a>
+												<fmt:formatNumber value="${lecture.lecture_price}"
+													pattern="#,###" />
+												원
 											</h3>
-											<h6>${startDt}~${endDt}</h6>
-											<h6>${tutor.tutor_nickname}</h6>
-											<h6>현재인원: ${lecture.lecture_current} / 최대인원:
-												${lecture.lecture_max}</h6>
-										</div>
-										<input type="hidden" name="listlecture_id"
-											value="${lecture.lecture_id}" />
-									</div>
-									<div
-										class="properties__footer d-flex justify-content-between align-items-center">
-										<h3><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###"/>원</h3>
-										<div class="heart lecture_cancle">
-											<img src="/shallwe/assets/img/gallery/cancel.png" width="30px" alt="수강취소" title="수강취소">
-											<input type="hidden" name="lectureId" value="${lecture.lecture_id}">
+											<div class="heart lecture_cancle">
+												<img src="/shallwe/assets/img/gallery/cancel.png"
+													width="30px" alt="수강취소" title="수강취소"> <input
+													type="hidden" name="lectureId"
+													value="${lecture.lecture_id}">
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-							<!-- Single -->
+								<!-- Single -->
+							<!-- 밑에는 승인 끝 -->
 						</c:if>
 					</c:forEach>
 				</div>
@@ -200,7 +212,8 @@ $(function(){
 							<!-- Single -->
 							<div class="properties pb-20">
 								<div class="properties__cardseo">
-									<div name="gotoDeend" style="cursor: pointer;" value="${lecture.lecture_id}">
+									<div name="gotoDeend" style="cursor: pointer;"
+										value="${lecture.lecture_id}">
 										<div class="properties__imgseo overlay1">
 											<img src="/shallwe/lecture/${lecture.lecture_img}" alt="">
 										</div>
@@ -218,14 +231,20 @@ $(function(){
 									</div>
 									<div
 										class="properties__footer d-flex justify-content-between align-items-center">
-										<h3><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###"/>원</h3>
+										<h3>
+											<fmt:formatNumber value="${lecture.lecture_price}"
+												pattern="#,###" />
+											원
+										</h3>
 										<div class="heart reviewAdd"">
-											<img src="/shallwe/assets/img/gallery/performance.png" width="30px" alt="강사후기등록" title="강사후기등록">
-											<input type="hidden" name="lectureId" value="${lecture.lecture_id}">
+											<img src="/shallwe/assets/img/gallery/performance.png"
+												width="30px" alt="강사후기등록" title="강사후기등록"> <input
+												type="hidden" name="lectureId" value="${lecture.lecture_id}">
 										</div>
 										<div class="heart reviewRemove"">
-											<img src="/shallwe/assets/img/gallery/performance.png" width="30px" alt="강사후기삭제" title="강사후기삭제">
-											<input type="hidden" name="lectureId" value="${lecture.lecture_id}">
+											<img src="/shallwe/assets/img/gallery/performance.png"
+												width="30px" alt="강사후기삭제" title="강사후기삭제"> <input
+												type="hidden" name="lectureId" value="${lecture.lecture_id}">
 										</div>
 									</div>
 								</div>
@@ -237,8 +256,8 @@ $(function(){
 			</div>
 		</div>
 		<!--? 완료 End -->
-		<div class= "reviewModal"> </div>
-		
+		<div class="reviewModal"></div>
+
 	</main>
 	<!-- Scroll Up -->
 	<div id="back-top">

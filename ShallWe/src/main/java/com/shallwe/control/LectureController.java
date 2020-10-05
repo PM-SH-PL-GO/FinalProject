@@ -28,11 +28,13 @@ import com.shallwe.exception.FindException;
 import com.shallwe.exception.RemoveException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.service.LectureService;
+import com.shallwe.service.ReviewService;
 import com.shallwe.service.TutorService;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureDetail;
 import com.shallwe.vo.Member;
 import com.shallwe.vo.MemberLectureHistory;
+import com.shallwe.vo.Review;
 import com.shallwe.vo.Tutor;
 
 import lombok.extern.log4j.Log4j;
@@ -47,6 +49,9 @@ public class LectureController {
 	// 강사 : 강의 등록/수정/취소, 등록한 강의 조회
 	@Autowired
 	LectureService service;
+	
+	@Autowired
+	ReviewService reserv;
 
 	@Autowired
 	TutorService tutoser;
@@ -183,10 +188,13 @@ public class LectureController {
 		List<MemberLectureHistory> mlthlist = new ArrayList<>();
 		ModelAndView mnv = new ModelAndView();
 		Member mem = new Member();
+		List<Review> relist = new ArrayList<Review>();
 		mem.setMember_id(id);
 		mlth.setMember(mem);
+		Map<String, String> map = new HashMap<String, String>();
 		try {
 			mlthlist = service.memberLectureList(mlth);
+			
 			mnv.addObject("mlthlist", mlthlist);
 			mnv.setViewName("/memberLectureList");
 			mnv.addObject("status", "success");
@@ -230,22 +238,24 @@ public class LectureController {
 		Member mem = new Member();
 		Tutor tuto = new Tutor();
 		Lecture lecttuto = new Lecture();
-		LectureDetail lectDetuto = new LectureDetail();
 		MemberLectureHistory mlth = new MemberLectureHistory();
 		Lecture lect = new Lecture();
 		LectureDetail lectDetail = new LectureDetail();
 		mem.setMember_id(id);
+		List<MemberLectureHistory> mlthlist = new ArrayList<>();
 		tuto.setMember(mem);
 		lecttuto.setTutor(tuto);
-		lectDetuto.setLecture(lecttuto);
+		List<Lecture> lectlist = new ArrayList<>();
 		mlth.setMember(mem);
 		lect.setLecture_id(lecture_id);
 		lectDetail.setLecture(lect);
 		try {
 			lectDetail = service.lectureDetailView(lect);
 			mnv.addObject("lectDetail", lectDetail);
-			mnv.addObject("mlth", mlth);
-			mnv.addObject("lectDetuto", lectDetuto);
+			mlthlist = service.memberLectureList(mlth);
+			mnv.addObject("mlthlist", mlthlist);
+			lectlist = service.tutorLectureList(lecttuto);
+			mnv.addObject("lectlist", lectlist);
 			mnv.setViewName("/lectureDetail");
 		} catch (FindException e) {
 			e.printStackTrace();
