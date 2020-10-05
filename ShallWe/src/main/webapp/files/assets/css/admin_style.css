@@ -10,11 +10,11 @@
 .contents{
 	margin-left: 255px;
     margin-top: 100px;
-    width: 80%;
+    width: 90%;
     height: 100%;
 }
 
-.btn{
+.menu-btn{
     position: absolute;
     top: 15px;
     left: 45px;
@@ -27,17 +27,17 @@
     transition: left 0.4s ease;
 }
 
-.btn.click{
+.menu-btn.click{
     left: 260px;
 }
 
-.btn span{
+.menu-btn span{
     color: white;
     font-size: 28px;
     line-height: 45px;
 }
 
-.btn.click span:before{
+.menu-btn.click span:before{
     content: "\f00d";
 }
 
@@ -151,6 +151,8 @@ hr{
     border-style: solid;
     border-color: #dddddd;
     text-align: center;
+    width: 85%;
+    height: 100%
 }
 
 .table th{
@@ -188,22 +190,26 @@ hr{
 	width: 350px;
 }
 
+
+/* 내장형 모달창 설정 */
 .modal_slot {
 	display: none;
 	position: absolute;
+	top: 100px;
 	width: 100%;
 	height: 100%;
 	z-index: 1;
 }
 
 .modal_slot .modal_content{
-	position: absolute;
-	width: 50%;
-	height: auto;
-	left: 250px;
-	padding: 20px 10px;
-	background: #fff;
-	border: 2px solid #666;
+	position: fixed;
+	width: 40%;
+    height: 50%;
+    transform: translate(30%, 30%);
+    padding: 20px 10px;
+    background: #fff;
+    border: 2px solid #666;
+    overflow: scroll;
 }
 
 .modal_slot .modal_layer{
@@ -220,10 +226,16 @@ hr{
 	margin-top: 10px
 }
 
-
-input[id="reject-detail"]{	
+input[id="reject_reason"]{	
 	width: 70%;
     height: 80%;
+    margin-bottom: 1%;
+}
+
+input.reject-detail{
+	width: 70%;
+    height: 80%;
+    margin-bottom: 1%;
 }
 
 .reason-modal-tutor{
@@ -237,7 +249,7 @@ input[id="reject-detail"]{
 	width: 20px;
 }
 
-/* 새로 추가되는 모달 창을 위한 레이아웃 */
+/* 확장형 모달창 설정 */
 .modal-add{
 	display: block;
 	position: absolute;
@@ -266,4 +278,19 @@ input[id="reject-detail"]{
 	height: 100%;
 	background: rgba(0, 0, 0, 0.5);
 	z-index: -1;
-}    
+}
+
+.modal-close{
+	margin-left: 80%;
+    margin-top: 20px;
+}
+.modal_close{
+	margin-left: 80%;
+    margin-top: 20px;
+}
+
+.scroll-section{
+	overflow: scroll;
+    width: 100%;
+    height: 100%;
+}

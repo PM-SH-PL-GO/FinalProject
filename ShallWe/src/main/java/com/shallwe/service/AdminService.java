@@ -22,6 +22,7 @@ import com.shallwe.exception.RemoveException;
 import com.shallwe.model.AdminTutorBean;
 import com.shallwe.vo.Faq;
 import com.shallwe.vo.Lecture;
+import com.shallwe.vo.LectureCategory;
 import com.shallwe.vo.LectureDetail;
 import com.shallwe.vo.Member;
 import com.shallwe.vo.MemberLectureHistory;
@@ -59,49 +60,35 @@ public class AdminService {
 	
 	
 	/**
-	 * 예비 강사 목록 보여주기
+	 * 
 	 * @author jun6
+	 * @param YN
+	 * @param preTutorPage
+	 * @return
+	 * @throws FindException
 	 */
 	@Transactional
-	public AdminTutorBean showAllTutor(String YN, int preTutorPage) throws FindException{
-		Map<String, String> tutorMap = new HashMap<>();
-		AdminTutorBean preTutorBean = new AdminTutorBean(preTutorPage);
-
-		tutorMap.put("YN", YN);
-		tutorMap.put("startRow", "" + preTutorBean.getStartRow());
+	public AdminTutorBean showAllTutor(String YN) throws FindException{
+		AdminTutorBean preTutorBean = new AdminTutorBean();
+		Map<String, List<LectureCategory>> valueMap = new HashMap<>();
 		
-		preTutorBean.setTutorList(tutorDAO.selectAllTutor(tutorMap));
+		List<Tutor> tutorList = new ArrayList<>();
+		List<Tutor> list = tutorDAO.selectAllTutor(YN);
 		
-//		Map<Tutor, List<String>> map = new HashMap<>();
-//		List<Tutor> list = tutorDAO.selectAllTutor(tutorMap);
-//		
-//		for (Tutor tutor : list) {
-//			if (map.containsKey(tutor))
-//				map.get(tutor).add(tutor.getLectureCategory().getLecture_category_name());
-//			else {
-//				List<String> catList = new ArrayList<>();
-//				catList.add(tutor.getLectureCategory().getLecture_category_name());
-//				map.put(tutor, catList);
-//			}
-//		}
-//		preTutorBean.setTutorCategoryMap(map);
+		for (Tutor tutor : list) {
+			String tutor_id = tutor.getMember().getMember_id();
+			if (valueMap.containsKey(tutor_id))
+				valueMap.get(tutor_id).add(tutor.getLectureCategory());
+			else {
+				List<LectureCategory> catList = new ArrayList<>();
+				catList.add(tutor.getLectureCategory());
+				valueMap.put(tutor_id, catList);
+				tutorList.add(tutor);
+			}
+		}
 		
-		int count = tutorDAO.countAllTutor(YN);
-		
-		if (count % AdminTutorBean.CNT_PER_PAGE != 0) {
-			count /= AdminTutorBean.CNT_PER_PAGE;
-			count++;
-		}else
-			count /= AdminTutorBean.CNT_PER_PAGE;
-		
-		preTutorBean.setTotalPage(count);
-		
-		int startPage = ((preTutorPage - 1) / AdminTutorBean.CNT_PER_PAGE) * AdminTutorBean.CNT_PER_PAGE + 1;
-		int calEndPage = (((preTutorPage - 1) / AdminTutorBean.CNT_PER_PAGE) + 1) * AdminTutorBean.CNT_PER_PAGE;
-		int endPage =  (calEndPage > 8) ? 8 : calEndPage;
-		
-		preTutorBean.setStartPage(startPage);
-		preTutorBean.setEndPage(endPage);
+		preTutorBean.setTutorKeyList(tutorList);
+		preTutorBean.setTutorCategoryMap(valueMap);
 		
 		return preTutorBean;
 	}
@@ -126,16 +113,29 @@ public class AdminService {
 	 * @param reject_reason
 	 * @param reject_category_id
 	 * @throws AddException
+	 * @throws FindException 
 	 */
-	public void rejectPreTutor(String tutor_id, String reject_reason, String reject_category_id) throws AddException{
+	@Transactional(rollbackFor = {AddException.class, FindException.class})
+	public void rejectPreTutor(String tutor_id, String reject_reason, String reject_category_id) throws AddException, FindException{
+		
+		List<LectureCategory> categoryList = tutorDAO.selectPreTutorById(tutor_id);
+		
 		TutorReject tutorReject = new TutorReject();
 		RejectCategory rejectCategory = new RejectCategory();
 		rejectCategory.setReject_category_id(reject_category_id);
-		
-		tutorReject.setRejectCategory(rejectCategory);
+		Tutor tutor = new Tutor();
+		Member member = new Member();
+		member.setMember_id(tutor_id);
+		tutor.setMember(member);
 		tutorReject.setReject_reason(reject_reason);
-		
-		memberDAO.insertTutorReject(tutorReject);
+		tutorReject.setTutor(tutor);
+
+		for (LectureCategory category : categoryList) {
+			tutor.setLectureCategory(category);
+			tutorReject.setRejectCategory(rejectCategory);
+			
+			memberDAO.insertTutorReject(tutorReject);
+		}
 	}
 	
 	/**
@@ -174,17 +174,11 @@ public class AdminService {
 	 * @throws ModifyException
 	 */
 //	@Transactional
-	public void updateLectureStatusByIdAndStatus(String lecture_id, String status, String reject_reason) throws ModifyException{
-		Map<String, String> map = new HashMap<>();
-		map.put("lecture_id", lecture_id);
+	public void updateLectureStatusByIdAndStatus(Map<String, String> map) throws ModifyException{
+		String status = map.get("status");
 		
-		if (status.equals("승인"))
-			map.put("status", status);
-		else if(status.equals("반려")) {
-			map.put("status", "반려");
-			map.put("reject_reason", reject_reason);
+		if(status.equals("반려"))
 			lectureDetailDAO.updateLectureRejectReason(map);
-		}
 		else if(status.equals("복구"))
 			map.put("status", "승인");
 		else if (status.equals("취소승인"))
@@ -210,10 +204,14 @@ public class AdminService {
 	public LectureDetail showLectureReason(String lecture_id, String rejectOrCancel) throws FindException{
 		if (rejectOrCancel.equals("반려사유"))
 			rejectOrCancel = "reject_reason";
-		else if(rejectOrCancel.equals("취소사유"))
+		else if(rejectOrCancel.equals("취소사유") || rejectOrCancel.equals("취소정보"))
 			rejectOrCancel = "cancel_reason";
 		
-		return lectureDetailDAO.selectLectureReasonById(lecture_id, rejectOrCancel);
+		Map<String, String> map = new HashMap<>();
+		map.put("lecture_id", lecture_id);
+		map.put("rejectOrCancel", rejectOrCancel);
+		
+		return lectureDetailDAO.selectLectureReasonById(map);
 	}
 	
 	

@@ -221,6 +221,11 @@ public class LectureDAO {
 		return lectureList;
 	}
 
+	/**
+	 * 강의 승인/반려/취소하기
+	 * @param map
+	 * @throws ModifyException
+	 */
 	public void updateLectureStatusByIdAndStatus(Map<String, String> map) throws ModifyException {
 		SqlSession session = null;
 

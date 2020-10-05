@@ -29,12 +29,12 @@ public class TutorDAO {
 	// 강사 정보 수정 : 경찬
 	
 	// 강사/예비강사 목록 보기(admin) : 준식
-	public List<Tutor> selectAllTutor(Map<String, String> map) throws FindException{
+	public List<Tutor> selectAllTutor(String YN) throws FindException{
 		List<Tutor> tutorList = new ArrayList<>();
 		SqlSession session = null;
 		try {
 			session = sqlSessionFactory.openSession();
-			tutorList = session.selectList("TutorMapper.selectAllTutor", map);
+			tutorList = session.selectList("TutorMapper.selectAllTutor", YN);
 		}catch(DataAccessException e) {
 			throw new FindException("검색 과정에 오류가 있습니다");
 		}finally {
@@ -47,18 +47,27 @@ public class TutorDAO {
 		return tutorList;
 	}
 	
-	public int countAllTutor(String YN) throws FindException{
+	/**
+	 * 특정 예비 강사가 신청한 전문분야 목록 반환
+	 * @param tutor_id
+	 * @return
+	 * @throws FindException
+	 */
+	public List<LectureCategory> selectPreTutorById(String tutor_id) throws FindException{
 		SqlSession session = null;
-		int count = 0;
+		List<LectureCategory> list = null;
+		
 		try {
 			session = sqlSessionFactory.openSession();
-			count = session.selectOne("TutorMapper.selectCount", YN);
+			list = session.selectList("TutorMapper.selectPreTutorById", tutor_id);
 		}catch(DataAccessException e) {
 			e.printStackTrace();
-			throw new FindException();
+			throw new FindException("문제가 발생했습니다");
+		}finally {
+			session.close();
 		}
 		
-		return count;
+		return list;
 	}
 	
 	//강사등록 : 경찬

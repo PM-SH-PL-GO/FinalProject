@@ -142,12 +142,11 @@
 	
 <!-- admin(jun6) : 예비강사 반려 -->
 	<insert id="rejectPretutor" parameterType="TutorReject" statementType="CALLABLE">
-		{ call 	REJECT_PRETUTOR (
-			#{tutor.member.member_id} 
-			, #{tutor.tutor_category_id}
-			, #{rejectCategory.reject_category_id}
-			, #{rejectCategory.reject_reason} 
-		)}
+		INSERT INTO tutor_reject VALUES(#{tutor.member.member_id},
+									 #{tutor.lectureCategory.lecture_category_id},
+									 #{rejectCategory.reject_category_id},
+									 #{reject_reason},
+									  SYSDATE)
 	</insert>
 
 <!-- admin(jun6) : 전체 회원 목록 조회 -->

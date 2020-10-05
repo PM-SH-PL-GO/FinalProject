@@ -1,9 +1,6 @@
 package com.shallwe.dao;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,8 +15,9 @@ import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureDetail;
-import com.shallwe.vo.Tutor;
 
+import lombok.extern.log4j.Log4j;
+@Log4j
 @Repository(value = "lectureDetailDAO")
 public class LectureDetailDAO {
 	@Autowired
@@ -110,13 +108,13 @@ public class LectureDetailDAO {
 	 * @return 반려/취소 이유
 	 * @throws FindException
 	 */
-	public LectureDetail selectLectureReasonById(String lecture_id, String rejectOrCancel) throws FindException {
+	public LectureDetail selectLectureReasonById(Map<String, String> map) throws FindException {
 		SqlSession session = null;
 		LectureDetail lectureDetail = null;
 		
 		try {
 			session = sqlSessionFactory.openSession();
-			lectureDetail = session.selectOne("LectureDetailMapper.selectLectureReasonById", lecture_id);
+			lectureDetail = session.selectOne("LectureDetailMapper.selectLectureReasonById", map);
 		}catch(DataAccessException e) {
 			throw new FindException("You've got Error!^^");
 		}finally {
@@ -132,7 +130,8 @@ public class LectureDetailDAO {
 		
 		try {
 			session = sqlSessionFactory.openSession();
-			session.update("LectureDetail.updateLectureRejectReason", map);
+			log.info(map);
+			session.update("LectureDetailMapper.updateLectureRejectReason", map);
 		}catch(DataAccessException e) {
 			throw new ModifyException("뭔가 잘못되었습니다");
 		}finally {

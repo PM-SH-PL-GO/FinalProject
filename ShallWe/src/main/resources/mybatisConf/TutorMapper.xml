@@ -28,25 +28,40 @@
 	</resultMap>
 
 <!-- jun6 : 예비/전체 강사 list 출력 -->
-	<select id="selectAllTutor" parameterType="Map" resultMap="tutor">
-		SELECT *
-		FROM (SELECT ROWNUM r, a.*
-		  	  FROM (SELECT tu.*, lc.category_name, me.member_name
-					FROM tutor tu
-					    JOIN member me ON (tu.tutor_id = me.member_id)
-					    JOIN lecture_category lc ON (tu.tutor_category_id = lc.category_id)
-					WHERE me.tutor_YN = #{YN}) a)
-		WHERE r BETWEEN #{startRow} AND (#{startRow} + 3)
+	<select id="selectAllTutor" parameterType="String" resultMap="tutor">
+		<choose>
+			<when test="value == 'Y'">
+				SELECT tu.*, lc.category_name, me.member_name
+				FROM tutor tu
+				    JOIN member me ON (tu.tutor_id = me.member_id)
+				    JOIN lecture_category lc ON (tu.tutor_category_id = lc.category_id)
+				WHERE me.tutor_YN = #{value}
+			</when>
+			<otherwise>
+				SELECT tu.*, lc.category_name, me.member_name
+				FROM tutor tu
+				    JOIN member me ON (tu.tutor_id = me.member_id)
+				    JOIN lecture_category lc ON (tu.tutor_category_id = lc.category_id)
+				WHERE me.tutor_YN = #{value}
+					AND tu.tutor_id NOT IN (SELECT tutor_id
+											FROM tutor_reject)
+			</otherwise>
+		</choose>
 	</select>
 	
-<!-- jun6 : 전체 강사 수  -->
-	<select id="selectCount" parameterType="String" resultType="int">
-		SELECT COUNT(*) 
-		FROM TUTOR tu
-			JOIN member me ON (tu.tutor_id = me.member_id)
-		WHERE me.tutor_YN = #{YN}
-	</select>
-<!-- 	강사등록 and 수정 :경찬 -->
+	<resultMap type="LectureCategory" id="lectureCategory" autoMapping="true">
+		<id property="lecture_category_id" column="tutor_category_id"/>
+		<result property="lecture_category_name" column="category_name"/>
+	</resultMap>
+	
+<!-- jun6 : 특정 예비강사 category_id 가져오기 -->
+	<select id="selectPreTutorById" parameterType="String" resultMap="lectureCategory">
+		SELECT lc.category_name, tu.tutor_category_id
+		FROM tutor tu
+		    JOIN lecture_category lc ON(tu.tutor_category_id = lc.category_id)
+		WHERE tu.tutor_id = #{tutor_id}
+	</select>	
+	
 	<insert id="insertTutor" parameterType="Tutor">
 	INSERT INTO TUTOR
 				(TUTOR_ID,TUTOR_CATEGORY_ID,TUTOR_IMG,TUTOR_CAREER_FILE,tutor_introduce,TUTOR_LINK,TUTOR_SCORE,TUTOR_NICKNAME) 

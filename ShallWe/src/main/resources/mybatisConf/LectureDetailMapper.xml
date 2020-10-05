@@ -61,6 +61,9 @@
 				</association>
 			</association>
 		</association>
+		<association property="rejectCategory" javaType="RejectCategory" autoMapping="true">
+			<id property="reject_category_id" column="reject_category_id"/>
+		</association>
 	</resultMap>
 	<select id="lectureDetailView" resultMap="lectDeResultMap">
 		SELECT le.lecture_id,
@@ -93,20 +96,31 @@
 	</select>
 
 	<!-- admin(jun6) : 강의 취소/반려사유 조회 -->
-	<select id="selectLectureReasonById" parameterType="String" resultMap="lectDeResultMap">
-		SELECT ld.lecture_reject_reason, ld.lecture_cancel_reason, tu.tutor_nickname, lec.lecture_title
-		FROM lecture_detail ld
-		    JOIN lecture lec ON (ld.lecture_id = lec.lecture_id and ld.lecture_category_id = lec.lecture_category_id)
-		    JOIN tutor tu ON(lec.lecture_tutor_id = tu.tutor_id and lec.lecture_category_id = tu.tutor_category_id)
-		WHERE ld.lecture_id = #{lecture_id}	
+	<select id="selectLectureReasonById" parameterType="Map" resultMap="lectDeResultMap">
+		<choose>
+			<when test="rejectOrCancel == 'reject_reason'">
+				SELECT ld.lecture_reject_reason, tu.tutor_nickname, lec.lecture_title, rej.reject_category_value
+				FROM lecture_detail ld
+				    JOIN lecture lec ON (ld.lecture_id = lec.lecture_id and ld.lecture_category_id = lec.lecture_category_id)
+				    JOIN tutor tu ON(lec.lecture_tutor_id = tu.tutor_id and lec.lecture_category_id = tu.tutor_category_id)
+				    JOIN reject_category rej ON (ld.lecture_reject_category = rej.reject_category_id)
+				WHERE ld.lecture_id = #{lecture_id}	
+			</when>
+			<when test="rejectOrCancel == 'cancel_reason'">
+				SELECT ld.lecture_cancel_reason, tu.tutor_nickname, lec.lecture_title
+				FROM lecture_detail ld
+				    JOIN lecture lec ON (ld.lecture_id = lec.lecture_id and ld.lecture_category_id = lec.lecture_category_id)
+				    JOIN tutor tu ON(lec.lecture_tutor_id = tu.tutor_id and lec.lecture_category_id = tu.tutor_category_id)
+				WHERE ld.lecture_id = #{lecture_id}	
+			</when>
+		</choose>	
+	
 	</select>
 
 	<!-- admin(jun6) : 강의 반려 사유 설정 -->
 	<update id="updateLectureRejectReason" parameterType="Map">
-		UPDATE
-		lecture_detail
-		SET lecture_reject_reason = #{reject_reason}
-		WHERE
-		lecture_id = #{lecture_id}
+		UPDATE lecture_detail
+		SET lecture_reject_reason = #{reject_reason}, lecture_reject_category = #{reject_category}, lecture_reject_dt = SYSDATE
+		WHERE lecture_id = #{lecture_id}
 	</update>
 </mapper>
