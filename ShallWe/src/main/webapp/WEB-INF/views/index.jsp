@@ -54,6 +54,12 @@ cursor: pointer;
 #searchBtn{
 cursor: pointer;
 }
+div.menu-wrapper .d-flex .align-items-center .justify-content-between{
+margin-right: 10%;
+}
+.hero-bg1{
+text-align: center;
+}
 </style>
 <script>
 
@@ -87,7 +93,8 @@ $(function(){
 		<!--메인 슬라이드 시작-->
 		<div class="slider-area hero-bg1 hero-overly main">
 			<div
-				class="single-slider hero-overly  slider-height1 d-flex align-items-center">
+				class="single-slider slider-height1 d-flex align-items-center">
+				<div class="hero-overly"></div>
 				<div class="container">
 					<div class="row justify-content-center">
 						<div class="col-xl-10 col-lg-100">

@@ -2847,7 +2847,7 @@ transition
 }
 
 .header-sticky.sticky-bar {
-	background: #3B2774
+	background: white;
 }
 
 .header-sticky.sticky-bar.sticky .main-menu ul li a {
@@ -2968,11 +2968,11 @@ transition
 }
 
 .hero-bg1 {
-/* 	background-image: url(../img/hero/h1_hero.png); */
 	background-image: url(../img/hero/main.jpg);
-	background-size: 100% 60%;
-/* 	background-size: cover; */
+	background-size: 85% 60%;
 	background-repeat: no-repeat;
+	background-position: top;
+
 }
 
 .hero-bg2 {
@@ -3128,7 +3128,7 @@ transition
 	height: 60px;
 	width: 100%;
 	color: #140C40;
-	font-size: 17px;
+	font-size: 19px;
 	font-weight: 400;
 	padding: 9px 33px 9px 24px;
 	border: none;
@@ -3188,7 +3188,7 @@ transition
 	line-height: 42px;
 	border: 0;
 	border-radius: 6px;
-	font-size: 17px
+	font-size: 19px
 }
 
 @media ( max-width : 575px) {
@@ -3292,14 +3292,15 @@ transition
 	position: absolute;
 	content: "";
 	background-color: rgba(0, 1, 2, 0.5);
-	width: 100%;
+	width: 85%;
 	height: 60%;
 	left: 0;
 	top: 0;
 	bottom: 0;
 	right: 0;
 	z-index: 0;
-	background-repeat: no-repeat
+	background-repeat: no-repeat;
+	background-position: top;
 }
 
 .hero-overly2 {
