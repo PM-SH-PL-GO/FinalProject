@@ -160,29 +160,29 @@ public class SangHtest {
 	}
 	
 //	@Test
-	 void insertWishList() { //찜목록에 추가 : 상하
-		String member_id = "member3";
-		String lecture_category_id = "MA";
-		int lecture_id = 4; 
-		
-		LectureCategory lectureCategory = new LectureCategory();
-		lectureCategory.setLecture_category_id(lecture_category_id);
-		
-		Lecture lecture = new Lecture();
-		lecture.setLectureCategory(lectureCategory);
-		lecture.setLecture_id(lecture_id);
-		
-		Map<String, Object>map = new HashMap<String, Object>();
-		map.put("member_id", member_id);
-		map.put("lecture", lecture);
-		
-		
-		try {
-			wishDAO.addFavLec(map);
-		}catch(AddException e) {
-			e.printStackTrace();
-		}
-	}
+//	 void insertWishList() { //찜목록에 추가 : 상하
+//		String member_id = "member3";
+//		String lecture_category_id = "MA";
+//		int lecture_id = 4; 
+//		
+//		LectureCategory lectureCategory = new LectureCategory();
+//		lectureCategory.setLecture_category_id(lecture_category_id);
+//		
+//		Lecture lecture = new Lecture();
+//		lecture.setLectureCategory(lectureCategory);
+//		lecture.setLecture_id(lecture_id);
+//		
+//		Map<String, Object>map = new HashMap<String, Object>();
+//		map.put("member_id", member_id);
+//		map.put("lecture", lecture);
+//		
+//		
+//		try {
+//		//	wishDAO.addFavLec(map);
+//		}catch(AddException e) {
+//			e.printStackTrace();
+//		}
+//	}
 //	@Test
 	 void deleteWishList() { //찜목록 삭제 : 상하
 		String member_id = "member1";

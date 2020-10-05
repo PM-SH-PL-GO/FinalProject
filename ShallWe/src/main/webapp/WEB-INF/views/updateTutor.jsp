@@ -1,15 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
- 
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
-<!-- Created By CodingNepal -->
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Animated Sidebar Menu | CodingLab</title>
+    <title>강사신청 정보 수정</title>
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
-    
     <script 
 	  src="https://code.jquery.com/jquery-3.5.1.min.js"
 	  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
@@ -339,7 +338,18 @@ label.light {
   
   margin-top: 100px;
   }
-  
+
+}
+
+#tutor_info{
+
+	position: fixed;
+	right: 300px;
+	bottom:175px;
+
+
+}
+
   .filebox  { 
   
    display: inline-block;  
@@ -377,14 +387,6 @@ label.light {
    text-align: center;
    
    }
-#tutor_info{
-
-	position: fixed;
-	right: 300px;
-	bottom:175px;
-
-
-}
 
 </style>
 <script>
@@ -421,6 +423,7 @@ $(function(){
 				});
 			//체크 갯수 유효성 검사 end
 			
+			
 			 //---------버튼시작-------------------\\ 
 			$('button#addTutor').click(function(e){
 				
@@ -432,17 +435,18 @@ $(function(){
                  //파일 업로드 formdata end 
                	
                // 최종 submit 버튼
-                let $tutor = confirm('강사등록을 원하십니까?');
-                //닉네임 벨류값
+                let $tutor = confirm('강사신청서 수정을 진행하시겠습니까?(주의)기존의 있던 정보들은 삭제됩니다.');
                 let $nickName = $('input#nickName').val();
+                
+                let $fileCheck = $("input[name=tutor_img1]").val();
+              
             		// 체크된 값을 넘김  
             	let totalChecked = 0;
 				let tutor_category_id = [];
     	        $("input:checkbox[type='checkbox']:checked").each(function (index) {
-    	        	tutor_category_id.push($(this).val());
-    	        	
+    	        	tutor_category_id.push($(this).val());	        	
     	    	   });  // 체크된 값을 넘김 end
-    	        
+    	        console.log(tutor_category_id);
     	        
 				// url 유효성 검사 
 				let $urlCheck = $('input#link').val();
@@ -455,31 +459,35 @@ $(function(){
 					return false;
 					// url 유효성 검사 end
 
-					//체크 갯수제한 두기
-				}  else if($nickName == ''){
-						alert("닉네임을 입력해주세요");
-						return false;
-							
-					}else if($tutor == true){ 
+				}else if($fileCheck == ""){
+					  
+                    alert("사진을 올려주세요");
+                    return false;
+		             
+				}else if ($nickName == '') {
+				alert("닉네임을 입력해주세요");
+				return false;
+
+			    }else if($tutor == true){ 
 					
 				
 					$.ajax({
 					
-					url:'/shallwe/upload/addTutor'
+					url:'${contextPath}/upload/updateTutor'
 				   ,method:"POST"
 				   ,processData: false
 				   ,contentType: false
 				   ,data: formData
 				   ,success:function(){
-
-					alert("강사등록 신청이 완료되었습니다");
+				
+					alert("강사등록 신청을 수정되었습니다");
 					location.href = "http://localhost/shallwe/"
 								 
 				
 					} // end of success
   		 		 }); // end of ajax
 				} else {
-					alert("등록이 취소되었습니다");
+					alert("수정이 취소되었습니다");
 					location.reload();
 					e.preventDefault();
 
@@ -496,7 +504,7 @@ $(function(){
 				
 					$.ajax({
 
-						url:'tutor/checkNickName'
+						url:'${contextPath}/tutor/updateNickName'
 					   ,method:"POST"
 					   ,data:{tutor_nickName:$tutor_nickName}
 					   ,success: function(data){
@@ -518,6 +526,16 @@ $(function(){
 				return false;
 				});//end of Nicknameclick
 
+				var
+				doSomething = function() {
+					/* do something with Error */
+				},
+				submitAction = function() {
+					setTimeout(doSomething, 0);
+				    return false;
+				};
+				$('form').bind('submit', submitAction);
+		
 });    
 
 </script>
@@ -553,46 +571,43 @@ $(function(){
     </div>
   
 <div class="content">
- <h1>강사 등록</h1>
+ <h1>강사신청 정보 수정</h1>
  <form method="post" enctype="multipart/form-data" id="fileUpload" accept-charset="">
+ <c:forEach var ="t" items ="${tutor}" begin="0" end="0">
  <div class="cer" >
     <div style="margin:3em;"> 
 		<br>
 		<div class="filebox">
-		<label for="ex_file">자기자신을표현해주세요</label>
-         <input hidden="hidden class="uploadImage" type="file" name="tutor_img1" accept="imags/*" id="ex_file"/>
+		<label for="ex_file">강사님의 사진을 등록해주세요</label>
+         <input hidden="hidden" class="uploadImage" type="file" name="tutor_img1" accept="imags/*"id="ex_file"/>
          <br>
          </div>
-			 <img  id="select_img" src="#" alt = "your image" style="width:100%;max-width:100%; position: center;"/>
+			 <img id="select_img" name="dell_imags" src="#" style="width:100%;max-width:100%;"/>
 			 <br />
 		 </div> 
         <fieldset> 	 
           <legend><span class="number">1</span>강사 기본정보 </legend>       
           <label for="name">닉네임:</label>
-          <input type="text" id="nickName" name="tutor_nickname" placeholder="ex)카드값죠체리">
+          <input type="text" id="nickName" name="tutor_nickname" placeholder="ex)카드값죠체리" value="${t.tutor_nickname}">
           <input type="button" class="checkNickName" value ="닉네임중복확인"><br /><br />
         
            <label for="email">링크:</label>
-          <input type="text" id="link" name="tutor_link" placeholder="ex)https://www.instagram.com/">
+          <input type="text" id="link" name="tutor_link" placeholder="ex)https://www.instagram.com/" value="${t.tutor_link}">
          <span hidden="hidden" class="checkUrl" style="color: red; font-size: 0.8em;"><i>[주소양식이 맞지 않습니다]</i></span>
-           <div style="margin:4em; margin-top:10px;">
-           <div class="filebox2">
-    		<label for="PDF">활동이력을 PDF 로올려주세요</label>
-           <input class = "file2" type="file" name="tutor_career_file1" accept="imags/*," id ="PDF">
-             </div>
-			<br>
-		 </div>
+          
         </fieldset>
 	</div>
-	
+</c:forEach>
+
 
 		<div class="form2" id = "tutor_info">
         <fieldset>
+        <c:forEach var ="t" items ="${tutor}" begin="0" end="0">
           <legend><span class="number">2</span> 강사 프로필</legend>
           <label for="coment">강사 한마디:</label>
-          <textarea id="coment" name="tutor_introduce" placeholder="강사한마디"></textarea>
+          <textarea id="coment" name="tutor_introduce" placeholder="강사한마디" value="${t.tutor_introduce}"></textarea>
           <br><br>
-     
+  		</c:forEach>
           <label>강의 선택:</label>
           <br />
           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="IT">
