@@ -2911,7 +2911,7 @@ transition
 }
 
 .slider-height1 {
-	min-height: 890px
+	min-height: 1000px
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
@@ -3273,7 +3273,7 @@ transition
 .slider-area .category-img img {
 	width: 112px;
 	height: 112px;
-	margin: 0 8px
+	margin: 8px
 }
 
 @media ( max-width : 575px) {
