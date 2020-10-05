@@ -173,9 +173,11 @@ public class LectureController {
 			try {
 				service.tutorcancelLecture(lectDe.getLecture(), lectDe);
 				mnv.setViewName("/success");
+				mnv.setViewName("/lecturepopup");
 			} catch (ModifyException e) {
 				e.printStackTrace();
 				mnv.setViewName("/fail");
+				mnv.setViewName("/lecturepopup");
 				mnv.addObject("errorMsg", e.getMessage());
 			}
 			return mnv;
@@ -194,8 +196,9 @@ public class LectureController {
 		Map<String, String> map = new HashMap<String, String>();
 		try {
 			mlthlist = service.memberLectureList(mlth);
-			
 			mnv.addObject("mlthlist", mlthlist);
+			relist = reserv.selectReviewByMemberId(id);
+			mnv.addObject("relist", relist);
 			mnv.setViewName("/memberLectureList");
 			mnv.addObject("status", "success");
 		} catch (FindException e) {

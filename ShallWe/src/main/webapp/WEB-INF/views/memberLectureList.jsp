@@ -136,45 +136,44 @@ $(function(){
 						<c:if
 							test="${endDate-nowDate>=0 && lecture.lecture_state eq '승인' && cancelDt eq ''}">
 
-								<!-- Single -->
-								<div class="properties pb-20">
-									<div class="properties__cardseo">
-										<div name="gotoDe" style="cursor: pointer;"
-											value="${lecture.lecture_id}">
-											<div class="properties__imgseo overlay1">
-												<img src="/shallwe/lecture/${lecture.lecture_img}" alt=""
-													style="cursor: pointer;">
+							<!-- Single -->
+							<div class="properties pb-20">
+								<div class="properties__cardseo">
+									<div name="gotoDe" style="cursor: pointer;"
+										value="${lecture.lecture_id}">
+										<div class="properties__imgseo overlay1">
+											<img src="/shallwe/lecture/${lecture.lecture_img}" alt=""
+												style="cursor: pointer;">
 
-											</div>
-											<div class="properties__caption">
-												<h3>
-													<a href="#">${lecture.lecture_title}</a>
-												</h3>
-												<h6>${startDt}~${endDt}</h6>
-												<h6>${tutor.tutor_nickname}</h6>
-												<h6>현재인원: ${lecture.lecture_current} / 최대인원:
-													${lecture.lecture_max}</h6>
-											</div>
-											<input type="hidden" name="listlecture_id"
-												value="${lecture.lecture_id}" />
 										</div>
-										<div
-											class="properties__footer d-flex justify-content-between align-items-center">
+										<div class="properties__caption">
 											<h3>
-												<fmt:formatNumber value="${lecture.lecture_price}"
-													pattern="#,###" />
-												원
+												<a href="#">${lecture.lecture_title}</a>
 											</h3>
-											<div class="heart lecture_cancle">
-												<img src="/shallwe/assets/img/gallery/cancel.png"
-													width="30px" alt="수강취소" title="수강취소"> <input
-													type="hidden" name="lectureId"
-													value="${lecture.lecture_id}">
-											</div>
+											<h6>${startDt}~${endDt}</h6>
+											<h6>${tutor.tutor_nickname}</h6>
+											<h6>현재인원: ${lecture.lecture_current} / 최대인원:
+												${lecture.lecture_max}</h6>
+										</div>
+										<input type="hidden" name="listlecture_id"
+											value="${lecture.lecture_id}" />
+									</div>
+									<div
+										class="properties__footer d-flex justify-content-between align-items-center">
+										<h3>
+											<fmt:formatNumber value="${lecture.lecture_price}"
+												pattern="#,###" />
+											원
+										</h3>
+										<div class="heart lecture_cancle">
+											<img src="/shallwe/assets/img/gallery/cancel.png"
+												width="30px" alt="수강취소" title="수강취소"> <input
+												type="hidden" name="lectureId" value="${lecture.lecture_id}">
 										</div>
 									</div>
 								</div>
-								<!-- Single -->
+							</div>
+							<!-- Single -->
 							<!-- 밑에는 승인 끝 -->
 						</c:if>
 					</c:forEach>
@@ -236,16 +235,35 @@ $(function(){
 												pattern="#,###" />
 											원
 										</h3>
-										<div class="heart reviewAdd"">
-											<img src="/shallwe/assets/img/gallery/performance.png"
-												width="30px" alt="강사후기등록" title="강사후기등록"> <input
-												type="hidden" name="lectureId" value="${lecture.lecture_id}">
-										</div>
-										<div class="heart reviewRemove"">
-											<img src="/shallwe/assets/img/gallery/performance.png"
-												width="30px" alt="강사후기삭제" title="강사후기삭제"> <input
-												type="hidden" name="lectureId" value="${lecture.lecture_id}">
-										</div>
+										<c:set var="eqfalse" value="true"/>
+										<c:set var="eqtrue" value="false"/>
+										<c:forEach items="${relist}" var="rl" varStatus="i">
+										<c:set var="rel" value="${relist[i.index]}" />
+											<c:set var="rlecture_id"
+												value="${rel.member_lecture_history.lecture.lecture_id}" />
+											<c:if test="${rlecture_id ne lecture.lecture_id}">
+											</c:if>
+											<c:if test="${rlecture_id eq lecture.lecture_id}">
+												<c:set var="eqfalse" value="false"/>
+												<c:set var="eqtrue" value="true"/>
+											</c:if>
+										</c:forEach>
+										<c:if test="${empty rlecture_id || eqfalse}">
+											<div class="heart reviewAdd"">
+												<img src="/shallwe/assets/img/gallery/performance.png"
+													width="30px" alt="강사후기등록" title="강사후기등록"> <input
+													type="hidden" name="lectureId"
+													value="${lecture.lecture_id}">
+											</div>
+										</c:if>
+										<c:if test="${eqtrue}">
+											<div class="heart reviewRemove"">
+												<img src="/shallwe/assets/img/gallery/performance.png"
+													width="30px" alt="강사후기삭제" title="강사후기삭제"> <input
+													type="hidden" name="lectureId"
+													value="${lecture.lecture_id}">
+											</div>
+										</c:if>
 									</div>
 								</div>
 							</div>
