@@ -50,20 +50,14 @@
 			location.href = url;
 		}); // end of clickEvent
 		
+		$('div.category-img a').click(function(){
+			$searchText = $(this).attr("id");
+			var $searchKey = 3
+	        var url = '${contextPath}/search?searchKey='+$searchKey+'&searchText='+$searchText ;
+	        location.href = url;
+		});
 		
-		
-		//강의상세화면으로 이동
-// 		var $lectureCard = $("section.right_menu > div.container> div.row").find("div.col");
-// 		console.log($lectureCard);
-		
-// 		$lectureCard.click(function(e) {
-// 			var lectureCode = $(this).find('input[name=lecture_code]').val();
-// 			var url = '/shallwe/lectures/detail?lecture_id='+lectureCode;
-// 			console.log(lectureCode);
-// 			console.log(url);
-// 			location.href = url;
-// 		});
-		
+		// 강의상세보기
 		var lectureDetail = $('a.lecture_detail');
 		lectureDetail.click(function e () {
 			let lecture_code = $(this).find('input[name=lecture_code]').val();
@@ -71,15 +65,13 @@
 			location.href = url;
 		}); 
 		
-		
 		// 강의찜하기
-		var lectureLike = $('div.lectureLike');
+		var $lectureLike = $('div.lectureLike');
 		$lectureLike.on('click', 'input[name=lecture_code]', function(e){
 			let lecture_code = $(this).find('input[name=lecture_code]').val();
 			var url = '${contextPath}/lectures/detail?lecture_id='+lecture_code;
 			location.href = url;
 		});
-		
 	}); // end of 
 	
 </script>
@@ -116,7 +108,6 @@
 							<div>
 								<!-- searchKey = {"all", "tutor_name", "lecture_title" , "category" }; -->
 								<select class="nice-select" id="searchKey">
-									<option value="0" class="option">검색조건</option>
 									<option value="0" class="option">전체 검색</option>
 									<option value="1" class="option">강사 이름</option>
 									<option value="2" class="option">강의명</option>
@@ -130,34 +121,37 @@
 										onblur="this.placeholder = 'Search Keyword'" id="searchText">
 								</div>
 							</div>
-							<button id="searchBtn" type="submit"  style="cursor: pointer;">Search</button>
+							<button class="btn" id="searchBtn" type="submit"  style="cursor: pointer;">강의검색하기</button>
 						</form>
 					</aside>
 				</div>
 
-				<div class="left_menu_result">
+				<div class="left_menu_result"></div>
 				
+				<div class="category-img text-center">
+					<a id="IT" style="cursor: pointer;">
+						<img src="assets/img/gallery/category_icon1.png" alt="IT"></a> 
+					<a id="취미" style="cursor: pointer;">
+						<img src="assets/img/gallery/category_icon2.png" alt="취미"></a>
 				</div>
-
-<!-- 				<div class="category-img text-center"> -->
-<!-- 					<a href="#"> <img src="assets/img/gallery/category_icon1.png" -->
-<!-- 						alt=""></a> <a href="#"> <img -->
-<!-- 						src="assets/img/gallery/category_icon2.png" alt=""></a> <a -->
-<!-- 						href="#"> <img src="assets/img/gallery/category_icon3.png" -->
-<!-- 						alt=""></a> -->
-<!-- 				</div> -->
-<!-- 				<div class="category-img text-center"> -->
-<!-- 					<a href="#"> <img src="assets/img/gallery/category_icon4.png" -->
-<!-- 						alt=""></a> <a href="#"> <img -->
-<!-- 						src="assets/img/gallery/category_icon6.png" alt=""></a> <a -->
-<!-- 						href="#"> <img src="assets/img/gallery/category_icon7.png" -->
-<!-- 						alt=""></a> -->
-<!-- 				</div> -->
-<!-- 				<div class="category-img text-center"> -->
-<!-- 					<a href="#"> <img src="assets/img/gallery/category_icon8.png" -->
-<!-- 						alt=""></a> <a href="#"> <img -->
-<!-- 						src="assets/img/gallery/category_icon9.png" alt=""></a> -->
-<!-- 				</div> -->
+				<div class="category-img text-center">
+					<a id="디자인" style="cursor: pointer;">
+						<img src="assets/img/gallery/category_icon4.png" alt="디자인"></a>
+					<a id="사진" style="cursor: pointer;">
+						<img src="assets/img/gallery/category_icon6.png" alt="사진"></a>
+				</div>
+				<div class="category-img text-center">
+					<a id="음악" style="cursor: pointer;">
+						<img src="assets/img/gallery/category_icon8.png" alt="음악"></a>
+					<a id="스포츠" style="cursor: pointer;">
+						<img src="assets/img/gallery/category_icon9.png" alt="스포츠"></a>
+				</div>
+				<div class="category-img text-center">
+					<a id="마케팅" style="cursor: pointer;">
+						<img src="assets/img/gallery/category_icon3.png" alt="마케팅"></a>
+					<a id="회계" style="cursor: pointer;">
+						<img src="assets/img/gallery/category_icon7.png" alt="회계"></a>
+				</div>
 			</div>
 		</section>
 
