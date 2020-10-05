@@ -12,6 +12,7 @@ import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.exception.RemoveException;
+import com.shallwe.vo.LectureCategory;
 import com.shallwe.vo.Tutor;
 
 import lombok.extern.log4j.Log4j;
@@ -40,17 +41,33 @@ public class TutorService {
 	//강사닉네임 중복확인:경찬
 	public int checkNickName(String tutor_nickName)throws FindException{
 			int NickName =  dao.checkNickName(tutor_nickName);
-			if (NickName ==1) {
-				throw new FindException("예외발생:중복된아이디");
-			} else {
-				
+		
 				return dao.checkNickName(tutor_nickName);
-			}	
+		
 	}
 	//강사등록취소:경찬
-	public void dellTutor(String tutor_id)throws RemoveException{
-		dao.dellTutor(tutor_id);
+	public void dellTutor(Map<String,Object> tutor)throws RemoveException{
+		dao.dellTutor(tutor);
+		
+	}
+	//강사정보 수정: 경찬
+	public void tutorUpdate(Tutor tutor)throws ModifyException{
+		
+		String lec = tutor.getLectureCategory().getLecture_category_id();
+		String [] category = lec.split(",");
+		dao.tutorUpdate(tutor,category);
+	}
+	
+	//강사사진 수정:경찬
+	public void tutorImage(Tutor tutor)throws ModifyException{
+		
+		dao.tutorImage(tutor);
 		
 	}
 	
+	//강사이력서파일 변경: 경찬
+	public void tutorCareer(Tutor tutor)throws ModifyException{
+		
+		dao.tutorCareer(tutor);
+	}
 }

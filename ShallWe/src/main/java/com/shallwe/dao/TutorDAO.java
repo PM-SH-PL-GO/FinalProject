@@ -99,12 +99,12 @@ public class TutorDAO {
 		return nickNameCheck;
 	}
 	//강사등록취소: 경찬
-	public void dellTutor(String tutor_id) throws RemoveException{
+	public void dellTutor(Map<String,Object> tutor) throws RemoveException{
 		SqlSession session = null;
 		session = sqlSessionFactory.openSession();
 		
 		try {
-			session.delete("TutorMapper.deltutor",tutor_id);
+			session.delete("TutorMapper.deltutor",tutor);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -113,7 +113,62 @@ public class TutorDAO {
 			session.close();
 		}
 		
+	}
+	
+	//강사수정: 경찬
+	public void tutorUpdate(Tutor tutor,String[] category) throws ModifyException{
+		SqlSession session = null;
+		session = sqlSessionFactory.openSession();
+		LectureCategory lectureCategory = new LectureCategory();
 		
+		try {	
+				for(String t:category) {
+					
+					lectureCategory.setLecture_category_id(t);
+					tutor.setLectureCategory(lectureCategory);
+			        session.update("TutorMapper.tutorUpdate",tutor);
+				}
+					
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ModifyException(e.getMessage());
+		}finally {
+			session.close();
+		}
+		
+	}
+	//강사사진수정: 경찬
+	public void tutorImage(Tutor tutor)throws ModifyException{
+		SqlSession session = null;
+		session = sqlSessionFactory.openSession();
+		
+		try {
+			
+			session.update("TutorMapper.tutorImage",tutor);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ModifyException(e.getMessage());
+		} finally {
+			session.close();
+		}
+	}
+	
+	//강사이력서파일변경: 경찬
+	public void tutorCareer(Tutor tutor)throws ModifyException{
+		SqlSession session = null;
+		session = sqlSessionFactory.openSession();
+		
+		try {
+			session.update("TutorMapper.tutorCareer",tutor);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ModifyException(e.getMessage());
+			
+		} finally {
+			session.close();
+		}
 	}
 	
 }

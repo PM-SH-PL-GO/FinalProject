@@ -109,4 +109,5 @@ public class HomeController {
 	public void myinfoTutorInfo(Locale locale, Model model) {
 		System.out.println("myinfoTutorInfo");
 	}
+	
 }
