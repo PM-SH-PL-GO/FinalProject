@@ -2,6 +2,7 @@
 <html class="no-js" lang="zxx">
 <head>
 <meta charset="utf-8">
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 	
@@ -216,6 +217,22 @@ $(function(){
 		
 	});
 	//----------댓글 삭제 버튼 CLICK END---------	
+	
+	//----------파일 다운로드 클릭 START -------
+// 	$("div.fileDownload").click(function(){
+// 		var fileName = $(this).find("span").html();
+// 		alert(fileName);
+// 		console.log(fileName);
+// 		$.ajax({
+// 			url : "${contextPath}/board/download"
+// 			,method: "post"
+// 			,data: {fileName:fileName}
+// 			,success:function(data){
+// 				alert(data);
+// 			}
+// 		});
+// 	});
+	//----------파일 다운로드 클릭 END -------
 });
 function formatDate(date) { 
 	var d = new Date(date), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = d.getFullYear(); 
@@ -241,6 +258,12 @@ function nameMasking(str){
 	}
 	return maskingStr;
 
+}
+
+function subString(fileName){
+	var fn = fileName.substring(str.indexOf(".")+1)
+	return fn;
+	
 }
 </script>
 </head>
@@ -271,7 +294,13 @@ function nameMasking(str){
 								<li><a href="#">작성일 ${resultDt}</a></li>
 							</ul>
 							<p class="excert">${studyBoard.studyBoard_content}</p>
-							<input type="button" placeholder="${studyBoard.studyBoard_fileName}" value="${studyBoard.studyBoard_fileName}">
+							<hr>
+							<c:if test="${not empty studyBoard.studyBoard_fileName}">
+							<h3>파일 다운로드</h3><br>							
+								<c:set var="fileName" value="${fn:split(studyBoard.studyBoard_fileName, '_')}" />
+								<a href="${contextPath}/board/download?fileName=${studyBoard.studyBoard_fileName}">${fn:substringAfter(studyBoard.studyBoard_fileName,'_')}</a>
+							</c:if>
+							
 						</div>
 					</div>
 					<div class="comments-area">

@@ -48,15 +48,18 @@ $(function(){
 			$boardPage.html(boardPageData);
 			var $pageList = $("#pageList");
 			var pageListData = "";
+			console.log("pbObj.startPage======="+pbObj.startPage);
+			console.log("pbObj.endPage====="+pbObj.endPage);
+			console.log("pbObj.totalPage======="+pbObj.totalPage);
 			if(pbObj.startPage > 1){
-				pageListData += '<li class="page-item"><a class="prev"><span class="ti-angle-left"></span></a></li>';
+				pageListData += '<li class="page-item"><a class="prev page-link"><span class="ti-angle-left"></span></a></li>';
 			}
 			
-			for(var i=pbObj.startPage; i<=pbObj.totalPage; i++){
+			for(var i=pbObj.startPage; i<=pbObj.endPage; i++){
 				pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
 			}
 			if(pbObj.endPage < pbObj.totalPage){
-				pageListData += '<li class="page-item"><a class="next"><span class="ti-angle-right"></span></a></li>'
+				pageListData += '<li class="page-item"><a class="next page-link"><span class="ti-angle-right"></span></a></li>'
 			}
 			
 			$pageList.html(pageListData);
@@ -69,14 +72,16 @@ $(function(){
 	
 	//----------스터디 게시판 페이징 CLICK  START---------	
 	$pageList.on("click","li>a", function(e){
+// 		console.log("pbObj.startPage11111======="+${pb.startPage});
+// 		console.log("pbObj.endPage1111111111111111====="+${pb.endPage});
+// 		console.log("pbObj.totalPage1111111111======="+${pb.totalPage});
 		var $etClass = $(e.target).attr('class');
 		var $searchVal = $(this).parents('.pagination-area').siblings('.row').find('#searchBar').val();
 		var urlVal = null;
-		
-		if($etClass == 'prev'){
-			page = ${pb.startPage-1};			
-		}else if($etClass == 'next'){
-			page = ${endPage+1};
+		if($etClass == 'prev page-link'||$etClass =='ti-angle-left'){
+			page = ${pb.startPage-10};			
+		}else if($etClass == 'next page-link'||$etClass =='ti-angle-right'){
+			page = ${pb.endPage+1};
 		}else{
 			page = $(e.target).html();
 		}
@@ -87,7 +92,7 @@ $(function(){
 			urlVal = "${contextPath}/board/search/"+$searchVal+"/"+page;
 		}
 		$.ajax({
-				url:urlVal
+			url:urlVal
 			,method:"get"
 			,success:function(pbObj){
 			var $boardPage=$("#tbody");
@@ -112,15 +117,14 @@ $(function(){
 				var $pageList = $("#pageList");
 				var pageListData = "";
 				if(pbObj.startPage > 1){
-					pageListData += '<li class="page-item"><a class="prev"><span class="ti-angle-left"></span></a></li>';
+					pageListData += '<li class="page-item"><a class="prev page-link"><span class="ti-angle-left"></span></a></li>';
 				}
 				
 				for(var i=pbObj.startPage; i<=pbObj.totalPage; i++){
-					
 					pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
 				}
 				if(pbObj.endPage < pbObj.totalPage){
-					pageListData += '<li class="page-item"><a class="next"><span class="ti-angle-right"></span></a></li>'
+					pageListData += '<li class="page-item"><a class="next page-link"><span class="ti-angle-right"></span></a></li>'
 				}
 				
 				$pageList.html(pageListData);
@@ -166,15 +170,14 @@ $(function(){
 				var $pageList = $("#pageList");
 				var pageListData = "";
 				if(pbObj.startPage > 1){
-					pageListData += '<li class="page-item"><a class="prev"><span class="ti-angle-left"></span></a></li>';
+					pageListData += '<li class="page-item"><a class="prev page-link"><span class="ti-angle-left"></span></a></li>';
 				}
 				
-				for(var i=pbObj.startPage; i<=pbObj.totalPage; i++){
-					
+				for(var i=pbObj.startPage; i<=pbObj.endPage; i++){
 					pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
 				}
 				if(pbObj.endPage < pbObj.totalPage){
-					pageListData += '<li class="page-item"><a class="next"><span class="ti-angle-right"></span></a></li>'
+					pageListData += '<li class="page-item"><a class="next page-link"><span class="ti-angle-right"></span></a></li>'
 				}
 				
 				$pageList.html(pageListData);
@@ -287,7 +290,6 @@ function nameMasking(str){
 						<!-- 			<button type="submit" class="button-write">검색</button> -->
 						<div class="col-xl-12">
 							<a class="button button-write f-right" id="boardWrite">글쓰기</a>
-							
 						</div>
 					</div>
 				</div>
