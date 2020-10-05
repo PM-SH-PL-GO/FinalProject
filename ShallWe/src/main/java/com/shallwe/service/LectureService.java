@@ -179,6 +179,6 @@ public class LectureService {
 	
 	// 찜목록 추가 : 상하
 	public void addWishOne(Map<String, Object>map)throws AddException{
-			wishDAO.addWishByLecId(map);
+		wishDAO.addWishByLecId(map);
 	}
 }

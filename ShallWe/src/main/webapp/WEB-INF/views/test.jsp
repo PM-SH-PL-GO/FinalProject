@@ -41,8 +41,6 @@ $(document).ready(function() {
 		}
 	}); // end of ajax 
 	
-	
-	
 	//--- 클릭한 후기 삭제이벤트 발생 
 	$reviewAreaObj.on('click', function (e) {
       var tdObj = $(this).find('td');
@@ -71,8 +69,6 @@ $(document).ready(function() {
          }
       }); // end of ajax
    });
-	
-
 }); // end of script
 
 </script>
