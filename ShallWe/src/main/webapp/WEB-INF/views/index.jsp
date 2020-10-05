@@ -46,7 +46,13 @@
 }
 
 .category-img {
-	margin-top: 2%;
+	margin-top: 3%;
+}
+div img{
+cursor: pointer;
+}
+#searchBtn{
+cursor: pointer;
 }
 </style>
 <script>
@@ -86,7 +92,7 @@ $(function(){
 					<div class="row justify-content-center">
 						<div class="col-xl-10 col-lg-100">
 							<!-- Hero Caption -->
-							<div class="hero__caption pt-10">
+							<div class="hero__caption pt-90">
 								<h1>배우고, 나누고, 성장하세요</h1>
 								<p>다양한 분야의 강사를 만나보세요!</p>
 							</div>
@@ -114,6 +120,7 @@ $(function(){
 					</div>
 					<!-- hero category1 img -->
 					<div class="category-img text-center" id="category">
+					<h1 style="margin-top: 4%;">카테고리별로 검색해보세요!</h1>
 						<a id="IT"> <img src="assets/img/gallery/category_icon1.png"></a>
 						<a id="취미"> <img src="assets/img/gallery/category_icon2.png"></a> 
 						<a id="마케팅"> <img src="assets/img/gallery/category_icon3.png"></a> 
