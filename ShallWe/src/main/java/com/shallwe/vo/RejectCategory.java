@@ -1,16 +1,13 @@
 package com.shallwe.vo;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class WishList {
-	private Member member;
-//	private Lecture lecture;
-	private List<Lecture> lecs;
+public class RejectCategory {
+	private String reject_category_id;
+	private String reject_category_value;
 }

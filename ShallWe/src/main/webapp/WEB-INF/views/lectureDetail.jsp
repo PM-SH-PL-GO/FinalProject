@@ -5,6 +5,12 @@
 <c:set value="${lectDetail.lecture}" var="lecture" />
 <fmt:formatDate var="startDt" value="${lecture.lecture_start_dt}" pattern="yyyy-MM-dd" />
 <fmt:formatDate var="endDt" value="${lecture.lecture_end_dt}" pattern="yyyy-MM-dd" />
+<c:forEach items="${mlthlist}" var="ml" varStatus="i">
+<c:set var="m" value="${mlthlist[i.index]}"/>
+<c:set var="mtutor" value="${lecture.tutor}" />
+<c:if test="${m.lecture.lecture_id eq lecture.lecture_id}" var="lleq"/>
+<c:if test="${m.lecture.lecture_id ne lecture.lecture_id}" var="llne"/>
+</c:forEach>
 
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
@@ -44,6 +50,7 @@ $(document).ready(function() {
 		, data : {"tutor_id": "${lecture.tutor.member.member_id}",
 				  "category_id":"${lecture.lectureCategory.lecture_category_id}"}
 		, success : function (responseData) {
+			console.log(responseData);
 			$reviewAreaObj.append(responseData);
 		}
 	}); // end of ajax
@@ -54,8 +61,7 @@ $(document).ready(function() {
 		$.ajax({
 			url: "${contextPath}/insertMemberLectureHistory"
 			, method: "POST"
-			, data : {"lecture_category_id" : "${lecture.lectureCategory.lecture_category_id}" ,
-					  "lecture_id" : "${lecture.lecture_id}"}
+			, data : {"lecture_id" : "${lecture.lecture_id}"}
 			, success: function(responseData) {
 				let responseObj = JSON.parse(responseData);
 				if (responseObj.status == "success") {
@@ -73,12 +79,10 @@ $(document).ready(function() {
 	$cancelBtnObj.on("click", function() {
 		$.ajax({
 			url: "${contextPath}/updateMemberLectureHistory"
-			, method: "POST"
-			, data : {"lecture_category_id" : "${lecture.lectureCategory.lecture_category_id}" ,
-					  "lecture_id" : "${lecture.lecture_id}"}
+			, method: "GET"
+			, data : {"lecture_id" : "${lecture.lecture_id}"}
 			, success: function(responseData) {
-				let responseObj = JSON.parse(responseData);
-				if (responseObj.status == "success") {
+				if (responseData == "success") {
 					alert("강의 결제 취소가 정상적으로 처리 되었습니다.");
 				} else {
 					alert("강의 결제 취소가 실패했습니다.");
@@ -90,12 +94,12 @@ $(document).ready(function() {
 	
 	let letidValue = $("input[name=listlecture_id]").val();
 	$("div[name=gotoDe]").click(function(){
-		location.href = "/shallwe/lectures/detail?lecture_id=" +letidValue;		
+		location.href = "${contextPath}/lectures/detail?lecture_id=" +letidValue;		
 	});
 
 	let letidendValue = $("input[name=listendlecture_id]").val();
 	$("div[name=gotoDeend]").click(function(){
-		location.href = "/shallwe/lectures/detail?lecture_id=" +letidendValue;		
+		location.href = "${contextPath}/lectures/detail?lecture_id=" +letidendValue;		
 	});
 	return false;
 }); // end of scriptLoad
@@ -180,8 +184,12 @@ $(document).ready(function() {
 									pattern="#,###" />
 								원
 							</h4>
+							<c:if test="${lleq}">
 							<a href="#" id="applyBtn" class="genric-btn primary-border mt-10">신청</a>
+							</c:if>							
+							<c:if test="${llne}">
 							<a href="#" id="cancelBtn" class="genric-btn primary-border mt-10">결제취소</a>
+							</c:if>
 							<a href="#" class="genric-btn primary-border mt-10">찜하기</a>
 							<div class="d-flex mt-10">
 								<h6 class="mr-10">수강일시:</h6>

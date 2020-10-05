@@ -3,7 +3,9 @@ package com.shallwe.control;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.ServletContext;
@@ -12,8 +14,6 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,12 +25,16 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
+import com.shallwe.exception.RemoveException;
+import com.shallwe.exception.ModifyException;
 import com.shallwe.service.LectureService;
+import com.shallwe.service.ReviewService;
 import com.shallwe.service.TutorService;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureDetail;
 import com.shallwe.vo.Member;
 import com.shallwe.vo.MemberLectureHistory;
+import com.shallwe.vo.Review;
 import com.shallwe.vo.Tutor;
 
 import lombok.extern.log4j.Log4j;
@@ -45,6 +49,9 @@ public class LectureController {
 	// 강사 : 강의 등록/수정/취소, 등록한 강의 조회
 	@Autowired
 	LectureService service;
+	
+	@Autowired
+	ReviewService reserv;
 
 	@Autowired
 	TutorService tutoser;
@@ -134,7 +141,46 @@ public class LectureController {
 		}
 		return mnv;
 	}
-
+	
+	// 강사 강의 취소 요청 : 동일
+		@GetMapping(value = "/tutorcancelLecture")
+		public ModelAndView tutorcancelview(HttpSession session, @RequestParam(value = "lecture_id", required = false) Integer lecture_id) throws FindException {
+			ModelAndView mnv = new ModelAndView();
+			String id = (String) session.getAttribute("loginInfo");
+			Member mem = new Member();
+			Tutor tutor = new Tutor();
+			Lecture lect = new Lecture();
+			LectureDetail lectDetail = new LectureDetail();
+			mem.setMember_id(id);
+			tutor.setMember(mem);
+			lect.setTutor(tutor);
+			lect.setLecture_id(lecture_id);
+			try {
+			lectDetail = service.lectureDetailView(lect);
+			mnv.setViewName("/lecturepopup");
+			mnv.addObject("lectDetail", lectDetail);
+			} catch (FindException e) {
+				e.printStackTrace();
+				mnv.setViewName("/lecturepopup");
+			}
+			return mnv;
+		}
+	
+	// 강사 강의 취소 요청 : 동일
+		@PostMapping(value = "/tutorcancelLecture")
+		public ModelAndView tutorcancelLecture(LectureDetail lectDe) throws ModifyException {
+			ModelAndView mnv = new ModelAndView();
+			try {
+				service.tutorcancelLecture(lectDe.getLecture(), lectDe);
+				mnv.setViewName("/success");
+			} catch (ModifyException e) {
+				e.printStackTrace();
+				mnv.setViewName("/fail");
+				mnv.addObject("errorMsg", e.getMessage());
+			}
+			return mnv;
+		}
+	
 	// 학생 강의 조회 : 동일
 	@RequestMapping(value = "/memberLecture")
 	public ModelAndView memberLectureView(HttpSession session, MemberLectureHistory mlth) {
@@ -142,10 +188,13 @@ public class LectureController {
 		List<MemberLectureHistory> mlthlist = new ArrayList<>();
 		ModelAndView mnv = new ModelAndView();
 		Member mem = new Member();
+		List<Review> relist = new ArrayList<Review>();
 		mem.setMember_id(id);
 		mlth.setMember(mem);
+		Map<String, String> map = new HashMap<String, String>();
 		try {
 			mlthlist = service.memberLectureList(mlth);
+			
 			mnv.addObject("mlthlist", mlthlist);
 			mnv.setViewName("/memberLectureList");
 			mnv.addObject("status", "success");
@@ -189,22 +238,24 @@ public class LectureController {
 		Member mem = new Member();
 		Tutor tuto = new Tutor();
 		Lecture lecttuto = new Lecture();
-		LectureDetail lectDetuto = new LectureDetail();
 		MemberLectureHistory mlth = new MemberLectureHistory();
 		Lecture lect = new Lecture();
 		LectureDetail lectDetail = new LectureDetail();
 		mem.setMember_id(id);
+		List<MemberLectureHistory> mlthlist = new ArrayList<>();
 		tuto.setMember(mem);
 		lecttuto.setTutor(tuto);
-		lectDetuto.setLecture(lecttuto);
+		List<Lecture> lectlist = new ArrayList<>();
 		mlth.setMember(mem);
 		lect.setLecture_id(lecture_id);
 		lectDetail.setLecture(lect);
 		try {
 			lectDetail = service.lectureDetailView(lect);
 			mnv.addObject("lectDetail", lectDetail);
-			mnv.addObject("mlth", mlth);
-			mnv.addObject("lectDetuto", lectDetuto);
+			mlthlist = service.memberLectureList(mlth);
+			mnv.addObject("mlthlist", mlthlist);
+			lectlist = service.tutorLectureList(lecttuto);
+			mnv.addObject("lectlist", lectlist);
 			mnv.setViewName("/lectureDetail");
 		} catch (FindException e) {
 			e.printStackTrace();
@@ -214,20 +265,4 @@ public class LectureController {
 		return mnv;
 	}
 
-	// 장바구니 보기 : 상하
-
-	@RequestMapping(value = "/wishlist")
-	public String WishView(HttpSession session, Model model) throws FindException {
-		String member_id = (String) session.getAttribute("loginInfo");
-		List<Lecture> wishall = new ArrayList<>();
-		try {
-			service.findWishListById(member_id);
-			return "wishlist";
-		} catch (FindException e) {
-			e.printStackTrace();
-			Logger.info("error");
-			return "fail";
-		}
-
-	}
 }

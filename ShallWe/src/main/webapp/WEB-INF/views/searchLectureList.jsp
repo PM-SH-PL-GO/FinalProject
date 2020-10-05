@@ -11,7 +11,7 @@
 		<div class="col">
 			<div class="properties pb-20">
 				<div class="properties__card">
-					<a href="#"><img src="/shallwe/assets/img/gallery/properties3.png" alt=""></a><br/><br/>
+					<a href="#"><img src="${contextPath}/assets/img/gallery/properties3.png" alt=""></a><br/><br/>
 					<div class="properties__caption">
 						<p>${stats.count}</p>
 						<h3>

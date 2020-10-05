@@ -4,28 +4,6 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <c:set var="lectureList" value="${requestScope['list']}"/>
 
-<!doctype html>
-<html class="no-js" lang="zxx">
-<head>
-<meta charset="utf-8">
-<meta http-equiv="x-ua-compatible" content="ie=edge">
-<title>Shallwe-함께 배우는 교육공간</title>
-<meta name="description" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
-
-<!-- CSS here -->
-<link rel="stylesheet" href="assets/css/bootstrap.min.css">
-<link rel="stylesheet" href="assets/css/owl.carousel.min.css">
-<link rel="stylesheet" href="assets/css/slicknav.css">
-<link rel="stylesheet" href="assets/css/animate.min.css">
-<link rel="stylesheet" href="assets/css/hamburgers.min.css">
-<link rel="stylesheet" href="assets/css/magnific-popup.css">
-<link rel="stylesheet" href="assets/css/fontawesome-all.min.css">
-<link rel="stylesheet" href="assets/css/themify-icons.css">
-<link rel="stylesheet" href="assets/css/slick.css">
-<link rel="stylesheet" href="assets/css/nice-select.css">
-<link rel="stylesheet" href="assets/css/style.css">
 <style>
 .left_menu {
 	float: left;
@@ -39,6 +17,7 @@
 	float : center;
 	width: 70%;
 }
+
 </style>
 <!-- script area -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -55,8 +34,8 @@
 		//검색 입력 left_menu
 		var $searchTextObj = $("section.left_menu").find("input#searchText");
 		var $searchKeyObj = $("section.left_menu").find("select#searchKey");
-		var condition ="";
-		var $searchText ="";
+		var condition =0;
+		var $searchText =" ";
 		
 		$searchTextObj.focus();
 		
@@ -71,36 +50,42 @@
 			location.href = url;
 		}); // end of clickEvent
 		
+		$('div.category-img a').click(function(){
+			$searchText = $(this).attr("id");
+			var $searchKey = 3
+	        var url = '${contextPath}/search?searchKey='+$searchKey+'&searchText='+$searchText ;
+	        location.href = url;
+		});
 		
-		
-		//강의상세화면으로 이동
-// 		var $lectureCard = $("section.right_menu > div.container> div.row").find("div.col");
-// 		console.log($lectureCard);
-		
-// 		$lectureCard.click(function(e) {
-// 			var lectureCode = $(this).find('input[name=lecture_code]').val();
-// 			var url = '/shallwe/lectures/detail?lecture_id='+lectureCode;
-// 			console.log(lectureCode);
-// 			console.log(url);
-// 			location.href = url;
-// 		});
-		
-		var lectureDetail = $('a.lecture_detail');
+		// 강의상세보기
+		var lectureDetail = $('div.properties__caption');
 		lectureDetail.click(function e () {
 			let lecture_code = $(this).find('input[name=lecture_code]').val();
 			var url = '${contextPath}/lectures/detail?lecture_id='+lecture_code;
 			location.href = url;
 		}); 
 		
-		
 		// 강의찜하기
-		var lectureLike = $('div.lectureLike');
-		$lectureLike.on('click', 'input[name=lecture_code]', function(e){
+		var $lectureLike = $('div.heart');
+		$lectureLike.on('click', function(e){
 			let lecture_code = $(this).find('input[name=lecture_code]').val();
-			var url = '${contextPath}/lectures/detail?lecture_id='+lecture_code;
-			location.href = url;
+			console.log(lecture_code);
+			var url = '${contextPath}/member/wishlist/addWish?lecture_id='+lecture_code;
+			if(confirm("찜목록에 추가 하시겠습니까?")){
+				$.ajax( { 
+					url : '${contextPath}/member/wishlist/addWish'
+					, method : "GET"
+					, data : {"lecture_id" : lecture_code}
+					, success : function () {
+						if(confirm("찜목록으로 이동하시겠습니까")){
+							location.href = "${contextPath}/member/wishlist";
+						} else {
+							location.reload();
+						}
+					}
+				}); // end of ajax
+			}
 		});
-		
 	}); // end of 
 	
 </script>
@@ -137,7 +122,6 @@
 							<div>
 								<!-- searchKey = {"all", "tutor_name", "lecture_title" , "category" }; -->
 								<select class="nice-select" id="searchKey">
-									<option value="0" class="option">검색조건</option>
 									<option value="0" class="option">전체 검색</option>
 									<option value="1" class="option">강사 이름</option>
 									<option value="2" class="option">강의명</option>
@@ -151,34 +135,37 @@
 										onblur="this.placeholder = 'Search Keyword'" id="searchText">
 								</div>
 							</div>
-							<button id="searchBtn" type="submit">Search</button>
+							<button class="btn" id="searchBtn" type="submit"  style="cursor: pointer;">강의검색하기</button>
 						</form>
 					</aside>
 				</div>
 
-				<div class="left_menu_result">
+				<div class="left_menu_result"></div>
 				
+				<div class="category-img text-center">
+					<a id="IT" style="cursor: pointer;">
+						<img src="assets/img/gallery/category_icon1.png" alt="IT"></a> 
+					<a id="취미" style="cursor: pointer;">
+						<img src="assets/img/gallery/category_icon2.png" alt="취미"></a>
 				</div>
-
-<!-- 				<div class="category-img text-center"> -->
-<!-- 					<a href="#"> <img src="assets/img/gallery/category_icon1.png" -->
-<!-- 						alt=""></a> <a href="#"> <img -->
-<!-- 						src="assets/img/gallery/category_icon2.png" alt=""></a> <a -->
-<!-- 						href="#"> <img src="assets/img/gallery/category_icon3.png" -->
-<!-- 						alt=""></a> -->
-<!-- 				</div> -->
-<!-- 				<div class="category-img text-center"> -->
-<!-- 					<a href="#"> <img src="assets/img/gallery/category_icon4.png" -->
-<!-- 						alt=""></a> <a href="#"> <img -->
-<!-- 						src="assets/img/gallery/category_icon6.png" alt=""></a> <a -->
-<!-- 						href="#"> <img src="assets/img/gallery/category_icon7.png" -->
-<!-- 						alt=""></a> -->
-<!-- 				</div> -->
-<!-- 				<div class="category-img text-center"> -->
-<!-- 					<a href="#"> <img src="assets/img/gallery/category_icon8.png" -->
-<!-- 						alt=""></a> <a href="#"> <img -->
-<!-- 						src="assets/img/gallery/category_icon9.png" alt=""></a> -->
-<!-- 				</div> -->
+				<div class="category-img text-center">
+					<a id="디자인" style="cursor: pointer;">
+						<img src="assets/img/gallery/category_icon4.png" alt="디자인"></a>
+					<a id="사진" style="cursor: pointer;">
+						<img src="assets/img/gallery/category_icon6.png" alt="사진"></a>
+				</div>
+				<div class="category-img text-center">
+					<a id="음악" style="cursor: pointer;">
+						<img src="assets/img/gallery/category_icon8.png" alt="음악"></a>
+					<a id="스포츠" style="cursor: pointer;">
+						<img src="assets/img/gallery/category_icon9.png" alt="스포츠"></a>
+				</div>
+				<div class="category-img text-center">
+					<a id="마케팅" style="cursor: pointer;">
+						<img src="assets/img/gallery/category_icon3.png" alt="마케팅"></a>
+					<a id="회계" style="cursor: pointer;">
+						<img src="assets/img/gallery/category_icon7.png" alt="회계"></a>
+				</div>
 			</div>
 		</section>
 
@@ -197,13 +184,13 @@
 					<c:forEach items="resultList.Lecture" var="lec" varStatus="lec_count">
 					<div class="col">
 						<div class="properties pb-20">
-							<div class="properties__card">
-								<a href="#"><img src="/shallwe/assets/img/gallery/properties3.png" alt="강의사진"></a><br/><br/>
+							<div class="properties__card" style="cursor: pointer;">
+								<a href="#"><img src="${contextPath}/assets/img/gallery/properties3.png" alt="강의사진"></a><br/><br/>
 								<div class="properties__caption">
 									<p>${stats.count}</p>
 									<h3>
 										<label>강의명: </label>
-										<a class="lecture_detail">${lecture.lecture_title}
+										<a class="lecture_detail" style="cursor: pointer;">${lecture.lecture_title}
 											<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>
 										</a>
 									</h3>
@@ -212,15 +199,20 @@
 										<fmt:formatDate value="${lecture.lecture_end_dt}" pattern="yyyy-MM-dd"/> 
 									</h4>
 									<h4><label>강사명: </label>${lecture.tutor.tutor_nickname}</h4>
-									<h4><label>현재인원: </label> ${lecture.lecture_current} <label>/최대인원: </label> ${lecture.lecture_max}</h4>
+									<c:if test="${lecture.lecture_current eq lecture.lecture_max}" >
+										<h4 style="color: red;"><span>정원초과</span></h4>
+									</c:if>
+									<h4><label>현재인원:</label> ${lecture.lecture_current} <label>/최대인원: </label> ${lecture.lecture_max}</h4>
 								</div>
 								<div class="properties__footer d-flex justify-content-between align-items-center">
 									<h3><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###원"/></h3>
+									<c:if test="${lecture.lecture_current ne lecture.lecture_max}" >
 									<div class="heart">
-										<img class="shoppingCartImg" src="${contextPath}/assets/img/elements/shopping-cart.png"
+										<img class="shoppingCartImg"  style="cursor: pointer;" src="${contextPath}/assets/img/elements/shopping-cart.png"
 											width="30px" alt="강의찜하기" title="강의찜하기">
 										<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>								
 									</div>
+									</c:if>
 								</div>
 							</div>
 						</div>

@@ -2,6 +2,7 @@
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.shallwe.dao.FreeBoardDAO;
 import com.shallwe.dao.MemberDAO;
 import com.shallwe.dao.WishListDAO;
 import com.shallwe.exception.AddException;
@@ -19,8 +21,10 @@ import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.exception.RemoveException;
 import com.shallwe.model.MemberInfoBean;
+import com.shallwe.vo.FreeBoard;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureCategory;
+import com.shallwe.vo.Member;
 
 import lombok.extern.log4j.Log4j;
 
@@ -34,6 +38,8 @@ public class SangHtest {
 	MemberDAO memberDAO;
 	@Autowired
 	WishListDAO wishDAO;
+	@Autowired
+	FreeBoardDAO freeDAO;
 	
 //	@Test
 	 void Join() { // 회원가입 : 상하
@@ -123,7 +129,7 @@ public class SangHtest {
 		
 		
 	}
-	@Test  //테스트 실패이니 점검
+//	@Test  //테스트 실패이니 점검
 	 void updateFavorites() { // Favorites 수정: 상하
 		String member_id = "member2";
 //		String favorite1 = "LE";
@@ -187,7 +193,7 @@ public class SangHtest {
 		map.put("lecture_id", lecture_id);
 		
 		try {
-			wishDAO.deleteFavLec(map);
+			wishDAO.deleteOneFavLec(map);
 		}catch(RemoveException e) {
 			e.printStackTrace();
 		}
@@ -205,5 +211,22 @@ public class SangHtest {
 			e.printStackTrace();
 		}
 //		return wishall;
+	}
+	@Test
+	void testCreate()throws Exception{
+//		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+		Date date =new Date();
+//		String dd = format.format(date);
+		Member member= new Member();
+		member.setMember_id("member2");
+		for(int i=1;1<=100; i++) {
+			FreeBoard freeboard = new FreeBoard();
+			freeboard.setFreeboard_title(i+"번쨰 글 제목입니다..");
+			freeboard.setFreeboard_content(i+"번째 글 내용입니당...");
+			freeboard.setFreeboard_id(i+4);
+			freeboard.setMember(member);
+			freeboard.setFreeboard_write_dt(date);
+			freeDAO.insert(freeboard);
+		}
 	}
 }

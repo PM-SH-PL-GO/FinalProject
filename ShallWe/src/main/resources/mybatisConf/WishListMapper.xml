@@ -12,16 +12,17 @@
 	</resultMap>
 		
 	<resultMap type="Lecture" id="lecsMap">
-		<result property="lecture_img" column="lecimg"/>
-		<result property="lecture_title" column="lectitle"/>
-		<result property="lecture_price" column="lecprice"/>
+		<id property="lecture_id" column="lecture_id"/>
+		<result property="lecture_img" column="lecture_img"/>
+		<result property="lecture_title" column="lecture_title"/>
+		<result property="lecture_price" column="lecture_price"/>
 		<association property = "tutor" javaType="Tutor" autoMapping="true" resultMap="tutory">
 		</association>
 	</resultMap>	
 	<resultMap type="Tutor" id="tutory" autoMapping="true">
 		<association property="member" javaType="Member" autoMapping="true">
 		<result property="member_id" column="member_id"/>
-		<result property="member_name" column="tutorname"/>
+		<result property="member_name" column="tutor_name"/>
 		</association>
 	</resultMap>
 
@@ -33,8 +34,8 @@
 <!-- 		</association> -->
 	
 
-	<select id ="selectWishListById" parameterType ="String" resultMap="wishListMap">
-	SELECT lec.lecture_img lecimg, lec.lecture_title lectitle, tut.member_name tutorname, lec.lecture_price lecprice
+	<select id ="selectWishListById" parameterType ="wishlist" resultMap="wishListMap">
+	SELECT lec.lecture_id lecture_id ,lec.lecture_img lecture_img, lec.lecture_title lecture_title, tut.member_name tutor_name, lec.lecture_price lecture_price
 	FROM wishlist wish JOIN lecture lec on(wish.lecture_id = lec.lecture_id)
                     JOIN member tut on(lec.lecture_tutor_id = tut.member_id)
                     JOIN member mem on(wish.member_id = mem.member_id)
@@ -43,11 +44,15 @@
 
 	<insert id ="addFavLec" parameterType="Map">
 	INSERT INTO WishList(lecture_id, member_id, lecture_category_id)
-	VALUES( #{lecture.lecture_id},#{member_id}, #{lecture.lectureCategory.lecture_category_id})
+	VALUES( #{lecture_id},#{member_id}, #{lecture_category_id})
 	</insert>
 	
-	<delete id ="deleteFavLec" parameterType="Map">
+	<delete id ="deleteOneFavLec" parameterType="Map">
 	DELETE from WishList where member_id=#{member_id} AND lecture_id=#{lecture_id}
+	</delete>
+	
+	<delete id ="deleteAllFavLec" parameterType="String">
+	DELETE from WishList where member_id=#{member_id}
 	</delete>
 	
 </mapper>

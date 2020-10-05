@@ -1,7 +1,6 @@
 package com.shallwe.service;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,12 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.shallwe.dao.FreeBoardDAO;
+import com.shallwe.dao.FreeReplyDAO;
 import com.shallwe.dao.StudyBoardDAO;
 import com.shallwe.dao.StudyReplyDAO;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
+import com.shallwe.exception.RemoveException;
 import com.shallwe.model.BoardPageBean;
+import com.shallwe.vo.FreeBoard;
 import com.shallwe.vo.StudyBoard;
 import com.shallwe.vo.StudyReply;
 
@@ -25,7 +28,10 @@ public class BoardService {
 	StudyBoardDAO studyBoardDAO;
 	@Autowired
 	StudyReplyDAO studyReplyDAO;
-	
+	@Autowired
+	FreeBoardDAO freeBoardDAO;
+	@Autowired
+	FreeReplyDAO freeReplyDAO;
 	/**
 	 * 게시글 전체조회
 	 * @author 박성운
@@ -164,4 +170,68 @@ public class BoardService {
 		return studyBoard;
 		
 	}
+	
+	// FreeBoard Service Start
+	
+	/**
+	 * freeboard
+	 * 리스트 조회
+	 * @author 김상하
+	 * @param listAll
+	 * @return 리스트페이지
+	 * @throws FindException
+	 */
+	public List<FreeBoard> listAll()throws FindException{
+		return freeBoardDAO.listAll();
+	}
+	
+	/**
+	 * freeboard
+	 * 게시글 조회
+	 * @author 김상하
+	 * @param freeboard_id
+	 * @return 게시글 페이지
+	 * @throws FindException 
+	 */
+	public FreeBoard read(int freeboard_id)throws FindException{
+		return freeBoardDAO.read(freeboard_id);
+	}
+	
+	/**
+	 * freeboard
+	 * 게시글 쓰기
+	 * @author 김상하
+	 * @param 작성할 게시글 요소들
+	 * @return
+	 * @throws AddException
+	 */
+	public void insertFreeBoard(FreeBoard freeboard)throws AddException{
+		freeBoardDAO.insert(freeboard);
+	}
+
+	/**
+	 * freeboard
+	 * 게시글 수정
+	 * @author 김상하
+	 * @param 수정할 게시글 
+	 * @return
+	 * @throws ModifyException
+	 */
+	public void updateFreeBoard(FreeBoard freeboard)throws ModifyException{
+		freeBoardDAO.update(freeboard);
+	}
+	
+	/**
+	 * freeboard
+	 * 게시글 삭제
+	 * @author 김상하
+	 * @param 삭제할 게시글 번호
+	 * @return
+	 * @throws RemoveException
+	 */
+	public void deleteFreeBoard(int freeboard_id)throws Exception{
+		freeBoardDAO.delete(freeboard_id);
+	}
+	
+
 }

@@ -17,6 +17,7 @@ import com.shallwe.dao.WishListDAO;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
+import com.shallwe.exception.RemoveException;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureDetail;
 import com.shallwe.vo.MemberLectureHistory;
@@ -44,23 +45,33 @@ public class LectureService {
 	 * @return List<Lecture>
 	 * @throws FindException
 	 */
-	public ModelAndView searchLecture(HashMap<String, Object> map) throws FindException {
+	public List<Lecture> searchLecture(HashMap<String, Object> map) throws FindException {
 		List<Lecture> list = new ArrayList<>();
-		ModelAndView modelAndView = new ModelAndView();
-
 		try {
 			list = lectureDAO.selectLectureListBySearch(map);
 
-			modelAndView.addObject("list", list);
-			modelAndView.addObject("status", "success");
-
 		} catch (FindException e) {
-			modelAndView.addObject("status", "fail");
-			modelAndView.addObject("errMsg", e.getMessage());
+			throw new FindException(e.getMessage());
 		}
-
-		return modelAndView;
-
+		return list;
+	}
+	
+	/**
+	 * @author Soojeong
+	 * @강의 검색 lecture_Id로 검색
+	 * @Param String lecture_Id
+	 * @return Lecture
+	 * @throws FindException
+	 */
+	public Lecture searchLectureByLectureId(String lecture_id) throws FindException {
+		Lecture lecture = new Lecture();
+		try {
+			lecture = lectureDAO.selectLectureByLectureId(lecture_id);
+		} catch (FindException e) {
+			throw new FindException(e.getMessage());
+		}
+		return lecture;
+		
 	}
 
 	// 강의 등록 : 동일
@@ -80,6 +91,17 @@ public class LectureService {
 		try {
 			lectureDAO.update(lect);
 			lectureDetailDAO.updateDetail(lectDe);
+		} catch (ModifyException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// 강사 강의 취소 요청: 동일
+	@Transactional
+	public void tutorcancelLecture(Lecture lect, LectureDetail lectDe) throws ModifyException {
+		try {
+			lectureDAO.cancelRequest(lect);
+			lectureDetailDAO.cancelRequest(lectDe);
 		} catch (ModifyException e) {
 			e.printStackTrace();
 		}
@@ -136,10 +158,27 @@ public class LectureService {
 		}
 		return result;
 	}
-
+	
+	// 찜목록 가져오기 : 상하
 	public List<Lecture> findWishListById(String member_id) throws FindException {
-
 		return wishDAO.selectWishListById(member_id);
 	}
 
+	// 찜목록 개별 삭제 : 상하
+	public void deleteOneWishList(Map<String, Object>map) throws RemoveException{
+		try { 
+			wishDAO.deleteOneFavLec(map);
+		}catch(RemoveException e){
+			e.printStackTrace();
+		}
+	}
+	// 찜목록 전체 삭제 : 상하
+	public void deleteAllWishList(String member_id) throws RemoveException{
+			wishDAO.deleteAllFavLec(member_id);
+	}
+	
+	// 찜목록 추가 : 상하
+	public void addWishOne(Map<String, Object>map)throws AddException{
+		wishDAO.addWishByLecId(map);
+	}
 }
