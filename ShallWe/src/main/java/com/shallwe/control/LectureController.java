@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.RemoveException;
+import com.shallwe.exception.ModifyException;
 import com.shallwe.service.LectureService;
 import com.shallwe.service.TutorService;
 import com.shallwe.vo.Lecture;
@@ -135,7 +136,46 @@ public class LectureController {
 		}
 		return mnv;
 	}
-
+	
+	// 강사 강의 취소 요청 : 동일
+		@GetMapping(value = "/tutorcancelLecture")
+		public ModelAndView tutorcancelview(HttpSession session, @RequestParam(value = "lecture_id", required = false) Integer lecture_id) throws FindException {
+			ModelAndView mnv = new ModelAndView();
+			String id = (String) session.getAttribute("loginInfo");
+			Member mem = new Member();
+			Tutor tutor = new Tutor();
+			Lecture lect = new Lecture();
+			LectureDetail lectDetail = new LectureDetail();
+			mem.setMember_id(id);
+			tutor.setMember(mem);
+			lect.setTutor(tutor);
+			lect.setLecture_id(lecture_id);
+			try {
+			lectDetail = service.lectureDetailView(lect);
+			mnv.setViewName("/lecturepopup");
+			mnv.addObject("lectDetail", lectDetail);
+			} catch (FindException e) {
+				e.printStackTrace();
+				mnv.setViewName("/lecturepopup");
+			}
+			return mnv;
+		}
+	
+	// 강사 강의 취소 요청 : 동일
+		@PostMapping(value = "/tutorcancelLecture")
+		public ModelAndView tutorcancelLecture(LectureDetail lectDe) throws ModifyException {
+			ModelAndView mnv = new ModelAndView();
+			try {
+				service.tutorcancelLecture(lectDe.getLecture(), lectDe);
+				mnv.setViewName("/success");
+			} catch (ModifyException e) {
+				e.printStackTrace();
+				mnv.setViewName("/fail");
+				mnv.addObject("errorMsg", e.getMessage());
+			}
+			return mnv;
+		}
+	
 	// 학생 강의 조회 : 동일
 	@RequestMapping(value = "/memberLecture")
 	public ModelAndView memberLectureView(HttpSession session, MemberLectureHistory mlth) {

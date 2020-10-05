@@ -3,6 +3,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 <head>
@@ -17,7 +18,12 @@
 <link rel="stylesheet" href="/shallwe/assets/css/bootstrap.min.css">
 <link rel="stylesheet" href="/shallwe/assets/css/owl.carousel.min.css">
 <link rel="stylesheet" href="/shallwe/assets/css/slicknav.css">
+<link rel="stylesheet" href="/shallwe/assets/css/flaticon.css">
+<link rel="stylesheet"
+	href="/shallwe/assets/css/progressbar_barfiller.css">
+<link rel="stylesheet" href="/shallwe/assets/css/gijgo.css">
 <link rel="stylesheet" href="/shallwe/assets/css/animate.min.css">
+<link rel="stylesheet" href="/shallwe/assets/css/animated-headline.css">
 <link rel="stylesheet" href="/shallwe/assets/css/hamburgers.min.css">
 <link rel="stylesheet" href="/shallwe/assets/css/magnific-popup.css">
 <link rel="stylesheet"
@@ -34,21 +40,37 @@
 <fmt:formatDate pattern="yyyy-MM-dd" value="${now}" />
 <fmt:parseNumber value="${now.time/(1000*60*60*24)}" integerOnly="true" var="nowDate" />
 $(function(){
-	let letidValue = $("input[name=listlecture_id]").val();
-	$("div[name=gotoDe]").click(function(){
-		location.href = "/shallwe/lectures/detail?lecture_id=" +letidValue;		
-	});
-	let letidendValue = $("input[name=listendlecture_id]").val();
-	$("div[name=gotoDeend]").click(function(){
-		location.href = "/shallwe/lectures/detail?lecture_id=" +letidendValue;		
-	});
-	return false;
+	let $cont = $(".listcontents");
+	let $conte = $(".listendcontents");
+
+	$cont.on("click", "div[name=gotoDe]", function(){
+    	let letidValue = $(this).attr("value");
+    	
+    	location.href = "${contextPath}/lectures/detail?lecture_id=" +letidValue;
+    	return false;
+    });
+	
+	$conte.on("click", "div[name=gotoDeend]", function(){
+    	let letidendValue = $(this).attr("value");
+    	
+    	location.href = "${contextPath}/lectures/detail?lecture_id=" +letidendValue;
+    	return false;
+    });
+	$cont.on("click", "img[name=openCancelre]", 
+		function showPopup(frm) { 
+		let letidimgValue = $(this).attr("value");
+		windowObj = window.open("tutorcancelLecture?lecture_id="+letidimgValue, "강의 취소 요청", "width=500px, height=500px, left=100, top=50"); 
+
+		return false;
+		});
+	
 });
 </script>
 <body>
 	<main>
 		<!--? 강의목록 Start -->
-		<div class="popular-directorya-area section-padding40 fix">
+		<div
+			class="listcontents popular-directorya-area section-padding40 fix">
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-12">
@@ -74,16 +96,15 @@ $(function(){
 							<!-- Single -->
 							<div class="properties pb-20">
 								<div class="properties__cardseo">
-									<div name="gotoDe" style="cursor: pointer;">
+									<div name="gotoDe" style="cursor: pointer;"
+										value="${lecture.lecture_id}">
 										<div class="properties__imgseo overlay1">
 											<img src="/shallwe/lecture/${lecture.lecture_img}" alt=""
 												style="cursor: pointer;">
 
 										</div>
 										<div class="properties__caption">
-											<h3>
-												<a href="#">${lecture.lecture_title}</a>
-											</h3>
+											<h3>${lecture.lecture_title}</h3>
 											<h6>${startDt}~${endDt}</h6>
 											<h6>${tutor.tutor_nickname}</h6>
 											<h6>현재인원: ${lecture.lecture_current} / 최대인원:
@@ -94,10 +115,15 @@ $(function(){
 									</div>
 									<div
 										class="properties__footer d-flex justify-content-between align-items-center">
-										<h3><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###"/>원</h3>
+										<h3>
+											<fmt:formatNumber value="${lecture.lecture_price}"
+												pattern="#,###" />
+											원
+										</h3>
 										<div class="heart">
-											<img src="/shallwe/assets/img/gallery/cancel.png"
-												width="30px" alt="강의취소요청" title="강의취소요청">
+											<img name="openCancelre"
+												src="/shallwe/assets/img/gallery/cancel.png" width="30px"
+												alt="강의취소요청" title="강의취소요청" value="${lecture.lecture_id}" onclick="showPopup();">
 										</div>
 									</div>
 								</div>
@@ -112,7 +138,7 @@ $(function(){
 
 		<!--? 완료 Start -->
 		<div
-			class="popular-directorya-area border-bottom section-padding40 fix">
+			class="listendcontents popular-directorya-area border-bottom section-padding40 fix">
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-12">
@@ -138,7 +164,8 @@ $(function(){
 							<!-- Single -->
 							<div class="properties pb-20">
 								<div class="properties__cardseo">
-									<div name="gotoDeend" style="cursor: pointer;">
+									<div name="gotoDeend" style="cursor: pointer;"
+										value="${lecture.lecture_id}">
 										<div class="properties__imgseo overlay1">
 											<img src="/shallwe/lecture/${lecture.lecture_img}" alt="">
 										</div>
@@ -156,7 +183,11 @@ $(function(){
 									</div>
 									<div
 										class="properties__footer d-flex justify-content-between align-items-center">
-										<h3><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###"/>원</h3>
+										<h3>
+											<fmt:formatNumber value="${lecture.lecture_price}"
+												pattern="#,###" />
+											원
+										</h3>
 										<div class="heart">
 											<img src="/shallwe/assets/img/gallery/performance.png"
 												width="30px" alt="후기보기" title="후기보기">

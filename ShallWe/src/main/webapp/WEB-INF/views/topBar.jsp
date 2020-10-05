@@ -120,7 +120,7 @@ $(function(){
 	//----------강사 강의등록 버튼 CLICK START---------		
 // 	$("#tutorLectureBtn").click(function(){
 	$("#tutorOrLecture").on("click","#tutorLectureBtn",function(){
-		location.href = "${contextPath}/tutorLectureList";		
+		location.href = "${contextPath}/lectures/tutorLecture";		
 	});
 	//----------강사 강의등록 버튼 CLICK START---------		
 	

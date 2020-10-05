@@ -26,11 +26,13 @@ import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.exception.RemoveException;
+import com.shallwe.model.AdminTutorBean;
 import com.shallwe.service.AdminService;
 import com.shallwe.vo.Faq;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureDetail;
 import com.shallwe.vo.Member;
+import com.shallwe.vo.MemberLectureHistory;
 import com.shallwe.vo.Tutor;
 
 import lombok.extern.log4j.Log4j;
@@ -101,15 +103,15 @@ public class AdminController {
 	 * @author jun6
 	 * @return
 	 */
-	@RequestMapping(value = "/preTutor")
-	public ResponseEntity<List<Tutor>> preTutor() {
-		List<Tutor> tutorList = new ArrayList<>();
+	@RequestMapping(value = "/preTutor/{page}")
+	public ResponseEntity<AdminTutorBean> preTutor(@PathVariable(name = "page")Integer preTutorPage) {
+		AdminTutorBean preTutorBean = null;
 		try {
-			tutorList = adminService.showAllTutor("N");
-			return ResponseEntity.status(HttpStatus.OK).body(tutorList);
+			preTutorBean = adminService.showAllTutor("N", preTutorPage);
+			return ResponseEntity.status(HttpStatus.OK).body(preTutorBean);
 		} catch (FindException e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(tutorList, HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(preTutorBean, HttpStatus.NOT_FOUND);
 		}
 	}
 	
@@ -118,12 +120,12 @@ public class AdminController {
 	 * @author jun6
 	 * @return
 	 */
-	@RequestMapping(value = "/tutor/list")
-	public ResponseEntity<List<Tutor>> tutorList() {
-		List<Tutor> tutorList = new ArrayList<>();
+	@RequestMapping(value = "/tutor/list/{page}")
+	public ResponseEntity<AdminTutorBean> tutorList(@PathVariable(name = "page")Integer preTutorPage) {
+		AdminTutorBean tutorBean = null;
 		try {
-			tutorList = adminService.showAllTutor("Y");
-			return ResponseEntity.status(HttpStatus.OK).body(tutorList);
+			tutorBean = adminService.showAllTutor("Y", preTutorPage);
+			return ResponseEntity.status(HttpStatus.OK).body(tutorBean);
 		} catch (FindException e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -131,42 +133,39 @@ public class AdminController {
 	}
 	
 	/**
-	 * 예비 강사 승인/반려
+	 * 예비 강사 승인
 	 * @author jun6
 	 * @param id
 	 * @param status
 	 * @return
 	 */
 	@PatchMapping(value = "/tutor/status/{tutorId}")
-	public ResponseEntity<String> tutorStatusChange(@PathVariable(value = "tutorId")String id, @RequestBody String status){
-		ObjectMapper mapper = new ObjectMapper();
-		Map<String, Object> map;
-		String tutorStatus = "";
+	public ResponseEntity<String> tutorStatusChange(@PathVariable(value = "tutorId")String id){
 		try {
-			map = mapper.readValue(status, new TypeReference<Map<String, Object>>() {});
-			tutorStatus = map.get("status").toString();
-		} catch (JsonMappingException e1) {
-			e1.printStackTrace();
-		} catch (JsonProcessingException e1) {
-			e1.printStackTrace();
-		}
-		try{
-//		HttpHeaders h = new HttpHeaders();
-//		h.setContentType(MediaType.APPLICATION_JSON_UTF8);
-//		return new ResponseEntity<String>("{\"status\" : \"정상적으로 설정되었습니다\"}", h, HttpStatus.OK);
-			
-			
-			if (tutorStatus.equals("승인"))
-				adminService.approvePreTutor(id, tutorStatus);
-			else {
-				
-			}
-			return  ResponseEntity.status(HttpStatus.OK).body("{\"status\" : \"정상적으로 " + tutorStatus + " 처리되었습니다\"}");
+			adminService.approvePreTutor(id, "승인");
+			return  ResponseEntity.status(HttpStatus.OK).body("{\"status\" : \"정상적으로 승인 처리되었습니다\"}");
 		}catch(ModifyException e) {
 			e.printStackTrace();
 			return (ResponseEntity<String>) ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("{\"status\" : \"설정에 실패하였습니다\"}");
 		}
 	}
+
+	/**
+	 * 강사신청 반려시키기
+	 * @param tutor_id
+	 * @return
+	 */
+	@PostMapping(value = "/tutor/status/{tutorId}", produces = "application/json; charset=UTF-8;")
+	public ResponseEntity<String> rejectTutor(@PathVariable(name = "tutorId") String tutor_id, String reject_reason, String reject_category_id){
+		try {
+			adminService.rejectPreTutor(tutor_id, reject_reason, reject_category_id);
+			return ResponseEntity.status(HttpStatus.OK).body("{ \"success\" : \"정상적으로 반려 처리되었습니다\"}");
+		}catch(AddException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{ \"errMsg\" : \"" + e.getMessage() + "\"}");
+		}
+	}
+	
 	
 	/**
 	 * 특정 강사의 강의 목록 보여주기
@@ -205,6 +204,25 @@ public class AdminController {
 		}
 	}
 	
+	
+	/**
+	 * 특정 강의를 수강중인 수강생 목록 조회
+	 * @author jun6
+	 * @param lecture_id
+	 * @return 수강생 목록(MemberLectureHistory List)
+	 */
+	@GetMapping(value = "/history/{lectureId}")
+	public ResponseEntity<List<MemberLectureHistory>> history(@PathVariable(name = "lectureId") String lecture_id){
+		try {
+			List<MemberLectureHistory> historyList = adminService.showMemberHistoryByLectureId(lecture_id);
+			return ResponseEntity.status(HttpStatus.OK).body(historyList);
+		}catch(FindException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+	}
+	
+	
+	
 	/**
 	 * 강의 승인/반려/취소 하기
 	 * @author jun6
@@ -214,8 +232,6 @@ public class AdminController {
 	 */
 	@PatchMapping(value = "/lecture/status/{lectureId}")
 	public ResponseEntity<String> lectureStatusChange(@PathVariable(name = "lectureId") String lecture_id
-//													, String status
-//													, String reject_reason)
 													, @RequestBody String status)
 //													, @RequestBody(required = false) String reject_reason)
 	{
@@ -224,10 +240,11 @@ public class AdminController {
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> map;
 		String lectureStatus = "";
-		
+		String reject_reason = "";
 		try {
 			map = mapper.readValue(status, new TypeReference<Map<String, Object>>() {});
 			lectureStatus = map.get("status").toString();
+//			reject_reason = map.get("reject_reason").toString();
 		} catch (JsonMappingException e1) {
 			e1.printStackTrace();
 		} catch (JsonProcessingException e1) {
@@ -235,7 +252,7 @@ public class AdminController {
 		}
 		
 		try {
-			adminService.updateLectureStatusByIdAndStatus(lecture_id, lectureStatus, null);
+			adminService.updateLectureStatusByIdAndStatus(lecture_id, lectureStatus, reject_reason);
 			return ResponseEntity.status(HttpStatus.OK).body("{ \"success\" : \"정상적으로 " + lectureStatus + " 처리하였습니다\"}");
 		}catch(ModifyException e) {
 			e.printStackTrace();
@@ -269,11 +286,10 @@ public class AdminController {
 	 * @return
 	 */
 	@PatchMapping(value = "/reasons/{lectureId}")
-	public ResponseEntity<String> rejectLecture(@PathVariable(name = "lectureId")String lecture_id, String status, String reject_reason){
-		log.info("여기로는 오는거니??");
-		System.out.println("///////////////////////////////////////////////////////////////////////////////////////////////");
+	public ResponseEntity<String> rejectLecture(@PathVariable(name = "lectureId")String lecture_id, String reject_reason){
+		log.info(reject_reason);
 		try {
-			adminService.updateLectureStatusByIdAndStatus(lecture_id, status, reject_reason);
+			adminService.updateLectureStatusByIdAndStatus(lecture_id, "반려", reject_reason);
 			return ResponseEntity.status(HttpStatus.OK).body("{ \"success\" : \"성공적으로 설정되었습니다\"}");
 		}catch(ModifyException e) {
 			e.printStackTrace();

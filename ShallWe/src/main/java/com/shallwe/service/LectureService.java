@@ -45,23 +45,33 @@ public class LectureService {
 	 * @return List<Lecture>
 	 * @throws FindException
 	 */
-	public ModelAndView searchLecture(HashMap<String, Object> map) throws FindException {
+	public List<Lecture> searchLecture(HashMap<String, Object> map) throws FindException {
 		List<Lecture> list = new ArrayList<>();
-		ModelAndView modelAndView = new ModelAndView();
-
 		try {
 			list = lectureDAO.selectLectureListBySearch(map);
 
-			modelAndView.addObject("list", list);
-			modelAndView.addObject("status", "success");
-
 		} catch (FindException e) {
-			modelAndView.addObject("status", "fail");
-			modelAndView.addObject("errMsg", e.getMessage());
+			throw new FindException(e.getMessage());
 		}
-
-		return modelAndView;
-
+		return list;
+	}
+	
+	/**
+	 * @author Soojeong
+	 * @강의 검색 lecture_Id로 검색
+	 * @Param String lecture_Id
+	 * @return Lecture
+	 * @throws FindException
+	 */
+	public Lecture searchLectureByLectureId(String lecture_id) throws FindException {
+		Lecture lecture = new Lecture();
+		try {
+			lecture = lectureDAO.selectLectureByLectureId(lecture_id);
+		} catch (FindException e) {
+			throw new FindException(e.getMessage());
+		}
+		return lecture;
+		
 	}
 
 	// 강의 등록 : 동일
@@ -81,6 +91,17 @@ public class LectureService {
 		try {
 			lectureDAO.update(lect);
 			lectureDetailDAO.updateDetail(lectDe);
+		} catch (ModifyException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// 강사 강의 취소 요청: 동일
+	@Transactional
+	public void tutorcancelLecture(Lecture lect, LectureDetail lectDe) throws ModifyException {
+		try {
+			lectureDAO.cancelRequest(lect);
+			lectureDetailDAO.cancelRequest(lectDe);
 		} catch (ModifyException e) {
 			e.printStackTrace();
 		}

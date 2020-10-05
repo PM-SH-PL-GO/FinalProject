@@ -1,14 +1,21 @@
 package com.shallwe.control;
 
+import java.io.File;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
+import javax.annotation.PostConstruct;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.tomcat.util.net.ApplicationBufferHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -109,6 +118,7 @@ public class BoardController {
 	@RequestMapping("/detail/{boardIdVal}")
 //	@ResponseBody
 	public ModelAndView detail(@PathVariable int boardIdVal) {
+		System.out.println("보드아이디발??"+boardIdVal);
 		ModelAndView mnv = new ModelAndView();
 		StudyBoard board;
 		try {
@@ -130,19 +140,52 @@ public class BoardController {
 		return "studyBoardWrite";
 	}
 	
+	@Autowired
+	ServletContext c;
+	
+	private String realPath;
+	
+	@PostConstruct
+	public void initController() {
+		this.realPath = c.getRealPath("/files/studyBoard");
+  }
+	
+	public String saveFile(MultipartFile file) {
+		String UPLOAD_PATH = realPath;
+		UUID uuid = UUID.randomUUID();
+		String saveName = uuid+"_"+file.getOriginalFilename();
+		File saveFile = new File(UPLOAD_PATH,saveName);
+		try {
+			file.transferTo(saveFile);
+			//업로드 파일에 saveFile이라는 껍데기 입힘
+			System.out.println("파일크기:" + saveFile.length() + "파일사이즈:" + file.getSize());
+			
+		} catch (IllegalStateException e) {
+			//즉 브라우져에 보낼 데이터를 버퍼에 쓴 이후로는 redirect나 forward를 할수 없을떄 일어난다(forward나 redirect)
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return saveName;
+	}
+	
 	@RequestMapping(value = "/writeBoard", method = RequestMethod.POST)
-	@ResponseBody
 	@Transactional
-	public ResponseEntity<Integer> writeBoard(@RequestBody StudyBoard sb, HttpSession session) {
+	public ResponseEntity<Integer> writeBoard(String studyBoard_title, HttpSession session, MultipartFile boardUpload, String studyBoard_content) {
+		StudyBoard sb = new StudyBoard();
 		Member member = new Member();
 		String memberId = (String)session.getAttribute("loginInfo");
 		member.setMember_id(memberId);
+		String studyBoard_fileName = saveFile(boardUpload);
 		try {
 			sb.setMember(member);
+			sb.setStudyBoard_fileName(studyBoard_fileName);
+			sb.setStudyBoard_title(studyBoard_title);
+			sb.setStudyBoard_content(studyBoard_content);
 			service.writeBoard(sb);
 			BoardPageBean<StudyBoard> studyBoard = service.findAll(1);
 			int board_id = studyBoard.getList().get(0).getStudyBoard_id();
-			System.out.println("첫번째 번호!!"+board_id);
 			return ResponseEntity.status(HttpStatus.OK).body(board_id);
 		} catch (AddException | FindException e) {
 			e.printStackTrace();
@@ -174,16 +217,25 @@ public class BoardController {
 		
 	}
 	
-	@RequestMapping("/updateBoard")
-	@ResponseBody
-	public ResponseEntity<Integer> updateBoard(@RequestBody StudyBoard sb, HttpSession session) {
+	@RequestMapping(value = "/updateBoard", method = RequestMethod.POST)
+	@Transactional
+	public ResponseEntity<Integer> updateBoard(StudyBoard sb, HttpSession session, MultipartFile boardUpload, String studyBoard_content) {
+		System.out.println(1);
 		Member member = new Member();
 		String memberId = (String)session.getAttribute("loginInfo");
 		member.setMember_id(memberId);
+		String studyBoard_fileName = saveFile(boardUpload);
+		System.out.println(2);
 		try {
 			sb.setMember(member);
+			sb.setStudyBoard_fileName(studyBoard_fileName);
+			sb.setStudyBoard_content(studyBoard_content);
+			System.out.println(3);
+			System.out.println("sbsbsbsbsb========="+sb);
 			service.updateBoard(sb);
-			return ResponseEntity.status(HttpStatus.OK).body(sb.getStudyBoard_id());
+//			BoardPageBean<StudyBoard> studyBoard = service.findAll(1);
+			int board_id = sb.getStudyBoard_id();
+			return ResponseEntity.status(HttpStatus.OK).body(board_id);
 		} catch (ModifyException e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(0);

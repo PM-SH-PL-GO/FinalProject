@@ -93,40 +93,74 @@
             
 //---------강사관리----------------------------------------------------------------------------------------
  
-			// 예비강사목록 선택시
+			// 예비강사목록 선택시 (페이징)
             $(".pre-tutor").on("click", function(){
+            	let $page = $(this).attr("value");
+            	
                 $.ajax({
-                    url: "${contextPath}/admin/preTutor",
+                    url: "${contextPath}/admin/preTutor/" + $page,
                     method: "GET",
-                    success: function(preTutors){
-                    	let $lot = '<table class="table"><thead><tr>';
+                    success: function(bean){
+                    	let $lot = '<h2>예비 강사 목록</h2><hr><table class="table"><thead><tr>';
                     	$lot += '<th>순서</th><th>강사 사진</th><th>아이디</th><th>회원 이름</th><th>강사 별명</th>';
-                    	$lot += '<th>전문 분야</th><th>승인</th><th>반려</th></tr></thead>';
+                    	$lot += '<th>전문 분야</th><th>승인</th><th>반려</th></tr></thead><tbody>';
                     	
-                    	preTutors.forEach(function(preTutor, index){
-                    		let idx = index + 1;
-                    		$lot += '<tr class="modal_show" value="tutor' + idx + '"><td>' + idx + '</td>';
-                    		$lot += '<td><img src="${contextPath}/tutorImages/' + preTutor.tutor_img + '"></td>';
-                    		$lot += '<td>' + preTutor.member.member_id + '</td>';
-                    		$lot += '<td>' + preTutor.member.member_name + '</td>';
-                    		$lot += '<td>' + preTutor.tutor_nickname + '</td>';
-                    		$lot += '<td>' + preTutor.lectureCategory.lecture_category_name + '</td>';
-                    		$lot += ' <td><button class="tutor_status" value="' + preTutor.member.member_id + '">승인</button></td>';
-                    		$lot += ' <td><button class="tutor_status" value="' + preTutor.member.member_id + '">반려</button></td></tr>';
+                    	bean.tutorList.forEach(function(tutor, index){
+                    		let tutorId = tutor.member.member_id;
+	                   		let idx = index + 1;
+                    		$lot += '<tr class="modal_show ' + tutorId + '" value="' + tutorId + '"><td>' + idx + '</td>';
+                    		$lot += '<td><img src="${contextPath}/tutorImages/' + tutor.tutor_img + '"></td>';
+                    		$lot += '<td>' + tutorId + '</td>';
+                    		$lot += '<td>' + tutor.member.member_name + '</td>';
+                    		$lot += '<td>' + tutor.tutor_nickname + '</td>';
+                    		$lot += '<td>' + tutor.lectureCategory.lecture_category_name + '</td>';
+                    		$lot += ' <td><button class="tutor_status" value="' + tutorId + '">승인</button></td>';
+                    		$lot += ' <td><button class="tutor_status" value="' + tutorId + '">반려</button></td></tr>';
                     		
-                    		$lot += '<div class="modal_slot tutor' + idx + '"><div class="modal_content">';
-                      		$lot += '<h3>' + preTutor.tutor_nickname + ' 강사의 세부정보</h3><hr>';
+                    		$lot += '<div class="modal_slot ' + tutorId + '"><div class="modal_content">';
+                      		$lot += '<h3>' + tutor.tutor_nickname + ' 강사의 세부정보</h3><hr>';
+                      		$lot += '<div>이름 : ' + tutor.member.member_name + '</div>'
+                      		$lot += '<div>아이디 : ' + tutor.member.member_id + '</div>'
                       		$lot += '<h5>강사 사진</h5><br>';
-                      		$lot += '<div><img class="tutor-detail-img" src="${contextPath}/tutorImages/' + preTutor.tutor_img + '"><div><br>';
-                      		$lot += '<div>신청 분야 : <span>' + preTutor.lectureCategory.lecture_category_name + '<span></div><hr>';
-                      		$lot += '<div>자기소개<br><span>' + preTutor.tutor_introduce + '</span></div><br>';
-                      		$lot += '<div>이력서 : <a href="${contextPath }/tutorCareer/' +  preTutor.tutor_career_file + '">';
-                      		$lot += preTutor.tutor_career_file + '</a></div><hr>';
-                      		$lot += '<div>SNS 링크 : <a href="' + preTutor.tutor_link + '">' + preTutor.tutor_link + '</a></div><br>';
+                      		$lot += '<div><img class="tutor-detail-img" src="${contextPath}/tutorImages/' + tutor.tutor_img + '"><div><br>';
+                      		$lot += '<div>닉네임 : ' + tutor.tutor_nickname + '</div>'
+                      		//
+                      		$lot += '<div>신청 분야 :' + tutor.lectureCategory.lecture_category_name;
+//                       		tutor.lectureCategory.forEach(function(category){
+// 	                      		$lot += ' ' + category;
+//                       		});
+                      		$lot += '</div><hr>';
+                      		
+                      		$lot += '<div>자기소개<br><span>' + tutor.tutor_introduce + '</span></div><br>';
+                      		$lot += '<div>이력서 : <a href="${contextPath }/tutorCareer/' +  tutor.tutor_career_file + '">';
+                      		$lot += tutor.tutor_career_file + '</a></div><hr>';
+                      		$lot += '<div>SNS 링크 : <a href="' + tutor.tutor_link + '">' + tutor.tutor_link + '</a></div><br>';
                       		$lot += '<button class="modal_close">닫기</button></div><div class="modal_layer"></div></div>'
                     	});
                     	
-                    	$lot += '</table>';
+						
+                    	
+                    	$lot += '<tbody></table>';
+                    	
+//////////////////////////페이징
+                    	$lot += '<div class="pagination-area text-center"><div class="container">';
+                    	$lot += '<div class="row"><div class="col-xl-12"><div class="single-wrap d-flex justify-content-center">';
+                    	$lot += '<nav aria-label="Page navigation example"><ul class="pagination justify-content-start " id="pageList">';
+                    	
+                    	//prev
+                    	if (bean.startPage > 1)
+                    		$lot += '<li class="page-item"><a class="prev"><span class="ti-angle-left"></span></a></li>';
+                    	
+                    	//페이지 삽입
+                    	for(let i = bean.startPage; i <= bean.totalPage; i++)
+        					$lot += '<li class="page-item active"><a class="page-link">' + i + '</a></li>';
+                    	
+                    	//next
+                    	if (bean.endPage < bean.totalPage)
+                    		$lot += '<li class="page-item"><a class="next"><span class="ti-angle-right"></span></a></li>'
+                    		
+						$lot += '</ul></nav></div></div></div></div></div>';				
+/////////////////////////페이징 끝		
                     	
                         $cont.html($lot);
                     },
@@ -144,10 +178,16 @@
                 return false;
             });
  
+ 
+ 			// page-link(다른 페이지 누를 때 처리)
+ 			$cont.on("click", ".page-link", function(){
+ 				let $page = $(this).html();
+ 				
+ 			});
             
             // 강사 상세정보 modal 보이기
             $cont.on("click", ".modal_show", function(){
-            	let $lotDiv = "." +$(this).attr("value");
+            	let $lotDiv = "div." +$(this).attr("value");
             	let $lot = $($lotDiv);
             	$lot.attr("style", "display:block");
 //             	window.open("", "newWindow");
@@ -164,23 +204,15 @@
 
             // 예비강사 승인/반려 버튼
             $cont.on("click", ".tutor_status", function(){
-            	let $tatus = $(this).html();				// 승인/반려 상태
-            	let isTrue = confirm($tatus + " 하시겠습니까?");
             	
-            	if (isTrue == true){
-	            	let approve = $(this).attr('value');		// 예비강사 ID
+            	if ($(this).html() == "승인"){	 //승인시
+	            	if (confirm("승인 하시겠습니까?")){
+		            	let approve = $(this).attr('value');		// 예비강사 ID
 					
-	            	if ($tatus == "승인"){	 //승인시
 		            	$.ajax({
-		            		dataType: "json",														// 응답 결과의 형식 -> 다른 형식이 응답된다면 error로 간다
-		            		beforeSend : function(xhr){												// 요청을 보내기 전 헤더 값을 설정
-		            			xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");		// -> csrf 헤더와 토큰을 헤더에 넣어 놔야 403에러가 발생하지 않는다
-		            		},																		// 2차 403에러의 주된 원인
+		            		dataType: "json",
 		            		url: "${contextPath}/admin/tutor/status/" + approve,
 		            		method: "PATCH",
-		            		contentType: 'application/json-patch+json; charset=utf-8',				// 1차 에러의 주된 원인
-		            		data: JSON.stringify({"status" : $tatus}),
-		            		
 		            		success: function(data){
 		            			alert(data.status);
 		            			$(".pre-tutor").trigger("click")
@@ -192,13 +224,56 @@
 		            				alert(xhttr.status);
 		            		}
 		            	});
-	            	}else{	//반려시
-	            		// tutor에서 삭제 후 반려 메세지 email로 보내기
-	            		alert("tutor에서 삭제 후 반려 메세지 email로 보내기 : 아직 준비중입니다");
 	            	}
-            	}
+           		}else{	//반려시
+            		// tutor에서 삭제 후 반려 메세지 email로 보내기
+            		let rejectModal = '<div class="modal-add"><div class="modal-content">';
+					rejectModal += '<h3>강사신청 반려하기</h3><br>';
+	      			
+					rejectModal += '<label for="reject-reason">반려 사유 : </label>';
+					rejectModal += '<select name="reject-reason" id="reject-reason">';
+					rejectModal += '<option value="unsuit">부적절한 제목/사진 사용</option>';
+					rejectModal += '<option value="lewdNviolent">외설적, 폭력적인 내용 포함</option>';
+					rejectModal += '<option value="illegal">불법적이거나 부당한 행위</option>';
+					rejectModal += '<option value="lack">부족한 내용설명</option><br>';
+					rejectModal += '<option value="etc">기타</option></select></select><br>';
+					rejectModal += '<label for="reject-detail">세부 사유</label><br>';
+					rejectModal += '<input id="reject-detail" name="reject-detial" placeholder="세부 내용을 작성해주세요"></input><br>';
+					
+					rejectModal += '<br><button class="tutor-reject" value="">반려하기</button>';
+            		rejectModal += '<button class="modal-close">닫기</button></div>';
+            		rejectModal += '<div class="modal-layer"></div></div>';
+            		
+            		let cont = $cont.html() + rejectModal;
+            		$cont.html(cont);
+				}
             	
            		return false;
+            });
+            
+            
+            // 예비강사 반려하기
+            $cont.on("click", ".tutor-reject", function(){
+            	let tutorId = $(this).attr("value");			// tutor_id
+            	let rejectId = $("#reject-reason");			// reject_category_id
+            	let rejectReason = $("#reject-detail");			// reject_reason
+            	
+            	$.ajax({
+            		url: "${contextPath}/tutor/status/" + tutorId,
+            		method: "POST",
+            		data: {tutor_category_id : rejectId, reject_reason : rejectReason},
+            		dataType: "json",
+            		success: function(data){
+            			alert(data.success);
+            			$(".pre-tutor").trigger("click");
+            		},
+            		error: function(data){
+            			alert(data.errMsg);
+            			$(".pre-tutor").trigger("click");
+            		}
+            	});
+            	
+            	return false;
             });
             
             // 전체 강사목록 선택시
@@ -256,9 +331,8 @@
             		url: "${contextPath}/admin/tutor/lecture/" + $tutorId,
             		method: "GET",
             		success: function(lectures){
-            			let $tutor_Lecture = '<div class="tutor-lecture-list"><div class="tutor-lecture-content">';
-            			$tutor_Lecture += '<h3>' + lectures[0].tutor.tutor_nickname + '강사의 강의목록</h3><br>';
-            			$tutor_Lecture += '<button class="tutor-lecture-close">닫기</button><hr>';
+            			let $tutor_Lecture = '<div class="modal-add"><div class="modal-content">';
+            			$tutor_Lecture += '<h3>' + lectures[0].tutor.tutor_nickname + '강사의 강의목록</h3><hr>';
             			$tutor_Lecture += '<table class="table">';
             			$tutor_Lecture += '<tr><thead><th>순서</th><th>강의번호</th><th>강의명</th><th>상태</th></tr></thead>';
            				$tutor_Lecture += '<tbody>';
@@ -276,19 +350,19 @@
             				$tutor_Lecture += '</tr>';
             			});
             			
-            			$tutor_Lecture += '</tbody></table></div>';
-            			$tutor_Lecture += '<div class="tutor-lecture-layer"></div></div>';
+            			$tutor_Lecture += '</tbody></table><button class="modal-close">닫기</button></div>';
+            			$tutor_Lecture += '<div class="modal-layer"></div></div>';
             			
             			let cont = $cont.html() + $tutor_Lecture;
             			$cont.html(cont);
             		},
             		error: function(){
-            			let $tutor_Lecture = '<div class="tutor-lecture-list"><div class="tutor-lecture-content">';
-            			$tutor_Lecture += '<button class="tutor-lecture-close">닫기</button><hr>';
+            			let $tutor_Lecture = '<div class="modal-add"><div class="modal-content"><hr>';
             			$tutor_Lecture += '<table class="table">';
             			$tutor_Lecture += '<tr><thead><th>순서</th><th>강의번호</th><th>강의명</th><th>상태</th></tr></thead>';
            				$tutor_Lecture += '<tbody><tr>등록한 강의가 존재하지 않습니다</tr></tbody></table></div>'
-            			$tutor_Lecture += '<div class="tutor-lecture-layer"></div></div>';
+            			$tutor_Lecture += '<div class="tutor-lecture-layer"></div>';
+            			$tutor_Lecture += '<button class="modal-close">닫기</button></div>';
             			let cont = $cont.html() + $tutor_Lecture;
             			$cont.html(cont);
             		}
@@ -298,8 +372,8 @@
             });
             
             // 강의 목록 모달창 닫기
-            $cont.on("click", ".tutor-lecture-close", function(){
-            	$(".tutor-lecture-list").remove(".tutor-lecture-list");
+            $cont.on("click", ".modal-close", function(){
+            	$(".modal-add").remove(".modal-add");
             	return false;
             });
             
@@ -381,7 +455,8 @@
                     			process += '<td>' + end + '</td>';
                     			process += '<td>' + lecture.lecture_max + '</td>';
                     			process += '<td>' + lecture.lecture_min + '</td>';
-                    			process += '<td>' + lecture.lecture_current + '</td>';
+                    			process += '<td><button class="current" value="' + lecture.lecture_id + '">';
+                    			process += lecture.lecture_current + '</button></td>';
                     		}else if(lecture.lecture_state == '승인' && today >= end){
                     			// 완료
                     			finishCnt++;
@@ -396,7 +471,8 @@
                     			finish += '<td>' + end + '</td>';
                     			finish += '<td>' + lecture.lecture_max + '</td>';
                     			finish += '<td>' + lecture.lecture_min + '</td>';
-                    			finish += '<td>' + lecture.lecture_current + '</td>';
+                    			finish += '<td><button class="current" value="' + lecture.lecture_id + '">';
+                    			finish += lecture.lecture_current + '</button></td>';
                     			finish += '<td><button class="lecture-review" value="' + lecture.lecture_id + '">후기보기</button></td>';
                     		}else if(lecture.lecture_state == '취소대기'){
                     			// 취소 요청
@@ -483,6 +559,47 @@
             	return false;
             });
             
+            // 수강하고 있는 회원 목록 보기
+            $cont.on("click", ".current", function(){
+				let lectureId = $(this).attr("value");
+				
+				$.ajax({
+					url: "${contextPath}/admin/history/" + lectureId,
+					method: "GET",
+					success: function(historyList){
+						let historyModal = '<div class="modal-add"><div class="modal-content">';
+						historyModal += '<div>최대 신청 인원 수 : / 현재 신청 인원 수</div>';
+						historyModal += '<table class="table"><thead><tr><th>순서</th><th>아이디</th><th>이름</th><th>신청일</th></tr>';
+						historyModal += '</thead><tbody>';
+						historyList.forEach(function(history, index){
+							let idx = index + 1;
+							historyModal += '<tr class="member-detail" value="' + history.member.member_id + '"><td>' + idx + '</td>';
+							historyModal += '<td>' + history.member.member_id + '</td>';
+							historyModal += '<td>' + history.member.member_name + '</td>';
+							historyModal += '<td>' + formatDate(history.payment_dt) + '</td></tr>';
+						});
+						historyModal += '</tbody></table><button class="modal-close">닫기</button></div>';
+						historyModal += '<div class="modal-layer"></div></div>';
+						
+						let cont = $cont.html() + historyModal;
+						$cont.html(cont);
+					},
+					error: function(data){
+						alert("에러에러");
+						$(".lecture-list").trigger("click");
+					}
+				});
+            
+				return false;
+            });
+            
+            
+            // 회원 상세정보 보기
+            $cont.on("click", ".member-detail", function(){
+            	alert("회원 상세정보 창 띄워주기");
+            	return false;
+            });
+            
             // 강의 승인/취소 승인/복구하기
             $cont.on("click", ".lecture-edit", function(){
             	let $tatus = $(this).html();					// 변경할 강의 상태
@@ -506,9 +623,9 @@
 	            			$(".lecture-list").trigger("click")
 	            		},
 	            		error: function(xhttr){
-	            			if (xhttr.status == 200)
-	            				location.replace('${contextPath}/login');
-	            			else
+// 	            			if (xhttr.status == 200)
+// 	            				location.replace('${contextPath}/login');
+// 	            			else
 	            				alert(xhttr.errMsg);
 	            		}
 	            	});
@@ -517,25 +634,27 @@
             	return false;
             });
             
+            
             // 강의 반려하기 버튼 클릭시
             $cont.on("click", ".show-reject", function(){
     			// 모달창(반려 사유 작성) 생성 후 화면에 추가
     			$lectureId = $(this).attr("value");		// 강의 ID
     			
-    			let $lot = '<div class="tutor-lecture-list"><div class="tutor-lecture-content">';
+    			let $lot = '<div class="modal-add"><div class="modal-content">';
       			$lot += '<h3>강의 반려하기</h3><br>';
       			
       			$lot += '<label for="reject-reason">반려 사유 : </label>';
       			$lot += '<select name="reject-reason" id="reject-reason">';
-      			$lot += '<option value="부적절한 제목/사진 사용">부적절한 제목/사진 사용</option>';
-      			$lot += '<option value="외설적, 폭력적인 내용 포함">외설적, 폭력적인 내용 포함</option>';
-      			$lot += '<option value="불법적이거나 부당한 행위">불법적이거나 부당한 행위</option>';
-      			$lot += '<option value="부족한 내용설명">부족한 내용설명</option>';
+      			$lot += '<option value="unsuit">부적절한 제목/사진 사용</option>';
+      			$lot += '<option value="lewdNviolent">외설적, 폭력적인 내용 포함</option>';
+      			$lot += '<option value="illegal">불법적이거나 부당한 행위</option>';
+      			$lot += '<option value="lack">부족한 내용설명</option><br>';
+      			$lot += '<option value="etc">기타</option></select><br>';
       			$lot += '</select><br><label for="reject-detail">세부 사유</label><br>';
       			$lot += '<input id="reject-detail" name="reject-detial" placeholder="세부 내용을 작성해주세요"></input><br>';
-      			$lot += '<br><button class="reject-lecture modal-button" value="' + $lectureId + '">전송</button>';
-      			$lot += '<button class="tutor-lecture-close modal-button">취소</button>';
-      			$lot += '<div class="tutor-lecture-layer"></div></div></div>';
+      			$lot += '<br><button class="reject-lecture" value="' + $lectureId + '">전송</button>';
+      			$lot += '<button class="modal-close">취소</button></div>';
+      			$lot += '<div class="modal-layer"></div></div>';
       			
       			let cont = $cont.html() + $lot;
     			$cont.html(cont)
@@ -543,6 +662,7 @@
             	return false;
             });
 			
+            
             // 강의 반려하기
             $cont.on("click", ".reject-lecture", function(){
             	$lectureId = $(this).attr("value");		// 강의 ID
@@ -553,10 +673,12 @@
 //             		beforeSend : function(xhr){
 //             			xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");		
 //             		},
-            		url: "${contextPath}/admin/reasons/status/" + $lectureId,
+//             		url: "${contextPath}/admin/reasons/" + $lectureId,
+            		url: "${contextPath}/admin/lecture/status/" + $lectureId,
             		method: "PATCH",
             		contentType: "application/json-patch+json; charset=utf-8;",
-            		date: { "status" : "반려",  "reject_reason" : $message }),
+//             		date: [{ status : "반려"}, {reject_reason : $message}],
+            		date: JSON.stringify({ status : "반려"}, {reject_reason : $message}),
             		success: function(data){
             			alert(data.success);
             			alter("성공");
@@ -587,7 +709,7 @@
             		method: "GET",
             		data: { rejectOrCancel : reasonType },
             		success: function(lectureDetail){
-            			let modal = '<div class="tutor-lecture-list"><div class="tutor-lecture-content">';
+            			let modal = '<div class="modal-add"><div class="modal-content">';
                     	modal += '<div><span class="reason-modal-tutor">' + lectureDetail.lecture.tutor.tutor_nickname;
                     	modal += '</span>강사의<span class="reason-modal-tutor">' + lectureDetail.lecture.lecture_title;
                     	modal += '</span>강의<span class="reason-modal-tutor">' + reasonType + '</span>';
@@ -597,17 +719,18 @@
             				modal += lectureDetail.lecture_cancel_reason + '"></input>';
            				else
             				modal += lectureDetail.lecture_reject_reason + '"></input>';
-		    			modal += '<div class="tutor-lecture-layer"></div><button class="tutor-lecture-close modal-button">닫기</button></div>';
+		    			modal += '<button class="modal-close">닫기</button></div>';
+		    			modal += '<div class="modal-layer"></div></div>';
 		    			
 		    			let cont = $cont.html() + modal;
 		    			$cont.html(cont);
 		    			
             		},
             		error: function(data){
-            			let modal = '<div class="tutor-lecture-list"><div class="tutor-lecture-content">';
+            			let modal = '<div class="modal-add"><div class="modal-content">';
                     	modal += '<div>' + reasonType + '목록을 불러오는데 실패했습니다</div>';
-            			modal += '<button class="tutor-lecture-close">닫기</button>';
-		    			modal += '<div class="tutor-lecture-layer"></div></div>';
+            			modal += '<button class="modal-close">닫기</button></div>';
+		    			modal += '<div class="modal-layer"></div></div>';
 		    			let cont = $cont.html() + modal;
 		    			$cont.html(cont);
             		}
@@ -655,12 +778,12 @@
             
             // FAQ 추가용 모달 화면에 추가하기
             $cont.on("click", ".faq-insert-modal", function(){
-            	let $lot = '<div class="modal_slot"><div class="modal_content">';
+            	let $lot = '<div class="modal-add"><div class="modal-content">';
     			$lot += '<h3>FAQ 추가하기</h3><hr>';
     			$lot += '<form id="faq-insert"><div>질문 : <input class="faq-question" name="faq_question"></div><br>';
     			$lot += '<div>답변 : <input class="faq-answer" name="faq_answer"></div><br>';
-    			$lot += '</form><button class="faq-insert">등록</button><button class="modal_close">닫기</button>';
-    			$lot += '</div><div class="modal_layer"></div></div>';
+    			$lot += '</form><button class="faq-insert">등록</button><button class="modal-close">닫기</button>';
+    			$lot += '</div><div class="modal-layer"></div></div>';
           		
             	let cont = $cont.html();
             	$cont.html(cont + $lot);
@@ -701,7 +824,7 @@
             		url: "${contextPath}/admin/faq/" + $faqId,
             		method: "GET",
             		success: function(faq){
-            			let $lot = '<div class="modal_slot"><div class="modal_content">';
+            			let $lot = '<div class="modal-add"><div class="modal-content">';
             			$lot += '<h3>FAQ 수정하기</h3><hr>';
             			$lot += '<form id="faq-change"><div>질문 : <input class="faq_question" name="faq_question"';
             			$lot += 'value="' + faq.faq_question + '"></div><br>';
@@ -711,8 +834,8 @@
 //             			$lot += '<button class="faq-change">등록</button>';
             			$lot += '</form>';
             			$lot += '<button class="faq-change" value="' + faq.faq_id + '">등록</button>';
-            			$lot += '<button class="modal_close">닫기</button>';
-            			$lot += '</div><div class="modal_layer"></div></div>';
+            			$lot += '<button class="modal-close">닫기</button>';
+            			$lot += '</div><div class="modal-layer"></div></div>';
                   		
                     	let cont = $cont.html();
                     	$cont.html(cont + $lot);
@@ -815,7 +938,7 @@
                     <span class="fas fa-caret-down second"></span>
                 </a>
                 <ul class="tog">
-                    <li><a class="pre-tutor">예비강사목록</a></li>
+                    <li><a class="pre-tutor" value="1">예비강사목록</a></li>
                     <li><a class="tutor-list">강사목록</a></li>
                 </ul>
               </li>

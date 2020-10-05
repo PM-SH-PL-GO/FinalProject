@@ -19,6 +19,7 @@ import com.shallwe.exception.RemoveException;
 import com.shallwe.model.MemberInfoBean;
 import com.shallwe.vo.LectureCategory;
 import com.shallwe.vo.Member;
+import com.shallwe.vo.TutorReject;
 
 
 @Repository
@@ -214,7 +215,7 @@ public class MemberDAO {
 	}
 
 	
-	// 강사 승인/반려(admin) : 준식
+	// 강사 승인(admin) : 준식
 	public void updateTutorState(Map<String, String> map) throws ModifyException{
 		SqlSession session = null;
 		try {
@@ -226,6 +227,26 @@ public class MemberDAO {
 			session.close();
 		}
 	}
+	
+	/**
+	 * 예비 강사 신청 반려하기
+	 * @author jun6
+	 * @param tutorReject
+	 * @throws AddException
+	 */
+	public void insertTutorReject(TutorReject tutorReject) throws AddException{
+		SqlSession session = null;
+		
+		try {
+			session = sqlSessionFactory.openSession();
+			session.insert("MemberMapper.rejectPretutor", tutorReject);
+		}catch(DataAccessException e) {
+			throw new AddException("설정 중 에러가 발생했습니다");
+		}finally {
+			session.close();
+		}
+	}
+	
 	//비밀번호(임시비밀번호):경찬
 	public void randomPassword(Map<String,Object>member1 , Member member) {
 		
@@ -274,11 +295,18 @@ public class MemberDAO {
 			
 		}catch(DataAccessException e) {
 			throw new FindException("서버연결 중 에러가 발생했습니다");
+		}finally {
+			session.close();
 		}
 		
 		return memberList;
 	}
 	
+	/**
+	 * admin : 회원 탈퇴 시키기?
+	 * @param member_id
+	 * @throws RemoveException
+	 */
 	public void deleteMemberById(String member_id) throws RemoveException{
 		SqlSession session = null;
 		
@@ -288,8 +316,9 @@ public class MemberDAO {
 		}catch(DataAccessException e) {
 			e.printStackTrace();
 			throw new RemoveException("삭제 시도 중 에러가 발생했습니다");
+		}finally {
+			session.close();
 		}
 	}
-	
 	
 }

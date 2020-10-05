@@ -44,6 +44,7 @@ $(document).ready(function() {
 		, data : {"tutor_id": "${lecture.tutor.member.member_id}",
 				  "category_id":"${lecture.lectureCategory.lecture_category_id}"}
 		, success : function (responseData) {
+			console.log(responseData);
 			$reviewAreaObj.append(responseData);
 		}
 	}); // end of ajax
@@ -54,8 +55,7 @@ $(document).ready(function() {
 		$.ajax({
 			url: "${contextPath}/insertMemberLectureHistory"
 			, method: "POST"
-			, data : {"lecture_category_id" : "${lecture.lectureCategory.lecture_category_id}" ,
-					  "lecture_id" : "${lecture.lecture_id}"}
+			, data : {"lecture_id" : "${lecture.lecture_id}"}
 			, success: function(responseData) {
 				let responseObj = JSON.parse(responseData);
 				if (responseObj.status == "success") {
@@ -73,12 +73,10 @@ $(document).ready(function() {
 	$cancelBtnObj.on("click", function() {
 		$.ajax({
 			url: "${contextPath}/updateMemberLectureHistory"
-			, method: "POST"
-			, data : {"lecture_category_id" : "${lecture.lectureCategory.lecture_category_id}" ,
-					  "lecture_id" : "${lecture.lecture_id}"}
+			, method: "GET"
+			, data : {"lecture_id" : "${lecture.lecture_id}"}
 			, success: function(responseData) {
-				let responseObj = JSON.parse(responseData);
-				if (responseObj.status == "success") {
+				if (responseData == "success") {
 					alert("강의 결제 취소가 정상적으로 처리 되었습니다.");
 				} else {
 					alert("강의 결제 취소가 실패했습니다.");
@@ -90,12 +88,12 @@ $(document).ready(function() {
 	
 	let letidValue = $("input[name=listlecture_id]").val();
 	$("div[name=gotoDe]").click(function(){
-		location.href = "/shallwe/lectures/detail?lecture_id=" +letidValue;		
+		location.href = "${contextPath}/lectures/detail?lecture_id=" +letidValue;		
 	});
 
 	let letidendValue = $("input[name=listendlecture_id]").val();
 	$("div[name=gotoDeend]").click(function(){
-		location.href = "/shallwe/lectures/detail?lecture_id=" +letidendValue;		
+		location.href = "${contextPath}/lectures/detail?lecture_id=" +letidendValue;		
 	});
 	return false;
 }); // end of scriptLoad

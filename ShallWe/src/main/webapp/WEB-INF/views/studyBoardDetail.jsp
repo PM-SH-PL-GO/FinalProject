@@ -271,6 +271,7 @@ function nameMasking(str){
 								<li><a href="#">작성일 ${resultDt}</a></li>
 							</ul>
 							<p class="excert">${studyBoard.studyBoard_content}</p>
+							<input type="button" placeholder="${studyBoard.studyBoard_fileName}" value="${studyBoard.studyBoard_fileName}">
 						</div>
 					</div>
 					<div class="comments-area">

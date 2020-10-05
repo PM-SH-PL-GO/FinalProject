@@ -1,5 +1,6 @@
 package com.shallwe.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,16 +13,21 @@ import com.shallwe.dao.FaqDAO;
 import com.shallwe.dao.LectureDAO;
 import com.shallwe.dao.LectureDetailDAO;
 import com.shallwe.dao.MemberDAO;
+import com.shallwe.dao.MemberLectureHistoryDAO;
 import com.shallwe.dao.TutorDAO;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.exception.RemoveException;
+import com.shallwe.model.AdminTutorBean;
 import com.shallwe.vo.Faq;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureDetail;
 import com.shallwe.vo.Member;
+import com.shallwe.vo.MemberLectureHistory;
+import com.shallwe.vo.RejectCategory;
 import com.shallwe.vo.Tutor;
+import com.shallwe.vo.TutorReject;
 
 @Service(value = "adminService")
 public class AdminService {
@@ -35,6 +41,8 @@ public class AdminService {
 	private LectureDAO lectureDAO;
 	@Autowired
 	private LectureDetailDAO lectureDetailDAO;
+	@Autowired
+	private MemberLectureHistoryDAO historyDAO;
 	
 	/**
 	 * 전체 회원 목록 보여주기
@@ -54,12 +62,53 @@ public class AdminService {
 	 * 예비 강사 목록 보여주기
 	 * @author jun6
 	 */
-	public List<Tutor> showAllTutor(String YN) throws FindException{
-		return tutorDAO.selectAllTutor(YN);
+	@Transactional
+	public AdminTutorBean showAllTutor(String YN, int preTutorPage) throws FindException{
+		Map<String, String> tutorMap = new HashMap<>();
+		AdminTutorBean preTutorBean = new AdminTutorBean(preTutorPage);
+
+		tutorMap.put("YN", YN);
+		tutorMap.put("startRow", "" + preTutorBean.getStartRow());
+		
+		preTutorBean.setTutorList(tutorDAO.selectAllTutor(tutorMap));
+		
+//		Map<Tutor, List<String>> map = new HashMap<>();
+//		List<Tutor> list = tutorDAO.selectAllTutor(tutorMap);
+//		
+//		for (Tutor tutor : list) {
+//			if (map.containsKey(tutor))
+//				map.get(tutor).add(tutor.getLectureCategory().getLecture_category_name());
+//			else {
+//				List<String> catList = new ArrayList<>();
+//				catList.add(tutor.getLectureCategory().getLecture_category_name());
+//				map.put(tutor, catList);
+//			}
+//		}
+//		preTutorBean.setTutorCategoryMap(map);
+		
+		int count = tutorDAO.countAllTutor(YN);
+		
+		if (count % AdminTutorBean.CNT_PER_PAGE != 0) {
+			count /= AdminTutorBean.CNT_PER_PAGE;
+			count++;
+		}else
+			count /= AdminTutorBean.CNT_PER_PAGE;
+		
+		preTutorBean.setTotalPage(count);
+		
+		int startPage = ((preTutorPage - 1) / AdminTutorBean.CNT_PER_PAGE) * AdminTutorBean.CNT_PER_PAGE + 1;
+		int calEndPage = (((preTutorPage - 1) / AdminTutorBean.CNT_PER_PAGE) + 1) * AdminTutorBean.CNT_PER_PAGE;
+		int endPage =  (calEndPage > 8) ? 8 : calEndPage;
+		
+		preTutorBean.setStartPage(startPage);
+		preTutorBean.setEndPage(endPage);
+		
+		return preTutorBean;
 	}
+
 	
 	/**
-	 * 예비강사 승인/반려
+	 * 예비강사 승인
 	 * @param id
 	 * @param status
 	 * @throws ModifyException
@@ -67,18 +116,26 @@ public class AdminService {
 	public void approvePreTutor(String id, String status) throws ModifyException{
 		Map<String, String> map = new HashMap<>();
 		map.put("id", id);
-		if (status.equals("승인"))
-			map.put("status", "Y");
-		else if(status.equals("반려"))
-			map.put("status", "N");
-		else
-			throw new ModifyException("승인/반려 이외의 글자가 전달되었습니다 : " + status);
-		
+		map.put("status", "Y");
 		memberDAO.updateTutorState(map);
+	}
+	
+	/**
+	 * 예비강사 신청 반려하기
+	 * @param tutor_id
+	 * @param reject_reason
+	 * @param reject_category_id
+	 * @throws AddException
+	 */
+	public void rejectPreTutor(String tutor_id, String reject_reason, String reject_category_id) throws AddException{
+		TutorReject tutorReject = new TutorReject();
+		RejectCategory rejectCategory = new RejectCategory();
+		rejectCategory.setReject_category_id(reject_category_id);
 		
-		if(status.equals("반려")){
-			// email로 반려 사유보내주기
-		}
+		tutorReject.setRejectCategory(rejectCategory);
+		tutorReject.setReject_reason(reject_reason);
+		
+		memberDAO.insertTutorReject(tutorReject);
 	}
 	
 	/**
@@ -138,6 +195,10 @@ public class AdminService {
 		lectureDAO.updateLectureStatusByIdAndStatus(map);
 	}
 	
+	public List<MemberLectureHistory> showMemberHistoryByLectureId(String lecture_id) throws FindException{
+		return historyDAO.selectMemberHistoryByLectureId(lecture_id);
+	}
+	
 	/**
 	 * 강의 취소/반려 사유 조회하기
 	 * @author jun6
@@ -151,19 +212,6 @@ public class AdminService {
 			rejectOrCancel = "reject_reason";
 		else if(rejectOrCancel.equals("취소사유"))
 			rejectOrCancel = "cancel_reason";
-		
-//		LectureDetail lectureDetail = lectureDetailDAO.selectLectureReasonById(lecture_id, rejectOrCancel);
-		
-//		if (rejectOrCancel.equals("reject_reason"))
-//			lectureDetail.setLecture_reject_reason(map.get(rejectOrCancel));
-//		else
-//			lectureDetail.setLecture_cancel_reason(map.get(rejectOrCancel));
-//		
-//		Tutor tutor = new Tutor();
-//		tutor.setTutor_nickname(map.get(""));
-//		Lecture lecture = new Lecture();
-//		lecture.setTutor(tutor);
-//		lectureDetail.setLecture(lecture);
 		
 		return lectureDetailDAO.selectLectureReasonById(lecture_id, rejectOrCancel);
 	}
