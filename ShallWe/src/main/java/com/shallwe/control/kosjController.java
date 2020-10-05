@@ -26,13 +26,13 @@ import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.exception.RemoveException;
-import com.shallwe.model.BoardPageBean;
+import com.shallwe.model.MemberInfoBean;
 import com.shallwe.model.ReviewBean;
 import com.shallwe.service.LectureService;
+import com.shallwe.service.MemberSerivce;
 import com.shallwe.service.ReviewService;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.Review;
-import com.shallwe.vo.StudyBoard;
 
 import lombok.extern.log4j.Log4j;
 
@@ -45,6 +45,9 @@ public class kosjController {
 	
 	@Autowired
 	ReviewService reviewService;
+
+	@Autowired
+	MemberSerivce memberService;
 	
 	@Autowired
 	LectureDAO lectureDAO;

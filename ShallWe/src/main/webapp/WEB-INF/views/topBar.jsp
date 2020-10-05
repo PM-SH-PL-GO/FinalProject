@@ -153,6 +153,12 @@ $(function(){
 		location.href = "${contextPath}/lectures/memberLecture";
 	});
 	//----------내 강의보기 CLICK END---------	
+	
+	//----------내 찜목록보기 CLICK START---------	
+	$("#wishList").click(function(){
+		location.href = "${contextPath}/member/wishlist";
+	});
+	//----------내 강의보기 CLICK END---------	
 
 	//----------로그아웃 CLICK START---------	
 	$("#signOut").click(function(){
@@ -223,6 +229,7 @@ $(function(){
 											</c:when>
 											<c:otherwise>
 												<li><a id ="myInfo" class="community">내 정보보기</a></li>
+												<li><a id ="wishList" class="community">내 찜목록보기</a></li>
 												<li><a id ="myLecture" class="community">내 수강목록</a></li>
 												<li><a id ="signOut" class="community">로그아웃</a></li>
 											</c:otherwise>

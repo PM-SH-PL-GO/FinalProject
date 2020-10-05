@@ -70,10 +70,10 @@ public class HomeController {
 	public void topBar(Locale locale, Model model) {
 		System.out.println("topBar");
 	}
-	@RequestMapping(value = "/myinfo", method = RequestMethod.GET)
-	public void myinfo(Locale locale, Model model) {
-		System.out.println("myinfo");
-	}
+//	@RequestMapping(value = "/myinfo", method = RequestMethod.GET)
+//	public void myinfo(Locale locale, Model model) {
+//		System.out.println("myinfo");
+//	}
 	@RequestMapping(value = "/myinfoModi", method = RequestMethod.GET)
 	public void myinfoModi(Locale locale, Model model) {
 		System.out.println("myinfo");

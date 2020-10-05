@@ -44,7 +44,7 @@
 
 	<insert id ="addFavLec" parameterType="Map">
 	INSERT INTO WishList(lecture_id, member_id, lecture_category_id)
-	VALUES( #{lecture.lecture_id},#{member_id}, #{lecture.lectureCategory.lecture_category_id})
+	VALUES( #{lecture_id},#{member_id}, #{lecture_category_id})
 	</insert>
 	
 	<delete id ="deleteOneFavLec" parameterType="Map">
