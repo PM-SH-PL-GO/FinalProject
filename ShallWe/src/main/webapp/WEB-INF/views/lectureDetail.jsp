@@ -14,7 +14,7 @@
 	<c:set var="m" value="${mlthlist[i.index]}" />
 	<c:set var="mtutor" value="${lecture.tutor}" />
 	<c:if test="${m.lecture.lecture_id eq lecture.lecture_id}" var="lleq" />
-	<c:if test="${m.lecture.lecture_id ne lecture.lecture_id}" var="llne" />
+	<c:if test="${(empty m.lecture.lecture_id || m.lecture.lecture_id) ne lecture.lecture_id}" var="llne" />
 </c:forEach>
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
@@ -214,11 +214,11 @@ $(document).ready(function() {
 									pattern="#,###" />
 								원
 							</h4>
-							<c:if test="${endDate-nowDate>=0}">
-								<c:if test="${llne}">
+							<c:if test="${endDate-nowDate>=0 && ((tutorlist[0].member.member_id || empty tutorlist) ne lecture.tutor.member.member_id)}">
+
 									<a href="#" id="applyBtn"
 										class="genric-btn primary-border mt-10">신청</a>
-								</c:if>
+
 								<c:if test="${lleq}">
 									<a href="#" id="cancelBtn"
 										class="genric-btn primary-border mt-10">결제취소</a>
