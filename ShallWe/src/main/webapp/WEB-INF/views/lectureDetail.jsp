@@ -56,7 +56,7 @@ $(document).ready(function() {
 	var $reviewAreaObj = $('#reviewArea');
 	// 강사별, 카테고리별 리뷰 목록 조회
 	$.ajax({
-		url : "${contextPath}/reviewList"
+		url : "${contextPath}/member/reviewList"
 		, data : {"tutor_id": "${lecture.tutor.member.member_id}",
 				  "category_id":"${lecture.lectureCategory.lecture_category_id}"}
 		, success : function (responseData) {
@@ -69,7 +69,7 @@ $(document).ready(function() {
 	var $applyBtnObj = $('#applyBtn');
 	$applyBtnObj.on("click", function() {
 		$.ajax({
-			url: "${contextPath}/insertMemberLectureHistory"
+			url: "${contextPath}/member/insertMemberLectureHistory"
 			, method: "POST"
 			, data : {"lecture_id" : "${lecture.lecture_id}"}
 			, success: function(responseData) {
@@ -88,7 +88,7 @@ $(document).ready(function() {
 	var $cancelBtnObj = $('#cancelBtn');
 	$cancelBtnObj.on("click", function() {
 		$.ajax({
-			url: "${contextPath}/updateMemberLectureHistory"
+			url: "${contextPath}/member/updateMemberLectureHistory"
 			, method: "GET"
 			, data : {"lecture_id" : "${lecture.lecture_id}"}
 			, success: function(responseData) {

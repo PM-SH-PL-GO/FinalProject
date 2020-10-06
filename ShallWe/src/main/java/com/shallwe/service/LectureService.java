@@ -181,4 +181,9 @@ public class LectureService {
 	public void addWishOne(Map<String, Object>map)throws AddException{
 		wishDAO.addWishByLecId(map);
 	}
+	
+	// myInfo 수강하고 있는 강의 목록 조회
+	public List<Lecture> selectLectureListByMemberId( String member_id )throws FindException {
+		return lectureDAO.selectLectureListByMemberId(member_id);
+	}
 }

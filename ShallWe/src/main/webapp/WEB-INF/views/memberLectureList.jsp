@@ -56,7 +56,7 @@ $(function(){
 	$("div.reviewAdd").on('click', function (e) { 
 		var $lectureId = $(this).find('input[name=lectureId]').val();
 		$.ajax({ 
-			url: '${contextPath}/reviewAdd'
+			url: '${contextPath}/member/reviewAdd'
 			, method : 'GET'
 			, data : {"lecture_id" : $lectureId}
 			, success : function (responseData) {
@@ -70,7 +70,7 @@ $(function(){
 	$("div.reviewRemove").on('click', function (e) { 
 		var $lectureId = $(this).find('input[name=lectureId]').val();
 		$.ajax({
-		    url: "${contextPath}/removeReview"
+		    url: "${contextPath}/member/removeReview"
 		    , method : 'GET'
 		    , data : {"lecture_id" : $lectureId}
 		    , success : function ( responseData ) {
@@ -89,7 +89,7 @@ $(function(){
 		var $lectureId = $(this).find('input[name=lectureId]').val();
 		
 		$.ajax({ 
-			url: '${contextPath}/updateMemberLectureHistory'
+			url: '${contextPath}/member/updateMemberLectureHistory'
 			, method : 'GET'
 			, data : {"lecture_id" : $lectureId}
 			, success : function (responseData) {

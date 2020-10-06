@@ -3,6 +3,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <c:set var="myInfo" value="${requestScope['myInfo']}"/>
+<c:set var="lectureList" value="${requestScope['lectureList']}"/>
+
 <!doctype html>
 <!-- <html class="no-js" lang="zxx"> -->
 <head>
@@ -34,6 +36,16 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 $(document).ready(function() {
+	// 내가 수강하고 있는 강의 목록보기 
+	var bodyObj = $('.myinfobody');
+	$.ajax({ 
+		url : '${contextPath}/lectures/myinfoLectureList'
+		, method : "GET"
+		, success : function (responseData) {
+			console.log(responseData);
+// 			bodyObj.append(responseData);
+		}
+	}); // end of ajax
 
 	// 내정보 수정하기 버튼 클릭 이벤트
 	var $myinfoModiBtnObj = $('#myinfoModi');
@@ -44,20 +56,6 @@ $(document).ready(function() {
 		}
 	}); // end of 내강의 수정 event
 	
-	
-	// 내가 수강하고 있는 강의 목록보기 
-	$.ajax( { 
-		url : '${contextPath}/myinfoLectureList'
-		, method : "GET"
-		, data : {"lecture_id" : lecture_code}
-		, success : function () {
-			if(confirm("찜목록으로 이동하시겠습니까")){
-				location.href = "${contextPath}/member/wishlist";
-			} else {
-				location.reload();
-			}
-		}
-	}); // end of ajax
 	
 	
 }); // end of load();
@@ -128,11 +126,20 @@ $(document).ready(function() {
                                 <div class="properties properties2 mb-30">
                                     <div class="properties__card">
                                             <h3 style="text-align :center">최근 학습중인 강의들</h3>
-											<ul class="abblecture">
-											 <li><a href="#">닭가슴살 조리법</a></li>
-											 <li><a href="#">헬창이 되는 빠른방법</a></li>
-											 <li><a href="#">가짜사나이3</a></li>
-		                                    </ul>
+											<!-- <ul class="abblecture"> -->
+											<c:forEach items="${lectureList}" var="lecture" varStatus="status">
+												<tr class="lecture">
+													<td class="no">${status.count}</td>
+													<td class="lecture_id">${lecture.lecture_id}</td>
+													<td class="lecture_title">${lecture.lecture_title}</td>
+													<td class="lecture_start_dt"><fmt:formatDate value="${lecture.lecture_start_dt}" pattern="yyyy-MM-dd"/></td>
+													<td class="lecture_end_dt"><fmt:formatDate value="${lecture.lecture_end_dt}" pattern="yyyy-MM-dd"/></td>
+													<td class="lectureCategoryId">${review.member_lecture_history.lecture.lectureCategory.lecture_category_id}</td>
+												</tr>
+											</c:forEach>
+
+
+											<!-- </ul> -->
                                     </div>
                                 </div>
                             </div>
@@ -153,77 +160,6 @@ $(document).ready(function() {
     </div>
 <!-- myinfo-area Area End -->
 
-
-
     </main>
-    <footer>
-        <div class="footer-wrapper pt-20">
-            <!-- footer-bottom -->
-            <div class="footer-bottom-area">
-                <div class="container">
-                    <div class="footer-border">
-                        <div class="row d-flex justify-content-between align-items-center">
-                            <div class="col-xl-10 col-lg-9 ">
-                                <div class="footer-copy-right">
-                                    <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scroll Up -->
-    <div id="back-top" >
-        <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
-    </div>
-    <!-- JS here -->
-
-    <script src="/shallwe/assets/js/vendor/modernizr-3.5.0.min.js"></script>
-    <!-- Jquery, Popper, Bootstrap -->
-    <script src="/shallwe/assets/js/vendor/jquery-1.12.4.min.js"></script>
-    <script src="/shallwe/assets/js/popper.min.js"></script>
-    <script src="/shallwe/assets/js/bootstrap.min.js"></script>
-    <!-- Jquery Mobile Menu -->
-    <script src="/shallwe/assets/js/jquery.slicknav.min.js"></script>
-
-    <!-- Jquery Slick , Owl-Carousel Plugins -->
-    <script src="/shallwe/assets/js/owl.carousel.min.js"></script>
-    <script src="/shallwe/assets/js/slick.min.js"></script>
-    <!-- One Page, Animated-HeadLin -->
-    <script src="/shallwe/assets/js/wow.min.js"></script>
-    <script src="/shallwe/assets/js/animated.headline.js"></script>
-    <script src="/shallwe/assets/js/jquery.magnific-popup.js"></script>
-
-    <!-- Date Picker -->
-    <script src="/shallwe/assets/js/gijgo.min.js"></script>
-    <!-- Nice-select, sticky -->
-    <script src="/shallwe/assets/js/jquery.nice-select.min.js"></script>
-    <script src="/shallwe/assets/js/jquery.sticky.js"></script>
-    <!-- Progress -->
-    <script src="/shallwe/assets/js/jquery.barfiller.js"></script>
-    
-    <!-- counter , waypoint,Hover Direction -->
-    <script src="/shallwe/assets/js/jquery.counterup.min.js"></script>
-    <script src="/shallwe/assets/js/waypoints.min.js"></script>
-    <script src="/shallwe/assets/js/jquery.countdown.min.js"></script>
-    <script src="/shallwe/assets/js/hover-direction-snake.min.js"></script>
-
-    <!-- contact js -->
-    <script src="/shallwe/assets/js/contact.js"></script>
-    <script src="/shallwe/assets/js/jquery.form.js"></script>
-    <script src="/shallwe/assets/js/jquery.validate.min.js"></script>
-    <script src="/shallwe/assets/js/mail-script.js"></script>
-    <script src="/shallwe/assets/js/jquery.ajaxchimp.min.js"></script>
-    
-    <!-- Jquery Plugins, main Jquery -->	
-    <script src="/shallwe/assets/js/plugins.js"></script>
-    <script src="/shallwe/assets/js/main.js"></script>
-
-    
     </body>
 </html>

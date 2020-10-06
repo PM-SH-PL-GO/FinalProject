@@ -19,7 +19,7 @@ $(document).ready(function() {
 	console.log($reviewAreaObj);
 	// 강사별, 카테고리별 리뷰 목록 조회
 	$.ajax({
-		url : "${contextPath}/reviewList"
+		url : "${contextPath}/member/reviewList"
 		, data : {"tutor_id": "member3",
 				  "category_id":"MA"}
 		, success : function (responseData) {
@@ -56,12 +56,9 @@ $(document).ready(function() {
       var tutor_id = reviewArrObj[5];
       
       $.ajax({
-         url: "${contextPath}/removeReview"
-         , method : 'POST'
-         , data : {"lectureCategoryId" : lecture_category_id
-                  , "member_id" : member_id
-                  , "lecture_id" : lecture_id
-                  , "tutor_id" : tutor_id}
+         url: "${contextPath}/member/removeReview"
+         , method : 'GET'
+         , data : {"lecture_id" : lecture_id}
          , success : function ( responseData ) {
         	 console.log("responseData ::: " + responseData);
        		 alert('삭제완료');
@@ -78,7 +75,7 @@ $(document).ready(function() {
 
 <a href="${contextPath}/lectures/detail?lecture_id=3"> 강의상세보기 </a>
 <br/>
-<a href="${contextPath}/reviewAdd?lecture_id=3"> 후기등록테스트</a>
+<a href="${contextPath}/member/reviewAdd?lecture_id=3"> 후기등록테스트</a>
 
 <br/>
 <div class="mb-30 mt-30" id="reviewArea"> </div>

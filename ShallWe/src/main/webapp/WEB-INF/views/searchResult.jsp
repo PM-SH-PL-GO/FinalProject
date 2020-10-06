@@ -6,17 +6,17 @@
 
 <style>
 .left_menu {
-	padding-left: 10%;
-	float: left;
+	padding-left: 120px;
 	width: 30%;
+	float: left;
 }
 
 .left_menu_result {
 	text-align: center;
 }
 .right_menu { 
-/* 	float : center; */
-	width: 60%;
+	padding-right: 120px;
+	width: 100%;
 }
 
 </style>
@@ -38,8 +38,6 @@
 		var condition =0;
 		var $searchText =" ";
 		
-		$searchTextObj.focus();
-		
 		$searchKeyObj.change(function(e) {
 			condition = $(this).val();
 		});
@@ -47,14 +45,14 @@
 		var $searchBtnObj = $("form[name='resultList']").find('button#searchBtn');
 		$searchBtnObj.click (function ( ) {
 			$searchText = $searchTextObj.val();
-			var url = '${contextPath}/search?searchKey='+condition+'&searchText='+$searchText ;
+			var url = '${contextPath}/lectures/search?searchKey='+condition+'&searchText='+$searchText ;
 			location.href = url;
 		}); // end of clickEvent
 		
 		$('div.category-img a').click(function(){
 			$searchText = $(this).attr("id");
 			var $searchKey = 3
-	        var url = '${contextPath}/search?searchKey='+$searchKey+'&searchText='+$searchText ;
+	        var url = '${contextPath}/lectures/search?searchKey='+$searchKey+'&searchText='+$searchText ;
 	        location.href = url;
 		});
 		
@@ -120,21 +118,22 @@
 			<div class="col-lg-10">
 				<div class="blog_right_sidebar">
 					<aside class="single_sidebar_widget search_widget">
-						<form name= "resultList" class="form-select  mb-100">
+						<form name= "resultList" class="form-select  mb-100" style="text-align: center">
 							<div>
 								<!-- searchKey = {"all", "tutor_name", "lecture_title" , "category" }; -->
-								<select class="nice-select" id="searchKey">
-									<option value="0" class="option">전체 검색</option>
+								<select class="nice-select" id="searchKey" style="font-weight: bold; font-size: large; text-align: center;">
+<!-- 								<select class="nice-select" id="searchKey" style="font-weight: bold; font-size: large;"> -->
+									<option value="0" class="option">전체 검색</option>\
 									<option value="1" class="option">강사 이름</option>
 									<option value="2" class="option">강의명</option>
 									<option value="3" class="option">카테고리명</option>
 								</select>
 							</div>
-							<div class="form-group">
+							<div class="form-group" style="">
 								<div class="input-group mb-3">
 									<input type="text" class="form-control"
 										placeholder="카테고리 내 재검색" onfocus="this.placeholder = ''"
-										onblur="this.placeholder = 'Search Keyword'" id="searchText">
+										onblur="this.placeholder = '검색어를 입력하세요'" id="searchText" style="text-align: center">
 								</div>
 							</div>
 							<button class="btn" id="searchBtn" type="submit"  style="cursor: pointer;">강의검색하기</button>
@@ -144,49 +143,44 @@
 
 				<div class="left_menu_result"></div>
 				
-				<div class="category-img text-center">
-					<a id="IT" style="cursor: pointer;">
-						<img src="assets/img/gallery/category_icon1.png" alt="IT"></a> 
-					<a id="취미" style="cursor: pointer;">
-						<img src="assets/img/gallery/category_icon2.png" alt="취미"></a>
+				<div class="category-img text-center" style="padding-bottom: 5px;">
+					<a id="IT" style="cursor:pointer;">
+						<img src="${contextPath}/assets/img/gallery/category_icon1.png" alt="IT"></a> 
+					<a id="취미" style="cursor:pointer;">
+						<img src="${contextPath}/assets/img/gallery/category_icon2.png" alt="취미"></a>
 				</div>
-				<div class="category-img text-center">
-					<a id="디자인" style="cursor: pointer;">
-						<img src="assets/img/gallery/category_icon4.png" alt="디자인"></a>
-					<a id="사진" style="cursor: pointer;">
-						<img src="assets/img/gallery/category_icon6.png" alt="사진"></a>
+				<div class="category-img text-center" style="padding-bottom: 5px;">
+					<a id="디자인" style="cursor:pointer;">
+						<img src="${contextPath}/assets/img/gallery/category_icon4.png" alt="디자인"></a>
+					<a id="사진" style="cursor:pointer;">
+						<img src="${contextPath}/assets/img/gallery/category_icon6.png" alt="사진"></a>
 				</div>
-				<div class="category-img text-center">
-					<a id="음악" style="cursor: pointer;">
-						<img src="assets/img/gallery/category_icon8.png" alt="음악"></a>
-					<a id="스포츠" style="cursor: pointer;">
-						<img src="assets/img/gallery/category_icon9.png" alt="스포츠"></a>
+				<div class="category-img text-center" style="padding-bottom: 5px;">
+					<a id="음악" style="cursor:pointer;">
+						<img src="${contextPath}/assets/img/gallery/category_icon8.png" alt="음악"></a>
+					<a id="스포츠"style="cursor:pointer;">
+						<img src="${contextPath}/assets/img/gallery/category_icon9.png" alt="스포츠"></a>
 				</div>
-				<div class="category-img text-center">
+				<div class="category-img text-center" style="padding-bottom: 5px;">
 					<a id="마케팅" style="cursor: pointer;">
-						<img src="assets/img/gallery/category_icon3.png" alt="마케팅"></a>
-					<a id="회계" style="cursor: pointer;">
-						<img src="assets/img/gallery/category_icon7.png" alt="회계"></a>
+						<img src="${contextPath}/assets/img/gallery/category_icon3.png" alt="마케팅"></a>
+					<a id="회계" style="cursor:pointer;">
+						<img src="${contextPath}/assets/img/gallery/category_icon7.png" alt="회계"></a>
 				</div>
 			</div>
 		</section>
 
-		<!--검색결과 : searchLectureList.jsp   -->
-<!-- 		<section class="right_menu section-padding"> -->
 		<section class="right_menu">
 			<div class="container">
-			
 				<div class="row">
 				<c:if test="${lectureList.size() ==  0}" >
-					<div class="col">
-						<p>조회된 강의가 없습니다! 다시 검색해주세요~</p>
-					</div>
+					<span style="font-weight: bold; color:red; font-size:40px; text-align:center; padding:20px;">조회된 강의가 없습니다! 다시 검색해주세요~</span>
 				</c:if>
 				<!-- single start -->
 				<c:forEach items="${lectureList}" var="lecture" varStatus="stats">
 					<c:forEach items="resultList.Lecture" var="lec" varStatus="lec_count">
 					<div class="col">
-						<div class="properties pb-20">
+						<div class="properties pb-20" style="padding-top:10px; height:420px; box-shadow : 2px 2px 5px #999; text-align: center;">
 							<div class="properties__card" style="cursor: pointer;">
 								<a href="#"><img src="${contextPath}/assets/img/gallery/properties3.png" alt="강의사진"></a><br/><br/>
 								<div class="properties__caption">
