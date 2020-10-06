@@ -1,12 +1,12 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="contextPath" value="${pageContext.request.contextPath }" />
+
 <!doctype html>
 <html class="no-js" lang="zxx">
 <head>
 <meta charset="utf-8">
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<link rel="shortcut icon" type="image/x-icon"
-	href="/shallwe/assets/img/favicon.ico">
+<link rel="shortcut icon" type="image/x-icon" href="${contextPath}/assets/img/favicon.ico">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   
@@ -32,7 +32,7 @@
 }
 
 .header-area {
-	box-shadow: 0 2px 4px 0 hsla(0, 0%, 80.8%, .5);
+/* 	box-shadow: 0 2px 4px 0 hsla(0, 0%, 80.8%, .5); */
 	min-height: unset;
 	background-color: white;
 }
@@ -46,7 +46,19 @@
 }
 
 .category-img {
-	margin-top: 2%;
+	margin-top: 3%;
+}
+div img{
+cursor: pointer;
+}
+#searchBtn{
+cursor: pointer;
+}
+div.menu-wrapper .d-flex .align-items-center .justify-content-between{
+margin-right: 10%;
+}
+.hero-bg1{
+text-align: center;
 }
 </style>
 <script>
@@ -55,13 +67,13 @@ $(function(){
 	$('#searchBtn').click(function(){
 		var $searchText = $('#searchText').val()
 		var $searchKey = $('#select').val()
-        var url = '/shallwe/search?searchKey='+$searchKey+'&searchText='+$searchText ;
+        var url = '${contextPath}/lectures/search?searchKey='+$searchKey+'&searchText='+$searchText ;
         location.href = url;
 	});
 	$('#category a').click(function(){
 		var $searchText = $(this).attr("id");
 		var $searchKey = 3
-        var url = '/shallwe/search?searchKey='+$searchKey+'&searchText='+$searchText ;
+        var url = '${contextPath}/lectures/search?searchKey='+$searchKey+'&searchText='+$searchText ;
         location.href = url;
 	});
 	
@@ -81,12 +93,13 @@ $(function(){
 		<!--메인 슬라이드 시작-->
 		<div class="slider-area hero-bg1 hero-overly main">
 			<div
-				class="single-slider hero-overly  slider-height1 d-flex align-items-center">
+				class="single-slider slider-height1 d-flex align-items-center">
+				<div class="hero-overly"></div>
 				<div class="container">
 					<div class="row justify-content-center">
 						<div class="col-xl-10 col-lg-100">
 							<!-- Hero Caption -->
-							<div class="hero__caption pt-10">
+							<div class="hero__caption pt-90">
 								<h1>배우고, 나누고, 성장하세요</h1>
 								<p>다양한 분야의 강사를 만나보세요!</p>
 							</div>
@@ -114,6 +127,7 @@ $(function(){
 					</div>
 					<!-- hero category1 img -->
 					<div class="category-img text-center" id="category">
+					<h1 style="margin-top: 4%;">카테고리별로 검색해보세요!</h1>
 						<a id="IT"> <img src="assets/img/gallery/category_icon1.png"></a>
 						<a id="취미"> <img src="assets/img/gallery/category_icon2.png"></a> 
 						<a id="마케팅"> <img src="assets/img/gallery/category_icon3.png"></a> 

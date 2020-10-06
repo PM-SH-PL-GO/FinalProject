@@ -212,22 +212,22 @@
 
 	<!-- admin(jun6) : 강의 전체 조회 -->
 	<select id="selectAllLectures" resultMap="lectResultMap">
-		SELECT le.*,
-		lc.category_name "lecture_category_name", le.lecture_tutor_id
-		"member_id"
+		SELECT le.*, lc.category_name "lecture_category_name", le.lecture_tutor_id "member_id"
 		FROM lecture le
-		JOIN lecture_category lc
-		ON(le.lecture_category_id = lc.category_id)
-		ORDER
-		BY lecture_id DESC
+			JOIN lecture_category lc ON(le.lecture_category_id = lc.category_id)
+		ORDER BY lecture_id DESC
 	</select>
 
 	<!-- admin(jun6) : 강의 승인/반려 -->
 	<update id="updateLectureStateByIdAndStatus" parameterType="Map">
 		UPDATE lecture
 		SET lecture_state = #{status}
-		WHERE lecture_id =
-		#{lecture_id}
+		WHERE lecture_id = #{lecture_id}
 	</update>
-
+	
+	<!-- 고수정 : memberID by 강의 수강중인 목록 조회하기 -->
+	<select id="selectLectureListByMemberId" parameterType="String" resultMap="lectResultMap">
+		SELECT lec.lecture_title,  lec.lecture_category_id, lec.lecture_id,  lec.lecture_start_dt,  lec.lecture_end_dt FROM lecture lec JOIN member_lecture_history mlh ON (lec.lecture_id = mlh.lecture_id) 
+		WHERE member_id = 'member6' AND lecture_state ='승인' AND lecture_end_dt > SYSDATE
+	</select>
 </mapper>

@@ -290,7 +290,7 @@ $(document).ready(function() {
  		var jsonData = JSON.stringify(reviewBean);
  		
  		$.ajax({
- 			url: "${contextPath}/reviewAddmethod"
+ 			url: "${contextPath}/member/reviewAddmethod"
  			, method : 'POST'
  			, contentType: 'application/json'
  			, data : jsonData

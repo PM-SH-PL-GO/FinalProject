@@ -9,6 +9,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
@@ -28,12 +29,12 @@ public class TutorDAO {
 	// 강사 정보 수정 : 경찬
 	
 	// 강사/예비강사 목록 보기(admin) : 준식
-	public List<Tutor> selectAllTutor(Map<String, String> map) throws FindException{
+	public List<Tutor> selectAllTutor(String YN) throws FindException{
 		List<Tutor> tutorList = new ArrayList<>();
 		SqlSession session = null;
 		try {
 			session = sqlSessionFactory.openSession();
-			tutorList = session.selectList("TutorMapper.selectAllTutor", map);
+			tutorList = session.selectList("TutorMapper.selectAllTutor", YN);
 		}catch(DataAccessException e) {
 			throw new FindException("검색 과정에 오류가 있습니다");
 		}finally {
@@ -44,20 +45,6 @@ public class TutorDAO {
 			throw new FindException("검색 결과가 없습니다");
 		
 		return tutorList;
-	}
-	
-	public int countAllTutor(String YN) throws FindException{
-		SqlSession session = null;
-		int count = 0;
-		try {
-			session = sqlSessionFactory.openSession();
-			count = session.selectOne("TutorMapper.selectCount", YN);
-		}catch(DataAccessException e) {
-			e.printStackTrace();
-			throw new FindException();
-		}
-		
-		return count;
 	}
 	
 	//강사등록 : 경찬
@@ -76,6 +63,7 @@ public class TutorDAO {
 		session.close();
 		
 	}
+	
 	
 	//강사상세보기: 경찬
 	public List<Tutor> TutorInfo(String tutor_id)throws FindException {
@@ -116,13 +104,14 @@ public class TutorDAO {
 		return nickNameCheck;
 	}
 	//강사등록취소: 경찬
-	public void dellTutor(String tutor_id) throws RemoveException{
+	public void dellTutor(Map<String,Object> tutor) throws RemoveException{
+		
 		SqlSession session = null;
 		session = sqlSessionFactory.openSession();
 		
 		try {
-			session.delete("TutorMapper.deltutor",tutor_id);
-			
+			session.delete("TutorMapper.deltutor",tutor);
+			System.out.println("@@@@@@@@@@@@@@@@@@@@@@@: " + tutor);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RemoveException(e.getMessage());
@@ -130,7 +119,61 @@ public class TutorDAO {
 			session.close();
 		}
 		
-		
 	}
+	
+	//강사수정: 경찬
+	@Transactional(rollbackFor = RemoveException.class)
+	public void tutorUpdate(Map<String,Object> tutor,String[] category,Tutor tutor1) throws AddException{
+		
+	
+		try {
+			
+			dellTutor(tutor);
+			System.out.println("@@@@@@@@@@@@@@@@@@@@@@:" + tutor.get("tutor_id"));
+			insertTutor(tutor1,category);
+				
+		} catch (AddException e) {
+			e.printStackTrace();
+		} catch (RemoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+	}
+	
+	//강사사진수정: 경찬
+	public void tutorImage(Tutor tutor)throws ModifyException{
+		SqlSession session = null;
+		session = sqlSessionFactory.openSession();
+		
+		try {
+			
+			session.update("TutorMapper.tutorImage",tutor);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ModifyException(e.getMessage());
+		} finally {
+			session.close();
+		}
+	}
+	
+	//강사이력서파일변경: 경찬
+	public void tutorCareer(Tutor tutor)throws ModifyException{
+		SqlSession session = null;
+		session = sqlSessionFactory.openSession();
+		
+		try {
+			session.update("TutorMapper.tutorCareer",tutor);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ModifyException(e.getMessage());
+			
+		} finally {
+			session.close();
+		}
+	}
+	
+	
 	
 }

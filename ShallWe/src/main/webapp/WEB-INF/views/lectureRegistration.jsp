@@ -96,9 +96,14 @@
 </script>
 
 <body>
+	<!-- topbar Start -->
+	<div class="topMenu">
+		<jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
+	</div>
+	<!-- topbar End -->
 	<main>
 		<!--? Start Align Area -->
-		<div class="whole-wrap">
+		<div class="whole-wrap mt-100">
 			<div class="container box_1170">
 				<div class="section-top-border">
 					<h3 class="mb-30">강의 등록</h3>
