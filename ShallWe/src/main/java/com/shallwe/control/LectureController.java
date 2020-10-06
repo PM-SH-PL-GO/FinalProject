@@ -260,10 +260,10 @@ public class LectureController {
 			mnv.addObject("lectDetail", lectDetail);
 			mlthlist = service.memberLectureList(mlth);
 			mnv.addObject("mlthlist", mlthlist);
-			lectlist = service.tutorLectureList(lecttuto);
-			mnv.addObject("lectlist", lectlist);
 			wishlist = service.findWishListById(id);
 			mnv.addObject("wishlist", wishlist);
+			lectlist = service.tutorLectureList(lecttuto);
+			mnv.addObject("lectlist", lectlist);
 			tutorlist = tutoser.showTutorInfo(id);
 			mnv.addObject("tutorlist", tutorlist);
 			mnv.setViewName("/lectureDetail");
