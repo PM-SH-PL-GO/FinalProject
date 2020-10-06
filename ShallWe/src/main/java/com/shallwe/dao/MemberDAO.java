@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.naming.directory.ModificationItem;
+
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -307,19 +309,19 @@ public class MemberDAO {
 	}
 	
 	/**
-	 * admin : 회원 탈퇴 시키기?
+	 * admin : 회원 탈퇴 시키기(유효성 0으로 전환)
 	 * @param member_id
 	 * @throws RemoveException
 	 */
-	public void deleteMemberById(String member_id) throws RemoveException{
+	public void updateEnabledById(Map<String, String> map) throws ModifyException{
 		SqlSession session = null;
 		
 		try {
 			session = sqlSessionFactory.openSession();
-			session.delete("MemberMapper.deleteMemberById", member_id);
+			session.delete("MemberMapper.updateEnabledById", map);
 		}catch(DataAccessException e) {
 			e.printStackTrace();
-			throw new RemoveException("삭제 시도 중 에러가 발생했습니다");
+			throw new ModifyException("정지 시도 중 에러가 발생했습니다");
 		}finally {
 			session.close();
 		}

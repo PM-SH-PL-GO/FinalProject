@@ -63,7 +63,12 @@
 	                    	
 	                    	$memberList += '<td>'+ member.member_sex +'</td>';
                     		$memberList += '<td>' + member.tutor_YN + '</td>';
-                    		$memberList += '<td><button class="ban-modal" value="' + member.member_id + '">정지</button></td></tr>';
+                    		$memberList += '<td><button class="ban-modal" value="' + member.member_id + '">';
+                    		
+                    		if(member.enabled == 1)
+                    			$memberList += '정지</button></td></tr>';
+                  			else
+                    			$memberList += '복구</button></td></tr>';
                     	});
                     	
                     	$memberList += '</tbody></table></div>';
@@ -75,14 +80,27 @@
                 return false;
             });
             
-            // 탈퇴시키기
+            // 정지/복구시키기
             $cont.on("click", ".ban-modal", function(){
             	let $memberId = $(this).attr("value");
+            	let $tatus = $(this).html();
+            	let status = 0;
+            	
+            	if ($tatus == "복구")
+            		status = 1;
+            		
             	$.ajax({
             		url: "${contextPath}/admin/member/" + $memberId,
             		method: "PATCH",
-            		succuss: function(){
-            			
+            		data: JSON.stringify({enabled : status}),
+            		dataType: "json",
+            		succuss: function(data){
+            			alert(data.success);
+            			$(".member").trigger("click");
+            		},
+            		error: function(data){
+            			alert(data.errMsg);
+            			$(".member").trigger("click");
             		}
             	});
             	
@@ -578,22 +596,27 @@
 					method: "GET",
 					success: function(historyList){
 						let historyModal = '<div class="modal-add"><div class="modal-content">';
-						historyModal += '<div>최대 신청 인원 수 : ' + historyList[0].lecture.lecture_max;
-						historyModal += '/ 현재 신청 인원 수 : ' + historyList[0].lecture.lecture_current + '</div>';
-						historyModal += '<table class="table"><thead><tr><th>순서</th><th>아이디</th><th>이름</th><th>신청일</th></tr>';
-						historyModal += '</thead><tbody>';
-						historyList.forEach(function(history, index){
-							let idx = index + 1;
-							historyModal += '<tr class="member-detail" value="' + history.member.member_id + '"><td>' + idx + '</td>';
-							historyModal += '<td>' + history.member.member_id + '</td>';
-							historyModal += '<td>' + history.member.member_name + '</td>';
-							historyModal += '<td>' + formatDate(history.payment_dt) + '</td></tr>';
-						});
-						historyModal += '</tbody></table><button class="modal-close">닫기</button></div>';
-						historyModal += '<div class="modal-layer"></div></div>';
 						
-						let cont = $cont.html() + historyModal;
-						$cont.html(cont);
+						if (historyList != null){
+							historyModal += '<div>최대 신청 인원 수 : ' + historyList[0].lecture.lecture_max;
+							historyModal += '/ 현재 신청 인원 수 : ' + historyList[0].lecture.lecture_current + '</div>';
+							historyModal += '<table class="table"><thead><tr><th>순서</th><th>아이디</th><th>이름</th><th>신청일</th></tr>';
+							historyModal += '</thead><tbody>';
+							historyList.forEach(function(history, index){
+								let idx = index + 1;
+								historyModal += '<tr class="member-detail" value="' + history.member.member_id + '"><td>' + idx + '</td>';
+								historyModal += '<td>' + history.member.member_id + '</td>';
+								historyModal += '<td>' + history.member.member_name + '</td>';
+								historyModal += '<td>' + formatDate(history.payment_dt) + '</td></tr>';
+							});
+							historyModal += '</tbody></table><button class="modal-close">닫기</button></div>';
+							historyModal += '<div class="modal-layer"></div></div>';
+							
+							let cont = $cont.html() + historyModal;
+							$cont.html(cont);
+						}else
+							alert(신청 인원이 없습니다);
+							
 					},
 					error: function(data){
 						alert("에러에러");

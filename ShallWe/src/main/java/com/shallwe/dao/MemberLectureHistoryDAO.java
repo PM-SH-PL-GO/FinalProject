@@ -40,6 +40,7 @@ public class MemberLectureHistoryDAO {
 	
 	/**
 	 * 강의별 수강생 목록 반환하기
+	 * @author jun6
 	 * @param lecture_id
 	 * @return
 	 * @throws FindException
