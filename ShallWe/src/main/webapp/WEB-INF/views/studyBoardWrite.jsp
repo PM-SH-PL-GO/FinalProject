@@ -131,9 +131,9 @@ $(function() {
 		<div class="row slider-height1">
 			<div class="col-lg-8 posts-list" style="margin-left : auto; margin-right: auto ">
 				<div class="col-sm-6">
-					<h2 class="contact-title">글쓰기</h2>
 				</div>
 				<div class="col-lg-8">
+					<h2 class="contact-title">글쓰기</h2>
 					<form class="form-contact contact_form" id="writeForm" method="post" enctype="multipart/form-data">
 						<div class="col-sm-6">
 							<div class="form-group">

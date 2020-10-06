@@ -14,6 +14,13 @@ tr td.boardTitle:hover {
     color: #00DBD5;
     cursor: pointer;
 }
+tr td.boardId{
+width: 8%;
+}
+tr td.boardTitle{
+width: 50%;
+text-align: left;
+}
 #boardWrite{
 color: white;
 }
@@ -42,7 +49,8 @@ $(function(){
 					boardPageData += "<tr>"
 					boardPageData += "	<td class=\"boardId\">"+studyBoard.studyBoard_id+"</td>";
 				if(studyBoard.replylist==null||studyBoard.replylist==""){
-					boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"</td>";
+					boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title;
+					boardPageData += "	</td>";
 				}else{
 					boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"  ["+studyBoard.replylist.length+"]</td>";					
 				}
