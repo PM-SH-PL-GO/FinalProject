@@ -11,13 +11,14 @@
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="basic.css" />
-     <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
   	<link rel="stylesheet" href="css/core.css">
   	 <script 
 	  src="https://code.jquery.com/jquery-3.5.1.min.js"
 	  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
 	  crossorigin="anonymous"> </script>
     <style>
+    @import url(https://fonts.googleapis.com/css?family=Roboto:400,100,900);
     html,
 body,
 div,
@@ -173,11 +174,6 @@ table {
   border-bottom: 2px solid #000000;
 }
 
- /* .head-photo {
-  width: 300px;
-  height: 300px;
-  margin: 50px 0;
-} */
 .title {
   text-transform: uppercase;
   font-weight: bold;
@@ -284,13 +280,14 @@ body
 {
 	position: relative;
 	padding: 10px 40px;
-  margin: 0px 10px 10px 0px;
-  float: left;
+ 	margin: 0px 10px 10px 0px;
+  	float: left;
 	border-radius: 10px;
-	font-family: 'Pacifico', cursive;
 	font-size: 25px;
 	color: #FFF;
 	text-decoration: none;	
+	font-style: italic;
+	
 }
 
 .blue
@@ -320,6 +317,7 @@ width: 100%;
 
 }
 iframe{display: none;}
+
 
     </style>
 <script>
@@ -353,16 +351,14 @@ $(function(){
 
 		let $pdf = $('input#pdfId').val();
 		
-		/* console.log($(this)); */
+		
 		let id = $(this).attr("id");
 		$iframe = $("iframe");
-		 let url = "${contextPath}/upload/pdf.do?tutor_id=" + $pdf + "&fileName=" + id;
-		 console.log(url);
+		 let url = "${contextPath}/upload/pdf.do?tutor_id=" + $pdf + "&fileName=" + id;	
 		 $iframe.attr("src", url).show();
 			
 		});
 
-	
 	$('a#ModifyTutor').click(function(){
 			
 			let $url = "/shallwe/tutor/showUpdateTutor";
@@ -442,6 +438,9 @@ $(function(){
            	<li>${t.tutor_introduce}</li><br />
            	<label id ="tutor_yn">강사등록여부:</label>
            	<li>${t.member.tutor_YN}</li>
+           	<br />
+           	<label id ="tutor_reject">강사반려여부:</label>
+           	<li>${t.tutorReject.reject_reason}</li>
             </p>
           </div>
               </c:forEach>
@@ -463,10 +462,13 @@ $(function(){
           	<c:if test="${t.member.tutor_YN eq 'Y'}">
           <a href="#" class="action-button shadow animate blue" id="updateTutor">등록정보수정</a>
              </c:if>
-     		<c:if test="${t.member.tutor_YN eq 'N'}">
+     		<c:if test="${not empty t.tutorReject.reject_reason}">
+         	<span></span>
+         	</c:if> 
+         	<c:if test="${empty t.tutorReject.reject_reason}">
+         	 <a href="#" class="action-button shadow animate blue" id="ModifyTutor">신청정보확인수정</a>	
          	 <a href="#" class="action-button shadow animate blue" id="cancleTutor">강사신청취소</a>
-         	 <a href="#" class="action-button shadow animate blue" id="ModifyTutor">신청정보수정</a>
-           </c:if>
+          	</c:if> 
  	 	</c:forEach>
         </div>
       </div>

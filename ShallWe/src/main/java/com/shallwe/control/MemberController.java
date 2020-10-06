@@ -309,8 +309,6 @@ public class MemberController {
 	}
 	
 	
-	
-	
 	// 강의결제 등록
 	// 고수정
 	@RequestMapping(value = "/insertMemberLectureHistory", method = RequestMethod.POST)
