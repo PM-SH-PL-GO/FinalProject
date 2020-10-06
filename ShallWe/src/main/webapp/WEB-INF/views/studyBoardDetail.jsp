@@ -97,7 +97,6 @@ function formatDate(date) {
 
 $(function(){
 	//----------댓글 로드 START---------
-// 	console.log("${studyBoard.member.member_id}" == "${loginId}");
 	$.ajax({
 		url:"${contextPath}/reply/"+${studyBoard.studyBoard_id}
 		,method:"get"
@@ -230,7 +229,6 @@ $(function(){
 	
 	//----------댓글 삭제 버튼 CLICK START---------	
 	$('#replyList').on("click","#replyDelete",function(){
-		console.log("딜리트도?");
 		var $replyIdVal = $(this).parents('.reply-btn').siblings('.replyId') .val();
 		$.ajax({
 			url:"${contextPath}/reply/delete/"+$replyIdVal
@@ -238,12 +236,10 @@ $(function(){
 			,data:{"reply_id":$replyIdVal}
 			,success:function(data){
 				alert(data);
-				alert("성공");
 				location.reload();
 			}
 			,error: function(data){
 				alert(data);
-				alert("실패");
 				location.reload();
 			}
 		});
@@ -253,12 +249,15 @@ $(function(){
 	//----------댓글 삭제 버튼 CLICK END---------	
 	
 });
+	//---------  날짜 데이터 변경  START---------
 function formatDate(date) { 
 	var d = new Date(date), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = d.getFullYear(); 
 	if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; 
 	return [year, month, day].join('-'); 
 }
+	//---------  날짜 데이터 변경  END---------
 
+	//---------  이름 Masking START---------
 function nameMasking(str){
 	var originStr = str;
 	var maskingStr;
@@ -278,12 +277,15 @@ function nameMasking(str){
 	return maskingStr;
 
 }
+	//---------  이름 Masking END---------
 
+	//---------  파일명 UUID 제거 START---------
 function subString(fileName){
 	var fn = fileName.substring(str.indexOf(".")+1)
 	return fn;
 	
 }
+	//---------  파일명 UUID 제거 END---------
 </script>
 </head>
 

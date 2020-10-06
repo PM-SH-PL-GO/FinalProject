@@ -26,7 +26,11 @@ import com.shallwe.vo.StudyBoard;
 public class StudyBoardDAO {
 	@Autowired
 	SqlSessionFactory sqlSessionFactory;
-	// 게시글 전체 조회(+페이징) : 성운
+	/**
+	 * 게시글 전체 조회(+페이징)
+	 * @author psw09
+	 * @return 조회된 게시글
+	 */
 	public List<StudyBoard> selectAll(Map<String, Object> map) throws FindException{
 		System.out.println("selectAllDAO");
 		SqlSession session = sqlSessionFactory.openSession();
@@ -43,7 +47,12 @@ public class StudyBoardDAO {
 		}
 		
 	}
-	// 게시글 조건 검색(+페이징) : 성운
+	
+	/**
+	 * 게시글 조건 검색(+페이징)
+	 * @author psw09
+	 * @return 조건검색된 게시글
+	 */
 	public List<StudyBoard> selectByTitleAndContent(Map<String, Object> map) throws FindException{
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
@@ -60,7 +69,10 @@ public class StudyBoardDAO {
 		
 	}
 	
-	// 게시글 작성 : 성운
+	/**
+	 * 게시글 작성 
+	 * @author psw09
+	 */
 	public void insert(StudyBoard board) throws AddException {
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
@@ -74,7 +86,10 @@ public class StudyBoardDAO {
 			session.close();			
 		}
 	}
-	// 게시글 수정 : 성운
+	/**
+	 * 게시글 수정 
+	 * @author psw09
+	 */
 	public void update(StudyBoard board) throws ModifyException {
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
@@ -88,7 +103,10 @@ public class StudyBoardDAO {
 			session.close();				
 		}
 	}
-	// 게시글 삭제(작성자 & admin) : 성운
+	/**
+	 * 게시글 삭제(작성자 & admin)
+	 * @author psw09
+	 */
 	public void delete(int studyBoard_id) throws RemoteException {
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
@@ -103,7 +121,11 @@ public class StudyBoardDAO {
 		}
 	}
 	
-	//게시글 수 조회 : 성운
+	/**
+	 * 게시글 수 조회
+	 * @author psw09
+	 * @return 전체 게시글 수
+	 */
 	public int selectCount() {
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
@@ -114,7 +136,11 @@ public class StudyBoardDAO {
 		}
 	}
 	
-	//검색 게시글 수 조회 : 성운
+	/**
+	 * 검색 게시글 수 조회
+	 * @author psw09
+	 * @return 검색된 게시글 수
+	 */
 	public int SearchSelectCount(Map<String, Object> map) {
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
@@ -126,7 +152,11 @@ public class StudyBoardDAO {
 	}
 	
 	
-	//게시글 번호로 조회
+	/**
+	 * 게시글 번호로 조회
+	 * @author psw09
+	 * @return 검색된 게시글 
+	 */
 	@Transactional(rollbackFor = FindException.class)
 	public StudyBoard selectByNo(int studyBoard_id) throws FindException {
 		SqlSession session = sqlSessionFactory.openSession();

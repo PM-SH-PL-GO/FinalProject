@@ -12,6 +12,8 @@
 			<id property="member_id" column="STUDYREPLY_MEMBER_ID"/>
 		</association>	
 	</resultMap>
+	
+	<!-- 댓글 전체조회 -->
 	<select id="selectAll" parameterType="map" resultMap="StudyReplyResultMap">
 	select *
 	from(select rownum r, a.*
@@ -21,17 +23,25 @@
 	        order by studyreply_id desc)a)b
 	where r BETWEEN #{startRow} AND #{endRow}
 	</select>
+	
+	<!-- 게시글 번호로 댓글조회 -->
 	<select id="selectById" resultType="StudyReply">
 	select *
 	from studyreply
 	where STUDYREPLY_PARENT_BOARD=#{studyboard_id}
 	</select>
+	
+	<!-- 댓글 작성 -->
 	<insert id="insert" parameterType="StudyReply">
 	INSERT INTO STUDYREPLY VALUES(STUDYREPLY_SEQ.NEXTVAL, #{studyboard.studyBoard_id}, #{member.member_id}, #{studyreply_content}, sysdate)
 	</insert>
+	
+	<!-- 댓글 수정 -->
 	<update id="update" parameterType="StudyReply">
 	update STUDYREPLY set STUDYREPLY_CONTENT=#{studyreply_content},STUDYREPLY_DT=sysdate where STUDYREPLY_ID=#{studyreply_id}
 	</update>
+	
+	<!-- 댓글 삭제 -->
 	<delete id="delete" parameterType="int">
 	delete STUDYREPLY where STUDYREPLY_ID=#{studyreply_id}
 	</delete>

@@ -51,9 +51,6 @@ $(function(){
 			$boardPage.html(boardPageData);
 			var $pageList = $("#pageList");
 			var pageListData = "";
-			console.log("pbObj.startPage======="+pbObj.startPage);
-			console.log("pbObj.endPage====="+pbObj.endPage);
-			console.log("pbObj.totalPage======="+pbObj.totalPage);
 			if(pbObj.startPage > 1){
 				pageListData += '<li class="page-item"><a class="prev page-link"><span class="ti-angle-left"></span></a></li>';
 			}
@@ -153,7 +150,6 @@ $(function(){
 		$searchVal = $("#searchBar").val()
 		console.log($searchVal);
 		if($searchVal==""){
-// 			$("#studBoard").trigger("click");
 			alert("키워드를 입력해주세요");
 			return;
 		}
@@ -231,6 +227,7 @@ $(function(){
 	});
 	//--------- 게시글 CLICK  START---------		
 
+	//---------  글쓰기 CLICK  START---------		
 	$("#boardWrite").click(function(){
 		if("${loginId}"==""){
 			alert("로그인 후 글쓰기가 가능합니다.");			
@@ -238,15 +235,18 @@ $(function(){
 		location.href="${contextPath}/board/write"
 		}
 	});
+	//---------  글쓰기 CLICK  END---------	
 });
 
-
+	//---------  날짜 데이터 변경  START---------
 function formatDate(date) { 
 	var d = new Date(date), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = d.getFullYear(); 
 	if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; 
 	return [year, month, day].join('-'); 
 }
+	//---------  날짜 데이터 변경  END---------
 
+	//---------  이름 Masking START---------
 function nameMasking(str){
 	var originStr = str;
 	var maskingStr;
@@ -267,6 +267,7 @@ function nameMasking(str){
 
 }
 
+	//---------  이름 Masking END---------
 
 </script>
 </head>

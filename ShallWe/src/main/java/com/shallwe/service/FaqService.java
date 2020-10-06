@@ -14,6 +14,11 @@ public class FaqService {
 	@Autowired
 	FaqDAO dao;
 	
+	/**
+	 * faq 조회
+	 * @author psw09
+	 * @return 조회된 faq
+	 */
 	public List<Faq> findAll() throws FindException{
 		List<Faq> faq= dao.selectAll();
 		return faq;
