@@ -3289,12 +3289,12 @@ transition
 }
 
 .hero-overly::before {
-	position: fixed;
+	position: absolute;
 	content: "";
 	background-color: rgba(0, 1, 2, 0.5);
 	width: 85%;
 	height: 60%;
-	left: 114px;
+	left: 113px;
 	top: 0;
 	bottom: 0;
 	right: 0;
