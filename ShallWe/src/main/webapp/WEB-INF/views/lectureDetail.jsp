@@ -169,52 +169,52 @@ $(document).ready(function() {
 					</div>
 				</div>
 				<div class="d-flex">
-					<a href="#introduce"><h5 style="margin: 10px;">강의 소개</h5></a> <a
-						href="#curriculum"><h5 style="margin: 10px;">교육 과정</h5></a> <a
-						href="#prepared"><h5 style="margin: 10px;">준비물</h5></a> <a
-						href="#caution"><h5 style="margin: 10px;">유의사항</h5></a> <a
-						href="#tutorReview"><h5 style="margin: 10px;">첨부파일</h5></a> <a
-						href="#filename"><h5 style="margin: 10px;">강사후기</h5></a>
+					<a href="#introduce"><h4 style="margin: 10px;">강의 소개</h4></a> <a
+						href="#curriculum"><h4 style="margin: 10px;">교육 과정</h4></a> <a
+						href="#prepared"><h4 style="margin: 10px;">준비물</h4></a> <a
+						href="#caution"><h4 style="margin: 10px;">유의사항</h4></a> <a
+						href="#tutorReview"><h4 style="margin: 10px;">첨부파일</h4></a> <a
+						href="#filename"><h4 style="margin: 10px;">강사후기</h4></a>
 				</div>
 				<div class="section-top-border">
-					<h4 class="mb-30" id="introduce">강의 소개</h4>
+					<h3 class="mb-30" id="introduce">강의 소개</h3>
 					<div class="row">
 						<div class="col-md-8">
 							<p>${lectDetail.lecture_introduce}</p>
-							<h4 class="mb-30 mt-30" id="curriculum">교육 과정</h4>
+							<h3 class="mb-30 mt-30" id="curriculum">교육 과정</h3>
 							<ul class="unordered-list">${lectDetail.lecture_curriculum}
 							</ul>
-							<h4 class="mb-30 mt-30" id="prepared">준비물</h4>
+							<h3 class="mb-30 mt-30" id="prepared">준비물</h3>
 							<p>${lectDetail.lecture_prepared}</p>
-							<h4 class="mb-30 mt-30" id="caution">유의사항</h4>
+							<h3 class="mb-30 mt-30" id="caution">유의사항</h3>
 							<p>${lectDetail.lecture_caution}</p>
-							<h4 class="mb-30 mt-30" id="filename">첨부파일</h4>
+							<h3 class="mb-30 mt-30" id="filename">첨부파일</h3>
 							<p>${lectDetail.lecture_fileName}</p>
-							<h4 class="mb-30 mt-30" id="tutorReview">강사후기</h4>
+							<h3 class="mb-30 mt-30" id="tutorReview">강사후기</h3>
 							<!-- 후기영역 -->
 							<div class="mb-30 mt-30" id="reviewArea"></div>
 						</div>
 						<div class="col-md-4"
-							style="border-radius: 8px; border: 1px solid #eee; padding: 20px">
+							style="border-radius: 8px; border: 1px solid #eee; padding: 10px">
 							<img src="/shallwe/tutorImages/${lecture.tutor.tutor_img}" alt=""
 								class="img-fluid">
 							<div class="d-flex mt-10">
-								<h6 class="mr-10">강사:</h6>
-								<h6>
+								<h4 class="mr-10">강사:</h4>
+								<h4>
 									<a href="#">${lecture.tutor.tutor_nickname}</a>
-								</h6>
+								</h4>
 							</div>
 							<div class="d-flex mt-10">
-								<h6 class="mr-10">강사평점:</h6>
-								<h6>
+								<h4 class="mr-10">강사평점:</h4>
+								<h4>
 									<a href="#">${lecture.tutor.tutor_score}</a>
-								</h6>
+								</h4>
 							</div>
-							<h4 class="mt-30">
+							<h3 class="mt-30">
 								<fmt:formatNumber value="${lecture.lecture_price}"
 									pattern="#,###" />
 								원
-							</h4>
+							</h3>
 							<c:if test="${endDate-nowDate>=0}">
 								<c:if test="${empty m.lecture.lecture_id}">
 									<a href="#" id="applyBtn"
@@ -232,8 +232,8 @@ $(document).ready(function() {
 									class="genric-btn primary-border mt-10">찜하기</a>
 							</c:if>
 							<div class="d-flex mt-10">
-								<h6 class="mr-10">수강일시:</h6>
-								<h6 class="date mr-10">${startDt}-${endDt}</h6>
+								<h3 class="mr-10">수강일시:</h3>
+								<h3 class="date mr-10">${startDt}-${endDt}</h3>
 							</div>
 						</div>
 					</div>

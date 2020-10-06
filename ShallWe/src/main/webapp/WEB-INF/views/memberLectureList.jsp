@@ -99,6 +99,9 @@ $(function(){
 	}); // end of 강의결제취소 버튼
 }); // end of jsp load 이벤트
 </script>
+<style>
+
+</style>
 </head>
 <body>
 	<!-- topbar Start -->
