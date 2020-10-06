@@ -7,6 +7,7 @@
 	<resultMap type="Tutor" id="tutor" autoMapping="true">
 		<id property="member.member_id" column="tutor_id"/>
 		<id property="lectureCategory.lecture_category_id" column="tutor_category_id"/>
+		<id property="tutorReject.reject_reason" column="reject_reason"/>
 		
 		<result property="tutor_nickname" column="tutor_nickname"/>
 		<result property="tutor_img" column="tutor_img"/>
@@ -55,7 +56,7 @@
 	</resultMap>
 	
 	<insert id="insertTutor" parameterType="Tutor">
-	INSERT INTO TUTOR
+	INSERT INTO TUTOR 
 				(TUTOR_ID,TUTOR_CATEGORY_ID,TUTOR_IMG,TUTOR_CAREER_FILE,tutor_introduce,TUTOR_LINK,TUTOR_SCORE,TUTOR_NICKNAME) 
 				VALUES(#{member.member_id},UPPER(#{lectureCategory.lecture_category_id}),#{tutor_img},
 				#{tutor_career_file},#{tutor_introduce},#{tutor_link},#{tutor_score},#{tutor_nickname})
@@ -63,10 +64,11 @@
 <!-- 	강사정보조회 :경찬 -->
 	<select id="selectTutorInfo" resultMap="tutor">
 	
-		SELECT m.member_name, tu.*, m.member_email, m.member_phone ,lc.category_name, m.tutor_YN
+		SELECT m.member_name, tu.*, m.member_email, m.member_phone ,lc.category_name, m.tutor_YN,RE.REJECT_REASON
 		FROM tutor tu 
 		JOIN member m ON(tu.tutor_id = m.member_id)
 		JOIN lecture_category lc ON (tu.tutor_category_id = lc.category_id)
+		JOIN TUTOR_REJECT RE ON(TU.TUTOR_ID = RE.TUTOR_ID)
 		WHERE tu.tutor_id = #{tutor_id}
 
 	</select>

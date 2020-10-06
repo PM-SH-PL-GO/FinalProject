@@ -335,7 +335,7 @@ input.submit {
 			 let $saveId = $('input#userName').val();
 			 localStorage.test = $saveId;
 			 localStorage.setItem('userName',$saveId);
-			 console.log($saveId);
+			 
 			 
 			});
 //로그인-------
@@ -363,7 +363,7 @@ input.submit {
 				$("span#one_Password").slideUp(2000); //0.1초 동안 슬라이드로 올라가면서 감추기
 				$("span#one_Password").css("color","red"); 
 				return false;
-				
+				//유효성 검사 (지우면 안됌)
 			} /* else if(pwdR.test(pwdVal) == false){
 				// 비밀번호 맞지 않으면 비밀번호가 일치하지 않습니다 에러메세지 
 				$("input#userPassword").select();
@@ -402,11 +402,7 @@ input.submit {
 			 
 			 let $idValCheck = $("input#idInsert").val();
 		     let $mailCheck = $("input#emailInsert").val();
-		    
-		  	// 로컬 스토리지에 데이터 저장하기
-				
-			 /* localStorage.setItem('userName', $idValCheck); */
-			 
+		    		 
 			 
 			 if($("input#idInsert").val()==""){
 				
@@ -414,6 +410,7 @@ input.submit {
 				 $("span#one_id").slideUp(2000);
 				 $("span#one_id").css("color","red");
 				 
+				 // 유효성 떄문에 놔둔것이니 지우지 말아주세요
 			 }/*  else if(idR.test($idValCheck) == false){
 				 
 				 $("input#idInsert").select();
@@ -439,7 +436,7 @@ input.submit {
 					   ,data:{member_name:$idValCheck,member_email:$mailCheck}
 					   ,success:function(data){
 							let responseObj = JSON.parse(data)
-							console.log(data);
+							
 							if(responseObj.status == 'success'){
 								 
 										alert("이메일이 전송되었습니다.");

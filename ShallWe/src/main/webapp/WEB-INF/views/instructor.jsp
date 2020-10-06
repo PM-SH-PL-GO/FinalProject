@@ -17,12 +17,12 @@
    <script src=https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js></script>
   
 <style>
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,100,900);
 *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-weight: bolder;
 }
 .wrapper{
   height: 100%;
@@ -66,100 +66,11 @@
   opacity: 0;
   transform: rotate(180deg);
 }
-#sidebar{
-  position: fixed;
-  background: #404040;
-  height: 100%;
-  width: 270px;
-  overflow: hidden;
-  left: -270px;
-  transition: all 0.3s ease;
-}
-#btn:checked ~ #sidebar{
-  left: 0;
-}
-#sidebar .title{
-  line-height: 65px;
-  text-align: center;
-  background: #333;
-  font-size: 25px;
-  font-weight: 600;
-  color: #f2f2f2;
-  border-bottom: 1px solid #222;
-}
-#sidebar .list-items{
-  position: relative;
-  background: #404040;
-  width: 100%;
-  height: 100%;
-  list-style: none;
-}
-#sidebar .list-items li{
-  padding-left: 40px;
-  line-height: 50px;
-  border-top: 1px solid rgba(255,255,255,0.1);
-  border-bottom: 1px solid #333;
-  transition: all 0.3s ease;
-}
-#sidebar .list-items li:hover{
-  border-top: 1px solid transparent;
-  border-bottom: 1px solid transparent;
-  box-shadow: 0 0px 10px 3px #222;
-}
-#sidebar .list-items li:first-child{
-  border-top: none;
-}
-#sidebar .list-items li a{
-  color: #f2f2f2;
-  text-decoration: none;
-  font-size: 18px;
-  font-weight: 500;
-  height: 100%;
-  width: 100%;
-  display: block;
-}
-#sidebar .list-items li a i{
-  margin-right: 20px;
-}
-#sidebar .list-items .icons{
-  width: 100%;
-  height: 40px;
-  text-align: center;
-  position: absolute;
-  bottom: 100px;
-  line-height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-#sidebar .list-items .icons a{
-  height: 100%;
-  width: 40px;
-  display: block;
-  margin: 0 5px;
-  font-size: 18px;
-  color: #f2f2f2;
-  background: #4a4a4a;
-  border-radius: 5px;
-  border: 1px solid #383838;
-  transition: all 0.3s ease;
-}
-#sidebar .list-items .icons a:hover{
-  background: #404040;
-}
+
 .list-items .icons a:first-child{
   margin-left: 0px;
 }
-/* .content{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  color: #202020;
-  z-index: -1;
-  width: 100%;
-  text-align: center;
-} */
+
 .content .header{
   font-size: 45px;
   font-weight: 700;
@@ -193,13 +104,6 @@ body {
   padding: 10px 20px;
   background: #f4f7f8;
   border-radius: 8px;
-}
-
-h1 {
-  margin: 0 0 30px 0;
-  text-align: center;
-  margin-left: 230px;
- 
 }
 
 input[type="text"],
@@ -325,7 +229,7 @@ label.light {
 
   .cer {
     max-width: 480px;
-    margin-right: 45%;
+    margin-right: 50%;
     margin-top: 50px;
   
    
@@ -333,7 +237,7 @@ label.light {
     .form2 {
     max-width: 480px;
     margin-top: -680px;
-    margin-left: 60%;
+    margin-left: 55%;
   }
   .content{
   
@@ -379,10 +283,12 @@ label.light {
    }
 #tutor_info{
 
-	position: fixed;
+	float:left;
 	right: 300px;
 	bottom:175px;
-
+	height: 600px;
+	width: 80%;
+	margin-top: -1050px;
 
 }
 
@@ -435,6 +341,10 @@ $(function(){
                 let $tutor = confirm('강사등록을 원하십니까?');
                 //닉네임 벨류값
                 let $nickName = $('input#nickName').val();
+                // 이미지 벨류값
+                let $fileCheck = $("input[name=tutor_img1]").val();
+                //커리어 파일 벨류값
+              	let $careerCheck = $("input[name=tutor_career_file1]").val();
             		// 체크된 값을 넘김  
             	let totalChecked = 0;
 				let tutor_category_id = [];
@@ -456,7 +366,16 @@ $(function(){
 					// url 유효성 검사 end
 
 					//체크 갯수제한 두기
-				}  else if($nickName == ''){
+					} else if($fileCheck == ""){
+						alert(" 이미지를 올려주세요");
+						return false;
+
+					
+					}else if($careerCheck == ""){
+						alert("커리어 파일(PDF)을확인해주세요");
+						return false;
+						
+					} else if($nickName == ''){
 						alert("닉네임을 입력해주세요");
 						return false;
 							
@@ -473,7 +392,7 @@ $(function(){
 				   ,success:function(){
 
 					alert("강사등록 신청이 완료되었습니다");
-					location.href = "http://localhost/shallwe/"
+					location.href = "/shallwe/"
 								 
 				
 					} // end of success
@@ -486,10 +405,8 @@ $(function(){
 				} // end of confirm
 				return false;
 	});// tutor_add end of click
+	
 	 //---------버튼 end-------------------\\ 
-	 
-	 
-	 
     //닉네임중복 확인  
 			$('input.checkNickName').click(function(){
 			let $tutor_nickName = $('input#nickName').val();
@@ -502,11 +419,11 @@ $(function(){
 					   ,success: function(data){
 						   
 					   		if(data != 0){
-					   			console.log(data);
+					   			
 						   		alert("중복된아이디입니다");
 						   		
 						   		} else if(data == 0){
-						   			console.log(data);
+						   			
 									$("input.checkNickName").attr("value","사용가능합니다");
 									alert("사용가능한 아이디입니다");
 							   		
@@ -524,47 +441,21 @@ $(function(){
   </head>
   <jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include> 
   <body>
-    <div class="wrapper">
-      <input type="checkbox" id="btn" hidden>
-      <label for="btn" class="menu-btn">
-        <i class="fas fa-bars"></i>
-        <i class="fas fa-times"></i>
-      </label>
-      <nav id="sidebar">
-        <div class="title">
-				Side Menu</div>
-				<ul class="list-items">
-				<li><a href="#"><i class="fas fa-home"></i>Home</a></li>
-				<li><a href="#"><i class="fas fa-sliders-h"></i>Clients</a></li>
-				<li><a href="#"><i class="fas fa-address-book"></i>Services</a></li>
-				<li><a href="#"><i class="fas fa-cog"></i>Settings</a></li>
-				<li><a href="#"><i class="fas fa-stream"></i>Features</a></li>
-				<li><a href="#"><i class="fas fa-user"></i>About us</a></li>
-				<li><a href="#"><i class="fas fa-globe-asia"></i>Languages</a></li>
-				<li><a href="#"><i class="fas fa-envelope"></i>Contact us</a></li>
-				<div class="icons">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-github"></i></a>
-            <a href="#"><i class="fab fa-youtube"></i></a>
-          </div>
-</ul>
-</nav>
-    </div>
-  
 <div class="content">
- <h1>강사 등록</h1>
+
+ <br />
  <form method="post" enctype="multipart/form-data" id="fileUpload" accept-charset="">
  <div class="cer" >
     <div style="margin:3em;"> 
 		<br>
-		<div class="filebox">
+			 <img  id="select_img" src="https://www.flaticon.com/kr/premium-icon/icons/svg/3201/3201254.svg" 
+			 alt = "사진을 올려주세요!" style="width:100%;max-width:100%; position: center;"/>
+			 <br />
+			 <div class="filebox">
 		<label for="ex_file">자기자신을표현해주세요</label>
          <input hidden="hidden class="uploadImage" type="file" name="tutor_img1" accept="imags/*" id="ex_file"/>
          <br>
          </div>
-			 <img  id="select_img" src="#" alt = "your image" style="width:100%;max-width:100%; position: center;"/>
-			 <br />
 		 </div> 
         <fieldset> 	 
           <legend><span class="number">1</span>강사 기본정보 </legend>       
@@ -584,8 +475,6 @@ $(function(){
 		 </div>
         </fieldset>
 	</div>
-	
-
 		<div class="form2" id = "tutor_info">
         <fieldset>
           <legend><span class="number">2</span> 강사 프로필</legend>

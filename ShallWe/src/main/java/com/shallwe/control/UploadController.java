@@ -258,7 +258,7 @@ public class UploadController {
 			service.tutorImage(tutor);
 			out.println("<script>alert('사진이수정되었습니다'); location.href='/shallwe/tutor/showTutor';</script>");
 			out.flush();
-			
+			out.close();
 			
 		} catch (ModifyException e) {
 			
@@ -294,7 +294,7 @@ public class UploadController {
 			service.tutorCareer(tutor);
 			out.print("<script>alert('파일이변경되었습니다'); location.href='/shallwe/tutor/showTutor';</script>");
 			out.flush();
-			
+			out.close();
 		} catch (ModifyException e) {
 			
 			e.printStackTrace();
