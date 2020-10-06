@@ -47,29 +47,6 @@ public class TutorDAO {
 		return tutorList;
 	}
 	
-	/**
-	 * 특정 예비 강사가 신청한 전문분야 목록 반환
-	 * @param tutor_id
-	 * @return
-	 * @throws FindException
-	 */
-	public List<LectureCategory> selectPreTutorById(String tutor_id) throws FindException{
-		SqlSession session = null;
-		List<LectureCategory> list = null;
-		
-		try {
-			session = sqlSessionFactory.openSession();
-			list = session.selectList("TutorMapper.selectPreTutorById", tutor_id);
-		}catch(DataAccessException e) {
-			e.printStackTrace();
-			throw new FindException("문제가 발생했습니다");
-		}finally {
-			session.close();
-		}
-		
-		return list;
-	}
-	
 	//강사등록 : 경찬
 	public void insertTutor(Tutor tutor,String[]category)throws AddException{
 		SqlSession session = null;
