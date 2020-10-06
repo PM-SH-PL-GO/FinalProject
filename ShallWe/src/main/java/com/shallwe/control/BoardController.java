@@ -111,7 +111,6 @@ public class BoardController {
 			session.setAttribute("pb", pb);
 			BoardPageBean<StudyBoard> od=(BoardPageBean<StudyBoard>)session.getAttribute("pb");
 			for(StudyBoard s:od.getList()) {
-				System.out.println("몇개나오나요"+s.getStudyBoard_id());
 			}
 			
 			return (ResponseEntity<BoardPageBean<StudyBoard>>)ResponseEntity.status(HttpStatus.OK).body(pb);

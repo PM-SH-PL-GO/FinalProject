@@ -19,7 +19,11 @@ public class FaqDAO {
 	@Autowired
 	SqlSessionFactory sqlSessionFactory;
 	
-	// FAQ 조회 (전부) : 성운
+	/**
+	 * faq 조회
+	 * @author psw09
+	 * @return 조회된 faq
+	 */
 	public List<Faq> selectAll() throws FindException {
 		SqlSession session = null;
 		try {

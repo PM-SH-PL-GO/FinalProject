@@ -69,11 +69,8 @@ $(function() {
 			,contentType: false
 			,data: formData
 			,success:function(board_id){
-				var boardWrite = confirm("글쓰기를 완료했습니다. 작성글을 확인하시겠습니까?");
-				if(boardWrite){
-					location.href="${contextPath}/board/detail/"+board_id;
-				}else{
-				}
+				alert("작성이 완료했습니다. 작성글로 이동합니다.");
+				location.href="${contextPath}/board/detail/"+board_id;
 			}
 		,error:function(){
 			alert("글작성에 실패했습니다.");
@@ -98,11 +95,8 @@ $(function() {
 			,contentType: false
 			,data: formData
 			,success:function(board_id){
-				var boardWrite = confirm("수정이 완료했습니다. 작성글을 확인하시겠습니까?");
-				if(boardWrite){
-					location.href="${contextPath}/board/detail/"+board_id;
-				}else{
-				}
+				alert("수정이 완료했습니다. 작성글로 이동합니다.");
+				location.href="${contextPath}/board/detail/"+board_id;
 			}
 			,error:function(){
 				alert("글작성에 실패했습니다.");

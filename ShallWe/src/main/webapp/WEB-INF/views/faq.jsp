@@ -33,9 +33,9 @@ main {
 			<div class="container">
 				<div class="accordion">
 					<div class="accordion__item">
-						<div class="accordion__item__header">${fl.faq_question}</div>
+						<div class="accordion__item__header">Q: ${fl.faq_question}</div>
 						<div class="accordion__item__content">
-							<p>${fl.faq_answer}
+							<p>A: ${fl.faq_answer}
 							</p>
 						</div>
 					</div>
