@@ -110,7 +110,7 @@ public class LectureController {
 
 	// 강사 강의 등록 페이지 : 동일
 	@GetMapping(value = "/insert")
-	public ModelAndView insertView(HttpSession session) throws FindException {
+	public ModelAndView insertView(HttpSession session) {
 		ModelAndView mnv = new ModelAndView();
 		List<Tutor> tutorlist = new ArrayList<>();
 		String tutor_id = (String) session.getAttribute("loginInfo");
@@ -126,7 +126,7 @@ public class LectureController {
 
 	// 강사 강의 등록 : 동일
 	@PostMapping(value = "/insert")
-	public ModelAndView insertLecture(LectureDetail lectDe, MultipartFile lecture_img, MultipartFile lecture_filename) throws AddException {
+	public ModelAndView insertLecture(LectureDetail lectDe, MultipartFile lecture_img, MultipartFile lecture_filename) {
 		ModelAndView mnv = new ModelAndView();
 		String lect_img = saveLectFile(lecture_img);
 		String lect_fil = saveFile(lecture_filename);
@@ -145,7 +145,7 @@ public class LectureController {
 	
 	// 강사 강의 취소 요청 : 동일
 		@GetMapping(value = "/tutorcancelLecture")
-		public ModelAndView tutorcancelview(HttpSession session, @RequestParam(value = "lecture_id", required = false) Integer lecture_id) throws FindException {
+		public ModelAndView tutorcancelview(HttpSession session, @RequestParam(value = "lecture_id", required = false) Integer lecture_id) {
 			ModelAndView mnv = new ModelAndView();
 			String id = (String) session.getAttribute("loginInfo");
 			Member mem = new Member();
@@ -169,7 +169,7 @@ public class LectureController {
 	
 	// 강사 강의 취소 요청 : 동일
 		@PostMapping(value = "/tutorcancelLecture")
-		public ModelAndView tutorcancelLecture(LectureDetail lectDe) throws ModifyException {
+		public ModelAndView tutorcancelLecture(LectureDetail lectDe) {
 			ModelAndView mnv = new ModelAndView();
 			try {
 				service.tutorcancelLecture(lectDe.getLecture(), lectDe);
@@ -258,20 +258,47 @@ public class LectureController {
 		try {
 			lectDetail = service.lectureDetailView(lect);
 			mnv.addObject("lectDetail", lectDetail);
-			mlthlist = service.memberLectureList(mlth);
-			mnv.addObject("mlthlist", mlthlist);
-			wishlist = service.findWishListById(id);
-			mnv.addObject("wishlist", wishlist);
-			lectlist = service.tutorLectureList(lecttuto);
-			mnv.addObject("lectlist", lectlist);
-			tutorlist = tutoser.showTutorInfo(id);
-			mnv.addObject("tutorlist", tutorlist);
 			mnv.setViewName("/lectureDetail");
 		} catch (FindException e) {
 			e.printStackTrace();
 			mnv.setViewName("/lectureDetail");
 		}
-
+		try {
+			mlthlist = service.memberLectureList(mlth);
+			mnv.addObject("mlthlist", mlthlist);
+			mnv.setViewName("/lectureDetail");
+		} catch (FindException e1) {
+			e1.printStackTrace();
+			mnv.addObject("mlthlist", new ArrayList<MemberLectureHistory>());
+			mnv.setViewName("/lectureDetail");
+		}
+		try {
+			wishlist = service.findWishListById(id);
+			mnv.addObject("wishlist", wishlist);
+			mnv.setViewName("/lectureDetail");
+		} catch (FindException e1) {
+			e1.printStackTrace();
+			mnv.addObject("wishlist", new ArrayList<Lecture>());
+			mnv.setViewName("/lectureDetail");
+		}
+		try {
+			lectlist = service.tutorLectureList(lecttuto);
+			mnv.addObject("lectlist", lectlist);
+			mnv.setViewName("/lectureDetail");
+		} catch (FindException e1) {
+			e1.printStackTrace();
+			mnv.addObject("lectlist", new ArrayList<Lecture>());
+			mnv.setViewName("/lectureDetail");
+		}
+		try {
+			tutorlist = tutoser.showTutorInfo(id);
+			mnv.addObject("tutorlist", tutorlist);
+			mnv.setViewName("/lectureDetail");
+		} catch (FindException e1) {
+			e1.printStackTrace();
+			mnv.addObject("tutorlist", new ArrayList<Tutor>());
+			mnv.setViewName("/lectureDetail");
+		}
 		return mnv;
 	}
 	
