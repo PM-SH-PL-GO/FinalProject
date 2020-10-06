@@ -67,6 +67,11 @@ $(function(){
 });
 </script>
 <body>
+	<!-- topbar Start -->
+	<div class="topMenu">
+		<jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
+	</div>
+	<!-- topbar End -->
 	<main>
 		<!--? 강의목록 Start -->
 		<div
@@ -188,10 +193,6 @@ $(function(){
 												pattern="#,###" />
 											원
 										</h3>
-										<div class="heart">
-											<img src="/shallwe/assets/img/gallery/performance.png"
-												width="30px" alt="후기보기" title="후기보기">
-										</div>
 									</div>
 								</div>
 							</div>
