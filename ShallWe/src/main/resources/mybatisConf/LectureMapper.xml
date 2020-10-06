@@ -224,5 +224,10 @@
 		SET lecture_state = #{status}
 		WHERE lecture_id = #{lecture_id}
 	</update>
-
+	
+	<!-- 고수정 : memberID by 강의 수강중인 목록 조회하기 -->
+	<select id="selectLectureListByMemberId" parameterType="String" resultMap="lectResultMap">
+		SELECT lec.lecture_title,  lec.lecture_category_id,  lec.lecture_id,  lec.lecture_start_dt,  lec.lecture_end_dt FROM lecture lec JOIN member_lecture_history mlh ON (lec.lecture_id = mlh.lecture_id) 
+		WHERE member_id = 'member6' AND lecture_state ='승인' AND lecture_end_dt > SYSDATE
+	</select>
 </mapper>

@@ -1,12 +1,12 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="contextPath" value="${pageContext.request.contextPath }" />
+
 <!doctype html>
 <html class="no-js" lang="zxx">
 <head>
 <meta charset="utf-8">
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<link rel="shortcut icon" type="image/x-icon"
-	href="/shallwe/assets/img/favicon.ico">
+<link rel="shortcut icon" type="image/x-icon" href="${contextPath}/assets/img/favicon.ico">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   
@@ -67,13 +67,13 @@ $(function(){
 	$('#searchBtn').click(function(){
 		var $searchText = $('#searchText').val()
 		var $searchKey = $('#select').val()
-        var url = '/shallwe/search?searchKey='+$searchKey+'&searchText='+$searchText ;
+        var url = '${contextPath}/lectures/search?searchKey='+$searchKey+'&searchText='+$searchText ;
         location.href = url;
 	});
 	$('#category a').click(function(){
 		var $searchText = $(this).attr("id");
 		var $searchKey = 3
-        var url = '/shallwe/search?searchKey='+$searchKey+'&searchText='+$searchText ;
+        var url = '${contextPath}/lectures/search?searchKey='+$searchKey+'&searchText='+$searchText ;
         location.href = url;
 	});
 	

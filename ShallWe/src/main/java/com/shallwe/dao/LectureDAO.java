@@ -240,4 +240,28 @@ public class LectureDAO {
 		}
 	}
 
+	
+	
+	/**
+	 * memberID by 강의 수강중인 목록 조회하기
+	 * 
+	 * @author 고수정
+	 * @return 강의 전체 목록
+	 * @throws FindException
+	 */
+	public List<Lecture> selectLectureListByMemberId(String member_id) throws FindException {
+		SqlSession session = null;
+		List<Lecture> lectureList = new ArrayList<>();
+
+		try {
+			session = sqlSessionFactory.openSession();
+			lectureList = session.selectList("LectureMapper.selectLectureListByMemberId", member_id);
+		}catch(DataAccessException e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return lectureList;
+	}
 } // end of LectureDAO class
