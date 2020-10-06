@@ -275,29 +275,6 @@ public class LectureController {
 		return mnv;
 	}
 	
-	 
-	// myInfo 강의 조회 : 수정
-	@RequestMapping(value = "/myinfoLectureList", method = RequestMethod.GET)
-	public ModelAndView myinfoLectureList(HttpSession session) {
-		String member_id = (String) session.getAttribute("loginInfo");
-		
-		List<Lecture> lectureList = new ArrayList<>();
-		try {
-			lectureList = service.selectLectureListByMemberId(member_id);
-		} catch (FindException e) {
-			e.printStackTrace();
-		}
-		
-		log.info("message :::: " + lectureList.size());
-		log.info("message :::: " + lectureList.get(0).getLecture_title());
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("member_id", member_id);
-		modelAndView.addObject("lectureList", lectureList);
-		modelAndView.setViewName("/myinfo");
-
-		return modelAndView;
-	}
-	
 	@RequestMapping(value = "/searchResult", method = RequestMethod.GET)
 	public void searchResult() {
 		System.out.println("searchResult.jsp  호출");
