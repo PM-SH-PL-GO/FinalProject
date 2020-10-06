@@ -59,7 +59,7 @@ public class MemberDAO {
 		}finally {
 			session.close();
 		}
-		return session.selectOne("MemberMapper.checkId", usertyped);
+		return session.selectOne("MemberMapper.checkDuplId", usertyped);
 	}
 	
 	// 내 정보 보기(수강생) : 상하

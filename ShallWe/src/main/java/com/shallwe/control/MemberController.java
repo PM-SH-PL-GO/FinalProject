@@ -56,7 +56,7 @@ public class MemberController {
 		return "success";
 	}
 
-//	//아이디 중복체크: 상하
+	//아이디 중복체크: 상하
 //	public int memberChkId(MemberInfoBean mib) {
 //		int result = 0;
 //		String col = null;

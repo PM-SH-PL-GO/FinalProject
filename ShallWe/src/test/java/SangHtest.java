@@ -178,7 +178,7 @@ public class SangHtest {
 		
 		
 		try {
-			wishDAO.addFavLec(map);
+			wishDAO.addWishByLecId(map);
 		}catch(AddException e) {
 			e.printStackTrace();
 		}
