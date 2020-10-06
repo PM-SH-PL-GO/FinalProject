@@ -281,7 +281,7 @@
 	   if(confirm("강의를 결제하시겠습니까?")){
 	   // 강의신청, 강의결제페이지 호출
 	      $.ajax({
-	         url: "${contextPath}/insertMemberLectureHistory"
+	         url: "${contextPath}/member/insertMemberLectureHistory"
 	         , method: "POST"
 	         , data : {"lecture_id" : lecture_id}
 	         , success: function(responseData) {
