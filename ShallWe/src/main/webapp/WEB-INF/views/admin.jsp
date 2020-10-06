@@ -43,7 +43,7 @@
                     success: function(members){
                     	let $memberList = '<div class="scroll-section"><table class="table"><thead>';
                     	$memberList += "<tr><th>순서</th><th>아이디</th><th>이름</th><th>이메일</th><th>연락처</th>";
-                    	$memberList += '<th>관심분야1</th><th>관심분야2</th><th>관심분야3</th><th>성별</th><th>강사여부</th><th>탈퇴조치</th></tr></thead>';
+                    	$memberList += '<th>관심분야1</th><th>관심분야2</th><th>관심분야3</th><th>성별</th><th>강사여부</th><th>정지조치</th></tr></thead>';
                     	$memberList += '<tbody>'
                     	members.forEach(function(member, index){
                     		let idx = index + 1;
@@ -63,7 +63,7 @@
 	                    	
 	                    	$memberList += '<td>'+ member.member_sex +'</td>';
                     		$memberList += '<td>' + member.tutor_YN + '</td>';
-                    		$memberList += '<td><button class="member-ban" value="' + member.member_id + '">탈퇴</button></td></tr>';
+                    		$memberList += '<td><button class="ban-modal" value="' + member.member_id + '">정지</button></td></tr>';
                     	});
                     	
                     	$memberList += '</tbody></table></div>';
@@ -76,11 +76,11 @@
             });
             
             // 탈퇴시키기
-            $cont.on("click", ".member-ban", function(){
+            $cont.on("click", ".ban-modal", function(){
             	let $memberId = $(this).attr("value");
             	$.ajax({
             		url: "${contextPath}/admin/member/" + $memberId,
-            		method: "DELETE",
+            		method: "PATCH",
             		succuss: function(){
             			
             		}
@@ -754,7 +754,9 @@
             
             // 종료된 강의 후기보기
             $cont.on("click", ".lecture-review", function(){
-            	alert("아직 준비중입니다");
+            	let $lectureId = $(this).attr("value");
+            	let win = window.open("${contextPath}/lectures/detail?lecture_id=" + $lectureId, "_blank");
+            	win.window.scrollTo(0, 800);
             	return false;
             });
             

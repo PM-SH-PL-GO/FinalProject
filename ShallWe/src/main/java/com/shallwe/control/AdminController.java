@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
@@ -65,7 +64,7 @@ public class AdminController {
 		
 	}
 
-	@DeleteMapping(value = "/member/{memberId}")
+	@PatchMapping(value = "/member/{memberId}")
 	public ResponseEntity<String> deleteMember(@PathVariable(name = "memberId") String member_id){
 		
 		return ResponseEntity.status(HttpStatus.OK).body("");
