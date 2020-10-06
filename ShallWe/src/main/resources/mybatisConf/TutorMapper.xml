@@ -54,14 +54,6 @@
 		<result property="lecture_category_name" column="category_name"/>
 	</resultMap>
 	
-<!-- jun6 : 특정 예비강사 category_id 가져오기 -->
-	<select id="selectPreTutorById" parameterType="String" resultMap="lectureCategory">
-		SELECT lc.category_name, tu.tutor_category_id
-		FROM tutor tu
-		    JOIN lecture_category lc ON(tu.tutor_category_id = lc.category_id)
-		WHERE tu.tutor_id = #{tutor_id}
-	</select>	
-	
 	<insert id="insertTutor" parameterType="Tutor">
 	INSERT INTO TUTOR
 				(TUTOR_ID,TUTOR_CATEGORY_ID,TUTOR_IMG,TUTOR_CAREER_FILE,tutor_introduce,TUTOR_LINK,TUTOR_SCORE,TUTOR_NICKNAME) 

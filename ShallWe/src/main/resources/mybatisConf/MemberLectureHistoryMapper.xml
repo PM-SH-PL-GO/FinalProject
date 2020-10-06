@@ -55,7 +55,7 @@
 		parameterType="String" resultMap="MLHResultMap">
 		SELECT mem.member_id,
 		mem.member_name, his.payment_dt, his.lecture_category_id,
-		his.cancel_dt
+		his.cancel_dt, lec.lecture_min, lec.lecture_max, lec.lecture_current
 		FROM member mem
 		JOIN member_lecture_history his ON(mem.member_id = his.member_id)
 		JOIN lecture lec ON(his.lecture_id = lec.lecture_id)

@@ -26,11 +26,9 @@ import com.shallwe.model.AdminTutorBean;
 import com.shallwe.service.AdminService;
 import com.shallwe.vo.Faq;
 import com.shallwe.vo.Lecture;
-import com.shallwe.vo.LectureCategory;
 import com.shallwe.vo.LectureDetail;
 import com.shallwe.vo.Member;
 import com.shallwe.vo.MemberLectureHistory;
-import com.shallwe.vo.TutorReject;
 
 import lombok.extern.log4j.Log4j;
 
@@ -66,7 +64,7 @@ public class AdminController {
 		
 	}
 
-	@DeleteMapping(value = "/member/{memberId}")
+	@PatchMapping(value = "/member/{memberId}")
 	public ResponseEntity<String> deleteMember(@PathVariable(name = "memberId") String member_id){
 		
 		return ResponseEntity.status(HttpStatus.OK).body("");
@@ -120,11 +118,14 @@ public class AdminController {
 	 * @return
 	 */
 	@PatchMapping(value = "/tutor/status/{tutorId}")
-	public ResponseEntity<String> tutorStatusChange(@PathVariable(value = "tutorId")String id){
+	public ResponseEntity<String> tutorStatusChange(@PathVariable(value = "tutorId")String id, @RequestBody Map<String,String> map){
+		
+		String category = map.get("category");
+		
 		try {
-			adminService.approvePreTutor(id, "승인");
+			adminService.approvePreTutor(id, "승인", category);
 			return  ResponseEntity.status(HttpStatus.OK).body("{\"status\" : \"정상적으로 승인 처리되었습니다\"}");
-		}catch(ModifyException e) {
+		}catch(Exception e) {
 			e.printStackTrace();
 			return (ResponseEntity<String>) ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("{\"status\" : \"설정에 실패하였습니다\"}");
 		}
@@ -137,14 +138,11 @@ public class AdminController {
 	 */
 	@PostMapping(value = "/tutor/status/{tutorId}")
 	public ResponseEntity<String> rejectTutor(@PathVariable(name = "tutorId") String tutor_id,
-												String reject_reason, String reject_category_id){
+												String reject_reason, String reject_category_id, String category){
 		try {
-			adminService.rejectPreTutor(tutor_id, reject_reason, reject_category_id);
+			adminService.rejectPreTutor(tutor_id, reject_reason, reject_category_id, category);
 			return ResponseEntity.status(HttpStatus.OK).body("{ \"success\" : \"정상적으로 반려 처리되었습니다\"}");
-		}catch(AddException e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{ \"errMsg\" : \"" + e.getMessage() + "\"}");
-		}catch(FindException e) {
+		}catch(Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{ \"errMsg\" : \"" + e.getMessage() + "\"}");
 		}

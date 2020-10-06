@@ -214,7 +214,7 @@ $(document).ready(function() {
 									pattern="#,###" />
 								원
 							</h4>
-							<c:if test="${endDate-nowDate>=0 && ((tutorlist[0].member.member_id || empty tutorlist) ne lecture.tutor.member.member_id)}">
+							<c:if test="${endDate-nowDate>=0}">
 								<c:if test="${llne}">
 									<a href="#" id="applyBtn"
 										class="genric-btn primary-border mt-10">신청</a>
