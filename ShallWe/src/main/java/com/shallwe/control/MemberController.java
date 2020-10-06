@@ -1,11 +1,14 @@
 package com.shallwe.control;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.net.ssl.SSLEngineResult.Status;
 import javax.security.auth.message.callback.PrivateKeyCallback.Request;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -97,15 +100,14 @@ public class MemberController {
 	}
 	//멤버로그아웃:경찬
 	@RequestMapping(value="/memberLogout",method=RequestMethod.POST)
-	public ModelAndView memberLogout(HttpSession session) {
+	public ResponseEntity<String> memberLogout(HttpSession session) {
 		
 		ModelAndView modelAndView = new ModelAndView();
 		
 		session.removeAttribute("loginInfo");
-		modelAndView.addObject("status","success");
-		modelAndView.setViewName("/success");
 		
-		return modelAndView;
+		
+		return ResponseEntity.status(HttpStatus.OK).body("로그아웃성공");
 	
 	}
 	

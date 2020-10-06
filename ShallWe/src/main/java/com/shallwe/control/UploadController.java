@@ -206,20 +206,21 @@ public class UploadController {
 		
 		System.out.println("jsp넘어온 데이터:" + tutor);
 		log.info("이미지파일:" + tutor_img1);
-		log.info("이력서파일:" + tutor_career_file1);
-		
 		
 		String tutor_id = (String)session.getAttribute("loginInfo");	
 		Member member = new Member();
 		member.setMember_id(tutor_id);
-		tutor.put("tutor_id", tutor_id);
-				
+		tutor.put("tutor_id", tutor_id);		
 		String tutor_img = saveFile(tutor_img1);
+		
 		String tutor_career_file = craeerFiles(tutor_career_file1);
 		
 		tutor1.setMember(member);
 		tutor1.setTutor_img(tutor_img);
 		tutor1.setTutor_career_file(tutor_career_file);
+		
+		tutor1.setMember(member);
+		tutor1.setTutor_img(tutor_img);
 		
 		try {
 			
