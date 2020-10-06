@@ -338,18 +338,7 @@ label.light {
   
   margin-top: 100px;
   }
-
-}
-
-#tutor_info{
-
-	position: fixed;
-	right: 300px;
-	bottom:175px;
-
-
-}
-
+  
   .filebox  { 
   
    display: inline-block;  
@@ -387,6 +376,14 @@ label.light {
    text-align: center;
    
    }
+#tutor_info{
+
+	position: fixed;
+	right: 300px;
+	bottom:175px;
+
+
+}
 
 </style>
 <script>
@@ -469,8 +466,7 @@ $(function(){
 				return false;
 
 			    }else if($tutor == true){ 
-					
-				
+						
 					$.ajax({
 					
 					url:'${contextPath}/upload/updateTutor'
@@ -582,7 +578,7 @@ $(function(){
          <input hidden="hidden" class="uploadImage" type="file" name="tutor_img1" accept="imags/*"id="ex_file"/>
          <br>
          </div>
-			 <img id="select_img" name="dell_imags" src="#" style="width:100%;max-width:100%;"/>
+			 <img id="select_img" name="dell_imags" src="#" alrt="이미지를올려주새요!" style="width:100%;max-width:100%;"/>
 			 <br />
 		 </div> 
         <fieldset> 	 
@@ -594,7 +590,10 @@ $(function(){
            <label for="email">링크:</label>
           <input type="text" id="link" name="tutor_link" placeholder="ex)https://www.instagram.com/" value="${t.tutor_link}">
          <span hidden="hidden" class="checkUrl" style="color: red; font-size: 0.8em;"><i>[주소양식이 맞지 않습니다]</i></span>
-          
+          <div class="filebox2">
+          <label for="PDF">활동이력을 PDF 로올려주세요</label>
+           <input class = "file2" type="file" name="tutor_career_file1" accept="imags/*," id ="PDF">
+           </div>
         </fieldset>
 	</div>
 </c:forEach>
