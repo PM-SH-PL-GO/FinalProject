@@ -6,32 +6,7 @@
 <c:set var="lectureList" value="${requestScope['lectureList']}"/>
 
 <!doctype html>
-<!-- <html class="no-js" lang="zxx"> -->
 <head>
-<!--     <meta charset="utf-8"> -->
-<!--     <meta http-equiv="x-ua-compatible" content="ie=edge"> -->
-<!--     <title>DirectoryListing</title> -->
-<!--     <meta name="description" content=""> -->
-<!--     <meta name="viewport" content="width=device-width, initial-scale=1"> -->
-<!--     <link rel="manifest" href="site.webmanifest"> -->
-<!--     <link rel="shortcut icon" type="image/x-icon" href="/shallwe/assets/img/favicon.ico"> -->
-<!-- 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
-	
-<!-- 	<!-- CSS here -->
-<%-- 	<link rel="stylesheet" href="${contextPath}/assets/css/bootstrap.min.css"> --%>
-<%-- 	<link rel="stylesheet" href="${contextPath}/assets/css/owl.carousel.min.css"> --%>
-<%-- 	<link rel="stylesheet" href="${contextPath}/assets/css/slicknav.css"> --%>
-<%--     <link rel="stylesheet" href="${contextPath}/assets/css/flaticon.css"> --%>
-<%--     <link rel="stylesheet" href="${contextPath}/assets/css/progressbar_barfiller.css"> --%>
-<%--     <link rel="stylesheet" href="${contextPath}/assets/css/gijgo.css"> --%>
-<%--     <link rel="stylesheet" href="${contextPath}/assets/css/animate.min.css"> --%>
-<%--     <link rel="stylesheet" href="${contextPath}/assets/css/animated-headline.css"> --%>
-<%-- 	<link rel="stylesheet" href="${contextPath}/assets/css/magnific-popup.css"> --%>
-<%-- 	<link rel="stylesheet" href="${contextPath}/assets/css/fontawesome-all.min.css"> --%>
-<%-- 	<link rel="stylesheet" href="${contextPath}/assets/css/themify-icons.css"> --%>
-<%-- 	<link rel="stylesheet" href="${contextPath}/assets/css/slick.css"> --%>
-<%-- 	<link rel="stylesheet" href="${contextPath}/assets/css/nice-select.css"> --%>
-<%-- 	<link rel="stylesheet" href="${contextPath}/assets/css/style.css"> --%>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
@@ -42,8 +17,7 @@ $(document).ready(function() {
 		url : '${contextPath}/lectures/myinfoLectureList'
 		, method : "GET"
 		, success : function (responseData) {
-			console.log(responseData);
-// 			bodyObj.append(responseData);
+		
 		}
 	}); // end of ajax
 
@@ -51,12 +25,19 @@ $(document).ready(function() {
 	var $myinfoModiBtnObj = $('#myinfoModi');
 	$myinfoModiBtnObj.on('click', function (e) {
 		let url = "${contextPath}/myinfoModi";
-		if ( confirm("내 정보를 수정하시겠습니까?") ) {
-			location.href=url;
-		}
+		alert("준비중인 기능입니다. ㅠ_ㅠ");
+// 		if ( confirm("내 정보를 수정하시겠습니까?") ) {
+// 			location.href=url;
+// 		}
 	}); // end of 내강의 수정 event
 	
-	
+	// 강의상세보기
+	var trObj = $('tr.lecture');
+	trObj.click(function e () {
+		let lecture_code = $(this).find('input[name=lecture_id]').val();
+		var url = '${contextPath}/lectures/detail?lecture_id='+lecture_code;
+		location.href = url;
+	});
 	
 }); // end of load();
 </script>
@@ -107,7 +88,7 @@ $(document).ready(function() {
 											<tr><th><label>관심분야3 :</label></th><td>${myInfo.favorite3.lecture_category_name}</td></tr>                                            
                                             </table>
                                     <div class="btn_center">
-                                    	<a id="myinfoModi" class="infobutton">내 정보 수정</a>
+                                    	<button class="btn" id="myinfoModi" style="cursor: pointer; background: #00dbd5; padding-bottom: 5px; ">내 정보 수정</button>
                                     </div>
                                     </div>
                                 </div>
@@ -116,39 +97,28 @@ $(document).ready(function() {
                                 <!-- Single -->
                                 <div class="properties properties2 mb-30">
                                     <div class="properties__card">
-                                            <h3><a href="#">Urban areas</a></h3>
-                                            <p>Let's uncover the best places to eat, drink</p>
-                                    </div>
-                                </div>
-                            </div>
-                             <div class="col-lg-6">
-                                <!-- Single -->
-                                <div class="properties properties2 mb-30">
-                                    <div class="properties__card">
-                                            <h3 style="text-align :center">최근 학습중인 강의들</h3>
-											<!-- <ul class="abblecture"> -->
-											<c:forEach items="${lectureList}" var="lecture" varStatus="status">
-												<tr class="lecture">
-													<td class="no">${status.count}</td>
-													<td class="lecture_id">${lecture.lecture_id}</td>
-													<td class="lecture_title">${lecture.lecture_title}</td>
-													<td class="lecture_start_dt"><fmt:formatDate value="${lecture.lecture_start_dt}" pattern="yyyy-MM-dd"/></td>
-													<td class="lecture_end_dt"><fmt:formatDate value="${lecture.lecture_end_dt}" pattern="yyyy-MM-dd"/></td>
-													<td class="lectureCategoryId">${review.member_lecture_history.lecture.lectureCategory.lecture_category_id}</td>
-												</tr>
-											</c:forEach>
-
-
-											<!-- </ul> -->
-                                    </div>
-                                </div>
-                            </div>
-                             <div class="col-lg-6">
-                                <!-- Single -->
-                                <div class="properties properties2 mb-30">
-                                    <div class="properties__card">
-                                            <h3><a href="#">Urban areas</a></h3>
-                                            <p>Let's uncover the best places to eat, drink</p>
+                                        <h3 style="text-align :center">최근 학습중인 강의들</h3>
+                                        	<table "text-align :center">
+                                        	<thead>
+                                       	   	<colgroup>
+										   		<col width="50%"></col>
+										   		<col width="20%"></col>
+										   		<col width="20%"></col>
+										   	</colgroup>
+                                			<tr>
+												<th class="lecture_title">강의제목</th>
+												<th class="lecture_start_dt">강의시작날짜</th>
+												<th class="lecture_end_dt">강의종료날짜</th>
+											</tr>
+										<c:forEach items="${lectureList}" var="lecture" varStatus="status">
+											<tr class="lecture" style="cursor: pointer;>
+												<input type='hidden' name="lecture_id" value="${lecture.lecture_id}">
+												<td class="lecture_title">${lecture.lecture_title}</td>
+												<td class="lecture_start_dt"><fmt:formatDate value="${lecture.lecture_start_dt}" pattern="yyyy-MM-dd"/></td>
+												<td class="lecture_end_dt"><fmt:formatDate value="${lecture.lecture_end_dt}" pattern="yyyy-MM-dd"/></td>
+											</tr>
+										</c:forEach>
+										</table>
                                     </div>
                                 </div>
                             </div>
@@ -158,7 +128,7 @@ $(document).ready(function() {
             </div>
         </div>
     </div>
-<!-- myinfo-area Area End -->
+	<!-- myinfo-area Area End -->
 
     </main>
     </body>

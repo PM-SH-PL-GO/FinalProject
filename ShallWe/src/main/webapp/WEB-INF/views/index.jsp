@@ -32,7 +32,7 @@
 }
 
 .header-area {
-	box-shadow: 0 2px 4px 0 hsla(0, 0%, 80.8%, .5);
+/* 	box-shadow: 0 2px 4px 0 hsla(0, 0%, 80.8%, .5); */
 	min-height: unset;
 	background-color: white;
 }

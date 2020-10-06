@@ -158,9 +158,21 @@ public class MemberController {
 	// myInfo 정보 조회
 	@RequestMapping(value = "/myinfo", method = RequestMethod.GET)
 	public ModelAndView myinfo(HttpSession session) {
-		String member_id = (String)session.getAttribute("loginInfo");
-		MemberInfoBean myInfo = new MemberInfoBean();
 		ModelAndView modelAndView = new ModelAndView();
+		String member_id = (String)session.getAttribute("loginInfo");
+		modelAndView.addObject("member_id", member_id);
+		
+		// 나의 강의 목록 조회
+		List<Lecture> lectureList = new ArrayList<>();
+		try {
+			lectureList = lectureService.selectLectureListByMemberId(member_id);
+			modelAndView.addObject("lectureList", lectureList);
+		} catch (FindException e) {
+			e.printStackTrace();
+		}
+		
+		// myInfo
+		MemberInfoBean myInfo = new MemberInfoBean();
 		try {
 			myInfo = service.findById(member_id);
 			modelAndView.addObject("myInfo", myInfo);
@@ -173,8 +185,6 @@ public class MemberController {
 		}
 		return modelAndView;
 	}
-	
-	
 	
 	// 강의 후기 등록 화면 요청
 	// 고수정 : 후기 등록

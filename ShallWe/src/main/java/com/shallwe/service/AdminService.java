@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.shallwe.Email.Email;
+import com.shallwe.Email.EmailSender;
 import com.shallwe.dao.FaqDAO;
 import com.shallwe.dao.LectureDAO;
 import com.shallwe.dao.LectureDetailDAO;
@@ -20,6 +22,7 @@ import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.exception.RemoveException;
 import com.shallwe.model.AdminTutorBean;
+import com.shallwe.model.MemberInfoBean;
 import com.shallwe.vo.Faq;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureCategory;
@@ -100,11 +103,32 @@ public class AdminService {
 	 * @param status
 	 * @throws ModifyException
 	 */
-	public void approvePreTutor(String id, String status) throws ModifyException{
+	public void approvePreTutor(String id, String status, String category) throws Exception{
 		Map<String, String> map = new HashMap<>();
 		map.put("id", id);
 		map.put("status", "Y");
 		memberDAO.updateTutorState(map);
+		
+		MemberInfoBean bean = memberDAO.selectById(id);
+		
+		String approveCat = "";
+		
+		for (String cat : category.split("<br>"))
+			approveCat += " • " + cat;
+		
+		String emailContent = "강사 신청 결과 안내\r\n" + 
+				"Shall We에서 새로운 도전을 하신 " + bean.getMemberName() + " 고객님을 응원합니다!\r\n\"" +  
+				"신청하신 강사 등록 건이 아래와 같이 처리되었음을 알려드립니다.\r\n" + 
+				"\r\n" + 
+				"1. 신청내용\r\n" + 
+				" • 신규 강사 등록\r\n" + 
+				"2. 분야\r\n" + 
+				approveCat + "\r\n" + 
+				"3. 신청 결과\r\n" + 
+				" • 승인";
+		String email = bean.getMemberEmail();
+		
+		sendMail(emailContent, email);
 	}
 	
 	/**
@@ -115,10 +139,10 @@ public class AdminService {
 	 * @throws AddException
 	 * @throws FindException 
 	 */
-	@Transactional(rollbackFor = {AddException.class, FindException.class})
-	public void rejectPreTutor(String tutor_id, String reject_reason, String reject_category_id) throws AddException, FindException{
-		
-		List<LectureCategory> categoryList = tutorDAO.selectPreTutorById(tutor_id);
+	@Transactional(rollbackFor = Exception.class)
+	public void rejectPreTutor(String tutor_id, String reject_reason, String reject_category_id, String category) throws Exception{
+		category = category.replaceAll(" ", "");
+		String[] catArr = category.split("<br>");
 		
 		TutorReject tutorReject = new TutorReject();
 		RejectCategory rejectCategory = new RejectCategory();
@@ -129,14 +153,54 @@ public class AdminService {
 		tutor.setMember(member);
 		tutorReject.setReject_reason(reject_reason);
 		tutorReject.setTutor(tutor);
+		
+		String cancelCat = "";
 
-		for (LectureCategory category : categoryList) {
-			tutor.setLectureCategory(category);
+		for (String cat : catArr) {
+			LectureCategory lectureCategory = new LectureCategory();
+			lectureCategory.setLecture_category_name(cat);
+			tutor.setLectureCategory(lectureCategory);
 			tutorReject.setRejectCategory(rejectCategory);
 			
 			memberDAO.insertTutorReject(tutorReject);
+			cancelCat += " • " + cat + "\r\n";
+			
+			System.out.println(cat);
 		}
+		
+		MemberInfoBean bean = memberDAO.selectById(tutor_id);
+		
+		
+		String email = bean.getMemberEmail();
+		String mailContent = "강사 신청 결과 안내\r\n" + 
+				"Shall We에서 새로운 도전을 하신 " + bean.getMemberName() + " 고객님을 응원합니다!\r\n\"" +  
+				"신청하신 강사 등록 건이 아래와 같이 처리되었음을 알려드립니다.\r\n" + 
+				"\r\n" + 
+				"1. 신청내용\r\n" + 
+				" • 신규 강사 등록\r\n" + 
+				"2. 분야\r\n" + 
+				cancelCat + 
+				"3. 신청 결과\r\n" + 
+				" • 반려\r\n" +
+				"4. 반려 사유\r\n" + 
+				" • " + reject_reason;
+		
+		sendMail(mailContent, email);
 	}
+	
+	
+	@Autowired
+	Email email;
+	@Autowired
+	EmailSender mailSender;
+	
+	public void sendMail(String mailContent, String mailReceiver) throws Exception {
+		email.setContent(mailContent);
+		email.setReceiver("selgy8694@gmail.com");
+		email.setSubject("[Shall We?] 강사 신청 결과 안내");
+		mailSender.SendEmail(email);
+	}
+	
 	
 	/**
 	 * 특정 강사의 강의 목록 가져오기
@@ -213,9 +277,6 @@ public class AdminService {
 		
 		return lectureDetailDAO.selectLectureReasonById(map);
 	}
-	
-	
-	
 	
 	/**
 	 * FAQ 목록 보여주기

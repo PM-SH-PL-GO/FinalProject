@@ -3289,18 +3289,19 @@ transition
 }
 
 .hero-overly::before {
-	position: absolute;
+	position: fixed;
 	content: "";
 	background-color: rgba(0, 1, 2, 0.5);
 	width: 85%;
 	height: 60%;
-	left: 0;
+	left: 114px;
 	top: 0;
 	bottom: 0;
 	right: 0;
 	z-index: 0;
-	background-repeat: no-repeat;
-	background-position: top;
+	overflow: auto;
+/* 	background-repeat: no-repeat; */
+/* 	background-position: top; */
 }
 
 .hero-overly2 {

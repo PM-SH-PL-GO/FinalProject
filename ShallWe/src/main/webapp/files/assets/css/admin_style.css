@@ -204,8 +204,9 @@ hr{
 .modal_slot .modal_content{
 	position: fixed;
 	width: 40%;
-    height: 50%;
-    transform: translate(30%, 30%);
+    width: 70%;
+    height: 80%;
+    transform: translate(5%, 5%);
     padding: 20px 10px;
     background: #fff;
     border: 2px solid #666;
@@ -232,7 +233,7 @@ input[id="reject_reason"]{
     margin-bottom: 1%;
 }
 
-input.reject-detail{
+input[id ="reject-detail"]{
 	width: 70%;
     height: 80%;
     margin-bottom: 1%;
@@ -261,9 +262,9 @@ input.reject-detail{
 
 .modal-content{
 	position: fixed;
-	width: 40%;
-    height: 50%;
-    transform: translate(30%, 30%);
+    width: 70%;
+    height: 80%;
+    transform: translate(5%, 5%);
     padding: 20px 10px;
     background: #fff;
     border: 2px solid #666;

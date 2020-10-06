@@ -114,7 +114,7 @@
                     		$lot += '<td>' + tutor.member.member_name + '</td>';
                     		$lot += '<td>' + tutor.tutor_nickname + '</td>';
                     		
-                    		$lot += '<td>';
+                    		$lot += '<td class="' + tutorId + '-cat-td">';
                     		$catList.forEach(function(category, index){
 	                      		$lot += category.lecture_category_name + '<br>';
                       		});
@@ -131,11 +131,11 @@
                       		$lot += '<h5>강사 사진</h5><br>';
                       		$lot += '<div><img class="tutor-detail-img" src="${contextPath}/tutorImages/' + tutor.tutor_img + '"></div><br>';
                       		$lot += '<div>닉네임 : ' + tutor.tutor_nickname + '</div>'
-                      		$lot += '<div>신청 분야 :';
+                      		$lot += '<div>신청 분야<br>';
                       		$catList.forEach(function(category, index){
                       			if (index != 0)
-	                      			$lot += ' / ';
-                      			$lot += category.lecture_category_name;
+	                      			$lot += '<br>';
+                      			$lot += category.lecture_category_name ;
                       		});
                       		$lot += '</div><hr>';
                       		
@@ -183,6 +183,7 @@
             // 예비강사 승인/반려 버튼
             $cont.on("click", ".tutor_status", function(){
 	          	let tutorId = $(this).attr('value');		// 예비강사 ID
+	          	let catString = $("td[class=" + tutorId + "-cat-td]").html();	// 심사중인 카테고리
 	          	
             	if ($(this).html() == "승인"){	 //승인시
 	            	if (confirm("승인 하시겠습니까?")){
@@ -191,6 +192,8 @@
 		            		dataType: "json",
 		            		url: "${contextPath}/admin/tutor/status/" + tutorId,
 		            		method: "PATCH",
+		            		data: JSON.stringify({category : catString}),
+		            		contentType: 'application/json-patch+json; charset=utf-8',
 		            		success: function(data){
 		            			alert(data.status);
 		            			$(".pre-tutor").trigger("click")
@@ -218,7 +221,7 @@
 					rejectModal += '<label for="reject-detail">세부 사유</label><br>';
 					rejectModal += '<input id="reject-detail" name="reject-detial" placeholder="세부 내용을 작성해주세요"></input><br>';
 					
-					rejectModal += '<br><button class="tutor-reject" value="' + tutorId +'">반려하기</button>';
+					rejectModal += '<button class="tutor-reject" value="' + tutorId +'">반려하기</button>';
             		rejectModal += '<button class="modal-close">닫기</button></div>';
             		rejectModal += '<div class="modal-layer"></div></div>';
             		
@@ -233,14 +236,15 @@
             // 예비강사 반려하기
             $cont.on("click", ".tutor-reject", function(){
             	
-            	let tutorId = $(this).attr("value");					// tutor_id
-            	let rejectId = $("#reject-reason").val();				// reject_category_id
-            	let rejectReason = $("#reject-detail").val();			// reject_reason
+            	let tutorId = $(this).attr("value");							// tutor_id
+            	let rejectId = $("#reject-reason").val();						// reject_category_id
+            	let rejectReason = $("#reject-detail").val();					// reject_reason
+            	let catString = $("td[class=" + tutorId + "-cat-td]").html();	// lecture category
             	
             	$.ajax({
             		url: "${contextPath}/admin/tutor/status/" + tutorId,
             		method: "POST",
-            		data: {reject_category_id : rejectId, reject_reason : rejectReason},
+            		data: {reject_category_id : rejectId, reject_reason : rejectReason, category : catString},
             		dataType: "json",
             		success: function(data){
             			alert(data.success);
@@ -574,7 +578,8 @@
 					method: "GET",
 					success: function(historyList){
 						let historyModal = '<div class="modal-add"><div class="modal-content">';
-						historyModal += '<div>최대 신청 인원 수 : / 현재 신청 인원 수</div>';
+						historyModal += '<div>최대 신청 인원 수 : ' + historyList[0].lecture.lecture_max;
+						historyModal += '/ 현재 신청 인원 수 : ' + historyList[0].lecture.lecture_current + '</div>';
 						historyModal += '<table class="table"><thead><tr><th>순서</th><th>아이디</th><th>이름</th><th>신청일</th></tr>';
 						historyModal += '</thead><tbody>';
 						historyList.forEach(function(history, index){

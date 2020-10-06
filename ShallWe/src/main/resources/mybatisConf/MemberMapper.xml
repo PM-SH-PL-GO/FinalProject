@@ -120,12 +120,13 @@
 <!-- 	#{favorite1.lecture_category_id}, #{favorite2.lecture_category_id}, #{favorite3.lecture_category_id} 
 #{memberPhone}-->
 <!-- member(SH) : 아이디 중복체크 -->	
-	<select id="checkId" resultType="MemberInfoBean">
+	<select id="checkDuplId" resultType="MemberInfoBean">
 	select member_id from member
 	<if test="memberId!=null">
 	where member_id=#{memberId};
 	</if>
 	</select>
+
 
 <!-- admin(jun6) : 회원 삭제 -->
 <!-- 	<delete id="deleteMemberById"> -->
@@ -143,10 +144,12 @@
 <!-- admin(jun6) : 예비강사 반려 -->
 	<insert id="rejectPretutor" parameterType="TutorReject" statementType="CALLABLE">
 		INSERT INTO tutor_reject VALUES(#{tutor.member.member_id},
-									 #{tutor.lectureCategory.lecture_category_id},
-									 #{rejectCategory.reject_category_id},
-									 #{reject_reason},
-									  SYSDATE)
+										 (select category_id
+	                                            from lecture_category
+	                                            where category_name = #{tutor.lectureCategory.lecture_category_name}),
+										 #{rejectCategory.reject_category_id},
+										 #{reject_reason},
+										  SYSDATE)
 	</insert>
 
 <!-- admin(jun6) : 전체 회원 목록 조회 -->
