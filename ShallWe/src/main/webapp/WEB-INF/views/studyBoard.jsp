@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+	
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <c:set var="loginId" value="${sessionScope.loginInfo}"/>
@@ -16,6 +16,9 @@ tr td.boardTitle:hover {
 }
 #boardWrite{
 color: white;
+}
+a.on{
+color: black !important ;
 }
 </style>
 <script
@@ -69,8 +72,8 @@ $(function(){
 			
 			$pageList.html(pageListData);
 		}
-		,errer:function(data){
-			alert("실패" + data.status)
+		,error:function(data){
+			alert("게시물이 없습니다.")
 		}
 	});
 	//----------스터디 게시판 LOAD  END---------
@@ -89,7 +92,6 @@ $(function(){
 		}else{
 			page = $(e.target).html();
 		}
-		console.log("페이지이ㅣㅈ이"+page);
 		if($searchVal==null ||  $searchVal==""){
 			urlVal = "${contextPath}/board/list/"+page;
 		}else{
@@ -125,17 +127,25 @@ $(function(){
 				}
 				if(pbObj.endPage<=pbObj.totalPage){
 					for(var i=pbObj.startPage; i<=pbObj.endPage; i++){
-					pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
+						if(i==pbObj.currentPage){
+						pageListData += '<li class="page-item active"><a class="page-link on">'+i+'</a></li>';
+						}else{
+						pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
+						}
 					}
 				}else{
 					for(var i=pbObj.startPage; i<=pbObj.totalPage; i++){
+						if(i==pbObj.currentPage){
+						pageListData += '<li class="page-item active"><a class="page-link on">'+i+'</a></li>';
+						}else{
 						pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
+						}
 					}
 				}
 				if(pbObj.endPage < pbObj.totalPage){
 					pageListData += '<li class="page-item"><a class="next page-link"><span class="ti-angle-right"></span></a></li>'
 				}
-				
+
 				$pageList.html(pageListData);
 			}
 			,errer:function(xhr){
@@ -174,7 +184,8 @@ $(function(){
 					}else{
 						boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"  ["+studyBoard.replylist.length+"]</td>";					
 					}
-					boardPageData += "	<td>"+studyBoard.member.member_id+"/"+nameMasking(studyBoard.member.member_name)+"</td>";
+					boardPageData += "	<td>"+studyBoard.member.member_id+"/"+nameMasking(studyBoard.member.member_name);
+					boardPageData += "</td>";
 					boardPageData += "	<td>"+formatDate(studyBoard.studyBoard_write_dt)+"</td>";
 					boardPageData += "	<td>"+studyBoard.studyBoard_view_count+"</td>";
 					boardPageData += "</tr>"
@@ -268,7 +279,6 @@ function nameMasking(str){
 }
 
 	//---------  이름 Masking END---------
-
 </script>
 </head>
 <body>
@@ -300,7 +310,7 @@ function nameMasking(str){
 							</table>
 							<div class="freeboard_related_search" style="width: 1200px;">
 								<aside class="serach_form search_btn">
-									<input type="text" class="searchbar" id="searchBar" placeholder='키워드를 입력하세요...' onfocus="this.placeholder=''" onblur='this.placeholder="키워드를 입력하세요..."'>
+									<input type="text" class="searchbar" id="searchBar" placeholder='키워드를 입력하세요...' onfocus="this.placeholder=''" onblur='this.placeholder="키워드를 입력하세요..."'>
 										<button class="btns" id="search-btn" type="button">
 											<i class="ti-search"></i>
 										</button>
@@ -308,7 +318,6 @@ function nameMasking(str){
 								</aside>
 							</div>
 						</div>
-						<!-- 			<button type="submit" class="button-write">검색</button> -->
 						<div class="col-xl-12">
 							
 						</div>

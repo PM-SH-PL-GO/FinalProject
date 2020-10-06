@@ -225,7 +225,13 @@ $(function(){
 		});
 		
 	});
-	//----------댓글 수정 등록 버튼 CLICK END---------	
+	//----------댓글 수정 등록 버튼 CLICK END---------
+	
+	//----------댓글 수정 취소 버튼 CLICK START---------	
+	$('#replyList').on("click","#replyCancel",function(){
+		location.reload();
+	});
+	//----------댓글 수정 취소 버튼 CLICK END---------	
 	
 	//----------댓글 삭제 버튼 CLICK START---------	
 	$('#replyList').on("click","#replyDelete",function(){

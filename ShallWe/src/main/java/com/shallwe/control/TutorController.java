@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
@@ -35,8 +36,21 @@ public class TutorController {
 	// 강사 : 내 강사 정보 조회
 	
 	@Autowired private TutorService service;
-	@Autowired private ServletContext application;
-	
+	@Autowired private ServletContext c;
+			   private String imgrealPath;
+			   private String careerrealPath;
+	 @PostConstruct
+	   public void initController() {
+		   
+	      this.imgrealPath = c.getRealPath("/files/tutorImages/");
+	  }
+	 
+	 @PostConstruct
+	   public void initController2() {
+		   
+	      this.careerrealPath = c.getRealPath("/files/tutorCareer/");
+	  }
+	 
 	//강사정보 보기: 경찬"
 	@RequestMapping(value="/showTutor",method=RequestMethod.GET)
 	public ModelAndView showTutorInfo(HttpSession session) throws FindException {
@@ -81,33 +95,34 @@ public class TutorController {
 	}
 	
 	//강사 사진 이미지 지우기 : 경찬
-	public String dellImageFile(String imgFile) {
+	public String dellImageFile(String tutor_img1) {
 		
-		String path = application.getRealPath("/files/tutorImages");
+		String path = imgrealPath + tutor_img1;
 		 File files = new File(path);
 		 if (files.exists()) {
+			 
 			 File[] deleteFolderList = files.listFiles();
 			 for(int i = 0; i<deleteFolderList.length; i++) {
 				 deleteFolderList[i].delete();
 			 }
-		} return imgFile;
+		} return path;
 	}
 	
 	//강사 커리어 파일 지우기 : 경찬
 	@PostMapping(value="/dellcareer")
-	public String dellCareerFile(String careerfile) {
+	public String dellCareerFile(String tutor_career_file1) {
 		
-		String path = application.getRealPath("/files/tutorImages");
+		String path = careerrealPath + tutor_career_file1;
 		 File files = new File(path);
 		 if (files.exists()) {
 			 File[] deleteFolderList = files.listFiles();
 			 for(int i = 0; i<deleteFolderList.length; i++) {
 				 deleteFolderList[i].delete();
 			 }
-		} return careerfile;
+		} return path;
 	}
 	
-	//강사신청취소
+	//강사신청취소:경찬
 	@RequestMapping(value="/dellTutor",method= {RequestMethod.POST,RequestMethod.GET})
 	public ResponseEntity<String> dellTutor(HttpSession session,
 											@RequestParam Map<String,Object> tutor)throws RemoveException{
@@ -119,7 +134,7 @@ public class TutorController {
 		Tutor t = new Tutor();
 		tutor.put("tutor_id", tutor_id);
 		String image = dellImageFile((String) tutor.put("tutor_img", t.getTutor_img()));
-		String career = dellImageFile((String) tutor.put("tutor_career_file",t.getTutor_career_file()));
+		String career = dellCareerFile((String) tutor.put("tutor_career_file",t.getTutor_career_file()));
 		tutor.put("tutor_img", image);
 		tutor.put("tutor_career_file",career);
 		
