@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <c:set value="${lectDetail.lecture}" var="lecture" />
 <fmt:formatDate var="startDt" value="${lecture.lecture_start_dt}"
@@ -10,12 +11,20 @@
 <fmt:parseDate var="endDat" value="${endDt}" pattern="yyyy-MM-dd" />
 <fmt:parseNumber value="${endDat.time/(1000*60*60*24)}"
 	integerOnly="true" var="endDate" />
-<c:set var="eqlectidtrue" value="false"/>
+<c:set var="eqlectidtrue" value="false" />
 <c:forEach items="${mlthlist}" var="ml" varStatus="i">
 	<c:set var="m" value="${mlthlist[i.index]}" />
-	<c:set var="mtutor" value="${lecture.tutor}" />
-	<c:if test="${m.lecture.lecture_id eq lecture.lecture_id}" var="lleq"/>
-	<c:if test="${m.lecture.lecture_id ne lecture.lecture_id}" var="llne"/>
+	<c:if test="${m.lecture.lecture_id eq lecture.lecture_id}" var="lleq" />
+	<c:if test="${m.lecture.lecture_id ne lecture.lecture_id}" var="llne" />
+</c:forEach>
+
+<c:forEach items="${tutorlist}" var="tl" varStatus="i">
+	<c:set var="t" value="${tutorlist[i.index]}"/>
+</c:forEach>
+
+<c:forEach items="${lectlist}" var="lectl" varStatus="i">
+		<c:set var="lecl" value="${lectlist[i.index]}"/>
+		${lecl.tutor}
 </c:forEach>
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
@@ -54,6 +63,13 @@
 <%-- 화면 호출시 바로 조회 해와야할 데이터 처리 영역 --%>
 <%-- 강사-카테고리별 후기 조회--%>
 $(document).ready(function() {
+	//---------  파일명 UUID 제거 START---------
+	function subString(fileName){
+		var fn = fileName.substring(str.indexOf(".")+1)
+		return fn;
+		
+	}
+		//---------  파일명 UUID 제거 END---------
 	var $reviewAreaObj = $('#reviewArea');
 	// 강사별, 카테고리별 리뷰 목록 조회
 	$.ajax({
@@ -163,7 +179,8 @@ $(document).ready(function() {
 								<h4 class="mr-10">인원: ${lecture.lecture_current}/${lecture.lecture_max}</h4>
 							</div>
 							<div class="d-flex">
-								<h4 class="mr-10">카테고리: ${lecture.lectureCategory.lecture_category_id}</h4>
+								<h4 class="mr-10">카테고리:
+									${lecture.lectureCategory.lecture_category_id}</h4>
 							</div>
 						</div>
 					</div>
@@ -189,7 +206,10 @@ $(document).ready(function() {
 							<h3 class="mb-30 mt-30" id="caution">유의사항</h3>
 							<p>${lectDetail.lecture_caution}</p>
 							<h3 class="mb-30 mt-30" id="filename">첨부파일</h3>
-							<p>${lectDetail.lecture_fileName}</p>
+							<c:set var="fileName"
+								value="${fn:split(studyBoard.studyBoard_fileName, '_')}" />
+							<a style="-webkit-text-fill-color: #00dbd5 !important;"
+								href="${contextPath}/lectures/download?fileName=${lectDetail.lecture_fileName}">${fn:substringAfter(lectDetail.lecture_fileName,'_')}</a>
 							<h3 class="mb-30 mt-30" id="tutorReview">강사후기</h3>
 							<!-- 후기영역 -->
 							<div class="mb-30 mt-30" id="reviewArea"></div>
@@ -233,7 +253,7 @@ $(document).ready(function() {
 							</c:if>
 							<div class="d-flex mt-10">
 								<h3 class="mr-10">수강일시:</h3>
-								<h3 class="date mr-10">${startDt}-${endDt}</h3>
+								<h3 class="date mr-10">${startDt} ~ ${endDt}</h3>
 							</div>
 						</div>
 					</div>

@@ -118,7 +118,7 @@
 									width="300px" alt="" class="img-fluid d-block"> <input
 									type="file" id="lectureImgFile" name="lecture_img"
 									class="mt-10" accept="imags/*">
-								<h6 class="mt-10">강의 제목${contextPath}</h6>
+								<h6 class="mt-10">강의 제목</h6>
 								<div class="mt-10">
 									<input type="text" value="제목ㅎ" name="lecture.lecture_title"
 										placeholder="몇글자 이내" onfocus="this.placeholder = ''"
