@@ -137,8 +137,9 @@
                </thead>
                
             <tbody id="calculation1tbody">
+          	<c:set var="priceSum" value="0"/>
             <c:if test="${not empty requestScope.wishListVal}">
-               <c:forEach var="item" items="${requestScope.wishListVal}" varStatus="status">
+               	<c:forEach var="item" items="${requestScope.wishListVal}" varStatus="status">
                   <c:forEach var="lecture" items="${item.lecs}" varStatus="rows">
                <tr class="calculation1_tbody_tr1" style="height: 90px; background-color: #fff;">
                   <td style="text-align: left; text-align:center; border-right:none;">
@@ -151,20 +152,21 @@
                   
                   <td style="text-align: center; padding-left:10px; font-weight: bold;">${lecture.tutor.member.member_name}</td>
                   
-                  <td><span style="padding-left: 10px;" class="lecture_price${status.index}">${lecture.lecture_price}</span>원  </td>
-
+                  <td><span style="padding-left: 10px;" class="lecture_price">${lecture.lecture_price}</span>원  </td>
+				
                   <td class="orderBtn">
                      <button class="bttn default orderGobtn" style="border-radius:3px; width:90px; margin-bottom: 3px; font-size:11px; background-color: #264d73;color:#fff; font-weight:bold;">강의결제하기</button>
                      <button class="bttn default btndelete" style="border-radius:3px; width:90px; margin-bottom: 3px; font-size:11px; " value="${lecture.lecture_id}">x삭제</button>
                      <input type="hidden" class="lecture_id" name="lecture_id" value="${lecture.lecture_id}"/>
                   </td>
                </tr>
-                  <c:if test="${empty requestScope.wishListVal}">
-                     <tr id="notproduct" style="background-color: #fff;">
-                     <td colspan="10" style="font-size: 20pt; color: gray;"><span>찜목록에 등록된 상품이 없습니다</span></td> 
-                     </tr>
-                  </c:if>
-                  </c:forEach>
+<%--                   <c:if test="${empty requestScope.wishListVal}"> --%>
+<!--                      <tr id="noproduct" style="background-color: #fff;"> -->
+<!--                      <td colspan="10" style="font-size: 20pt; color: gray;"><span>찜목록에 등록된 상품이 없습니다</span></td>  -->
+<!--                      </tr> -->
+<%--                   </c:if> --%>
+					<c:set var="priceSum" value="${priceSum+lecture.lecture_price}"/>
+                </c:forEach>
                </c:forEach>                           
             </c:if>
             </tbody>
@@ -179,7 +181,7 @@
          </div>
          <div style="margin:10px 0;">
          
-            <button class="bttn default deleteAll backbtn btnfloat2">찜목록 비우기</button>
+            <button class="bttn default deleteAll btnfloat2">찜목록 비우기</button>
             <span class="clearboth"></span>
          </div>            
          <br/><br/>
@@ -190,15 +192,14 @@
             <tr>
                <th style="text-align:center; width:100px">총 주문금액</th>
             </tr>
-            
             <tr style="background-color:#fff;">
-               <td style="padding: 22px 0;"><span class="price">0</span>원  </td>
+               <td style="padding: 22px 0;"><span class="price"><c:out value="${priceSum}"/></span>원 </td>
             </tr>
          </table>            
          <br/><br/>
          
          <div align="center">
-            <button class="bttn default footerbtn" id="footerbtn">이전화면</button>
+            <button class="bttn default footerbtn backbtn" id="footerbtn">이전화면</button>
             <span class="clearboth"></span>
          </div>         
          <br/><br/><br/><br/><br/>
@@ -207,10 +208,13 @@
       
    </div>
    <script>
-//    ---------------------체크박스 선택 Start-------------------------
+//    ------------------체크박스 선택 Start-----------------------------------
    $(function(){
-      
-      $("#notproduct").hide();
+	   let tr=$("#calculation1tbody tr").val();
+	      if(tr==null){
+	    	  $("#noproduct").show();
+	      }
+      $("#noproduct").hide();
       
        $(".calculation1 thead input:checkbox[id=check]").click(function(){
          var chck=$(this).prop("checked");
@@ -232,9 +236,14 @@
             $(".calculation1 thead input:checkbox[id=check]").prop("checked",true);
          }
        });
-   });
-//    ---------------------체크박스 선택 End---------------------------
+   
+//  ---------------------체크박스 선택 End-----------------------------------
 
+//	---------------------이전화면 버튼 Start---------------------------------
+	$(".backbtn").on("click",function(){
+		history.go(-1);
+	});
+//	---------------------이전화면 버튼 End---------------------------------
 
 //  ---------------------x삭제 버튼 Start-----------------------------------
    $(".btndelete").click(function(){
@@ -243,34 +252,41 @@
          if(confirm("선택하신 강의를 삭제하시겠습니까?")){
 //             $(this).parent().parent().remove();
 //             location.href="wishlist/deleteOne.do?lecture_id="+wishLecture+"";
-         $.ajax({
-            url:"${contextPath}/member/wishlist/deleteOne"
-            ,method:'GET'
-            ,data:{"lecture_id" : lecture_id}
-            ,success: function(responseData){
-               location.reload();
-            }
-         });//end of ajax
+//          $.ajax({
+//             url:"${contextPath}/member/wishlist/deleteOne"
+//             ,method:'GET'
+//             ,data:{"lecture_id" : lecture_id}
+//             ,success: function(responseData){
+//                location.reload();
+//             }
+//          });//end of ajax
+			payNdelete(lecture_id);
          }
          if(tr==null){
-            $("#notproduct").show();
+            $("#noproduct").show();
          }
+         return false;
       });
 //  ---------------------x삭제 버튼 End-------------------------------------
 
 //  ---------------------찜목록 비우기 button Start-------------------------
    $(".deleteAll").click(function(){
-      if(confirm("찜목록을 비우시겠습니까?")){
+// 	  alert("비우기 all");
+   var bool = confirm("찜목록을 비우시겠습니까?");
+   	if(bool){
+   
 		$.ajax({
 			url:"${contextPath}/member/wishlist/deleteAll"
 			,method:'GET'
 			,success: function(responseData){
 				location.reload();
+// console.log(location.href);
 			}
 		});
-    	  $("#notproduct").show();
       }
+   	  return false;
    });
+   
 //  ---------------------찜목록 비우기 button End---------------------------
 
 
@@ -288,16 +304,32 @@
 	            let responseObj = JSON.parse(responseData);
 	            if (responseObj.status == "success") {
 	               alert("강의 신청이 정상적으로 되었습니다.");
+	               payNdelete(lecture_id);
 	            } else {
 	               alert("강의 신청에 실패했습니다.");
 	            }
 	      		}
 		  }); // end of 강의신청, 강의결제페이지 호출 
 	   }
+	   return false;
    });
 //  ---------------------강의결제하기 버튼 클릭시 주문 End---------------------------
 
-
+	function payNdelete(lecture_id){
+		 $.ajax({
+	            url:"${contextPath}/member/wishlist/deleteOne"
+	            ,method:'GET'
+	            ,data:{"lecture_id" : lecture_id}
+	            ,success: function(responseData){
+	               location.reload();
+	            }
+	            , error : function(xhr){
+	            	alert("실패");
+	            }
+	         });//end of ajax
+	};
+	
+});
    </script>
 </body>
 </html>
