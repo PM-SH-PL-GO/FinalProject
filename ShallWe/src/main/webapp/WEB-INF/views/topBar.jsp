@@ -93,10 +93,9 @@ $(function(){
 				,success:function(data){
 					if(data=='N'){
 						topbarBtnData = "<a class=\"btn\" id=\"tutorSetBtn\">강사 등록</a>"
-						console.log(2);
 					}else{
-						console.log(3);
-						topbarBtnData = "<a class=\"btn\" id=\"tutorLectureBtn\">내 강의보기(강사)</a>"
+						topbarBtnData = "<a class=\"btn\" id=\"tutorLectureBtn\">강사회원입니다.</a>"
+// 						topbarBtnData = "<a class=\"btn\" id=\"tutorLectureBtn\">내 강의보기(강사)</a>"
 					}
 					$topbarBtn.html(topbarBtnData);	
 			
@@ -173,6 +172,12 @@ $(function(){
 		location.href = "${contextPath}/member/wishlist";
 	});
 	//----------내 강의보기 CLICK END---------	
+	
+	//----------내 찜목록보기 CLICK START---------	
+	$("#myInfoTutorInfo").click(function(){
+		location.href = "${contextPath}/tutor/showTutor";
+	});
+	//----------내 강의보기 CLICK END---------	
 
 	//----------로그아웃 CLICK START---------	
 	$("#signOut").click(function(){
@@ -242,6 +247,7 @@ $(function(){
 											</c:when>
 											<c:otherwise>
 												<li><a id ="myInfo" class="community">내 정보보기</a></li>
+												<li><a id ="myInfoTutorInfo" class="community">내 강사 정보보기</a></li>
 												<li><a id ="wishList" class="community">내 찜목록보기</a></li>
 												<li><a id ="myLecture" class="community">내 수강목록</a></li>
 												<li><a id ="signOut" class="community">로그아웃</a></li>
