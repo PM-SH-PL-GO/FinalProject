@@ -215,8 +215,7 @@
 									class="mt-10" accept="imags/*">
 								<div class="mt-70">
 									<input type="button" class="genric-btn primary-border"
-										id="insertBtn" value="등록"> <input type="button"
-										class="genric-btn primary-border" id="updateBtn" value="수정">
+										id="insertBtn" value="등록">
 								</div>
 								<input type="hidden" name="lecture.lecture_state" value="승인대기" />
 							</form>
