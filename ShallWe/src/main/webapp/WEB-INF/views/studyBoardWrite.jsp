@@ -57,7 +57,6 @@ $(function() {
 	$("#writeBtn").click(function(){
 		var form = $("#writeForm")[0];
 		var formData = new FormData(form);
-// 		var $titleVal = $("#title").val();
 		var val2 = oEditors.getById["weditor"].exec("UPDATE_CONTENTS_FIELD",[]);
 		this.contents=$('#weditor').val();
         formData.set("studyBoard_content", this.contents);
@@ -70,18 +69,14 @@ $(function() {
 			,contentType: false
 			,data: formData
 			,success:function(board_id){
-				console.log("jsp입장!!")
 				var boardWrite = confirm("글쓰기를 완료했습니다. 작성글을 확인하시겠습니까?");
 				if(boardWrite){
-					console.log("작성글 나오세요"+board_id);
 					location.href="${contextPath}/board/detail/"+board_id;
 				}else{
-					console.log("여긴가!!");
 				}
 			}
 		,error:function(){
 			alert("글작성에 실패했습니다.");
-			console.log("설마실패?!!");
 			location.reload();
 		}
 		});		
@@ -96,10 +91,6 @@ $(function() {
 		this.contents=$('#weditor').val();
         formData.set("studyBoard_content", this.contents);
         formData.append("boardUpload", $("#fileLoad")[0].files[0]);		
-// 		if("${sb.studyBoard_id}"==""||"${sb.studyBoard_id}"==null){
-// 		}else{
-// 			studyBoard.studyBoard_id = "${sb.studyBoard_id}";
-// 		}
 		$.ajax({
 			url : "${contextPath}/board/updateBoard"
 			,method: 'post'
@@ -109,7 +100,6 @@ $(function() {
 			,success:function(board_id){
 				var boardWrite = confirm("수정이 완료했습니다. 작성글을 확인하시겠습니까?");
 				if(boardWrite){
-					alert(board_id);
 					location.href="${contextPath}/board/detail/"+board_id;
 				}else{
 				}

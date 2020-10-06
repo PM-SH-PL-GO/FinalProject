@@ -85,8 +85,6 @@ $(function(){
 		if("${memberId}"==null||"${memberId}"==""){
 			topbarBtnData = "<a class=\"btn\" id=\"tutorSetBtn\">강사 등록</a>"
 			$topbarBtn.html(topbarBtnData);				
-
-			
 		}else{
 			$.ajax({
 				url:"${contextPath}/member/tutorYN"
@@ -120,7 +118,6 @@ $(function(){
 	//----------FAQ CLICK END---------
 	
 	//----------강의등록 버튼 CLICK START---------	
-// 	$("#tutorSetBtn").click(function(){
 	$("#tutorOrLecture").on("click","#tutorSetBtn",function(){
 		if("${sessionScope.loginInfo}" == null ||"${sessionScope.loginInfo}" == ""){
 			alert("로그인 후 강의 등록이 가능합니다.");
@@ -131,11 +128,10 @@ $(function(){
 	//----------강의등록 버튼 CLICK END---------	
 	
 	//----------강사 강의등록 버튼 CLICK START---------		
-// 	$("#tutorLectureBtn").click(function(){
 	$("#tutorOrLecture").on("click","#tutorLectureBtn",function(){
 		location.href = "${contextPath}/lectures/tutorLecture";		
 	});
-	//----------강사 강의등록 버튼 CLICK START---------		
+	//----------강사 강의등록 버튼 CLICK END---------		
 	
 	//----------스터디게시판 CLICK START---------	
 	$("#studBoard").click(function(){
@@ -173,11 +169,11 @@ $(function(){
 	});
 	//----------내 강의보기 CLICK END---------	
 	
-	//----------내 찜목록보기 CLICK START---------	
+	//----------내  강사정보보기 CLICK START---------	
 	$("#myInfoTutorInfo").click(function(){
 		location.href = "${contextPath}/tutor/showTutor";
 	});
-	//----------내 강의보기 CLICK END---------	
+	//----------내 강사정보보기 CLICK END---------	
 
 	//----------로그아웃 CLICK START---------	
 	$("#signOut").click(function(){
@@ -188,6 +184,7 @@ $(function(){
 				if(data != 0){
 					alert("로그아웃");
 					location.reload();
+					location.href = "${contextPath}";
 					
 				}else{
 					alert("로그아웃 실패");

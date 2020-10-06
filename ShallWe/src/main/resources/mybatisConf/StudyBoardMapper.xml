@@ -10,6 +10,8 @@
 			<id property="member_id" column="STUDYBOARD_MEMBER_ID"/>
 		</association>
 	</resultMap>
+	
+	<!-- 게시글 검색 -->
 	<select id="selectAll" parameterType="map" resultMap="StudyBoardResultMap">
 		select *
 		from (select rownum r, a.*
@@ -20,6 +22,8 @@
 		        )b
 		WHERE r BETWEEN #{startRow} AND #{endRow}
 	</select>
+	
+	<!-- 게시글 조건 검색 -->
 	<select id="selectByTitleAndContent" resultMap="StudyBoardResultMap">
 	select *
 		from(select ROWNUM r, a.*
@@ -30,37 +34,50 @@
             where STUDYBOARD_DELETEYN='N'
          )b
     WHERE r BETWEEN #{startRow} AND #{endRow}
-    
 	</select>
+	
+	<!-- 게시글 쓰기 -->
 	<insert id="insert" parameterType="StudyBoard">
 		insert into STUDYBOARD(studyboard_id, studyboard_member_id, studyboard_title, studyboard_content, studyboard_filename, studyboard_viewcount, studyboard_write_dt, studyboard_deleteyn) 
 		VALUES(STUDYBOARD_SEQ.NEXTVAL,#{member.member_id} ,#{studyBoard_title} ,#{studyBoard_content}, #{studyBoard_fileName},0, SYSdate,'N')
 	</insert>
+	
+	<!-- 게시글 수정 -->
 	<update id="update" parameterType="StudyBoard">
 		update STUDYBOARD set studyboard_title= #{studyBoard_title},studyboard_content=#{studyBoard_content}, studyboard_filename=#{studyBoard_fileName}, studyboard_write_dt=sysdate
 		where studyboard_id = #{studyBoard_id}
 	</update>
+	
+	<!-- 게시글 삭제 -->
 	<update id="delete" parameterType="StudyBoard">
 		update STUDYBOARD set STUDYBOARD_DELETEYN= 'Y'
 		where studyboard_id = #{studyBoard_id}
 	</update>
+	
+	<!-- 게시글 수 조회 -->
 	<select id="selectCount" resultType="int">
 		select COUNT(*) FROM STUDYBOARD
 		where STUDYBOARD_DELETEYN ='N'
 	</select>
 	
+	<!-- 조건 검색된 게시글 수 -->
 	<select id="SerachSelectCount" parameterType="map" resultType="int">
 		select COUNT(*) FROM STUDYBOARD
 		where STUDYBOARD_TITLE like #{studyBoard_title} or STUDYBOARD_CONTENT like #{studyBoard_title}
 	</select>
+	
+	<!-- 조회수 추가 -->
 	<insert id="insertViews" parameterType="StudyBoard">
 		update STUDYBOARD set STUDYBOARD_VIEWCOUNT= STUDYBOARD_VIEWCOUNT+1 where STUDYBOARD_ID=#{studyBoard_id}
 	</insert>
+	
+	<!-- 게시글 번호로 조회 -->
 	<select id="selectByNo" resultMap="StudyBoardResultMap">
 		select * from studyboard sb join member m on(sb.STUDYBOARD_MEMBER_ID = m.member_id)
 		where STUDYBOARD_ID = #{studyBoard_id}
 	</select>
-<!-- 	파일 다운르도 sql -->
+	
+	<!-- 파일 다운로드 -->
 	<select id="selectFileName" resultType="StudyBoard">
 			SELECT STUDYBOARD_FILENAME 
 			FROM STUDYBOARD

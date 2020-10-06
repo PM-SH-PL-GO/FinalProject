@@ -65,7 +65,12 @@ public class BoardController {
 		return "studyBoard";
 		
 	}
-	
+
+	/**
+	 * 전체 faq 목록 조회
+	 * @author psw09
+	 * @return 전체faq 목록
+	 */
 	@RequestMapping(value = "/faqList")
 	public ModelAndView faqList() {
 		ModelAndView mnv = new ModelAndView();
@@ -82,7 +87,11 @@ public class BoardController {
 		
 	}
 	
-	
+	/**
+	 * 게시글  조회
+	 * @author psw09
+	 * @return 게시글 목록
+	 */
 	@RequestMapping("/list/{currentPage}")
 	@ResponseBody
 	public ResponseEntity<BoardPageBean<StudyBoard>> list(@PathVariable(value = "currentPage",required = false) Integer cp, HttpSession session){
@@ -113,6 +122,11 @@ public class BoardController {
 		
 	}
 	
+	/**
+	 * 게시글  검색
+	 * @author psw09
+	 * @return 검색된 게시글 목록
+	 */	
 	@RequestMapping("/search/{searchVal}/{currentPage}")
 	@ResponseBody
 	public ResponseEntity<BoardPageBean<StudyBoard>> searchList(@PathVariable(value = "searchVal",required = false) String sv, @PathVariable(value = "currentPage",required = false) Integer cp){
@@ -125,9 +139,13 @@ public class BoardController {
 			return (ResponseEntity<BoardPageBean<StudyBoard>>)ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(pb);
 		}
 	}
-	
+
+	/**
+	 * 게시글  상세보기
+	 * @author psw09
+	 * @return 게시글 상세페이지
+	 */	
 	@RequestMapping("/detail/{boardIdVal}")
-//	@ResponseBody
 	public ModelAndView detail(@PathVariable int boardIdVal) {
 		System.out.println("보드아이디발??"+boardIdVal);
 		ModelAndView mnv = new ModelAndView();
@@ -144,7 +162,12 @@ public class BoardController {
 		}
 		return mnv;
 	}
-	
+
+	/**
+	 * 글쓰기 이동
+	 * @author psw09
+	 * @return 글쓰기 이동
+	 */	
 	@RequestMapping(value = "/write")
 	public String studyBoardWrite() {
 		return "studyBoardWrite";
@@ -160,6 +183,11 @@ public class BoardController {
 		this.realPath = c.getRealPath("/files/studyBoard");
   }
 	
+	/**
+	 * 저장된 파일 UUID값 추가
+	 * @author psw09
+	 * @return UUID값 추가된 파일
+	 */	
 	public String saveFile(MultipartFile file) {
 		String UPLOAD_PATH = realPath;
 		UUID uuid = UUID.randomUUID();
@@ -180,6 +208,11 @@ public class BoardController {
 		return saveName;
 	}
 	
+	/**
+	 * 게시글 쓰기
+	 * @author psw09
+	 * @return 작성된 게시글 번호
+	 */	
 	@RequestMapping(value = "/writeBoard", method = RequestMethod.POST)
 	@Transactional
 	public ResponseEntity<Integer> writeBoard(String studyBoard_title, HttpSession session, MultipartFile boardUpload, String studyBoard_content) {
@@ -207,6 +240,11 @@ public class BoardController {
 		} 
 		
 	}
+	
+	/**
+	 * 게시글 삭제
+	 * @author psw09
+	 */	
 	@DeleteMapping(value = "/delete/{studyBoard_id}")
 	public ResponseEntity<String> delete(@PathVariable(value = "studyBoard_id",required = false) Integer id) {
 		try {
@@ -231,6 +269,11 @@ public class BoardController {
 		
 	}
 	
+	/**
+	 * 게시글 수정
+	 * @author psw09
+	 * @return 수정된 게시글 번호
+	 */	
 	@RequestMapping(value = "/updateBoard", method = RequestMethod.POST)
 	@Transactional
 	public ResponseEntity<Integer> updateBoard(StudyBoard sb, HttpSession session, MultipartFile boardUpload, String studyBoard_content) {
@@ -244,10 +287,7 @@ public class BoardController {
 			sb.setMember(member);
 			sb.setStudyBoard_fileName(studyBoard_fileName);
 			sb.setStudyBoard_content(studyBoard_content);
-			System.out.println(3);
-			System.out.println("sbsbsbsbsb========="+sb);
 			service.updateBoard(sb);
-//			BoardPageBean<StudyBoard> studyBoard = service.findAll(1);
 			int board_id = sb.getStudyBoard_id();
 			return ResponseEntity.status(HttpStatus.OK).body(board_id);
 		} catch (ModifyException e) {
@@ -257,6 +297,10 @@ public class BoardController {
 		
 	}
 	
+	/**
+	 * 파일 다운로드
+	 * @author psw09
+	 */	
 	@RequestMapping(value = "/download")
 	public void downloadBoard(String fileName, HttpServletResponse response) throws IOException{
 		response.setContentType("application/octet-stream; charset=UTF-8");

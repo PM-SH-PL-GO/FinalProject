@@ -34,6 +34,11 @@ public class ReplyController {
 	@Autowired
 	ReplyService service;
 	
+	/**
+	 * 댓글 조회
+	 * @author psw09
+	 * @return 조회된 댓글
+	 */
 	@RequestMapping("{studyboardId}")
 	@ResponseBody
 	public ResponseEntity<BoardPageBean<StudyReply>> list(@PathVariable(value = "studyboardId",required = false) Integer si){
@@ -49,6 +54,11 @@ public class ReplyController {
 		
 	}
 	
+	/**
+	 * 댓글 쓰기
+	 * @author psw09
+	 * @return 완료 메세지
+	 */
 	@RequestMapping(value ="/write" , method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	@ResponseBody
 	public ResponseEntity<String> write(String studyReply_content, int studyBoard_Id, HttpSession session){
@@ -74,7 +84,11 @@ public class ReplyController {
 	}
 		
 
-	
+	/**
+	 * 댓글 수정
+	 * @author psw09
+	 * @return 수정 메세지
+	 */
 	@RequestMapping(value = "/update", method = RequestMethod.POST, produces = "application/text; charset=utf8")
 	@ResponseBody
 	public ResponseEntity<String> update(int studyreply_id, String studyreply_content, HttpSession session){
@@ -96,6 +110,11 @@ public class ReplyController {
 		
 	}
 	
+	/**
+	 * 댓글 삭제
+	 * @author psw09
+	 * @return 삭제 메세지
+	 */
 	@RequestMapping(value = "/delete/{reply_id}", produces = "application/text; charset=utf8")
 	@ResponseBody
 	public ResponseEntity<String> delete(@PathVariable(value = "reply_id",required = false)Integer ri){
