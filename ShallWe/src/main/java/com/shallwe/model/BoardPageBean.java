@@ -2,9 +2,6 @@ package com.shallwe.model;
 
 import java.util.List;
 
-
-import com.shallwe.vo.LectureCategory;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

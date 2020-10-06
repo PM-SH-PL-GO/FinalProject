@@ -6,12 +6,13 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudyBoard {
 	private int studyBoard_id;
-//	private String studyBoard_memeber_id;
+	private int studyBoard_rowNum;
 	private Member member;
 	private String studyBoard_title;
 	private String studyBoard_content;

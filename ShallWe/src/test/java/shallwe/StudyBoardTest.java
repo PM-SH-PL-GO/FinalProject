@@ -83,7 +83,6 @@ public class StudyBoardTest {
 		studyboard.setStudyBoard_fileName("5성운.jpg");
 //		dao.insert(studyboard);
 		boardService.writeBoard(studyboard);
-		
 	}
 	
 //	@Test

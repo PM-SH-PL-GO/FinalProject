@@ -16,6 +16,12 @@ import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.vo.StudyBoard;
 
+import com.shallwe.exception.AddException;
+import com.shallwe.exception.FindException;
+import com.shallwe.exception.ModifyException;
+import com.shallwe.model.BoardPageBean;
+import com.shallwe.vo.StudyBoard;
+
 @Repository(value = "studyBoardDAO")
 public class StudyBoardDAO {
 	@Autowired
@@ -86,7 +92,7 @@ public class StudyBoardDAO {
 	public void delete(int studyBoard_id) throws RemoteException {
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
-		session.update("StudyBoardMapper.delete", studyBoard_id);
+			session.update("StudyBoardMapper.delete", studyBoard_id);
 		if(studyBoard_id == 0) {
 			throw new RemoteException("삭제할 게시물이 존재하지않습니다.");
 		}		
