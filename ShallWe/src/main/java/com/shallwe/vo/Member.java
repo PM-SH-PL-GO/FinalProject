@@ -17,4 +17,5 @@ public class Member {
 	private List<LectureCategory> favorite_list;
 	private String memeber_sex;
 	private String tutor_YN;
+	private int enabled;
 }

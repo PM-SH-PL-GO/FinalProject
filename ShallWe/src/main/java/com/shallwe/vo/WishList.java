@@ -11,6 +11,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class WishList {
 	private Member member;
-//	private Lecture lecture;
 	private List<Lecture> lecs;
 }

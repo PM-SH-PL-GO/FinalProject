@@ -41,7 +41,6 @@ public class AdminController {
 
 	@RequestMapping(value = "")
 	public void admin() {
-		System.out.println("Admin Index");
 	}
 	
 	/**
@@ -66,7 +65,6 @@ public class AdminController {
 
 	@PatchMapping(value = "/member/{memberId}")
 	public ResponseEntity<String> deleteMember(@PathVariable(name = "memberId") String member_id){
-		
 		return ResponseEntity.status(HttpStatus.OK).body("");
 	}
 	
@@ -87,7 +85,6 @@ public class AdminController {
 			}else
 				return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(null);
 		}catch(FindException e) {
-			System.out.println("ㅈ대따");
 			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(null);
 		}
 		
