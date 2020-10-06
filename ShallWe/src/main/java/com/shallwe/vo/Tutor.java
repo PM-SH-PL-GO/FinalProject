@@ -2,11 +2,13 @@ package com.shallwe.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@EqualsAndHashCode(of = {"member"})
 public class Tutor {
 	
 	private Member member;						// 회원 정보
@@ -17,4 +19,8 @@ public class Tutor {
 	private String tutor_introduce;				// 강사 자기소개
 	private String tutor_link;					// 강사 소개 link
 	private float tutor_score;					// 강사 평점
+	
+	//강사 반려 여부
+	private TutorReject tutorReject;
+
 }

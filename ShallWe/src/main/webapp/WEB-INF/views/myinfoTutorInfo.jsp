@@ -69,7 +69,7 @@ $(function(){
 	  	   let $url = "/shallwe/tutor/showTutor"
 		   location.href= $url;
 				   
-				});
+		});
 });
 
 </script>

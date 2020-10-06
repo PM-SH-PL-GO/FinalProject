@@ -23,10 +23,9 @@
   	<typeAlias  type="com.shallwe.vo.StudyReply" alias="StudyReply"/>
   	<typeAlias  type="com.shallwe.model.MemberInfoBean" alias="MemberInfoBean"/>
   	<typeAlias  type="com.shallwe.model.BoardPageBean" alias="BoardPageBean"/>
-<<<<<<< HEAD
-=======
   	<typeAlias  type="com.shallwe.model.ReviewBean" alias="ReviewBean"/>
->>>>>>> pre_master
+  	<typeAlias  type="com.shallwe.vo.RejectCategory" alias="RejectCategory"/>
+  	<typeAlias  type="com.shallwe.vo.TutorReject" alias="TutorReject"/>
   </typeAliases>
   
   <mappers>

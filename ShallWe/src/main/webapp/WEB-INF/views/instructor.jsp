@@ -339,6 +339,50 @@ label.light {
   
   margin-top: 100px;
   }
+  
+  .filebox  { 
+  
+   display: inline-block;  
+   padding: .5em .75em; 
+   color: #FFFFFF; 
+   font-size: inherit; 
+   line-height: normal; 
+   vertical-align: middle; 
+   background-color: #00DBD5; 
+   cursor: pointer; 
+   border: 1px solid #00DBD5;
+   border-bottom-color: #00DBD5; 
+   border-radius: .25em;
+   width: 100%;
+   position: center;
+   text-align: center;
+   
+   }
+   
+   .filebox2  { 
+  
+   display: inline-block;  
+   padding: .5em .75em; 
+   color: #FFFFFF; 
+   font-size: inherit; 
+   line-height: normal; 
+   vertical-align: middle; 
+   background-color: #00DBD5; 
+   cursor: pointer; 
+   border: 1px solid #00DBD5;
+   border-bottom-color: #00DBD5; 
+   border-radius: .25em;
+   width: 100%;
+   position: center;
+   text-align: center;
+   
+   }
+#tutor_info{
+
+	position: fixed;
+	right: 300px;
+	bottom:175px;
+
 
 }
 
@@ -389,7 +433,8 @@ $(function(){
                	
                // 최종 submit 버튼
                 let $tutor = confirm('강사등록을 원하십니까?');
-                
+                //닉네임 벨류값
+                let $nickName = $('input#nickName').val();
             		// 체크된 값을 넘김  
             	let totalChecked = 0;
 				let tutor_category_id = [];
@@ -411,7 +456,11 @@ $(function(){
 					// url 유효성 검사 end
 
 					//체크 갯수제한 두기
-				}  else if($tutor == true){ 
+				}  else if($nickName == ''){
+						alert("닉네임을 입력해주세요");
+						return false;
+							
+					}else if($tutor == true){ 
 					
 				
 					$.ajax({
@@ -509,9 +558,12 @@ $(function(){
  <div class="cer" >
     <div style="margin:3em;"> 
 		<br>
-         <input class="uploadImage" type="file" name="tutor_img1" accept="imags/*"/>
+		<div class="filebox">
+		<label for="ex_file">자기자신을표현해주세요</label>
+         <input hidden="hidden class="uploadImage" type="file" name="tutor_img1" accept="imags/*" id="ex_file"/>
          <br>
-			 <img  id="select_img" src="#" alt = "your image" style="width:100%;max-width:100%;"/>
+         </div>
+			 <img  id="select_img" src="#" alt = "your image" style="width:100%;max-width:100%; position: center;"/>
 			 <br />
 		 </div> 
         <fieldset> 	 
@@ -524,8 +576,10 @@ $(function(){
           <input type="text" id="link" name="tutor_link" placeholder="ex)https://www.instagram.com/">
          <span hidden="hidden" class="checkUrl" style="color: red; font-size: 0.8em;"><i>[주소양식이 맞지 않습니다]</i></span>
            <div style="margin:4em; margin-top:10px;">
-           <input  class = "file2" type="file" name="tutor_career_file1" accept="imags/*,">
-            
+           <div class="filebox2">
+    		<label for="PDF">활동이력을 PDF 로올려주세요</label>
+           <input class = "file2" type="file" name="tutor_career_file1" accept="imags/*," id ="PDF">
+             </div>
 			<br>
 		 </div>
         </fieldset>
@@ -541,27 +595,27 @@ $(function(){
      
           <label>강의 선택:</label>
           <br />
-          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="MA">
+          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="IT">
           <label class="light" for="development">IT 정보기술</label>
           <br />
             
-          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="WP">
+          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="HO">
           <label class="light" for="design">HOBBY 취미</label>
           <br />
             
-          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="SC">
+          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="MA">
           <label class="light" for="business">Marketing 마케팅</label>
            <br />
            
-           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="PB">
+           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="DE">
           <label class="light" for="business">Design 디자인</label>
            <br />
            
-           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="DB">
+           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="CA">
           <label class="light" for="business">Employment 취업</label>
            <br />
            
-           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="KING">
+           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="BU">
           <label class="light" for="business">Business 비지니스</label>
            <br />
          

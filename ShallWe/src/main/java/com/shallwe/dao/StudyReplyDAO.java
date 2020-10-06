@@ -54,4 +54,17 @@ public class StudyReplyDAO {
 			throw new RemoteException("댓글 삭제에 실패했습니다.");
 		}
 	}
+	
+	//게시글별 댓글
+	public List<StudyReply> selectById(int studyBoard_id) {
+		List<StudyReply> studyReply = null;
+		SqlSession session = sqlSessionFactory.openSession();
+		try {
+			studyReply = session.selectList("StudyReplyMapper.selectById", studyBoard_id);
+		return studyReply;
+		}finally {
+			session.close();
+		}
+
+	}
 }

@@ -48,6 +48,22 @@ public class ReviewService {
 		}
 		return list;
 	}
+
+	/**
+	 * @author Soojeong
+	 * @Param  String member_id 
+	 * @throws FindException 
+	 */
+	public List<Review> selectReviewByMemberId (String member_id) throws FindException {
+		List<Review> list = new ArrayList<Review>();
+		try {
+			list = reviewDAO.selectReviewByMemberId(member_id);
+		} catch (FindException e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		}
+		return list;
+	}
 	/**
 	 * @author Soojeong
 	 * @Param  Map String lecture_category_id, String member_id, String lecture_id  , String tutor_id 

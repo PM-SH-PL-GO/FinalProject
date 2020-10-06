@@ -63,7 +63,7 @@
 	</resultMap>
 	
 	<select id="selectById" parameterType="String" resultMap="MemberInfoMap">
-	SELECT m.member_id , m.member_pwd, m.member_name, m.member_sex, m.member_email, m.member_phone,
+	SELECT m.member_id , m.member_pwd, m.member_name, m.member_sex, m.member_email, m.member_phone,m.TUTOR_YN,
 			lc1.category_id fav1Id, lc1.category_name fav1Name
             ,lc2.category_id fav2Id, lc2.category_name fav2Name
             ,lc3.category_id fav3Id, lc3.category_name fav3Name
@@ -120,19 +120,38 @@
 <!-- 	#{favorite1.lecture_category_id}, #{favorite2.lecture_category_id}, #{favorite3.lecture_category_id} 
 #{memberPhone}-->
 <!-- member(SH) : 아이디 중복체크 -->	
-	<select id="checkId" resultType="MemberInfoBean">
+	<select id="checkDuplId" resultType="MemberInfoBean">
 	select member_id from member
 	<if test="memberId!=null">
 	where member_id=#{memberId};
 	</if>
 	</select>
 
-<!-- admin(jun6) : 예비강사 승인/반려 -->
+
+<!-- admin(jun6) : 회원 정지 조치 -->
+	<update id="deleteMemberById" parameterType="String">
+		UPDATE member
+		SET enabled = 0
+		WHERE member_id = #{member_id}
+	</update>
+
+<!-- admin(jun6) : 예비강사 승인 -->
 	<update id="updateTutorState" parameterType="map">
 		UPDATE member
 	 	SET tutor_yn = #{status}
  		WHERE member_id = #{id}
 	</update>
+	
+<!-- admin(jun6) : 예비강사 반려 -->
+	<insert id="rejectPretutor" parameterType="TutorReject" statementType="CALLABLE">
+		INSERT INTO tutor_reject VALUES(#{tutor.member.member_id},
+										 (select category_id
+	                                            from lecture_category
+	                                            where category_name = #{tutor.lectureCategory.lecture_category_name}),
+										 #{rejectCategory.reject_category_id},
+										 #{reject_reason},
+										  SYSDATE)
+	</insert>
 
 <!-- admin(jun6) : 전체 회원 목록 조회 -->
 	<select id="selectAllMember" resultMap="MemberInfoMap">
@@ -146,9 +165,4 @@
 	    JOIN lecture_category lc3 ON(m.member_favorite3=lc3.category_id)
 	</select>
 
-<!-- admin(jun6) : 회원 삭제 -->
-<!-- 	<delete id="deleteMemberById"> -->
-<!-- 		DELETE member -->
-<!-- 		WHERE member_id = #{} -->
-<!-- 	</delete> -->
 </mapper>

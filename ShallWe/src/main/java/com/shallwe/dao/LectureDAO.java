@@ -100,6 +100,29 @@ public class LectureDAO {
 			session.close();
 		}
 	} // end of selectLectureListBySearch method
+	
+	/**
+	 * @author Soojeong
+	 * @param String lecture_id
+	 * @return
+	 * @throws FindException
+	 */
+	public Lecture selectLectureByLectureId( String lecture_id) throws FindException {
+		SqlSession session = null;
+		try {
+			session = sqlSessionFactory.openSession();
+			Lecture lecuture = new Lecture();
+			lecuture = session.selectOne("LectureMapper.selectLectureByLectureId", lecture_id);
+			return lecuture;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+			
+		} finally {
+			session.close();
+		}
+	} // end of selectLectureListBySearch method
 
 	/**
 	 * 강의신청 후 결제
@@ -138,7 +161,7 @@ public class LectureDAO {
 	 * @return
 	 * @throws ModifyException
 	 */
-	public int updateMemberLectureHistory(HashMap<String, Object> map) throws ModifyException {
+	public int updateMemberLectureHistory(Map<String, Object> map) throws ModifyException {
 		SqlSession session = null;
 		int result = 0;
 		try {
@@ -198,6 +221,11 @@ public class LectureDAO {
 		return lectureList;
 	}
 
+	/**
+	 * 강의 승인/반려/취소하기
+	 * @param map
+	 * @throws ModifyException
+	 */
 	public void updateLectureStatusByIdAndStatus(Map<String, String> map) throws ModifyException {
 		SqlSession session = null;
 
@@ -207,7 +235,33 @@ public class LectureDAO {
 		} catch (DataAccessException e) {
 			e.printStackTrace();
 			throw new ModifyException("설정을 변경하는 중 에러가 발생했습니다");
+		}finally {
+			session.close();
 		}
 	}
 
+	
+	
+	/**
+	 * memberID by 강의 수강중인 목록 조회하기
+	 * 
+	 * @author 고수정
+	 * @return 강의 전체 목록
+	 * @throws FindException
+	 */
+	public List<Lecture> selectLectureListByMemberId(String member_id) throws FindException {
+		SqlSession session = null;
+		List<Lecture> lectureList = new ArrayList<>();
+
+		try {
+			session = sqlSessionFactory.openSession();
+			lectureList = session.selectList("LectureMapper.selectLectureListByMemberId", member_id);
+		}catch(DataAccessException e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return lectureList;
+	}
 } // end of LectureDAO class

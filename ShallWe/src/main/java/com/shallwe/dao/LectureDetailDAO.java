@@ -1,9 +1,6 @@
 package com.shallwe.dao;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,8 +15,9 @@ import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureDetail;
-import com.shallwe.vo.Tutor;
 
+import lombok.extern.log4j.Log4j;
+@Log4j
 @Repository(value = "lectureDetailDAO")
 public class LectureDetailDAO {
 	@Autowired
@@ -49,7 +47,19 @@ public class LectureDetailDAO {
 			session.close();
 		}
 	}
-
+	
+	// 강의 취소 요청(강사) : 동일
+		public void cancelRequest(LectureDetail lectDe) throws ModifyException {
+			SqlSession session = sqlSessionFactory.openSession();
+			try {
+				session.update("LectureDetailMapper.cancelRequest", lectDe);
+			} catch (DataAccessException e) {
+				throw new ModifyException(e.getMessage());
+			} finally {
+				session.close();
+			}
+		}
+	
 	// 강의 상세 보기 : 동일
 	public LectureDetail lectureDetailView(Lecture lect) throws FindException {
 		LectureDetail le = null;
@@ -98,20 +108,20 @@ public class LectureDetailDAO {
 	 * @return 반려/취소 이유
 	 * @throws FindException
 	 */
-	public Map<String, String> selectLectureReasonById(String lecture_id, String rejectOrCancel) throws FindException {
+	public LectureDetail selectLectureReasonById(Map<String, String> map) throws FindException {
 		SqlSession session = null;
-		Map<String, String> map = null;
+		LectureDetail lectureDetail = null;
 		
 		try {
 			session = sqlSessionFactory.openSession();
-			map = session.selectMap("LectureDetail.selectLectureReasonById", lecture_id);
+			lectureDetail = session.selectOne("LectureDetailMapper.selectLectureReasonById", map);
 		}catch(DataAccessException e) {
 			throw new FindException("You've got Error!^^");
 		}finally {
 			session.close();
 		}
 		
-		return map;
+		return lectureDetail;
 	}
 	
 	// 강의 취소 승인하기(admin) : 준식
@@ -120,7 +130,8 @@ public class LectureDetailDAO {
 		
 		try {
 			session = sqlSessionFactory.openSession();
-			session.update("LectureDetail.updateLectureRejectReason", map);
+			log.info(map);
+			session.update("LectureDetailMapper.updateLectureRejectReason", map);
 		}catch(DataAccessException e) {
 			throw new ModifyException("뭔가 잘못되었습니다");
 		}finally {

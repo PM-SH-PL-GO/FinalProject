@@ -2,35 +2,18 @@
 <html class="no-js" lang="zxx">
 <head>
 <meta charset="utf-8">
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="loginId" value="${sessionScope.loginInfo}"/>
 <c:set var="boardId" value="${studyBoard.member.member_id}"/>
+<c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <fmt:formatDate var="resultDt" value="${studyBoard.studyBoard_write_dt}" pattern="yyyy-MM-dd"/>
-
+    <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <meta http-equiv="x-ua-compatible" content="ie=edge">
-<title>Shallwe-함께 배우는 교육공간</title>
-<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<meta name="description" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="shortcut icon" type="image/x-icon"
-	href="assets/img/favicon.ico">
-
-<!-- CSS here -->
-<link rel="stylesheet" href="/shallwe/assets/css/bootstrap.min.css">
-<link rel="stylesheet" href="/shallwe/assets/css/owl.carousel.min.css">
-<link rel="stylesheet" href="/shallwe/assets/css/slicknav.css">
-<link rel="stylesheet" href="/shallwe/assets/css/animate.min.css">
-<link rel="stylesheet" href="/shallwe/assets/css/hamburgers.min.css">
-<link rel="stylesheet" href="/shallwe/assets/css/magnific-popup.css">
-<link rel="stylesheet"
-	href="/shallwe/assets/css/fontawesome-all.min.css">
-<link rel="stylesheet" href="/shallwe/assets/css/themify-icons.css">
-<link rel="stylesheet" href="/shallwe/assets/css/slick.css">
-<link rel="stylesheet" href="/shallwe/assets/css/nice-select.css">
-<link rel="stylesheet" href="/shallwe/assets/css/style.css">
 <style>
 .btn {
 	background: #00dbd5;
@@ -70,6 +53,40 @@ p {
 h5 i{
 	margin-right: 10px;
 }
+ul.blog-info-link li a.option{
+cursor: pointer;
+font-size: 20px;
+}
+nav{
+float: right;
+margin-left: 50px;
+}
+
+.blog_area a:hover{
+background : white !important;
+/* background: -webkit-linear-gradient(131deg, #B367FF 0%, #B367FF 99%); */
+-webkit-text-fill-color: #00dbd5 !important;
+cursor: pointer;
+}
+
+.blog_area a.ca:hover{
+background : white !important;
+/* background: -webkit-linear-gradient(131deg, #B367FF 0%, #B367FF 99%); */
+-webkit-text-fill-color: #999999 !important;
+cursor: default;
+}
+
+.blog_area a, .blog_area a{
+background : white !important;
+/* background: -webkit-linear-gradient(131deg, #B367FF 0%, #B367FF 99%); */
+-webkit-text-fill-color: #999999 !important;
+}
+a.#replyUpdate,a.#replyDelete{
+cursor: pointer !important;
+}
+/* .blog_details a:hover{ */
+
+/* } */
 </style>
 <script>
 function formatDate(date) { 
@@ -82,7 +99,7 @@ $(function(){
 	//----------댓글 로드 START---------
 // 	console.log("${studyBoard.member.member_id}" == "${loginId}");
 	$.ajax({
-		url:"/shallwe/reply/"+${studyBoard.studyBoard_id}
+		url:"${contextPath}/reply/"+${studyBoard.studyBoard_id}
 		,method:"get"
 		,success:function(pbObj){
 		var $replyPage=$("#replyList");
@@ -94,19 +111,19 @@ $(function(){
 				replyPageData += "<div class=\"single-comment justify-content-between d-flex\">"
 				replyPageData += "<div class=\"user justify-content-between d-flex\">"
 				replyPageData += "<div class=\"desc\">"
-				replyPageData += "<p id = \"comment\">"+studyReply.studyreply_content+"</p>"
-				replyPageData += "	<div class=\"d-flex justify-content-between\">"
 				replyPageData += "		<div class=\"d-flex align-items-center\">"
 				replyPageData += "			<h5>"
-				replyPageData += "				<a><i class=\"fa fa-user\"></i>"+studyReply.member.member_id+"/"+nameMasking(studyReply.member.member_name)+"</a>"
+				replyPageData += "				<a class=\"ca\"><i class=\"fa fa-user\"></i>"+studyReply.member.member_id+"/"+nameMasking(studyReply.member.member_name)+"</a>"
 				replyPageData += "			</h5>"
-				replyPageData += "				<p>"+formatDate(studyReply.studyreply_dt)+"</p>"
 				replyPageData += "		</div>"
+				replyPageData += "<p id = \"comment\">"+studyReply.studyreply_content+"</p>"
+				replyPageData += "	<div class=\"d-flex justify-content-between\">"
 				replyPageData += "	<input type=\"hidden\" class=\"replyId\" value=\""+ studyReply.studyreply_id +"\">" 
 				replyPageData += "	<div class=\"reply-btn\">"
+				replyPageData += "			<a class=\"text-uppercase ca\">"+formatDate(studyReply.studyreply_dt)+"</a>"
 			if("${loginId}" == studyReply.member.member_id){
-				replyPageData += "			<a class=\"btn-reply text-uppercase\" id=\"replyUpdate\">수정</a>" 
-				replyPageData += "			<a class=\"btn-reply text-uppercase\" id=\"replyDelete\">삭제</a>"
+				replyPageData += "<nav>			<a class=\"text-uppercase\" id=\"replyUpdate\">수정하기</a>" 
+				replyPageData += "			<a class=\"text-uppercase\" id=\"replyDelete\">삭제하기</a></nav>"
 			}
 				replyPageData += "	</div>"
 				replyPageData += "</div>"
@@ -129,7 +146,7 @@ $(function(){
 		var $studyBoard_id = ${studyBoard.studyBoard_id};
 		if(boardYN){
 			$.ajax({
-				url:"/shallwe/board/delete/" +$studyBoard_id
+				url:"${contextPath}/board/delete/" +$studyBoard_id
 				,method:"DELETE"
 				,success:function(){
 					alert($studyBoard_id+"번 게시물이 삭제되었습니다.")	
@@ -144,14 +161,14 @@ $(function(){
 	//----------게시글 수정 START---------
 	$('#update').click(function(){
 		var $studyBoard_id = "${studyBoard.studyBoard_id}";
-		location.href = "/shallwe/board/updateBoard/"+$studyBoard_id
+		location.href = "${contextPath}/board/updateBoard/"+$studyBoard_id
 	});
 	
 	//----------게시글 수정 END---------
 	
 	//----------게시글 목록보기 START---------
 	$('#list').click(function(){
-		history.back();
+		location.href = "${contextPath}/board/studyBoard"
 	});
 	//----------게시글 목록보기 END---------
 
@@ -161,7 +178,7 @@ $(function(){
 		var $studyBoard_Id = ${studyBoard.studyBoard_id};
 		
 		$.ajax({
-			url:"/shallwe/reply/write"
+			url:"${contextPath}/reply/write"
 			,method:"POST"
 			,data:{"studyReply_content":$replyContent,"studyBoard_Id":$studyBoard_Id}
 			,success:function(){
@@ -196,7 +213,7 @@ $(function(){
 		var $replyIdVal = $(this).parents('.reply-btn').siblings('.replyId') .val();
 		var $replyContentVal = $(this).parents('.desc').children('#comment').children('.replytext').val();
 		$.ajax({
-			url:"/shallwe/reply/update"
+			url:"${contextPath}/reply/update"
 			,method:"post"
 			,data:{"studyreply_id":$replyIdVal,"studyreply_content":$replyContentVal}
 			,success:function(data){
@@ -216,7 +233,7 @@ $(function(){
 		console.log("딜리트도?");
 		var $replyIdVal = $(this).parents('.reply-btn').siblings('.replyId') .val();
 		$.ajax({
-			url:"/shallwe/reply/delete/"+$replyIdVal
+			url:"${contextPath}/reply/delete/"+$replyIdVal
 			,method:"DELETE"
 			,data:{"reply_id":$replyIdVal}
 			,success:function(data){
@@ -234,6 +251,7 @@ $(function(){
 		
 	});
 	//----------댓글 삭제 버튼 CLICK END---------	
+	
 });
 function formatDate(date) { 
 	var d = new Date(date), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = d.getFullYear(); 
@@ -260,6 +278,12 @@ function nameMasking(str){
 	return maskingStr;
 
 }
+
+function subString(fileName){
+	var fn = fileName.substring(str.indexOf(".")+1)
+	return fn;
+	
+}
 </script>
 </head>
 
@@ -275,20 +299,27 @@ function nameMasking(str){
 					<div class="single-post">
 						<ul class="blog-info-link"style="float: right;" >
 							<c:if test="${loginId eq  boardId}">
-								<li><a id="delete">삭제  </a></li>
-								<li><a id="update">수정</a></li>
+								<li><a id="delete" class="option">삭제  </a></li>
+								<li><a id="update"class="option">수정</a></li>
 							</c:if>
-								<li><a id="list">목록보기</a></li>
+								<li><a id="list"class="option">목록보기</a></li>
 						</ul>
 						<div class="blog_details">
 							<h2 style="color: #2d2d2d;">${studyBoard.studyBoard_title}
 							</h2>
 							<ul class="blog-info-link mt-3 mb-4">
-								<li><a href="#"><i class="fa fa-user"></i>${studyBoard.member.member_id}</a></li>
-								<li><a href="#"><i class="fa fa-comments"></i> 조회 수(${studyBoard.studyBoard_view_count})</a></li>
-								<li><a href="#">작성일 ${resultDt}</a></li>
+								<li><a class="ca"><i class="fa fa-user"></i>${studyBoard.member.member_id}</a></li>
+								<li><a class="ca"><i class="fa fa-comments"></i> 조회 수(${studyBoard.studyBoard_view_count})</a></li>
+								<li><a class="ca">작성일 ${resultDt}</a></li>
 							</ul>
 							<p class="excert">${studyBoard.studyBoard_content}</p>
+							<c:if test="${not empty studyBoard.studyBoard_fileName}">
+							<hr>
+							<h3>파일 다운로드</h3><br>							
+								<c:set var="fileName" value="${fn:split(studyBoard.studyBoard_fileName, '_')}" />
+								<a href="${contextPath}/board/download?fileName=${studyBoard.studyBoard_fileName}">${fn:substringAfter(studyBoard.studyBoard_fileName,'_')}</a>
+							</c:if>
+							
 						</div>
 					</div>
 					<div class="comments-area">
@@ -318,33 +349,6 @@ function nameMasking(str){
 			</div>
 	</section>
 	<!-- Blog Area End -->
-
-	<footer>
-		<div class="footer-wrapper pt-30">
-			<!-- footer-bottom -->
-			<div class="footer-bottom-area">
-				<div class="container">
-					<div class="footer-border">
-						<div class="row d-flex justify-content-between align-items-center">
-							<div class="col-xl-10 col-lg-9 ">
-								<div class="footer-copy-right">
-									<p>
-										<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-										Copyright &copy;
-										<script>document.write(new Date().getFullYear());</script>
-										All rights reserved | This template is made with <i
-											class="fa fa-heart" aria-hidden="true"></i> by <a
-											href="https://colorlib.com" target="_blank">Colorlib</a>
-										<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</footer>
 <jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
     </body>
 </html>
