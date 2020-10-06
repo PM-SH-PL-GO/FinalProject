@@ -5,35 +5,14 @@
 <mapper namespace="StudyReplyMapper">
 	<resultMap type="StudyReply" id="StudyReplyResultMap" autoMapping="true">
 		<id property="studyreply_id" column="STUDYREPLY_ID"/>
-<<<<<<< HEAD
-		<result property="studyreply_rowNum" column="r" />		
-		<result property="studyreply_content" column="STUDYREPLY_CONTENT" />		
-		<result property="studyreply_dt" column="STUDYREPLY_DT" />		
-		<association property="studyreply_b" javaType="StudyBoard" autoMapping="true">
-			<id property="studyBoard_id" column="STUDYREPLY_PARENT_BOARD"/>
-		</association>	
-		<association property="studyreply_m" javaType="Member" autoMapping="true">
-=======
 		<association property="studyboard" javaType="StudyBoard" autoMapping="true">
 			<id property="studyBoard_id" column="STUDYREPLY_PARENT_BOARD"/>
 		</association>	
 		<association property="member" javaType="Member" autoMapping="true">
->>>>>>> pre_master
 			<id property="member_id" column="STUDYREPLY_MEMBER_ID"/>
 		</association>	
 	</resultMap>
 	<select id="selectAll" parameterType="map" resultMap="StudyReplyResultMap">
-<<<<<<< HEAD
-	select rownum r, a.*
-	from(select *
-	    from STUDYREPLY
-	    where STUDYREPLY_PARENT_BOARD=#{boardNo}
-	    order by studyreply_id desc)a
-	where studyreply_id BETWEEN #{startRow} AND #{endRow}
-	</select>
-	<insert id="insert" parameterType="StudyReply">
-	INSERT INTO STUDYREPLY VALUES(STUDYREPLY_SEQ.NEXTVAL, #{studyreply_b.studyBoard_id}, #{studyreply_m.member_id}, #{studyreply_content}, sysdate)
-=======
 	select *
 	from(select rownum r, a.*
 	    from(select *
@@ -49,16 +28,11 @@
 	</select>
 	<insert id="insert" parameterType="StudyReply">
 	INSERT INTO STUDYREPLY VALUES(STUDYREPLY_SEQ.NEXTVAL, #{studyboard.studyBoard_id}, #{member.member_id}, #{studyreply_content}, sysdate)
->>>>>>> pre_master
 	</insert>
 	<update id="update" parameterType="StudyReply">
 	update STUDYREPLY set STUDYREPLY_CONTENT=#{studyreply_content},STUDYREPLY_DT=sysdate where STUDYREPLY_ID=#{studyreply_id}
 	</update>
-<<<<<<< HEAD
-	<delete id="delete" parameterType="StudyReply">
-=======
 	<delete id="delete" parameterType="int">
->>>>>>> pre_master
 	delete STUDYREPLY where STUDYREPLY_ID=#{studyreply_id}
 	</delete>
 </mapper>
