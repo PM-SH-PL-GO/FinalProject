@@ -53,6 +53,40 @@ p {
 h5 i{
 	margin-right: 10px;
 }
+ul.blog-info-link li a.option{
+cursor: pointer;
+font-size: 20px;
+}
+nav{
+float: right;
+margin-left: 50px;
+}
+
+.blog_area a:hover{
+background : white !important;
+/* background: -webkit-linear-gradient(131deg, #B367FF 0%, #B367FF 99%); */
+-webkit-text-fill-color: #00dbd5 !important;
+cursor: pointer;
+}
+
+.blog_area a.ca:hover{
+background : white !important;
+/* background: -webkit-linear-gradient(131deg, #B367FF 0%, #B367FF 99%); */
+-webkit-text-fill-color: #999999 !important;
+cursor: default;
+}
+
+.blog_area a, .blog_area a{
+background : white !important;
+/* background: -webkit-linear-gradient(131deg, #B367FF 0%, #B367FF 99%); */
+-webkit-text-fill-color: #999999 !important;
+}
+a.#replyUpdate,a.#replyDelete{
+cursor: pointer !important;
+}
+/* .blog_details a:hover{ */
+
+/* } */
 </style>
 <script>
 function formatDate(date) { 
@@ -77,19 +111,19 @@ $(function(){
 				replyPageData += "<div class=\"single-comment justify-content-between d-flex\">"
 				replyPageData += "<div class=\"user justify-content-between d-flex\">"
 				replyPageData += "<div class=\"desc\">"
-				replyPageData += "<p id = \"comment\">"+studyReply.studyreply_content+"</p>"
-				replyPageData += "	<div class=\"d-flex justify-content-between\">"
 				replyPageData += "		<div class=\"d-flex align-items-center\">"
 				replyPageData += "			<h5>"
-				replyPageData += "				<a><i class=\"fa fa-user\"></i>"+studyReply.member.member_id+"/"+nameMasking(studyReply.member.member_name)+"</a>"
+				replyPageData += "				<a class=\"ca\"><i class=\"fa fa-user\"></i>"+studyReply.member.member_id+"/"+nameMasking(studyReply.member.member_name)+"</a>"
 				replyPageData += "			</h5>"
-				replyPageData += "				<p>"+formatDate(studyReply.studyreply_dt)+"</p>"
 				replyPageData += "		</div>"
+				replyPageData += "<p id = \"comment\">"+studyReply.studyreply_content+"</p>"
+				replyPageData += "	<div class=\"d-flex justify-content-between\">"
 				replyPageData += "	<input type=\"hidden\" class=\"replyId\" value=\""+ studyReply.studyreply_id +"\">" 
 				replyPageData += "	<div class=\"reply-btn\">"
+				replyPageData += "			<a class=\"text-uppercase ca\">"+formatDate(studyReply.studyreply_dt)+"</a>"
 			if("${loginId}" == studyReply.member.member_id){
-				replyPageData += "			<a class=\"btn-reply text-uppercase\" id=\"replyUpdate\">수정</a>" 
-				replyPageData += "			<a class=\"btn-reply text-uppercase\" id=\"replyDelete\">삭제</a>"
+				replyPageData += "<nav>			<a class=\"text-uppercase\" id=\"replyUpdate\">수정하기</a>" 
+				replyPageData += "			<a class=\"text-uppercase\" id=\"replyDelete\">삭제하기</a></nav>"
 			}
 				replyPageData += "	</div>"
 				replyPageData += "</div>"
@@ -218,21 +252,6 @@ $(function(){
 	});
 	//----------댓글 삭제 버튼 CLICK END---------	
 	
-	//----------파일 다운로드 클릭 START -------
-// 	$("div.fileDownload").click(function(){
-// 		var fileName = $(this).find("span").html();
-// 		alert(fileName);
-// 		console.log(fileName);
-// 		$.ajax({
-// 			url : "${contextPath}/board/download"
-// 			,method: "post"
-// 			,data: {fileName:fileName}
-// 			,success:function(data){
-// 				alert(data);
-// 			}
-// 		});
-// 	});
-	//----------파일 다운로드 클릭 END -------
 });
 function formatDate(date) { 
 	var d = new Date(date), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = d.getFullYear(); 
@@ -280,22 +299,22 @@ function subString(fileName){
 					<div class="single-post">
 						<ul class="blog-info-link"style="float: right;" >
 							<c:if test="${loginId eq  boardId}">
-								<li><a id="delete">삭제  </a></li>
-								<li><a id="update">수정</a></li>
+								<li><a id="delete" class="option">삭제  </a></li>
+								<li><a id="update"class="option">수정</a></li>
 							</c:if>
-								<li><a id="list">목록보기</a></li>
+								<li><a id="list"class="option">목록보기</a></li>
 						</ul>
 						<div class="blog_details">
 							<h2 style="color: #2d2d2d;">${studyBoard.studyBoard_title}
 							</h2>
 							<ul class="blog-info-link mt-3 mb-4">
-								<li><a href="#"><i class="fa fa-user"></i>${studyBoard.member.member_id}</a></li>
-								<li><a href="#"><i class="fa fa-comments"></i> 조회 수(${studyBoard.studyBoard_view_count})</a></li>
-								<li><a href="#">작성일 ${resultDt}</a></li>
+								<li><a class="ca"><i class="fa fa-user"></i>${studyBoard.member.member_id}</a></li>
+								<li><a class="ca"><i class="fa fa-comments"></i> 조회 수(${studyBoard.studyBoard_view_count})</a></li>
+								<li><a class="ca">작성일 ${resultDt}</a></li>
 							</ul>
 							<p class="excert">${studyBoard.studyBoard_content}</p>
-							<hr>
 							<c:if test="${not empty studyBoard.studyBoard_fileName}">
+							<hr>
 							<h3>파일 다운로드</h3><br>							
 								<c:set var="fileName" value="${fn:split(studyBoard.studyBoard_fileName, '_')}" />
 								<a href="${contextPath}/board/download?fileName=${studyBoard.studyBoard_fileName}">${fn:substringAfter(studyBoard.studyBoard_fileName,'_')}</a>
@@ -330,33 +349,6 @@ function subString(fileName){
 			</div>
 	</section>
 	<!-- Blog Area End -->
-
-	<footer>
-		<div class="footer-wrapper pt-30">
-			<!-- footer-bottom -->
-			<div class="footer-bottom-area">
-				<div class="container">
-					<div class="footer-border">
-						<div class="row d-flex justify-content-between align-items-center">
-							<div class="col-xl-10 col-lg-9 ">
-								<div class="footer-copy-right">
-									<p>
-										<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-										Copyright &copy;
-										<script>document.write(new Date().getFullYear());</script>
-										All rights reserved | This template is made with <i
-											class="fa fa-heart" aria-hidden="true"></i> by <a
-											href="https://colorlib.com" target="_blank">Colorlib</a>
-										<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</footer>
 <jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
     </body>
 </html>

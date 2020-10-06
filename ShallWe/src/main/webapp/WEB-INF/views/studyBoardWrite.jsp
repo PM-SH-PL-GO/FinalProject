@@ -145,85 +145,54 @@ $(function() {
 <main>
 	<section class="blog_area single-post-area section-padding">
 		<div class="row slider-height1">
-			<div class="col-sm-6">
-				<h2 class="contact-title">글쓰기</h2>
-			</div>
-			<div class="col-lg-8">
-				<form class="form-contact contact_form" id="writeForm" method="post" enctype="multipart/form-data">
-					<div class="col-sm-6">
-						<h4>제목</h4>
-						<div class="form-group">
-							<input type="hidden" name="studyBoard_id" value="${sb.studyBoard_id}">
-							<input class="form-control valid" name="studyBoard_title"
-								id="title" type="text" onfocus="this.placeholder = ''"
-								onblur="this.placeholder = '제목을 입력하세요'" placeholder="제목을 입력하세요"
-								value="${sb.studyBoard_title}">
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-12">
-							<h4>내용</h4>
-							<div class="form-group">
-								<textarea name="studyBoard_content" id="weditor" rows="10"
-									cols="100" placeholder="내용을 입력하세요">${sb.studyBoard_content}</textarea>
-							</div>
-						</div>
+			<div class="col-lg-8 posts-list" style="margin-left : auto; margin-right: auto ">
+				<div class="col-sm-6">
+					<h2 class="contact-title">글쓰기</h2>
+				</div>
+				<div class="col-lg-8">
+					<form class="form-contact contact_form" id="writeForm" method="post" enctype="multipart/form-data">
 						<div class="col-sm-6">
-							<h4>파일첨부</h4>
 							<div class="form-group">
-								<input class="form-control valid" id="fileLoad" type="file" placeholder="파일첨부"
-									value="${sb.studyBoard_fileName}">
+								<input type="hidden" name="studyBoard_id" value="${sb.studyBoard_id}">
+								<input class="form-control valid" name="studyBoard_title"
+									id="title" type="text" onfocus="this.placeholder = ''"
+									onblur="this.placeholder = '제목을 입력하세요'" placeholder="제목을 입력하세요"
+									value="${sb.studyBoard_title}">
 							</div>
 						</div>
-					</div>
-					<div class="form-group mt-3">
-						
-							<c:choose>
-								<c:when test="${empty sb.studyBoard_title}">
-									<button type="button" class="button button-contactForm boxed-btn" id="writeBtn">글쓰기</button>
-								</c:when>
-								<c:otherwise>
-									<button type="button" class="button button-contactForm boxed-btn" id="updateBtn">수정하기</button>
-								</c:otherwise>
-							</c:choose>
-						<button type="button" class="button button-contactForm boxed-btn" id="cancelBtn">취소</button>
-					</div>
-				</form>
+						<div class="row">
+							<div class="col-12">
+								<div class="form-group">
+									<textarea name="studyBoard_content" id="weditor" rows="10"
+										cols="100" placeholder="내용을 입력하세요">${sb.studyBoard_content}</textarea>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<input class="form-control valid" id="fileLoad" type="file" placeholder="파일첨부"
+										value="${sb.studyBoard_fileName}">
+								</div>
+							</div>
+						</div>
+						<div class="form-group mt-3">
+							
+								<c:choose>
+									<c:when test="${empty sb.studyBoard_title}">
+										<button type="button" class="button button-contactForm boxed-btn" id="writeBtn">글쓰기</button>
+									</c:when>
+									<c:otherwise>
+										<button type="button" class="button button-contactForm boxed-btn" id="updateBtn">수정하기</button>
+									</c:otherwise>
+								</c:choose>
+							<button type="button" class="button button-contactForm boxed-btn" id="cancelBtn">취소</button>
+						</div>
+					</form>
+				</div>
 			</div>
-		</div>
+			</div>
 		</div>
 	</section>
 </main>
-<footer>
-	<div class="footer-wrapper pt-30">
-		<!-- footer-bottom -->
-		<div class="footer-bottom-area">
-			<div class="container">
-				<div class="footer-border">
-					<div class="row d-flex justify-content-between align-items-center">
-						<div class="col-xl-10 col-lg-9 ">
-							<div class="footer-copy-right">
-								<p>
-									<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-									Copyright &copy;
-									<script>
-										document
-												.write(new Date().getFullYear());
-									</script>
-									All rights reserved | This template is made with <i
-										class="fa fa-heart" aria-hidden="true"></i> by <a
-										href="https://colorlib.com" target="_blank">Colorlib</a>
-									<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-</footer>
 <jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 </body>
 </html>
