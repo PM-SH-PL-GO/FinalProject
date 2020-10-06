@@ -22,4 +22,5 @@ public class Tutor {
 	
 	//강사 반려 여부
 	private TutorReject tutorReject;
+
 }

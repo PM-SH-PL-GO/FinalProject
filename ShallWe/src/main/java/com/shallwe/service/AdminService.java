@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.shallwe.Email.Email;
+import com.shallwe.Email.EmailSender;
 import com.shallwe.dao.FaqDAO;
 import com.shallwe.dao.LectureDAO;
 import com.shallwe.dao.LectureDetailDAO;
@@ -20,8 +22,10 @@ import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.exception.RemoveException;
 import com.shallwe.model.AdminTutorBean;
+import com.shallwe.model.MemberInfoBean;
 import com.shallwe.vo.Faq;
 import com.shallwe.vo.Lecture;
+import com.shallwe.vo.LectureCategory;
 import com.shallwe.vo.LectureDetail;
 import com.shallwe.vo.Member;
 import com.shallwe.vo.MemberLectureHistory;
@@ -59,49 +63,35 @@ public class AdminService {
 	
 	
 	/**
-	 * 예비 강사 목록 보여주기
+	 * 
 	 * @author jun6
+	 * @param YN
+	 * @param preTutorPage
+	 * @return
+	 * @throws FindException
 	 */
 	@Transactional
-	public AdminTutorBean showAllTutor(String YN, int preTutorPage) throws FindException{
-		Map<String, String> tutorMap = new HashMap<>();
-		AdminTutorBean preTutorBean = new AdminTutorBean(preTutorPage);
-
-		tutorMap.put("YN", YN);
-		tutorMap.put("startRow", "" + preTutorBean.getStartRow());
+	public AdminTutorBean showAllTutor(String YN) throws FindException{
+		AdminTutorBean preTutorBean = new AdminTutorBean();
+		Map<String, List<LectureCategory>> valueMap = new HashMap<>();
 		
-		preTutorBean.setTutorList(tutorDAO.selectAllTutor(tutorMap));
+		List<Tutor> tutorList = new ArrayList<>();
+		List<Tutor> list = tutorDAO.selectAllTutor(YN);
 		
-//		Map<Tutor, List<String>> map = new HashMap<>();
-//		List<Tutor> list = tutorDAO.selectAllTutor(tutorMap);
-//		
-//		for (Tutor tutor : list) {
-//			if (map.containsKey(tutor))
-//				map.get(tutor).add(tutor.getLectureCategory().getLecture_category_name());
-//			else {
-//				List<String> catList = new ArrayList<>();
-//				catList.add(tutor.getLectureCategory().getLecture_category_name());
-//				map.put(tutor, catList);
-//			}
-//		}
-//		preTutorBean.setTutorCategoryMap(map);
+		for (Tutor tutor : list) {
+			String tutor_id = tutor.getMember().getMember_id();
+			if (valueMap.containsKey(tutor_id))
+				valueMap.get(tutor_id).add(tutor.getLectureCategory());
+			else {
+				List<LectureCategory> catList = new ArrayList<>();
+				catList.add(tutor.getLectureCategory());
+				valueMap.put(tutor_id, catList);
+				tutorList.add(tutor);
+			}
+		}
 		
-		int count = tutorDAO.countAllTutor(YN);
-		
-		if (count % AdminTutorBean.CNT_PER_PAGE != 0) {
-			count /= AdminTutorBean.CNT_PER_PAGE;
-			count++;
-		}else
-			count /= AdminTutorBean.CNT_PER_PAGE;
-		
-		preTutorBean.setTotalPage(count);
-		
-		int startPage = ((preTutorPage - 1) / AdminTutorBean.CNT_PER_PAGE) * AdminTutorBean.CNT_PER_PAGE + 1;
-		int calEndPage = (((preTutorPage - 1) / AdminTutorBean.CNT_PER_PAGE) + 1) * AdminTutorBean.CNT_PER_PAGE;
-		int endPage =  (calEndPage > 8) ? 8 : calEndPage;
-		
-		preTutorBean.setStartPage(startPage);
-		preTutorBean.setEndPage(endPage);
+		preTutorBean.setTutorKeyList(tutorList);
+		preTutorBean.setTutorCategoryMap(valueMap);
 		
 		return preTutorBean;
 	}
@@ -113,11 +103,32 @@ public class AdminService {
 	 * @param status
 	 * @throws ModifyException
 	 */
-	public void approvePreTutor(String id, String status) throws ModifyException{
+	public void approvePreTutor(String id, String status, String category) throws Exception{
 		Map<String, String> map = new HashMap<>();
 		map.put("id", id);
 		map.put("status", "Y");
 		memberDAO.updateTutorState(map);
+		
+		MemberInfoBean bean = memberDAO.selectById(id);
+		
+		String approveCat = "";
+		
+		for (String cat : category.split("<br>"))
+			approveCat += " • " + cat;
+		
+		String emailContent = "강사 신청 결과 안내\r\n" + 
+				"Shall We에서 새로운 도전을 하신 " + bean.getMemberName() + " 고객님을 응원합니다!\r\n\"" +  
+				"신청하신 강사 등록 건이 아래와 같이 처리되었음을 알려드립니다.\r\n" + 
+				"\r\n" + 
+				"1. 신청내용\r\n" + 
+				" • 신규 강사 등록\r\n" + 
+				"2. 분야\r\n" + 
+				approveCat + "\r\n" + 
+				"3. 신청 결과\r\n" + 
+				" • 승인";
+		String email = bean.getMemberEmail();
+		
+		sendMail(emailContent, email);
 	}
 	
 	/**
@@ -126,17 +137,70 @@ public class AdminService {
 	 * @param reject_reason
 	 * @param reject_category_id
 	 * @throws AddException
+	 * @throws FindException 
 	 */
-	public void rejectPreTutor(String tutor_id, String reject_reason, String reject_category_id) throws AddException{
+	@Transactional(rollbackFor = Exception.class)
+	public void rejectPreTutor(String tutor_id, String reject_reason, String reject_category_id, String category) throws Exception{
+		category = category.replaceAll(" ", "");
+		String[] catArr = category.split("<br>");
+		
 		TutorReject tutorReject = new TutorReject();
 		RejectCategory rejectCategory = new RejectCategory();
 		rejectCategory.setReject_category_id(reject_category_id);
-		
-		tutorReject.setRejectCategory(rejectCategory);
+		Tutor tutor = new Tutor();
+		Member member = new Member();
+		member.setMember_id(tutor_id);
+		tutor.setMember(member);
 		tutorReject.setReject_reason(reject_reason);
+		tutorReject.setTutor(tutor);
 		
-		memberDAO.insertTutorReject(tutorReject);
+		String cancelCat = "";
+
+		for (String cat : catArr) {
+			LectureCategory lectureCategory = new LectureCategory();
+			lectureCategory.setLecture_category_name(cat);
+			tutor.setLectureCategory(lectureCategory);
+			tutorReject.setRejectCategory(rejectCategory);
+			
+			memberDAO.insertTutorReject(tutorReject);
+			cancelCat += " • " + cat + "\r\n";
+			
+			System.out.println(cat);
+		}
+		
+		MemberInfoBean bean = memberDAO.selectById(tutor_id);
+		
+		
+		String email = bean.getMemberEmail();
+		String mailContent = "강사 신청 결과 안내\r\n" + 
+				"Shall We에서 새로운 도전을 하신 " + bean.getMemberName() + " 고객님을 응원합니다!\r\n\"" +  
+				"신청하신 강사 등록 건이 아래와 같이 처리되었음을 알려드립니다.\r\n" + 
+				"\r\n" + 
+				"1. 신청내용\r\n" + 
+				" • 신규 강사 등록\r\n" + 
+				"2. 분야\r\n" + 
+				cancelCat + 
+				"3. 신청 결과\r\n" + 
+				" • 반려\r\n" +
+				"4. 반려 사유\r\n" + 
+				" • " + reject_reason;
+		
+		sendMail(mailContent, email);
 	}
+	
+	
+	@Autowired
+	Email email;
+	@Autowired
+	EmailSender mailSender;
+	
+	public void sendMail(String mailContent, String mailReceiver) throws Exception {
+		email.setContent(mailContent);
+		email.setReceiver("selgy8694@gmail.com");
+		email.setSubject("[Shall We?] 강사 신청 결과 안내");
+		mailSender.SendEmail(email);
+	}
+	
 	
 	/**
 	 * 특정 강사의 강의 목록 가져오기
@@ -174,17 +238,11 @@ public class AdminService {
 	 * @throws ModifyException
 	 */
 //	@Transactional
-	public void updateLectureStatusByIdAndStatus(String lecture_id, String status, String reject_reason) throws ModifyException{
-		Map<String, String> map = new HashMap<>();
-		map.put("lecture_id", lecture_id);
+	public void updateLectureStatusByIdAndStatus(Map<String, String> map) throws ModifyException{
+		String status = map.get("status");
 		
-		if (status.equals("승인"))
-			map.put("status", status);
-		else if(status.equals("반려")) {
-			map.put("status", "반려");
-			map.put("reject_reason", reject_reason);
+		if(status.equals("반려"))
 			lectureDetailDAO.updateLectureRejectReason(map);
-		}
 		else if(status.equals("복구"))
 			map.put("status", "승인");
 		else if (status.equals("취소승인"))
@@ -210,14 +268,15 @@ public class AdminService {
 	public LectureDetail showLectureReason(String lecture_id, String rejectOrCancel) throws FindException{
 		if (rejectOrCancel.equals("반려사유"))
 			rejectOrCancel = "reject_reason";
-		else if(rejectOrCancel.equals("취소사유"))
+		else if(rejectOrCancel.equals("취소사유") || rejectOrCancel.equals("취소정보"))
 			rejectOrCancel = "cancel_reason";
 		
-		return lectureDetailDAO.selectLectureReasonById(lecture_id, rejectOrCancel);
+		Map<String, String> map = new HashMap<>();
+		map.put("lecture_id", lecture_id);
+		map.put("rejectOrCancel", rejectOrCancel);
+		
+		return lectureDetailDAO.selectLectureReasonById(map);
 	}
-	
-	
-	
 	
 	/**
 	 * FAQ 목록 보여주기

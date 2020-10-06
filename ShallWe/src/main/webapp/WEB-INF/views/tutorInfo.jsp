@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html class="no-js">
   <head>
@@ -319,20 +319,21 @@ width: 100%;
 
 
 }
-
+iframe{display: none;}
 
     </style>
 <script>
 $(function(){
 
 	
-	$('a#dellTutor').click(function(e){
+	$('a#cancleTutor').click(function(e){
 	let $dell = confirm("강사신청을취소하시겠습니까?");
+	
 	if($dell == true){
 
 		$.ajax({
 			url:"/shallwe/tutor/dellTutor"
-		   ,mehod: "GET"
+		   ,mehod: "POST"
 		   ,success: function(data){		   
 			alert("강사신청을취소하셨습니다.");
 			location.href = "http://localhost/shallwe/"
@@ -347,10 +348,33 @@ $(function(){
 
 	  }
 	}); // end of buttonClick
+
+	$("button.career").click(function(e){
+
+		let $pdf = $('input#pdfId').val();
+		
+		/* console.log($(this)); */
+		let id = $(this).attr("id");
+		$iframe = $("iframe");
+		 let url = "${contextPath}/upload/pdf.do?tutor_id=" + $pdf + "&fileName=" + id;
+		 console.log(url);
+		 $iframe.attr("src", url).show();
+			
+		});
+
+	
+	$('a#ModifyTutor').click(function(){
+			
+			let $url = "/shallwe/tutor/showUpdateTutor";
+		    location.href= $url;
+		
+		});
+	
+	
 });
 </script>
   </head>
- 
+
   <body>
    <c:forEach var ="t" items ="${tutor}" begin="0" end="0">
     <div class="body-center">
@@ -359,6 +383,7 @@ $(function(){
           <h1>
         	${t.member.member_name}
         	<span id="tutor_id" value="${t.member.member_id}">${t.member.member_id}</span>
+        	
           </h1>
           <div class="herder-border"></div>
           <br />
@@ -366,9 +391,12 @@ $(function(){
         
         <div class="profile">
         <div class="box">
-          <img src="${contextPath}/tutorImages/${t.tutor_img}" class="img"/>
+           <img src="${contextPath}/tutorImages/${t.tutor_img}" class="img"/>
           </div>
           <br />
+          <div class="filebox">
+          </div>
+           </div> 
           <div class="title">
           <br />
             <h6>profile</h6>
@@ -392,8 +420,22 @@ $(function(){
           </div>
           <div class="education">
             <p>
-              <label id="tutor_craeer">강사활동:</label>
-              <a href="${contextPath}/tutorImages/${t.tutor_career_file}"><li>강사커리어</li></a></p><br>
+            </p>
+            
+             <label id="tutor_craeer">강사활동:</label>
+             	  <button class = "career" id="${t.tutor_career_file}"><span>PDF 보기</span></button>
+             	  <input hidden="hidden" id="pdfId" value="${t.member.member_id}">
+             	  <iframe></iframe>
+            
+            <form method="post" enctype="multipart/form-data" id="fileUpload" action="${contextPath}/upload/changeCareer">      
+                 <%-- <a href="${contextPath}/tutorImages/${t.tutor_career_file}"><li>강사커리어</li></a></p><br> --%>       
+           	 <br />
+            	 <label>PDF 파일변경:</label>		         
+		           <input  class = "file2" type="file" name="tutor_career_file1" accept="imags/*," id ="PDF">
+		           <br />
+	        	    <input type="submit" value="업로드" style ="width: 70px; position: relative; left: 95px;">
+	        </form>	    
+             </p><br>         
            	<label id="tutor_craeer">SNS:</label>
            	<li>${t.tutor_link}</li><br />
            	<label id="tutor_introduce">강사한마디:</label>
@@ -417,11 +459,18 @@ $(function(){
               </ul>
             </div>
           </div>
-          <a href="#" class="action-button shadow animate blue" id="dellTutor">강사신청취소</a>
-           <a href="#" class="action-button shadow animate blue" id="dellTutor">신청정보수정</a>
+          <c:forEach var ="t" items ="${tutor}" begin="0" end="0">
+          	<c:if test="${t.member.tutor_YN eq 'Y'}">
+          <a href="#" class="action-button shadow animate blue" id="updateTutor">등록정보수정</a>
+             </c:if>
+     		<c:if test="${t.member.tutor_YN eq 'N'}">
+         	 <a href="#" class="action-button shadow animate blue" id="cancleTutor">강사신청취소</a>
+         	 <a href="#" class="action-button shadow animate blue" id="ModifyTutor">신청정보수정</a>
+           </c:if>
+ 	 	</c:forEach>
         </div>
       </div>
     </div>
   </body>
- 
+
 </html>

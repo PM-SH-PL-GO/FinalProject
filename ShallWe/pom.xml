@@ -231,6 +231,20 @@
              <artifactId>mail</artifactId>
              <version>1.4.7</version>
         </dependency>
+        
+		        <!-- PDFBox -->
+		<dependency>
+		    <groupId>org.apache.pdfbox</groupId>
+		    <artifactId>pdfbox</artifactId>
+		    <version>2.0.13</version>
+		</dependency>
+		
+		<!-- PDFBox-Tool -->
+		<dependency>
+		    <groupId>org.apache.pdfbox</groupId>
+		    <artifactId>pdfbox-tools</artifactId>
+		    <version>2.0.13</version>
+		</dependency>
 
 
 	<!-- main api -->

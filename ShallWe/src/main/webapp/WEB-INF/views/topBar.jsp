@@ -37,8 +37,6 @@
 .menu-wrapper
 {float:left;}
 
- .header-btns
-{margin-left: 410px} 
 .mr-40
 {margin-left: 20px}
 .mr-40
@@ -50,6 +48,7 @@
 {font-size: 50px}
 .btn{
 background : #00dbd5;
+font-size: 16px;
 }
 .btn::before {
 	background: #009994;
@@ -62,6 +61,21 @@ background : #00dbd5;
 a.community{
 cursor: pointer;
 }
+#tutorSetBtn{
+color: white;
+}
+#tutorLectureBtn{
+color: white;
+}
+.menu-wrapper{
+margin-left:5%;
+}
+#tutorSetBtn{
+ margin-bottom: 15px;
+}
+
+#studBoard, #faq{
+font-size: 20px;}
 </style>
 <script>
 $(function(){
@@ -153,6 +167,12 @@ $(function(){
 		location.href = "${contextPath}/lectures/memberLecture";
 	});
 	//----------내 강의보기 CLICK END---------	
+	
+	//----------내 찜목록보기 CLICK START---------	
+	$("#wishList").click(function(){
+		location.href = "${contextPath}/member/wishlist";
+	});
+	//----------내 강의보기 CLICK END---------	
 
 	//----------로그아웃 CLICK START---------	
 	$("#signOut").click(function(){
@@ -186,19 +206,18 @@ $(function(){
 						class="menu-wrapper d-flex align-items-center justify-content-between">
 						<!-- Logo -->
 						<div class="logo">
-							<a href="${contextPath}"><img
-								src="${contextPath}/assets/img/logo/shallwelogo.png" alt=""></a>
+							<a href="${contextPath}"><img src="${contextPath}/assets/img/logo/shallwelogo.png" alt="" style="width: 160px;" ></a>
+								
 						</div>
 						<!-- Main-menu -->
 						<div class="main-menu f-right d-none d-lg-block">
 							<nav>
 								<ul id="navigation">
-									<li><a href="#">커뮤니티</a>
-										<ul class="submenu">
-											<li><a id="studBoard" class="community">공부 게시판</a></li>
-											<li><a id="freeBoard" class="community">자유게시판</a></li>
-											<li><a id="faq" class="community">FAQ</a></li>
-										</ul></li>
+									<li><a id="studBoard" class="community">공부 게시판</a>
+										</li>
+									<li><a id="faq" class="community">FAQ</a>
+										</li>
+
 								</ul>
 							</nav>
 						</div>
@@ -207,7 +226,7 @@ $(function(){
 			</div>
 			<div class="main-header header-stick  registered">
 				<div class="container-fluid">
-					<div class="menu-wrapper d-flex align-items-center justify-content-between" style="float: right; margin-right: 100px">
+					<div class="menu-wrapper d-flex align-items-center justify-content-between" style="float: right;margin-right: 12%;">
 						<!-- Header-btn -->
 						<div class="header-btns d-none d-lg-block f-right" id="tutorOrLecture">
 						</div>
@@ -223,6 +242,7 @@ $(function(){
 											</c:when>
 											<c:otherwise>
 												<li><a id ="myInfo" class="community">내 정보보기</a></li>
+												<li><a id ="wishList" class="community">내 찜목록보기</a></li>
 												<li><a id ="myLecture" class="community">내 수강목록</a></li>
 												<li><a id ="signOut" class="community">로그아웃</a></li>
 											</c:otherwise>

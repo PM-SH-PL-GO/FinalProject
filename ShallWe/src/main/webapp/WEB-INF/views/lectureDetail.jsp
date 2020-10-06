@@ -1,11 +1,21 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+<c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <c:set value="${lectDetail.lecture}" var="lecture" />
-<fmt:formatDate var="startDt" value="${lecture.lecture_start_dt}" pattern="yyyy-MM-dd" />
-<fmt:formatDate var="endDt" value="${lecture.lecture_end_dt}" pattern="yyyy-MM-dd" />
-
+<fmt:formatDate var="startDt" value="${lecture.lecture_start_dt}"
+	pattern="yyyy-MM-dd" />
+<fmt:formatDate var="endDt" value="${lecture.lecture_end_dt}"
+	pattern="yyyy-MM-dd" />
+<fmt:parseDate var="endDat" value="${endDt}" pattern="yyyy-MM-dd" />
+<fmt:parseNumber value="${endDat.time/(1000*60*60*24)}"
+	integerOnly="true" var="endDate" />
+<c:forEach items="${mlthlist}" var="ml" varStatus="i">
+	<c:set var="m" value="${mlthlist[i.index]}" />
+	<c:set var="mtutor" value="${lecture.tutor}" />
+	<c:if test="${m.lecture.lecture_id eq lecture.lecture_id}" var="lleq" />
+	<c:if test="${m.lecture.lecture_id ne lecture.lecture_id}" var="llne" />
+</c:forEach>
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 <head>
@@ -14,7 +24,8 @@
 <title>강의 상세 정보</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="shortcut icon" type="image/x-icon" href="/shallwe/assets/img/favicon.ico">
+<link rel="shortcut icon" type="image/x-icon"
+	href="/shallwe/assets/img/favicon.ico">
 
 <!-- CSS here -->
 <link rel="stylesheet" href="/shallwe/assets/css/bootstrap.min.css">
@@ -27,20 +38,25 @@
 <link rel="stylesheet" href="/shallwe/assets/css/animate.min.css">
 <link rel="stylesheet" href="/shallwe/assets/css/animated-headline.css">
 <link rel="stylesheet" href="/shallwe/assets/css/magnific-popup.css">
-<link rel="stylesheet" href="/shallwe/assets/css/fontawesome-all.min.css">
+<link rel="stylesheet"
+	href="/shallwe/assets/css/fontawesome-all.min.css">
 <link rel="stylesheet" href="/shallwe/assets/css/themify-icons.css">
 <link rel="stylesheet" href="/shallwe/assets/css/slick.css">
 <link rel="stylesheet" href="/shallwe/assets/css/nice-select.css">
 <link rel="stylesheet" href="/shallwe/assets/css/style.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+<c:set var="now" value="<%=new java.util.Date()%>" />
+<fmt:formatDate pattern="yyyy-MM-dd" value="${now}" />
+<fmt:parseNumber value="${now.time/(1000*60*60*24)}" integerOnly="true" var="nowDate" />
 <%-- 화면 호출시 바로 조회 해와야할 데이터 처리 영역 --%>
 <%-- 강사-카테고리별 후기 조회--%>
 $(document).ready(function() {
 	var $reviewAreaObj = $('#reviewArea');
 	// 강사별, 카테고리별 리뷰 목록 조회
 	$.ajax({
-		url : "${contextPath}/reviewList"
+		url : "${contextPath}/member/reviewList"
 		, data : {"tutor_id": "${lecture.tutor.member.member_id}",
 				  "category_id":"${lecture.lectureCategory.lecture_category_id}"}
 		, success : function (responseData) {
@@ -53,7 +69,7 @@ $(document).ready(function() {
 	var $applyBtnObj = $('#applyBtn');
 	$applyBtnObj.on("click", function() {
 		$.ajax({
-			url: "${contextPath}/insertMemberLectureHistory"
+			url: "${contextPath}/member/insertMemberLectureHistory"
 			, method: "POST"
 			, data : {"lecture_id" : "${lecture.lecture_id}"}
 			, success: function(responseData) {
@@ -72,7 +88,7 @@ $(document).ready(function() {
 	var $cancelBtnObj = $('#cancelBtn');
 	$cancelBtnObj.on("click", function() {
 		$.ajax({
-			url: "${contextPath}/updateMemberLectureHistory"
+			url: "${contextPath}/member/updateMemberLectureHistory"
 			, method: "GET"
 			, data : {"lecture_id" : "${lecture.lecture_id}"}
 			, success: function(responseData) {
@@ -85,6 +101,25 @@ $(document).ready(function() {
 			} 
 		}); 
 	}); // end of 강의신청, 강의결제페이지 호출 
+	
+	// 찜목록 추가 요청
+	var $favoriteLectureBtnObj = $('#favoriteLectureBtn');
+	$favoriteLectureBtnObj.on("click", function() {
+		if(confirm("찜목록에 추가 하시겠습니까?")){
+			$.ajax( { 
+				url : '${contextPath}/member/wishlist/addWish'
+				, method : "GET"
+				, data : {"lecture_id" : "${lecture.lecture_id}"}
+				, success : function () {
+					if(confirm("찜목록으로 이동하시겠습니까")){
+						location.href = "${contextPath}/member/wishlist";
+					} else {
+						location.reload();
+					}
+				}
+			}); // end of ajax
+		}
+	}); // end of 찜목록 추가 요청
 	
 	let letidValue = $("input[name=listlecture_id]").val();
 	$("div[name=gotoDe]").click(function(){
@@ -100,9 +135,14 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
+	<!-- topbar Start -->
+	<div class="topMenu">
+		<jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
+	</div>
+	<!-- topbar End -->
 	<main>
 		<!--? Start Align Area -->
-		<div class="whole-wrap">
+		<div class="whole-wrap mt-100">
 			<div class="container  box_1170">
 				<div class="section-top-border">
 					<div class="row">
@@ -113,20 +153,16 @@ $(document).ready(function() {
 						<div class="col-md-9 mt-sm-20">
 							<h3 class="mb-20">${lecture.lecture_title}</h3>
 							<div class="d-flex">
-								<h6 class="mr-10">상태:</h6>
-								<h6>${lecture.lecture_state}</h6>
+								<h4 class="mr-10">상태: ${lecture.lecture_state}</h4>
 							</div>
 							<div class="d-flex">
-								<h6 class="mr-10">장소:</h6>
-								<h6>${lectDetail.lecture_location}</h6>
+								<h4 class="mr-10">장소: ${lectDetail.lecture_location}</h4>
 							</div>
 							<div class="d-flex">
-								<h6 class="mr-10">인원:</h6>
-								<h6>${lecture.lecture_current}/${lecture.lecture_max}</h6>
+								<h4 class="mr-10">인원: ${lecture.lecture_current}/${lecture.lecture_max}</h4>
 							</div>
 							<div class="d-flex">
-								<h6 class="mr-10">카테고리:</h6>
-								<h6>${lecture.lectureCategory.lecture_category_id}</h6>
+								<h4 class="mr-10">카테고리: ${lecture.lectureCategory.lecture_category_id}</h4>
 							</div>
 						</div>
 					</div>
@@ -178,9 +214,18 @@ $(document).ready(function() {
 									pattern="#,###" />
 								원
 							</h4>
-							<a href="#" id="applyBtn" class="genric-btn primary-border mt-10">신청</a>
-							<a href="#" id="cancelBtn" class="genric-btn primary-border mt-10">결제취소</a>
-							<a href="#" class="genric-btn primary-border mt-10">찜하기</a>
+							<c:if test="${endDate-nowDate>=0}">
+								<c:if test="${llne}">
+									<a href="#" id="applyBtn"
+										class="genric-btn primary-border mt-10">신청</a>
+								</c:if>
+								<c:if test="${lleq}">
+									<a href="#" id="cancelBtn"
+										class="genric-btn primary-border mt-10">결제취소</a>
+								</c:if>
+								<a href="#" id="favoriteLectureBtn"
+									class="genric-btn primary-border mt-10">찜하기</a>
+							</c:if>
 							<div class="d-flex mt-10">
 								<h6 class="mr-10">수강일시:</h6>
 								<h6 class="date mr-10">${startDt}-${endDt}</h6>

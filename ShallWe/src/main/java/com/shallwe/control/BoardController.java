@@ -1,7 +1,9 @@
 package com.shallwe.control;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Locale;
@@ -9,13 +11,13 @@ import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.tomcat.util.net.ApplicationBufferHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -29,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -92,8 +93,18 @@ public class BoardController {
 		}
 		BoardPageBean<StudyBoard> pb = null;
 		try {
+			BoardPageBean<StudyBoard> oldPb=(BoardPageBean<StudyBoard>)session.getAttribute("pb");
+			if(oldPb !=null) {
+				session.removeAttribute("pb");
+				
+			}
 			pb = service.findAll(currentPage);
 			session.setAttribute("pb", pb);
+			BoardPageBean<StudyBoard> od=(BoardPageBean<StudyBoard>)session.getAttribute("pb");
+			for(StudyBoard s:od.getList()) {
+				System.out.println("몇개나오나요"+s.getStudyBoard_id());
+			}
+			
 			return (ResponseEntity<BoardPageBean<StudyBoard>>)ResponseEntity.status(HttpStatus.OK).body(pb);
 		} catch (FindException e) {
 			e.printStackTrace();
@@ -123,7 +134,6 @@ public class BoardController {
 		StudyBoard board;
 		try {
 			board = service.FindByNo(boardIdVal);
-			System.out.println("board="+board.getStudyBoard_view_count());
 			mnv.addObject("studyBoard", board);
 			mnv.setViewName("/studyBoardDetail");
 
@@ -175,9 +185,13 @@ public class BoardController {
 	public ResponseEntity<Integer> writeBoard(String studyBoard_title, HttpSession session, MultipartFile boardUpload, String studyBoard_content) {
 		StudyBoard sb = new StudyBoard();
 		Member member = new Member();
+		String studyBoard_fileName ="";
 		String memberId = (String)session.getAttribute("loginInfo");
 		member.setMember_id(memberId);
-		String studyBoard_fileName = saveFile(boardUpload);
+		if(boardUpload !=null) {
+			studyBoard_fileName = saveFile(boardUpload);
+		}
+		
 		try {
 			sb.setMember(member);
 			sb.setStudyBoard_fileName(studyBoard_fileName);
@@ -243,6 +257,31 @@ public class BoardController {
 		
 	}
 	
+	@RequestMapping(value = "/download")
+	public void downloadBoard(String fileName, HttpServletResponse response) throws IOException{
+		response.setContentType("application/octet-stream; charset=UTF-8");
+		//응답헤더 설정: Download할 파일이름 결정
+		String result = fileName.substring(fileName.lastIndexOf("_")+1);
+		result = new String(result.getBytes("UTF-8"), "ISO-8859-1");
+		response.setHeader("Content-Disposition", "attachment; filename=\""+result+"\"");
+		response.setHeader("Content-Transfer-Encoding", "binary");
+		response.setHeader("Pragma", "no-cache;");
+		response.setHeader("Expires", "-1;");
+		
+		
+		OutputStream os = response.getOutputStream();
+		FileInputStream fis = null;
+		File f = new File(realPath, fileName);
+		fis = new FileInputStream(f);
+		byte[] bArr = new byte[8*1024];
+		int len = -1;
+		while( (len = fis.read(bArr)) != -1){
+			os.write(bArr, 0, len);
+		}
+		fis.close();
+		os.close();
+	}
+	
 	// FreeBoard Controller Start 
 	
 	// 게시글 등록 페이지로 이동
@@ -302,6 +341,7 @@ public class BoardController {
 		service.deleteFreeBoard(freeboard_id);
 		redirectAttributes.addFlashAttribute("msg", "deleteSuccess");
 		return "redirect:/board/freeboard";
+	
 	}
 }
 

@@ -14,12 +14,15 @@ tr td.boardTitle:hover {
     color: #00DBD5;
     cursor: pointer;
 }
+#boardWrite{
+color: white;
+}
 </style>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 $(function(){
-	var page ="1";
+	var page =1;
 	var $pageList=$("#pageList");
 	
 	//----------스터디 게시판 LOAD START---------
@@ -48,15 +51,23 @@ $(function(){
 			$boardPage.html(boardPageData);
 			var $pageList = $("#pageList");
 			var pageListData = "";
+			console.log("pbObj.startPage======="+pbObj.startPage);
+			console.log("pbObj.endPage====="+pbObj.endPage);
+			console.log("pbObj.totalPage======="+pbObj.totalPage);
 			if(pbObj.startPage > 1){
-				pageListData += '<li class="page-item"><a class="prev"><span class="ti-angle-left"></span></a></li>';
+				pageListData += '<li class="page-item"><a class="prev page-link"><span class="ti-angle-left"></span></a></li>';
 			}
-			
-			for(var i=pbObj.startPage; i<=pbObj.totalPage; i++){
+			if(pbObj.endPage<=pbObj.totalPage){
+				for(var i=pbObj.startPage; i<=pbObj.endPage; i++){
 				pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
+				}
+			}else{
+				for(var i=pbObj.startPage; i<=pbObj.totalPage; i++){
+					pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
+				}
 			}
 			if(pbObj.endPage < pbObj.totalPage){
-				pageListData += '<li class="page-item"><a class="next"><span class="ti-angle-right"></span></a></li>'
+				pageListData += '<li class="page-item"><a class="next page-link"><span class="ti-angle-right"></span></a></li>'
 			}
 			
 			$pageList.html(pageListData);
@@ -72,22 +83,23 @@ $(function(){
 		var $etClass = $(e.target).attr('class');
 		var $searchVal = $(this).parents('.pagination-area').siblings('.row').find('#searchBar').val();
 		var urlVal = null;
-		
-		if($etClass == 'prev'){
-			page = ${pb.startPage-1};			
-		}else if($etClass == 'next'){
-			page = ${endPage+1};
+		if($etClass == 'prev page-link'||$etClass =='ti-angle-left'){
+			page=$(this).parents('.page-item').next().find('a.page-link').html();
+			page=Number(page)-10;	
+		}else if($etClass == 'next page-link'||$etClass =='ti-angle-right'){
+			page=$(this).parents('.page-item').prev().find('a.page-link').html();
+			page=Number(page)+1;
 		}else{
 			page = $(e.target).html();
 		}
-		
+		console.log("페이지이ㅣㅈ이"+page);
 		if($searchVal==null ||  $searchVal==""){
 			urlVal = "${contextPath}/board/list/"+page;
 		}else{
 			urlVal = "${contextPath}/board/search/"+$searchVal+"/"+page;
 		}
 		$.ajax({
-				url:urlVal
+			url:urlVal
 			,method:"get"
 			,success:function(pbObj){
 			var $boardPage=$("#tbody");
@@ -112,15 +124,19 @@ $(function(){
 				var $pageList = $("#pageList");
 				var pageListData = "";
 				if(pbObj.startPage > 1){
-					pageListData += '<li class="page-item"><a class="prev"><span class="ti-angle-left"></span></a></li>';
+					pageListData += '<li class="page-item"><a class="prev page-link"><span class="ti-angle-left"></span></a></li>';
 				}
-				
-				for(var i=pbObj.startPage; i<=pbObj.totalPage; i++){
-					
+				if(pbObj.endPage<=pbObj.totalPage){
+					for(var i=pbObj.startPage; i<=pbObj.endPage; i++){
 					pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
+					}
+				}else{
+					for(var i=pbObj.startPage; i<=pbObj.totalPage; i++){
+						pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
+					}
 				}
 				if(pbObj.endPage < pbObj.totalPage){
-					pageListData += '<li class="page-item"><a class="next"><span class="ti-angle-right"></span></a></li>'
+					pageListData += '<li class="page-item"><a class="next page-link"><span class="ti-angle-right"></span></a></li>'
 				}
 				
 				$pageList.html(pageListData);
@@ -135,6 +151,12 @@ $(function(){
 	//----------스터디 게시판 검색 button CLICK  START---------		
 	$("button#search-btn").click(function(){
 		$searchVal = $("#searchBar").val()
+		console.log($searchVal);
+		if($searchVal==""){
+// 			$("#studBoard").trigger("click");
+			alert("키워드를 입력해주세요");
+			return;
+		}
 		var page = 1;
 		if($searchVal== null || $searchVal== ""){
 			location.href = "${contextPath}/studyBoard";
@@ -166,15 +188,19 @@ $(function(){
 				var $pageList = $("#pageList");
 				var pageListData = "";
 				if(pbObj.startPage > 1){
-					pageListData += '<li class="page-item"><a class="prev"><span class="ti-angle-left"></span></a></li>';
+					pageListData += '<li class="page-item"><a class="prev page-link"><span class="ti-angle-left"></span></a></li>';
 				}
-				
-				for(var i=pbObj.startPage; i<=pbObj.totalPage; i++){
-					
+				if(pbObj.endPage<=pbObj.totalPage){
+					for(var i=pbObj.startPage; i<=pbObj.endPage; i++){
 					pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
+					}
+				}else{
+					for(var i=pbObj.startPage; i<=pbObj.totalPage; i++){
+						pageListData += '<li class="page-item active"><a class="page-link">'+i+'</a></li>';
+					}
 				}
 				if(pbObj.endPage < pbObj.totalPage){
-					pageListData += '<li class="page-item"><a class="next"><span class="ti-angle-right"></span></a></li>'
+					pageListData += '<li class="page-item"><a class="next page-link"><span class="ti-angle-right"></span></a></li>'
 				}
 				
 				$pageList.html(pageListData);
@@ -271,22 +297,18 @@ function nameMasking(str){
 								<tbody id="tbody">
 								</tbody>
 							</table>
-							<div class="freeboard_related_search" style="">
+							<div class="freeboard_related_search" style="width: 1200px;">
 								<aside class="serach_form search_btn">
 									<input type="text" class="searchbar" id="searchBar" placeholder='키워드를 입력하세요...' onfocus="this.placeholder=''" onblur='this.placeholder="키워드를 입력하세요..."'>
-										
-										
-									<div class="input-group-append">
 										<button class="btns" id="search-btn" type="button">
 											<i class="ti-search"></i>
 										</button>
-									</div>
+										<a class="button button-write f-right" id="boardWrite">글쓰기</a>
 								</aside>
 							</div>
 						</div>
 						<!-- 			<button type="submit" class="button-write">검색</button> -->
 						<div class="col-xl-12">
-							<a class="button button-write f-right" id="boardWrite">글쓰기</a>
 							
 						</div>
 					</div>
@@ -310,32 +332,6 @@ function nameMasking(str){
 		</div>
 
 	</main>
-	<footer>
-		<div class="footer-wrapper pt-30">
-			<!-- footer-bottom -->
-			<div class="footer-bottom-area">
-				<div class="container">
-					<div class="footer-border">
-						<div class="row d-flex justify-content-between align-items-center">
-							<div class="col-xl-10 col-lg-9 ">
-								<div class="footer-copy-right">
-									<p>
-										<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-										Copyright &copy;
-										<script>document.write(new Date().getFullYear());</script>
-										All rights reserved | This template is made with <i
-											class="fa fa-heart" aria-hidden="true"></i> by <a
-											href="https://colorlib.com" target="_blank">Colorlib</a>
-										<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</footer>
 <jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 
 </body>

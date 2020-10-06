@@ -75,10 +75,26 @@ public class ReviewDAO {
 			list = session.selectList("ReviewMapper.selectReivewList", map);
 			if ( list.size() == 0 ) {
 				log.info("강사별 후기 목록 조회 결과 없습니다.");
-			} else {
-				for ( Review r : list ) {
-					log.info(r);
-				}
+			} 
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new FindException(e.getMessage());
+		} finally {
+			session.close();
+		}
+		return list;
+	}
+	
+	// 멤버별, 카테고리별 후기 목록조회 : 수정
+	public List<Review> selectReviewByMemberId ( String member_id ) throws FindException {
+		SqlSession session = null;
+		List<Review> list = new ArrayList<Review>();
+		try {
+			// DB와의 연결
+			session = sqlSessionFactory.openSession();
+			list = session.selectList("ReviewMapper.selectReviewByMemberId", member_id);
+			if ( list.size() == 0 ) {
+				log.info( member_id + "님의 후기 목록 조회 결과 없습니다.");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

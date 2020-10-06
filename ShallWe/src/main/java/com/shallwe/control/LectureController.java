@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,11 +29,13 @@ import com.shallwe.exception.FindException;
 import com.shallwe.exception.RemoveException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.service.LectureService;
+import com.shallwe.service.ReviewService;
 import com.shallwe.service.TutorService;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureDetail;
 import com.shallwe.vo.Member;
 import com.shallwe.vo.MemberLectureHistory;
+import com.shallwe.vo.Review;
 import com.shallwe.vo.Tutor;
 
 import lombok.extern.log4j.Log4j;
@@ -47,6 +50,9 @@ public class LectureController {
 	// 강사 : 강의 등록/수정/취소, 등록한 강의 조회
 	@Autowired
 	LectureService service;
+	
+	@Autowired
+	ReviewService reserv;
 
 	@Autowired
 	TutorService tutoser;
@@ -104,7 +110,7 @@ public class LectureController {
 
 	// 강사 강의 등록 페이지 : 동일
 	@GetMapping(value = "/insert")
-	public ModelAndView insertView(Tutor tuto, HttpSession session) throws FindException {
+	public ModelAndView insertView(HttpSession session) throws FindException {
 		ModelAndView mnv = new ModelAndView();
 		List<Tutor> tutorlist = new ArrayList<>();
 		String tutor_id = (String) session.getAttribute("loginInfo");
@@ -168,9 +174,11 @@ public class LectureController {
 			try {
 				service.tutorcancelLecture(lectDe.getLecture(), lectDe);
 				mnv.setViewName("/success");
+				mnv.setViewName("/lecturepopup");
 			} catch (ModifyException e) {
 				e.printStackTrace();
 				mnv.setViewName("/fail");
+				mnv.setViewName("/lecturepopup");
 				mnv.addObject("errorMsg", e.getMessage());
 			}
 			return mnv;
@@ -183,11 +191,15 @@ public class LectureController {
 		List<MemberLectureHistory> mlthlist = new ArrayList<>();
 		ModelAndView mnv = new ModelAndView();
 		Member mem = new Member();
+		List<Review> relist = new ArrayList<Review>();
 		mem.setMember_id(id);
 		mlth.setMember(mem);
+		Map<String, String> map = new HashMap<String, String>();
 		try {
 			mlthlist = service.memberLectureList(mlth);
 			mnv.addObject("mlthlist", mlthlist);
+			relist = reserv.selectReviewByMemberId(id);
+			mnv.addObject("relist", relist);
 			mnv.setViewName("/memberLectureList");
 			mnv.addObject("status", "success");
 		} catch (FindException e) {
@@ -230,22 +242,30 @@ public class LectureController {
 		Member mem = new Member();
 		Tutor tuto = new Tutor();
 		Lecture lecttuto = new Lecture();
-		LectureDetail lectDetuto = new LectureDetail();
 		MemberLectureHistory mlth = new MemberLectureHistory();
 		Lecture lect = new Lecture();
 		LectureDetail lectDetail = new LectureDetail();
 		mem.setMember_id(id);
+		List<MemberLectureHistory> mlthlist = new ArrayList<>();
 		tuto.setMember(mem);
+		List<Tutor> tutorlist = new ArrayList<>();
 		lecttuto.setTutor(tuto);
-		lectDetuto.setLecture(lecttuto);
+		List<Lecture> lectlist = new ArrayList<>();
 		mlth.setMember(mem);
 		lect.setLecture_id(lecture_id);
 		lectDetail.setLecture(lect);
+		List<Lecture> wishlist = new ArrayList<>();
 		try {
 			lectDetail = service.lectureDetailView(lect);
 			mnv.addObject("lectDetail", lectDetail);
-			mnv.addObject("mlth", mlth);
-			mnv.addObject("lectDetuto", lectDetuto);
+			mlthlist = service.memberLectureList(mlth);
+			mnv.addObject("mlthlist", mlthlist);
+			wishlist = service.findWishListById(id);
+			mnv.addObject("wishlist", wishlist);
+			lectlist = service.tutorLectureList(lecttuto);
+			mnv.addObject("lectlist", lectlist);
+			tutorlist = tutoser.showTutorInfo(id);
+			mnv.addObject("tutorlist", tutorlist);
 			mnv.setViewName("/lectureDetail");
 		} catch (FindException e) {
 			e.printStackTrace();
@@ -254,5 +274,41 @@ public class LectureController {
 
 		return mnv;
 	}
+	
+	@RequestMapping(value = "/searchResult", method = RequestMethod.GET)
+	public void searchResult() {
+		System.out.println("searchResult.jsp  호출");
+	}
+	
+	@RequestMapping(value = "/search", method = {RequestMethod.GET, RequestMethod.POST})
+	public ModelAndView search(@RequestParam(value="searchKey", required=false) String searchKeyParam
+							 , @RequestParam(value="searchText", required=false)String searchText) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		if ( searchKeyParam == null ) {
+			searchKeyParam = "0";
+		} else if ( searchText == null )  {
+			searchText = " ";
+		}
+		
+		// 검색조건 요청 잘못 들어온 경우 처리
+		int searchKey = Integer.parseInt(searchKeyParam);
+		String [] searchKeyArr = {"all", "tutor_name", "lecture_title" , "category" };
+		map.put("searchKey", searchKeyArr[searchKey]);
+		map.put("searchText", searchText);
+		
+		ModelAndView modelAndView = new ModelAndView();
 
+		List<Lecture> list = new ArrayList<Lecture>();
+		try {
+			list = service.searchLecture(map);
+			log.info(modelAndView.getModelMap()); 
+			modelAndView.addObject("list", list);
+			modelAndView.setViewName("/searchResult");
+			
+		} catch (FindException e) {
+			e.printStackTrace();
+		}
+		return modelAndView;
+	}
 }
