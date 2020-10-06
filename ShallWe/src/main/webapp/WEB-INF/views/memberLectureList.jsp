@@ -134,7 +134,7 @@ $(function(){
 						<fmt:formatDate var="cancelDt" value="${m.cancel_dt}"
 							pattern="yyyy-MM-dd" />
 						<c:if
-							test="${endDate-nowDate>=0 && lecture.lecture_state eq '승인' && cancelDt eq ''}">
+							test="${endDate-nowDate>=0 && lecture.lecture_state eq '승인' && empty cancelDt}">
 
 							<!-- Single -->
 							<div class="properties pb-20">

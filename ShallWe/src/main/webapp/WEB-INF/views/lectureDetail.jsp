@@ -135,9 +135,14 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
+	<!-- topbar Start -->
+	<div class="topMenu">
+		<jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
+	</div>
+	<!-- topbar End -->
 	<main>
 		<!--? Start Align Area -->
-		<div class="whole-wrap">
+		<div class="whole-wrap mt-100">
 			<div class="container  box_1170">
 				<div class="section-top-border">
 					<div class="row">
@@ -148,20 +153,16 @@ $(document).ready(function() {
 						<div class="col-md-9 mt-sm-20">
 							<h3 class="mb-20">${lecture.lecture_title}</h3>
 							<div class="d-flex">
-								<h6 class="mr-10">상태${wishlist}${tutorlist}</h6>
-								<h6>${lecture.lecture_state}</h6>
+								<h4 class="mr-10">상태: ${lecture.lecture_state}</h4>
 							</div>
 							<div class="d-flex">
-								<h6 class="mr-10">장소:</h6>
-								<h6>${lectDetail.lecture_location}</h6>
+								<h4 class="mr-10">장소: ${lectDetail.lecture_location}</h4>
 							</div>
 							<div class="d-flex">
-								<h6 class="mr-10">인원:</h6>
-								<h6>${lecture.lecture_current}/${lecture.lecture_max}</h6>
+								<h4 class="mr-10">인원: ${lecture.lecture_current}/${lecture.lecture_max}</h4>
 							</div>
 							<div class="d-flex">
-								<h6 class="mr-10">카테고리:</h6>
-								<h6>${lecture.lectureCategory.lecture_category_id}</h6>
+								<h4 class="mr-10">카테고리: ${lecture.lectureCategory.lecture_category_id}</h4>
 							</div>
 						</div>
 					</div>

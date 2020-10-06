@@ -14,6 +14,9 @@ tr td.boardTitle:hover {
     color: #00DBD5;
     cursor: pointer;
 }
+#boardWrite{
+color: white;
+}
 </style>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -294,22 +297,19 @@ function nameMasking(str){
 								<tbody id="tbody">
 								</tbody>
 							</table>
-							<div class="freeboard_related_search" style="">
+							<div class="freeboard_related_search" style="width: 1200px;">
 								<aside class="serach_form search_btn">
 									<input type="text" class="searchbar" id="searchBar" placeholder='키워드를 입력하세요...' onfocus="this.placeholder=''" onblur='this.placeholder="키워드를 입력하세요..."'>
-										
-										
-									<div class="input-group-append">
 										<button class="btns" id="search-btn" type="button">
 											<i class="ti-search"></i>
 										</button>
-									</div>
+										<a class="button button-write f-right" id="boardWrite">글쓰기</a>
 								</aside>
 							</div>
 						</div>
 						<!-- 			<button type="submit" class="button-write">검색</button> -->
 						<div class="col-xl-12">
-							<a class="button button-write f-right" id="boardWrite">글쓰기</a>
+							
 						</div>
 					</div>
 				</div>
@@ -332,32 +332,6 @@ function nameMasking(str){
 		</div>
 
 	</main>
-	<footer>
-		<div class="footer-wrapper pt-30">
-			<!-- footer-bottom -->
-			<div class="footer-bottom-area">
-				<div class="container">
-					<div class="footer-border">
-						<div class="row d-flex justify-content-between align-items-center">
-							<div class="col-xl-10 col-lg-9 ">
-								<div class="footer-copy-right">
-									<p>
-										<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-										Copyright &copy;
-										<script>document.write(new Date().getFullYear());</script>
-										All rights reserved | This template is made with <i
-											class="fa fa-heart" aria-hidden="true"></i> by <a
-											href="https://colorlib.com" target="_blank">Colorlib</a>
-										<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</footer>
 <jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 
 </body>
