@@ -76,11 +76,10 @@ hr {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 900px;
+  height: 1000px;
  /*  background: #f2f2f2; */
   z-index:3;
-  background-image: url('https://images.unsplash.com/photo-1599687266197-6c66c083b39c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1268&q=80');
-  background-repeat : no-repeat;
+  background-image: url('https://images.unsplash.com/photo-1510070112810-d4e9a46d9e91?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80');
   background-size: 100%;
   background-position: center;
   background-origin: content-box;
@@ -225,6 +224,7 @@ input.submit {
 
 .checkbox {
     display: none;
+    color: #FFFFFF;
 }
 
 .checkbox:checked + svg .path-moving {
@@ -320,6 +320,24 @@ input.submit {
 	    let mailR= /^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/i;
 	    let telR =/^01([0|1|6|7|8|9])?([0-9]{3,4})?([0-9]{4})$/;
 
+
+		$("input#userName").keypress(function(e){
+			
+			
+			localStorage.test;
+			localStorage.getItem('userName');
+			
+			});
+
+
+		$("input#userName").focus(function(){
+			
+			 let $saveId = $('input#userName').val();
+			 localStorage.test = $saveId;
+			 localStorage.setItem('userName',$saveId);
+			 console.log($saveId);
+			 
+			});
 //로그인-------
 			
 		 $('input#signin').click(function(){
@@ -327,6 +345,7 @@ input.submit {
 			 let $idVal = $("input#userName").val();
 			 let $pwdVal = $("input#userPassword").val();
 			 
+			  
 			if($("input#userName").val() == "") {
 				$("span#one_help").slideDown(2000); //0.1초 동안 슬라이드로 내려오면서 보이기
 				$("span#one_help").slideUp(2000); //0.1초 동안 슬라이드로 올라가면서 감추기
@@ -356,11 +375,12 @@ input.submit {
 				   ,method:"POST"
 				   ,data:{member_id:$idVal,member_pwd:$pwdVal}
 				   ,success:function(data){
+					   
 					   let responseObj = JSON.parse(data);
 					   if(responseObj.status == "success"){
 						   
 						   alert('로그인성공');
-						   let $url = "/shallwe/?member_id="+$idVal+"&member_pwd="+$pwdVal;
+						   let $url = "/shallwe/";
 						   location.href= $url;
 						   
 						   } else{
@@ -382,21 +402,25 @@ input.submit {
 			 
 			 let $idValCheck = $("input#idInsert").val();
 		     let $mailCheck = $("input#emailInsert").val();
-		     
-		
+		    
+		  	// 로컬 스토리지에 데이터 저장하기
+				
+			 /* localStorage.setItem('userName', $idValCheck); */
+			 
+			 
 			 if($("input#idInsert").val()==""){
 				
 				 $("span#one_id").slideDown(2000);
 				 $("span#one_id").slideUp(2000);
 				 $("span#one_id").css("color","red");
 				 
-			 } else if(idR.test($idValCheck) == false){
+			 }/*  else if(idR.test($idValCheck) == false){
 				 
 				 $("input#idInsert").select();
 				 $msgIdFor.show();
 				 
 			
-			 } else if($("input#emailInsert").val()==""){
+			 } */ else if($("input#emailInsert").val()==""){
 		
 				 $("span#one_email").slideDown(2000);
 				 $("span#one_email").slideUp(2000);
@@ -463,34 +487,33 @@ input.submit {
 			 
 		 });
 
-		 $
-
+		
+		
 		
  });
  </script>
 </head>
 <body>
 <body> 
-<h1>Login & registration </h1>
-    <div class="info"><a href="https://www.grandvincent-marion.fr" target="_blank">
+<h1>로그인</h1>
+    <div class="info">
+    <a href="https://www.grandvincent-marion.fr" target="_blank">
 <!--     <p> Made with <i class="fa fa-heart"></i> by Marion Grandvincent </p></a> -->
     </div>
-  
 <div class="content">
-	<div class="container">
-	
+	<div class="container">	
 			<div class="menu">
-				<a href="#connexion" class="btn-connexion"><h2>SIGN IN</h2></a>
-				 <a href="#enregistrer" class="btn-enregistrer active" id = PWDCHECK><h2>Forgot Password?</h2></a>
+				<a href="#connexion" class="btn-connexion"><h2 >로그인</h2></a>
+				 <a href="#enregistrer" class="btn-enregistrer active" id = PWDCHECK style="color: black;"><h2>비밀번호 찾기</h2></a>
 			</div>
 			<div class="connexion">
 				<div class="contact-form">
-					<label>USERNAME</label>
+					<label >ID</label>
 					<span hidden="hidden" class="idR" style="color: red; font-size: 0.8em;"><i>[영어/숫자/언더바 사용가능/4~16자]</i></span>
 					<input placeholder="name" name="member_id" type="text" id="userName">
 					<span hidden="hidden" id="one_help">Name must be filled out!</span>
 					
-					<label>PASSWORD</label>
+					<label >PASSWORD</label>
 					<span hidden="hidden" class="pwdChk" style="color: red; font-size: 0.8em;"><i>비밀번호가 일치하지 않습니다</i></span>
 					<input placeholder="password" name="member_pwd" type="password" id="userPassword">
 					<span hidden="hidden" id="one_Password">Password must be filled out!</span>
@@ -498,35 +521,31 @@ input.submit {
 					<div class="check">
 						<label>				
 							<input id="check" type="checkbox" class="checkbox">
-								<svg xmlns="http://www.w3.org/2000/svg" width="26px" height="23px">
-									<path class="path-back"  d="M1.5,6.021V2.451C1.5,2.009,1.646,1.5,2.3,1.5h18.4c0.442,0,0.8,0.358,0.8,0.801v18.398c0,0.442-0.357,0.801-0.8,0.801H2.3c-0.442,0-0.8-0.358-0.8-0.801V6"/>
-									<path class="path-moving" d="M24.192,3.813L11.818,16.188L1.5,6.021V2.451C1.5,2.009,1.646,1.5,2.3,1.5h18.4c0.442,0,0.8,0.358,0.8,0.801v18.398c0,0.442-0.357,0.801-0.8,0.801H2.3c-0.442,0-0.8-0.358-0.8-0.801V6"/>
-								</svg>
+								
 						</label>
-						<h3>Keep me signed in</h3>
 					</div>
-					<input class="submit" value="SIGN IN" type="submit" id ="signin">
-					<input class="submit" value="SIGN UP" type="submit" id ="signup">
-					<input class="submit" value="ID CHECK" type="submit" id ="idCheck">
+					<input class="submit" value="로그인" type="submit" id ="signin">
+					<input class="submit" value="회원가입" type="submit" id ="signup">
+					<input class="submit" value="아이디 찾기" type="submit" id ="idCheck">
 				</div>
 				
 			</div>
 			
 			<div class="enregistrer active-section">
 				<div class="contact-form">
-					<label>USERNAME</label>
+					<label >USERNAME</label>
 					<span hidden="hidden" class="idFor" style="color: red; font-size: 0.8em;"><i>[영어/숫자/언더바 사용가능/4~16자]</i></span>
 					<input placeholder="" type="text" id="idInsert"><span hidden="hidden" id="one_id">Name must be filled out!</span>
 					
-					<label>E-MAIL</label>
+					<label >E-MAIL</label>
 					<span hidden="hidden" class="mailR" style="color: red; font-size: 0.8em;"><i>이메일 형식이 맞지 않습니다</i></span>
 					<input placeholder="" type="text" id="emailInsert"><span hidden="hidden" id="one_email">Email must be filled out!</span>
 					<div class="check">
 						
 				</div>
-					<input class="submit" value="RandomPassword" type="submit" id="RandomPassword">	
+					<input class="submit" value="임시비밀번호 받기" type="submit" id="RandomPassword">	
 				</div>
-					<input class="submit" value="Password Check" type="submit" id="Password">
+					<input class="submit" value="임시비밀번호 체크" type="submit" id="Password">
 					
 			
 			</div>
