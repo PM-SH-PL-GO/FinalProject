@@ -106,12 +106,12 @@
 
 <!-- ==================================================================	 -->
 
-	<update id="updateFavorites" parameterType="Map" resultMap="updateCategoFav">
-	UPDATE member set member_favorite1 fav1 = #{favorite_list.lecture_category_id1}, 
-					  member_favorite2 fav2 = #{favorite_list.lecture_category_id2},
-					  member_favorite3 fav3 = #{favorite_list.lecture_category_id3} 
-	WHERE member_id = #{member_id}
-	</update>
+<!-- 	<update id="updateFavorites" parameterType="Map" resultMap="updateCategoFav"> -->
+<!-- 	UPDATE member set member_favorite1 fav1 = #{favorite_list.lecture_category_id1},  -->
+<!-- 					  member_favorite2 fav2 = #{favorite_list.lecture_category_id2}, -->
+<!-- 					  member_favorite3 fav3 = #{favorite_list.lecture_category_id3}  -->
+<!-- 	WHERE member_id = #{member_id} -->
+<!-- 	</update> -->
 
 <!-- member(SH) : 회원가입 -->	
 	<insert id="joinMember" parameterType="MemberInfoBean">
