@@ -47,5 +47,7 @@ main {
 	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<script src="/shallwe/assets/js/accordion.js"></script>
+	
 </body>
 </html>
+<jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include>

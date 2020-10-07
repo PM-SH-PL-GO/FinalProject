@@ -296,3 +296,4 @@ $(function(){
     
     </body>
 </html>
+<jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include>

@@ -106,4 +106,8 @@ public class HomeController {
 		System.out.println("myinfoTutorInfo");
 	}
 	
+	@RequestMapping(value="/foot",method = RequestMethod.GET)
+	public void foot(Locale locale, Model model) {
+		System.out.println("foot");
+	}
 }
