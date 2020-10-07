@@ -9,7 +9,7 @@
 <fmt:parseDate var="startDat" value="${startDt}" pattern="yyyy-MM-dd" />
 <fmt:parseNumber value="${startDat.time/(1000*60*60*24)}"
 	integerOnly="true" var="startDate" />
-	
+
 <fmt:formatDate var="endDt" value="${lecture.lecture_end_dt}"
 	pattern="yyyy-MM-dd" />
 <fmt:parseDate var="endDat" value="${endDt}" pattern="yyyy-MM-dd" />
@@ -19,30 +19,33 @@ ${m.cancel_dt}
 <c:set var="eqlectidtrue" value="false" />
 <c:forEach items="${mlthlist}" var="ml" varStatus="i">
 	<c:set var="m" value="${mlthlist[i.index]}" />
-	<c:if test="${m.lecture.lecture_id eq lecture.lecture_id && empty m.cancel_dt}" var="lleq" />
+	<c:if
+		test="${m.lecture.lecture_id eq lecture.lecture_id && empty m.cancel_dt}"
+		var="lleq" />
 	<c:if test="${m.lecture.lecture_id ne lecture.lecture_id}" var="llne" />
 </c:forEach>
 
-<c:set var="tutoreq" value="true"/>
+<c:set var="tutoreq" value="true" />
 <c:forEach items="${lectlist}" var="lectl" varStatus="i">
-	<c:set var="lecl" value="${lectlist[i.index]}"/>
+	<c:set var="lecl" value="${lectlist[i.index]}" />
 	<c:forEach items="${tutorlist}" var="tl" varStatus="i">
-		<c:set var="t" value="${tutorlist[i.index]}"/>
-		<c:if test="${lecl.lecture_id eq lecture.lecture_id && tutorlist[0].member.member_id eq lecl.tutor.member.member_id}">
-			<c:set var="tutoreq" value="false"/>
+		<c:set var="t" value="${tutorlist[i.index]}" />
+		<c:if
+			test="${lecl.lecture_id eq lecture.lecture_id && tutorlist[0].member.member_id eq lecl.tutor.member.member_id}">
+			<c:set var="tutoreq" value="false" />
 		</c:if>
 	</c:forEach>
 </c:forEach>
-<c:set var="lecseq" value="true"/>
-<c:forEach items="${wishlist}" var="wil" varStatus="i">
-	<c:set var="wi" value="${wishlist[i.index]}"/>
-	<c:forEach items="${wi}" var="lecs" varStatus="j">
-		<c:set var="le" value="${lecs[j.index]}"/>
-		<c:if test="${lecs[j.index].lecture_id eq lecture.lecture_id}">
-			<c:set var="lecseq" value="false"/>
-		</c:if>
-	</c:forEach>
-</c:forEach>
+<c:set var="lecseq" value="true" />
+<%-- <c:forEach items="${wishlist}" var="wil" varStatus="i"> --%>
+<%-- 	<c:set var="wi" value="${wishlist[i.index]}"/> --%>
+<%-- 	<c:forEach items="${wi}" var="lecs" varStatus="j"> --%>
+<%-- 		<c:set var="le" value="${lecs[j.index]}"/> --%>
+<%-- 		<c:if test="${lecs[j.index].lecture_id eq lecture.lecture_id}"> --%>
+<%-- 			<c:set var="lecseq" value="false"/> --%>
+<%-- 		</c:if> --%>
+<%-- 	</c:forEach> --%>
+<%-- </c:forEach> --%>
 
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
@@ -165,6 +168,28 @@ $(document).ready(function() {
 	$("div[name=gotoDeend]").click(function(){
 		location.href = "${contextPath}/lectures/detail?lecture_id=" +letidendValue;		
 	});
+	$(document).ready(function() {
+
+		// 기존 css에서 플로팅 배너 위치(top)값을 가져와 저장한다.
+		var floatPosition = parseInt($("#floatMenu").css('top'));
+		// 250px 이런식으로 가져오므로 여기서 숫자만 가져온다. parseInt( 값 );
+
+		$(window).scroll(function() {
+			// 현재 스크롤 위치를 가져온다.
+			var scrollTop = $(window).scrollTop();
+			var newPosition = scrollTop + floatPosition + "px";
+
+			/* 애니메이션 없이 바로 따라감
+			 $("#floatMenu").css('top', newPosition);
+			 */
+
+			$("#floatMenu").stop().animate({
+				"top" : newPosition
+			}, 500);
+
+		}).scroll();
+
+	});
 	return false;
 }); // end of scriptLoad
 </script>
@@ -181,100 +206,114 @@ $(document).ready(function() {
 			<div class="container  box_1170">
 				<div class="section-top-border">
 					<div class="row">
-						<div class="col-md-3">
+						<div class="col-md-3"
+							style="padding: 20px; background-color: rgba(0, 219, 73, 0.8); border-radius: 20px 40px 60px 80px;">
 							<img src="/shallwe/lecture/${lecture.lecture_img}" alt=""
-								class="img-fluid">
+								class="img-fluid" style="border-radius: 20px 40px 60px 80px;">
 						</div>
-						<div class="col-md-9 mt-sm-20">
-							<h3 class="mb-20">${lecture.lecture_title}</h3>
+						<div class="col-md-8 mt-sm-20"
+							style="margin-left: 6px; padding: 20px; background-color: rgba(0, 219, 73, 0.8); border-radius: 60px 60px 60px 60px;">
+							<h2 class="mb-20"
+								style="margin-left: 50px; margin-top: 10px; font-weight: bold; color: white;">${lecture.lecture_title}</h2>
 							<div class="d-flex">
-								<h4 class="mr-10">상태: ${lecture.lecture_state}</h4>
-							</div>
-							<div class="d-flex">
-								<h4 class="mr-10">장소: ${lectDetail.lecture_location}</h4>
-							</div>
-							<div class="d-flex">
-								<h4 class="mr-10">인원: ${lecture.lecture_current}/${lecture.lecture_max}</h4>
-							</div>
-							<div class="d-flex">
-								<h4 class="mr-10">카테고리:
-									${lecture.lectureCategory.lecture_category_id}</h4>
+								<h3 class="mr-10 mb-9"
+									style="margin-left: 50px; line-height: 98%; color: white;">
+									상태: ${lecture.lecture_state}<br>
+									<br>장소: ${lectDetail.lecture_location}<br>
+									<br>인원: ${lecture.lecture_current}/${lecture.lecture_max}<br>
+									<br>카테고리: ${lecture.lectureCategory.lecture_category_id}
+								</h3>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="d-flex">
-					<a href="#introduce"><h4 style="margin: 10px;">강의 소개</h4></a> <a
-						href="#curriculum"><h4 style="margin: 10px;">교육 과정</h4></a> <a
-						href="#prepared"><h4 style="margin: 10px;">준비물</h4></a> <a
-						href="#caution"><h4 style="margin: 10px;">유의사항</h4></a> <a
-						href="#tutorReview"><h4 style="margin: 10px;">첨부파일</h4></a> <a
-						href="#filename"><h4 style="margin: 10px;">강사후기</h4></a>
+					<a href="#introduce"><h3
+							style="padding: 10px; font-weight: bold;">강의 소개</h3></a>
+					<h3 style="padding-top: 10px">|</h3>
+					<a href="#curriculum"><h3
+							style="padding: 10px; font-weight: bold;">교육 과정</h3></a>
+					<h3 style="padding-top: 10px">|</h3>
+					<a href="#prepared"><h3
+							style="padding: 10px; font-weight: bold;">준비물</h3></a>
+					<h3 style="padding-top: 10px">|</h3>
+					<a href="#caution"><h3
+							style="padding: 10px; font-weight: bold;">유의사항</h3></a>
+					<h3 style="padding-top: 10px">|</h3>
+					<a href="#tutorReview"><h3
+							style="padding: 10px; font-weight: bold;">첨부파일</h3></a>
+					<h3 style="padding-top: 10px">|</h3>
+					<a href="#filename"><h3
+							style="padding: 10px; font-weight: bold;">강사후기</h3></a>
 				</div>
-				<div class="section-top-border">
-					<h3 class="mb-30" id="introduce">강의 소개</h3>
+				<div class="section-top-border"
+					style="border-top: 1px solid #d9d9d9;">
 					<div class="row">
 						<div class="col-md-8">
+							<h3 class="mb-30 mt-30" " id="introduce"
+								style="padding: 10px; background-color: #00dbd5; font-weight: bold; color: white;">강의
+								소개</h3>
 							<p>${lectDetail.lecture_introduce}</p>
-							<h3 class="mb-30 mt-30" id="curriculum">교육 과정</h3>
+							<h3 class="mb-30 mt-30" id="curriculum"
+								style="padding: 10px; background-color: #00dbd5; font-weight: bold; color: white;">교육
+								과정</h3>
 							<ul class="unordered-list">${lectDetail.lecture_curriculum}
 							</ul>
-							<h3 class="mb-30 mt-30" id="prepared">준비물</h3>
+							<h3 class="mb-30 mt-30" id="prepared"
+								style="padding: 10px; background-color: #00dbd5; font-weight: bold; color: white;">준비물</h3>
 							<p>${lectDetail.lecture_prepared}</p>
-							<h3 class="mb-30 mt-30" id="caution">유의사항</h3>
+							<h3 class="mb-30 mt-30" id="caution"
+								style="padding: 10px; background-color: #00dbd5; font-weight: bold; color: white;">유의사항</h3>
 							<p>${lectDetail.lecture_caution}</p>
-							<h3 class="mb-30 mt-30" id="filename">첨부파일</h3>
+						</div>
+						<div class="col-md-4">
+							<div id="floatMenu" style="position: absolute; top:-56%; border-radius: 20px; border: 1px solid #dedede; padding: 20px; background-color: white; z-index: 999">
+								<img src="/shallwe/tutorImages/${lecture.tutor.tutor_img}"
+									alt="" class="img-fluid" style="border-radius: 20px;">
+								<div class="d-flex mt-10">
+									<h3 class="mr-10">강사: ${lecture.tutor.tutor_nickname}</h3>
+								</div>
+								<div class="d-flex mt-10">
+									<h3 class="mr-10">강사평점: ${lecture.tutor.tutor_score}</h3>
+								</div>
+								<div class="d-flex mt-10">
+									<h3 class="mr-10">수강일시: ${startDt}~${endDt}</h3>
+								</div>
+								<h3 class="mt-20">
+									<fmt:formatNumber value="${lecture.lecture_price}"
+										pattern="#,###" />
+									원
+								</h3>
+								<c:if test="${endDate-nowDate>=0 && startDate-nowDate>=0}">
+									<c:if test="${empty m.lecture.lecture_id && tutoreq}">
+										<a href="#" id="applyBtn"
+											class="genric-btn primary-border mt-10">신청</a>
+									</c:if>
+									<c:if test="${llne && tutoreq}">
+										<a href="#" id="applyBtn"
+											class="genric-btn primary-border mt-10">신청</a>
+									</c:if>
+									<c:if test="${lleq}">
+										<a href="#" id="cancelBtn"
+											class="genric-btn primary-border mt-10">결제취소</a>
+									</c:if>
+									<c:if test="${tutoreq}">
+										<a href="#" id="favoriteLectureBtn"
+											class="genric-btn primary-border mt-10">찜하기</a>
+									</c:if>
+								</c:if>
+								
+							</div>
+						</div>
+						<div class="col-md-12">
+							<h3 class="mb-30 mt-30" id="filename"
+								style="padding: 10px; font-weight: bold;">첨부파일</h3>
 							<c:set var="fileName"
 								value="${fn:split(studyBoard.studyBoard_fileName, '_')}" />
 							<a style="-webkit-text-fill-color: #00dbd5 !important;"
 								href="${contextPath}/lectures/download?fileName=${lectDetail.lecture_fileName}">${fn:substringAfter(lectDetail.lecture_fileName,'_')}</a>
-							<h3 class="mb-30 mt-30" id="tutorReview">강사후기</h3>
 							<!-- 후기영역 -->
 							<div class="mb-30 mt-30" id="reviewArea"></div>
-						</div>
-						<div class="col-md-4"
-							style="border-radius: 8px; border: 1px solid #eee; padding: 10px">
-							<img src="/shallwe/tutorImages/${lecture.tutor.tutor_img}" alt=""
-								class="img-fluid">
-							<div class="d-flex mt-10">
-								<h4 class="mr-10">강사:</h4>
-								<h4>
-									<a href="#">${lecture.tutor.tutor_nickname}</a>
-								</h4>
-							</div>
-							<div class="d-flex mt-10">
-								<h4 class="mr-10">강사평점:</h4>
-								<h4>
-									<a href="#">${lecture.tutor.tutor_score}</a>
-								</h4>
-							</div>
-							<h3 class="mt-30">
-								<fmt:formatNumber value="${lecture.lecture_price}"
-									pattern="#,###" />
-								원
-							</h3>
-							<c:if test="${endDate-nowDate>=0 && startDate-nowDate>=0}">
-								<c:if test="${empty m.lecture.lecture_id && tutoreq}">
-									<a href="#" id="applyBtn"
-										class="genric-btn primary-border mt-10">신청</a>
-								</c:if>
-								<c:if test="${llne && tutoreq}">
-									<a href="#" id="applyBtn"
-										class="genric-btn primary-border mt-10">신청</a>
-								</c:if>
-								<c:if test="${lleq}">
-									<a href="#" id="cancelBtn"
-										class="genric-btn primary-border mt-10">결제취소</a>
-								</c:if>
-								<c:if test="${lecseq}">
-								<a href="#" id="favoriteLectureBtn"
-									class="genric-btn primary-border mt-10">찜하기</a>
-								</c:if>
-							</c:if>
-							<div class="d-flex mt-10">
-								<h3 class="mr-10">수강일시:</h3>
-								<h3 class="date mr-10">${startDt} ~ ${endDt}</h3>
-							</div>
 						</div>
 					</div>
 				</div>
