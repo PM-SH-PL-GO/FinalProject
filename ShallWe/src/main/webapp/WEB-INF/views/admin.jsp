@@ -615,7 +615,7 @@
 							let cont = $cont.html() + historyModal;
 							$cont.html(cont);
 						}else
-							alert(신청 인원이 없습니다);
+							alert("신청 인원이 없습니다");
 							
 					},
 					error: function(data){

@@ -54,7 +54,7 @@ $(function(){
 				}else{
 					boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"  ["+studyBoard.replylist.length+"]</td>";					
 				}
-					boardPageData += "	<td>"+studyBoard.member.member_id+"/"+nameMasking(studyBoard.member.member_name)+"</td>";
+					boardPageData += "	<td>"+studyBoard.member.member_id+"/"+nameMasking(studyBoard.member.member_name)+"</td>";
 					boardPageData += "	<td>"+formatDate(studyBoard.studyBoard_write_dt)+"</td>";
 					boardPageData += "	<td>"+studyBoard.studyBoard_view_count+"</td>";
 					boardPageData += "</tr>"
@@ -122,7 +122,7 @@ $(function(){
 						}else{
 							boardPageData += "	<td class=\"boardTitle\">"+studyBoard.studyBoard_title+"  ["+studyBoard.replylist.length+"]</td>";					
 						}
-						boardPageData += "	<td>"+studyBoard.member.member_id+"/"+nameMasking(studyBoard.member.member_name)+"</td>";
+						boardPageData += "	<td>"+studyBoard.member.member_id+"/"+nameMasking(studyBoard.member.member_name)+"</td>";
 						boardPageData += "	<td>"+formatDate(studyBoard.studyBoard_write_dt)+"</td>";
 						boardPageData += "	<td>"+studyBoard.studyBoard_view_count+"</td>";
 						boardPageData += "</tr>"
