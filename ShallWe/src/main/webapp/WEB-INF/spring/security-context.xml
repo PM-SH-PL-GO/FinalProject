@@ -15,7 +15,7 @@
 			<!-- 강사등록해야만 접근 가능 -->
 <!-- 		<security:intercept-url pattern="/tutor/**" access="hasRole('ROLE_TUTOR')"/> -->
 			<!-- admin만 접근 가능 -->
-<!-- 		<security:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/> -->
+		<security:intercept-url pattern="/admin/**" access="hasRole('ADMIN')"/>
 			
 		
 		<security:form-login/>
@@ -28,14 +28,9 @@
 	<security:authentication-manager>
 		
 <!-- 		<security:authentication-provider> -->
-<!-- 			<security:user-service> -->
-<!-- 				<security:user name="member1" password="{noop}pw1" authorities="ROLE_MEMBER"/> -->
-<!-- 				<security:user name="member1" password="{noop}pw1" authorities="ROLE_MEMBER, ROLE_TUTOR"/> -->
-<!-- 				<security:user name="admin" password="{noop}admin" authorities="ROLE_ADMIN"/> -->
-<!-- 			</security:user-service> -->
 
 <!-- 			<security:jdbc-user-service data-source-ref="dataSource" -->
-<!-- 							         users-by-username-query="select member_id as username, member_pwd as password, 1 as enabled -->
+<!-- 							         users-by-username-query="select member_id as username, member_pwd as password, enabled -->
 <!-- 							         						 from member -->
 <!-- 							         						 where member_id = ?" -->
 <!-- 							         authorities-by-username-query="select member_id, authority from member_auth where member_id = ?" /> -->
