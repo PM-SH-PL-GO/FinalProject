@@ -37,6 +37,7 @@ import com.shallwe.service.LectureService;
 import com.shallwe.service.MemberSerivce;
 import com.shallwe.service.ReviewService;
 import com.shallwe.vo.Lecture;
+import com.shallwe.vo.LectureCategory;
 import com.shallwe.vo.Review;
 
 import lombok.extern.log4j.Log4j;
@@ -189,6 +190,57 @@ public class MemberController {
 		}
 		return modelAndView;
 	}
+	
+	// member 정보 수정 화면 정보에 데이터 보내기
+	@RequestMapping(value = "/myinfoModi", method = RequestMethod.GET)
+	public ModelAndView myinfoModi(HttpSession session) {
+		ModelAndView modelAndView = new ModelAndView();
+		String member_id = (String)session.getAttribute("loginInfo");
+		modelAndView.addObject("member_id", member_id);
+		
+		// myInfo
+		MemberInfoBean myInfo = new MemberInfoBean();
+		try {
+			myInfo = service.findById(member_id);
+			modelAndView.addObject("myInfo", myInfo);
+			log.info(myInfo);
+			
+		} catch (FindException e) {
+			e.printStackTrace();
+		} finally {
+			modelAndView.setViewName("/myinfoModi");
+		}
+		return modelAndView;
+	}
+	
+	// member 정보 수정 비즈니스로직 처리
+	@RequestMapping(value = "/myinfoModify", method = RequestMethod.GET)
+	public ModelAndView myinfoModify(HttpSession session , @RequestParam (value="memberPhone", required=false) String memberPhone
+			, @RequestParam (value="memberEmail" , required=false) String memberEmail
+			, @RequestParam (value="memberPassword" , required=false) String memberPassword
+			, @RequestParam (value="favorite_list" , required=false) Map<String, String> favorite_list) {
+		
+		String memberId = (String)session.getAttribute("loginInfo");
+
+		try {
+			if (memberPhone != null) {
+				service.updatePhone(memberId, memberPhone);
+			} else if (memberEmail != null) {
+				service.updatePhone(memberId, memberEmail);
+			} else if (memberPassword != null) {
+				service.updatePhone(memberId, memberPassword);
+			} else if (favorite_list.size() > 0 ) {
+				service.updateFavorites(memberId, favorite_list);
+			}
+		} catch (ModifyException e) {
+			e.printStackTrace();
+		}
+			
+		ModelAndView modelAndView = new ModelAndView();
+
+		return modelAndView;
+	}
+	
 	
 	// 강의 후기 등록 화면 요청
 	// 고수정 : 후기 등록
