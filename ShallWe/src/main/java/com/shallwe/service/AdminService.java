@@ -57,13 +57,13 @@ public class AdminService {
 		return memberDAO.selectAllMember();
 	}
 	
-	public void removeMemberById(String member_id) throws RemoveException{
-		
+	public void updateEnalbedMemberById(Map<String, String> map) throws ModifyException{
+		memberDAO.updateEnabledById(map);
 	}
 	
 	
 	/**
-	 * 
+	 * 예비/현 강사 목록 가져오기
 	 * @author jun6
 	 * @param YN
 	 * @param preTutorPage
@@ -121,11 +121,11 @@ public class AdminService {
 				"신청하신 강사 등록 건이 아래와 같이 처리되었음을 알려드립니다.\r\n" + 
 				"\r\n" + 
 				"1. 신청내용\r\n" + 
-				" • 신규 강사 등록\r\n" + 
+				" - 신규 강사 등록\r\n" + 
 				"2. 분야\r\n" + 
 				approveCat + "\r\n" + 
 				"3. 신청 결과\r\n" + 
-				" • 승인";
+				" - 승인";
 		String email = bean.getMemberEmail();
 		
 		sendMail(emailContent, email);
@@ -253,6 +253,13 @@ public class AdminService {
 		lectureDAO.updateLectureStatusByIdAndStatus(map);
 	}
 	
+	/**
+	 * 특정 강의 수강 중인 회원 목록 가져오기
+	 * @author jun6
+	 * @param lecture_id
+	 * @return
+	 * @throws FindException
+	 */
 	public List<MemberLectureHistory> showMemberHistoryByLectureId(String lecture_id) throws FindException{
 		return historyDAO.selectMemberHistoryByLectureId(lecture_id);
 	}

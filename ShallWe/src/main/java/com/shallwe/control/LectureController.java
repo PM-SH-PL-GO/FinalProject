@@ -1,14 +1,18 @@
 package com.shallwe.control;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -63,41 +67,26 @@ public class LectureController {
 	public String saveLectFile(MultipartFile file) {
 		// 파일 용량은 루트 컨텍스트에서 확인이 가능함
 		UUID uuid = UUID.randomUUID();
-
 		String saveName = uuid + "_" + file.getOriginalFilename();
 		String lectUploadPath = context.getRealPath("/files/lecture");
 		// 파일 중복 되지 않기 위해 사용함
 		File saveFile = new File(lectUploadPath, saveName);
-		System.out.println("in controller: saveFile=" + saveFile.getPath());
 		try {
-
 			file.transferTo(saveFile);
-			// 업로드 파일에 saveFile이라는 껍데기 입힘
-			System.out.println("파일크기:" + saveFile.length() + "파일사이즈:" + file.getSize());
-
 		} catch (IllegalStateException e) {
-			// 즉 브라우져에 보낼 데이터를 버퍼에 쓴 이후로는 redirect나 forward를 할수 없을떄 일어난다(forward나 redirect)
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		log.info("이 업로드한 파일은" + file);
-		log.info("이 업로드된 파일이다" + saveName);
-		log.info("업로드된 파일의 경로는 " + lectUploadPath);
-
 		return saveName;
-
 	}
 	
 	public String saveFile(MultipartFile file) {
 		// 파일 용량은 루트 컨텍스트에서 확인이 가능함
 		UUID uuid = UUID.randomUUID();
-
 		String saveName = uuid + "_" + file.getOriginalFilename();
 		String lectUploadPath = context.getRealPath("/files/lectureDetail");
 		File saveFile = new File(lectUploadPath, saveName);
-		System.out.println("in controller: saveFile=" + saveFile.getPath());
 		try {
 			file.transferTo(saveFile);
 		} catch (IllegalStateException e) {
@@ -108,6 +97,35 @@ public class LectureController {
 		return saveName;
 	}
 
+	/**
+	 * 파일 다운로드
+	 * @author psw09
+	 */	
+	@RequestMapping(value = "/download")
+	public void downloadBoard(String fileName, HttpServletResponse response) throws IOException{
+		response.setContentType("application/octet-stream; charset=UTF-8");
+		//응답헤더 설정: Download할 파일이름 결정
+		String result = fileName.substring(fileName.lastIndexOf("_")+1);
+		result = new String(result.getBytes("UTF-8"), "ISO-8859-1");
+		response.setHeader("Content-Disposition", "attachment; filename=\""+result+"\"");
+		response.setHeader("Content-Transfer-Encoding", "binary");
+		response.setHeader("Pragma", "no-cache;");
+		response.setHeader("Expires", "-1;");
+		
+		String lectDownPath = context.getRealPath("/files/lectureDetail");
+		OutputStream os = response.getOutputStream();
+		FileInputStream fis = null;
+		File f = new File(lectDownPath, fileName);
+		fis = new FileInputStream(f);
+		byte[] bArr = new byte[8*1024];
+		int len = -1;
+		while( (len = fis.read(bArr)) != -1){
+			os.write(bArr, 0, len);
+		}
+		fis.close();
+		os.close();
+	}
+	
 	// 강사 강의 등록 페이지 : 동일
 	@GetMapping(value = "/insert")
 	public ModelAndView insertView(HttpSession session) {
@@ -293,6 +311,7 @@ public class LectureController {
 		try {
 			tutorlist = tutoser.showTutorInfo(id);
 			mnv.addObject("tutorlist", tutorlist);
+			System.out.println("강사!"+tutorlist);
 			mnv.setViewName("/lectureDetail");
 		} catch (FindException e1) {
 			e1.printStackTrace();
@@ -309,7 +328,8 @@ public class LectureController {
 	
 	@RequestMapping(value = "/search", method = {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView search(@RequestParam(value="searchKey", required=false) String searchKeyParam
-							 , @RequestParam(value="searchText", required=false)String searchText) {
+							 , @RequestParam(value="searchText", required=false)String searchText
+							 , HttpSession session ) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		
 		if ( searchKeyParam == null ) {
@@ -325,7 +345,9 @@ public class LectureController {
 		map.put("searchText", searchText);
 		
 		ModelAndView modelAndView = new ModelAndView();
-
+		String member_id = (String)session.getAttribute("loginInfo");
+		modelAndView.addObject("loginUser", member_id);
+		
 		List<Lecture> list = new ArrayList<Lecture>();
 		try {
 			list = service.searchLecture(map);

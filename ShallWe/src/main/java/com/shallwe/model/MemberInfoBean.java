@@ -13,6 +13,7 @@ public class MemberInfoBean {
 	private LectureCategory favorite3;
 	private String memberSex;
 	private String tutorYN;
+	private String enabled;
 
 	
 	public MemberInfoBean(String memberId, String memberPwd, String memberName, String memberEmail, String memberPhone,

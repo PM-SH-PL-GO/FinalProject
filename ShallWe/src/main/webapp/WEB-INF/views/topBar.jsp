@@ -64,8 +64,8 @@ cursor: pointer;
 #tutorSetBtn{
 color: white;
 }
-#tutorLectureBtn{
-color: white;
+.myInfoTutorInfo{
+color: white !important;
 }
 .menu-wrapper{
 margin-left:5%;
@@ -76,12 +76,28 @@ margin-left:5%;
 
 #studBoard, #faq{
 font-size: 20px;}
+
+.submenu .side{
+left: -177px !important;
+top: -17px!important;
+background: #00b3ad!important;
+}
+.col-lg-8{
+max-width: 85%;
+}
+.col-sm-6{
+padding-left: 0px;
+}
+
 </style>
 <script>
 $(function(){
 	//----------강사여부 확인 LOAD START---------
 		var $topbarBtn = $('#tutorOrLecture');
+		var $tutorInfoBtn = $('#tutorInfoBtn');
+	
 		var topbarBtnData = "";
+		var tutorInfoBtn = "";
 		if("${memberId}"==null||"${memberId}"==""){
 			topbarBtnData = "<a class=\"btn\" id=\"tutorSetBtn\">강사 등록</a>"
 			$topbarBtn.html(topbarBtnData);				
@@ -92,11 +108,15 @@ $(function(){
 					if(data=='N'){
 						topbarBtnData = "<a class=\"btn\" id=\"tutorSetBtn\">강사 등록</a>"
 					}else{
-						topbarBtnData = "<a class=\"btn\" id=\"tutorLectureBtn\">강사회원입니다.</a>"
-// 						topbarBtnData = "<a class=\"btn\" id=\"tutorLectureBtn\">내 강의보기(강사)</a>"
+						topbarBtnData = "<a class=\"btn myInfoTutorInfo\">강사회원입니다.</a>"
+						tutorInfoBtn += "<a>강사정보</a>"
+						tutorInfoBtn += "<ul class=\"submenu side\" >"
+						tutorInfoBtn += "<li><a class=\"community myInfoTutorInfo\">내 강사 정보보기</a></li>"
+						tutorInfoBtn += "<li><a class=\"community myInfoTutorLecture\">내 강의 목록</a></li>"
+						tutorInfoBtn += "<li><a class=\"community addLecture\">강의신청</a></li></ul>"
 					}
 					$topbarBtn.html(topbarBtnData);	
-			
+					$tutorInfoBtn.html(tutorInfoBtn);
 				}
 				,error:function(data){
 				}
@@ -126,12 +146,6 @@ $(function(){
 		}
 	});
 	//----------강의등록 버튼 CLICK END---------	
-	
-	//----------강사 강의등록 버튼 CLICK START---------		
-	$("#tutorOrLecture").on("click","#tutorLectureBtn",function(){
-		location.href = "${contextPath}/lectures/tutorLecture";		
-	});
-	//----------강사 강의등록 버튼 CLICK END---------		
 	
 	//----------스터디게시판 CLICK START---------	
 	$("#studBoard").click(function(){
@@ -169,9 +183,27 @@ $(function(){
 	});
 	//----------내 강의보기 CLICK END---------	
 	
-	//----------내  강사정보보기 CLICK START---------	
-	$("#myInfoTutorInfo").click(function(){
+	//----------내  강사정보보기(버튼) CLICK START---------	
+	$(".myInfoTutorInfo").click(function(){
 		location.href = "${contextPath}/tutor/showTutor";
+	});
+	//----------내 강사정보보기(버튼) CLICK END---------	
+	
+	//----------내  강사정보보기 CLICK START---------	
+	$("#tutorInfoBtn").on("click",".myInfoTutorInfo",function(){
+		location.href = "${contextPath}/tutor/showTutor";
+	});
+	//----------내 강사정보보기 CLICK END---------	
+	
+	//----------내 강사 강의목록 CLICK START---------	
+	$("#tutorInfoBtn").on("click",".myInfoTutorLecture",function(){
+		location.href = "${contextPath}/lectures/tutorLecture";	
+	});
+	//----------내 강사 강의목록 CLICK END---------	
+	
+	//----------내  강사정보보기 CLICK START---------	
+	$("#tutorInfoBtn").on("click",".addLecture",function(){
+		location.href = "${contextPath}/lectures/insert";
 	});
 	//----------내 강사정보보기 CLICK END---------	
 
@@ -242,11 +274,16 @@ $(function(){
 												<li><a id ="signUp" class="community">회원가입</a></li>
 											</c:when>
 											<c:otherwise>
-												<li><a id ="myInfo" class="community">내 정보보기</a></li>
-												<li><a id ="myInfoTutorInfo" class="community">내 강사 정보보기</a></li>
-												<li><a id ="wishList" class="community">내 찜목록보기</a></li>
-												<li><a id ="myLecture" class="community">내 수강목록</a></li>
-												<li><a id ="signOut" class="community">로그아웃</a></li>
+												<li><a>회원정보</a>
+													<ul class="submenu side" >
+		                                           		 <li><a id ="myInfo" class="community">내 정보보기</a></li>
+		                                           		 <li><a id ="wishList" class="community">내 찜목록보기</a></li>
+		                                           		 <li><a id ="myLecture" class="community">내 수강목록</a></li>
+                                        			</ul>
+                                    			</li>
+												<li id="tutorInfoBtn">
+												</li>
+														<li><a id ="signOut" class="community">로그아웃</a></li>
 											</c:otherwise>
 										</c:choose>
 										</ul>

@@ -98,8 +98,8 @@ public class WishListController {
 	@RequestMapping(value="wishlist/deleteOne", method=RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<String> delete(@RequestParam(value="lecture_id")String lecture_id, HttpSession session){
-//		String member_id = (String)session.getAttribute("loginInfo");
-		String member_id = "member2";
+		String member_id = (String)session.getAttribute("loginInfo");
+//		String member_id = "member2";
 		if(member_id!=null) {
 			Map<String, Object>map = new HashMap<String, Object>();
 			map.put("member_id", member_id);
@@ -119,8 +119,8 @@ public class WishListController {
 	@RequestMapping(value="wishlist/deleteAll", method=RequestMethod.GET)
 	@ResponseBody	
 	public ResponseEntity<String> deleteAllWishList(HttpSession session) {
-//		String member_id = (String)session.getAttribute("loginInfo");
-		String member_id = "member2"; 
+		String member_id = (String)session.getAttribute("loginInfo");
+//		String member_id = "member2"; 
 		if(member_id!=null) {
 			try {
 				service.deleteAllWishList(member_id);

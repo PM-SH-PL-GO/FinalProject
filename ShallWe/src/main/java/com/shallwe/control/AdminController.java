@@ -41,7 +41,6 @@ public class AdminController {
 
 	@RequestMapping(value = "")
 	public void admin() {
-		System.out.println("Admin Index");
 	}
 	
 	/**
@@ -65,9 +64,15 @@ public class AdminController {
 	}
 
 	@PatchMapping(value = "/member/{memberId}")
-	public ResponseEntity<String> deleteMember(@PathVariable(name = "memberId") String member_id){
-		
-		return ResponseEntity.status(HttpStatus.OK).body("");
+	public ResponseEntity<String> deleteMember(@PathVariable(name = "memberId") String member_id, @RequestBody Map<String, String> map){
+		try {
+			map.put("member_id", member_id);
+			adminService.updateEnalbedMemberById(map);
+			return ResponseEntity.status(HttpStatus.OK).body("{ \"success\" : \"성공적으로 변경하였습니다\"}");
+		}catch(ModifyException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{ \"errMsg\" : \"" + e.getMessage() + "\"}");
+		}
 	}
 	
 	/////////////////////////강사 관리////////////////////////////
@@ -87,7 +92,6 @@ public class AdminController {
 			}else
 				return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(null);
 		}catch(FindException e) {
-			System.out.println("ㅈ대따");
 			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(null);
 		}
 		

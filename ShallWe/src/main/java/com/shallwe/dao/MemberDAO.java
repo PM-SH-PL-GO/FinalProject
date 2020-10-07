@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.naming.directory.ModificationItem;
+
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,18 +153,12 @@ public class MemberDAO {
 	}
 	
 	//선호카테고리 수정: 상하
-	public void updateFavorites(String member_id, List<LectureCategory>favorite_list)throws ModifyException{
+	public void updateFavorites(String member_id, Map<String, String> favorite_list)throws ModifyException{
 		SqlSession session = null;
-		Map<String, Object>map = new HashMap<String, Object>();
-		map.put("member_id", member_id);
-		map.put("favorite1", favorite_list.get(0));
-		map.put("favorite2", favorite_list.get(1));
-		map.put("favorite3", favorite_list.get(2));
-
 		int i = 0;
 		try {
 			session = sqlSessionFactory.openSession();
-			i = session.update("MemberMapper.updateFavorites", map);
+			i = session.update("MemberMapper.updateFavorites", favorite_list);
 			if(i==0) {
 				throw new ModifyException("카테고리 수정에 실패하였습니다.");
 			}
@@ -307,19 +303,19 @@ public class MemberDAO {
 	}
 	
 	/**
-	 * admin : 회원 탈퇴 시키기?
+	 * admin : 회원 탈퇴 시키기(유효성 0으로 전환)
 	 * @param member_id
 	 * @throws RemoveException
 	 */
-	public void deleteMemberById(String member_id) throws RemoveException{
+	public void updateEnabledById(Map<String, String> map) throws ModifyException{
 		SqlSession session = null;
 		
 		try {
 			session = sqlSessionFactory.openSession();
-			session.delete("MemberMapper.deleteMemberById", member_id);
+			session.delete("MemberMapper.updateEnabledById", map);
 		}catch(DataAccessException e) {
 			e.printStackTrace();
-			throw new RemoveException("삭제 시도 중 에러가 발생했습니다");
+			throw new ModifyException("정지 시도 중 에러가 발생했습니다");
 		}finally {
 			session.close();
 		}

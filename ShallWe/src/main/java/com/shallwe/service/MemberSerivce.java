@@ -1,5 +1,6 @@
 package com.shallwe.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,15 +69,31 @@ public class MemberSerivce {
 	public MemberInfoBean findById(String memberId)throws FindException{ 
 		return memberDao.selectById(memberId);
 	}
-	//비밀번호 수정(로그인 된 상태): 상하 
-	public void updatePwd(String memberId, String memberPassword)throws ModifyException { 
-		memberDao.updatePassword(memberId, memberPassword);
 
-	}
 	//비밀번호(임시비밀번호)
 	public void randomPassword(Map<String,Object>member1,Member member)throws ModifyException{
 		memberDao.randomPassword(member1,member);
 		
 	}
+	
+	//비밀번호 수정(로그인 된 상태): 수정
+	public void updatePwd(String memberId, String memberPassword)throws ModifyException { 
+		memberDao.updatePassword(memberId, memberPassword);
+	}
+	//이메일 수정(로그인 된 상태): 수정
+	public void updateEmail(String memberId, String memberEmail)throws ModifyException { 
+		memberDao.updateEmail(memberId, memberEmail);
+	}
+	//휴대전화번호 수정(로그인 된 상태): 수정
+	public void updatePhone(String memberId, String memberPhone)throws ModifyException { 
+		memberDao.updatePhone(memberId, memberPhone);
+	}
+	
+	//선호카테고리 수정: 수정
+	public void updateFavorites(String memberId, Map<String, String> favorite_list)throws ModifyException { 
+		memberDao.updateFavorites(memberId, favorite_list);
+		
+	}
+	
 }
 	
