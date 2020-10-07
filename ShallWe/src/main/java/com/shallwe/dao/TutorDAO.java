@@ -47,6 +47,19 @@ public class TutorDAO {
 		return tutorList;
 	}
 	
+	public String selectTutorEmailByLectureId(String lecture_id) throws FindException{
+		SqlSession session = null;
+		String tutorEmail = "";
+		try {
+			session = sqlSessionFactory.openSession();
+			tutorEmail = session.selectOne("TutorMapper.selectTutorEmailByLectureId", lecture_id);
+		}catch(DataAccessException e) {
+			e.printStackTrace();
+			throw new FindException("검색 중 에러가 발생했습니다");
+		}
+		return tutorEmail;
+	}
+	
 	//강사등록 : 경찬
 	public void insertTutor(Tutor tutor,String[]category)throws AddException{
 		SqlSession session = null;

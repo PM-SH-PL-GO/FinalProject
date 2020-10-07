@@ -53,14 +53,30 @@ public class AdminService {
 	 * @return 전체 회원 목록
 	 * @throws FindException
 	 */
-	public List<Member> showAllMember() throws FindException{
-		return memberDAO.selectAllMember();
+	public List<Member> showAllMember(int enabled) throws FindException{
+		return memberDAO.selectAllMember(enabled);
 	}
 	
+	
+	/**
+	 * 회원 유효성 변동(정지/복구)
+	 * @author jun6
+	 * @param map
+	 * @throws ModifyException
+	 */
 	public void updateEnalbedMemberById(Map<String, String> map) throws ModifyException{
 		memberDAO.updateEnabledById(map);
 	}
 	
+	/**
+	 * 특정 회원의 수강 목록 가져오기
+	 * @author jun6
+	 * @return
+	 * @throws FindException
+	 */
+	public List<MemberLectureHistory> showMemberLectureHistory(String member_id) throws FindException{
+		return historyDAO.selectHistroyByMemberId(member_id);
+	}
 	
 	/**
 	 * 예비/현 강사 목록 가져오기
@@ -128,7 +144,7 @@ public class AdminService {
 				" - 승인";
 		String email = bean.getMemberEmail();
 		
-		sendMail(emailContent, email);
+		sendMail("강사", emailContent, email);
 	}
 	
 	/**
@@ -185,7 +201,7 @@ public class AdminService {
 				"4. 반려 사유\r\n" + 
 				" • " + reject_reason;
 		
-		sendMail(mailContent, email);
+		sendMail("강사", mailContent, email);
 	}
 	
 	
@@ -194,10 +210,16 @@ public class AdminService {
 	@Autowired
 	EmailSender mailSender;
 	
-	public void sendMail(String mailContent, String mailReceiver) throws Exception {
+	/**
+	 * 강사 승인/반려 정보 메일로 보내주기
+	 * @param mailContent
+	 * @param mailReceiver
+	 * @throws Exception
+	 */
+	public void sendMail(String tutorOrLecture, String mailContent, String mailReceiver) throws Exception {
 		email.setContent(mailContent);
-		email.setReceiver("selgy8694@gmail.com");
-		email.setSubject("[Shall We?] 강사 신청 결과 안내");
+		email.setReceiver(mailReceiver);
+		email.setSubject("[Shall We?] " + tutorOrLecture + "신청 결과 안내");
 		mailSender.SendEmail(email);
 	}
 	
@@ -237,20 +259,40 @@ public class AdminService {
 	 * @param status
 	 * @throws ModifyException
 	 */
-//	@Transactional
-	public void updateLectureStatusByIdAndStatus(Map<String, String> map) throws ModifyException{
+	@Transactional
+	public void updateLectureStatusByIdAndStatus(Map<String, String> map) throws Exception{
 		String status = map.get("status");
 		
-		if(status.equals("반려"))
+		String mailReceiver = tutorDAO.selectTutorEmailByLectureId(map.get("lecture_id"));
+		String mailContent= "강의 신청 결과 안내\r\n" + 
+				"Shall We에서 새로운 도전을 하신  고객님을 응원합니다!\r\n\"" +  
+				"신청하신 강의 등록 건이 아래와 같이 처리되었음을 알려드립니다.\r\n" + 
+				"\r\n" + 
+				"1. 신청내용\r\n" + 
+				" • 강의 등록\r\n" + 
+				"2. 분야\r\n";
+		
+		if(status.equals("반려")) {
+			String rejectReason = map.get("reject_reason");
 			lectureDetailDAO.updateLectureRejectReason(map);
-		else if(status.equals("복구"))
+			mailContent += "3. 신청 후 강의 상태\r\n • " + status + "\r\n";
+			mailContent += "4. 반려 사유\r\n • " + rejectReason;
+		}
+		else if(status.equals("복구")) {
 			map.put("status", "승인");
-		else if (status.equals("취소승인"))
+			mailContent += "3. 신청 후 강의 상태\r\n • " + status + "\r\n";
+		}
+		else if (status.equals("취소승인")) {
 			map.put("status", "취소");
+			mailContent += "3. 신청 후 강의 상태\r\n • " + status + "\r\n";
+		}
 		else
 			throw new ModifyException("승인/반려 이외의 글자가 전달되었습니다 : " + status);
 		
 		lectureDAO.updateLectureStatusByIdAndStatus(map);
+		
+		
+		sendMail("강의", mailContent, mailReceiver);
 	}
 	
 	/**

@@ -1,5 +1,6 @@
 <%@page contentType="text/html; charset=UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -38,39 +39,48 @@
             // 회원목록 선택시
             $(".member").on("click", function(){
                 $.ajax({
-                    url: "${contextPath}/admin/member",
+                    url: "${contextPath}/admin/member/list/1",
                     method: "GET",
                     success: function(members){
+                    	let $memberList = '<div class="scroll-section"><h2>회원 목록</h2><hr>';
+                    	$memberList += '<table class="table"><thead>'
+                    	$memberList += "<tr><th>순서</th><th>아이디</th><th>이름</th><th>이메일</th><th>연락처</th>";
+                    	$memberList += '<th>관심분야1</th><th>관심분야2</th><th>관심분야3</th><th>성별</th>';
+                    	$memberList += '<th>강사여부</th><th>정지조치</th></tr></thead>';
+                    	$memberList += '<tbody>'
+                    	members.forEach(function(member, index){
+                    		let memberId = member.member_id;
+                    		if (memberId != "shallwe"){
+	                    		let idx = index + 1;
+		                    	$memberList += '<tr class="member-history" value='+ memberId +'><td>'+ idx +'</td>';
+		                    	$memberList += '<td>'+ memberId +'</td>';
+		                    	$memberList += '<td>'+ member.member_name +'</td>';
+		                    	$memberList += '<td>'+ member.member_email +'</td>';
+		                    	$memberList += '<td>'+ member.member_phone +'</td>';
+		                    	member.favorite_list.forEach(function(favorite){
+			                    	$memberList += '<td>'+ favorite.lecture_category_name +'</td>';
+		                    	});
+		                    	
+		                    	let listSize = member.favorite_list.length;
+		                    	for (let i = 0; i < 3 - listSize; i++){
+			                    	$memberList += '<td> </td>';
+		                    	}
+		                    	
+		                    	$memberList += '<td>'+ member.member_sex +'</td>';
+	                    		$memberList += '<td>' + member.tutor_YN + '</td>';
+	                    		$memberList += '<td><button class="ban-modal" value="' + memberId + '">';
+                    			$memberList += '정지</button></td></tr>';
+                    		}
+                    	});
+                    	
+                    	$memberList += '</tbody></table></div>';
+                        $cont.html($memberList);
+                    },
+                    error: function(){
                     	let $memberList = '<div class="scroll-section"><table class="table"><thead>';
                     	$memberList += "<tr><th>순서</th><th>아이디</th><th>이름</th><th>이메일</th><th>연락처</th>";
                     	$memberList += '<th>관심분야1</th><th>관심분야2</th><th>관심분야3</th><th>성별</th><th>강사여부</th><th>정지조치</th></tr></thead>';
-                    	$memberList += '<tbody>'
-                    	members.forEach(function(member, index){
-                    		let idx = index + 1;
-	                    	$memberList += '<tr><td>'+ idx +'</td>';
-	                    	$memberList += '<td>'+ member.member_id +'</td>';
-	                    	$memberList += '<td>'+ member.member_name +'</td>';
-	                    	$memberList += '<td>'+ member.member_email +'</td>';
-	                    	$memberList += '<td>'+ member.member_phone +'</td>';
-	                    	member.favorite_list.forEach(function(favorite){
-		                    	$memberList += '<td>'+ favorite.lecture_category_name +'</td>';
-	                    	});
-	                    	
-	                    	let listSize = member.favorite_list.length;
-	                    	for (let i = 0; i < 3 - listSize; i++){
-		                    	$memberList += '<td> </td>';
-	                    	}
-	                    	
-	                    	$memberList += '<td>'+ member.member_sex +'</td>';
-                    		$memberList += '<td>' + member.tutor_YN + '</td>';
-                    		$memberList += '<td><button class="ban-modal" value="' + member.member_id + '">';
-                    		
-                    		if(member.enabled == 1)
-                    			$memberList += '정지</button></td></tr>';
-                  			else
-                    			$memberList += '복구</button></td></tr>';
-                    	});
-                    	
+                    	$memberList += '<tbody><tr><td colspan="11">목록이 비어있습니다</td></tr>'
                     	$memberList += '</tbody></table></div>';
                         $cont.html($memberList);
                     }
@@ -79,6 +89,118 @@
 
                 return false;
             });
+            
+            
+            // 회원 별 신청 강의 보기
+            $cont.on("click", ".member-history", function(){
+            	let memberId = $(this).attr("value");
+            	
+            	$.ajax({
+            		url: "${contextPath}/admin/member/history/list/" + memberId,
+            		method: "GET",
+            		success: function(historyList){
+            			let $historyModal = '<div class="modal-add"><div class="modal-content">';
+            			$historyModal += '<h3>' + historyList[0].member.member_name + ' 회원의 수강목록</h3><hr>';
+            			$historyModal += '<table class="table">';
+            			$historyModal += '<thead><tr><th>순서</th><th>강의번호</th><th>강의명</th><th>상태</th><th>신청/취소일</th></tr>';
+           				$historyModal += '</thead><tbody>';
+            		
+           				historyList.forEach(function(history, index){
+            				let idx = index + 1;
+            				let lecture = history.lecture;
+            				let idNumber = '' + lecture.lecture_id;
+                    		for (let i = idNumber.length; i < 4; i++)
+                    			idNumber = '0' + idNumber;
+            				
+            				$historyModal += '<tr class="lecture-detail" value="' + lecture.lecture_id + '">';
+            				$historyModal += '<td>' + idx + '</td>';
+            				$historyModal += '<td>' + lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
+            				$historyModal += '<td>' + lecture.lectureCategory.lecture_category_name + '</td>';
+            				let state = lecture.lecture_state;
+            				$historyModal += '<td>'+ state +'</td>';
+            				if (state == "승인")
+            					$historyModal += '<td>' + formatDate(history.payment_dt) + '</td>';
+           					else
+            					$historyModal += '<td>' + formatDate(history.cancel_dt) + '</td>';
+           						
+            				$historyModal += '</tr>';
+            			});
+            			
+            			$historyModal += '</tbody></table><button class="modal-close">닫기</button></div>';
+            			$historyModal += '<div class="modal-layer"></div></div>';
+            			
+            			let cont = $cont.html() + $historyModal;
+            			$cont.html(cont);
+            		},
+            		error: function(data){
+            			let $historyModal = '<div class="modal-add"><div class="modal-content">';
+            			$historyModal += '<table class="table">';
+            			$historyModal += '<thead><tr><th>순서</th><th>강의번호</th><th>강의명</th><th>상태</th><th>신청/취소일</th></tr>';
+            			$historyModal += '<tbody><tr colspan="5"><td>신청 목록이 없습니다</td></tr>';
+            			$historyModal += '</tbody></table><button class="modal-close">닫기</button></div>';
+            			$historyModal += '<div class="modal-layer"></div></div>';
+            			
+            			let cont = $cont.html() + $historyModal;
+            			$cont.html(cont);
+            		}
+            	});
+            });
+            
+            
+            
+            // 정지 회원 목록보기
+            $(".ban-member").on("click", function(){
+                $.ajax({
+                    url: "${contextPath}/admin/member/list/0",
+                    method: "GET",
+                    success: function(members){
+                    	let $memberList = '<div class="scroll-section"><h2>정지 회원 목록</h2><hr>';
+                    	$memberList += '<table class="table"><thead>'
+                    	$memberList += "<tr><th>순서</th><th>아이디</th><th>이름</th><th>이메일</th><th>연락처</th>";
+                    	$memberList += '<th>관심분야1</th><th>관심분야2</th><th>관심분야3</th><th>성별</th><th>강사여부</th><th>정지조치</th></tr></thead>';
+                    	$memberList += '<tbody>'
+                    	members.forEach(function(member, index){
+                    		let memberId = member.member_id;
+                    		if (memberId != "shallwe"){
+	                    		let idx = index + 1;
+		                    	$memberList += '<tr><td>'+ idx +'</td>';
+		                    	$memberList += '<td>'+ memberId +'</td>';
+		                    	$memberList += '<td>'+ member.member_name +'</td>';
+		                    	$memberList += '<td>'+ member.member_email +'</td>';
+		                    	$memberList += '<td>'+ member.member_phone +'</td>';
+		                    	member.favorite_list.forEach(function(favorite){
+			                    	$memberList += '<td>'+ favorite.lecture_category_name +'</td>';
+		                    	});
+		                    	
+		                    	let listSize = member.favorite_list.length;
+		                    	for (let i = 0; i < 3 - listSize; i++){
+			                    	$memberList += '<td> </td>';
+		                    	}
+		                    	
+		                    	$memberList += '<td>'+ member.member_sex +'</td>';
+	                    		$memberList += '<td>' + member.tutor_YN + '</td>';
+	                    		$memberList += '<td><button class="ban-modal" value="' + memberId + '">';
+                    			$memberList += '복구</button></td></tr>';
+                    		}
+                    	});
+                    	
+                    	$memberList += '</tbody></table></div>';
+                        $cont.html($memberList);
+                    },
+                    error: function(){
+                    	let $memberList = '<div class="scroll-section"><table class="table"><thead>';
+                    	$memberList += "<tr><th>순서</th><th>아이디</th><th>이름</th><th>이메일</th><th>연락처</th>";
+                    	$memberList += '<th>관심분야1</th><th>관심분야2</th><th>관심분야3</th><th>성별</th><th>강사여부</th><th>정지조치</th></tr></thead>';
+                    	$memberList += '<tbody><tr><td colspan="11">목록이 비어있습니다</td></tr>'
+                    	$memberList += '</tbody></table></div>';
+                        $cont.html($memberList);
+                    }
+                });
+                $cont.html("");
+
+                return false;
+            });
+            
             
             // 정지/복구시키기
             $cont.on("click", ".ban-modal", function(){
@@ -140,14 +262,14 @@
 
                     		$lot += ' <td><button class="tutor_status" value="' + tutorId + '">승인</button></td>';
                     		$lot += ' <td><button class="tutor_status" value="' + tutorId + '">반려</button></td></tr>';
-                    		
                     		// 상세정보용 모달창
                     		$lot += '<div class="modal_slot ' + tutorId + '"><div class="modal_content">';
                       		$lot += '<h3>' + tutor.tutor_nickname + ' 강사의 세부정보</h3><hr>';
                       		$lot += '<div>이름 : ' + tutor.member.member_name + '</div>'
                       		$lot += '<div>아이디 : ' + tutor.member.member_id + '</div>'
                       		$lot += '<h5>강사 사진</h5><br>';
-                      		$lot += '<div><img class="tutor-detail-img" src="${contextPath}/tutorImages/' + tutor.tutor_img + '"></div><br>';
+                      		$lot += '<div><img class="tutor-detail-img" src="${contextPath}/tutorImages/';
+                      		$lot += tutor.tutor_img + '"></div><br>';
                       		$lot += '<div>닉네임 : ' + tutor.tutor_nickname + '</div>'
                       		$lot += '<div>신청 분야<br>';
                       		$catList.forEach(function(category, index){
@@ -158,8 +280,9 @@
                       		$lot += '</div><hr>';
                       		
                       		$lot += '<div>자기소개<br><input class="single-input" value="' + tutor.tutor_introduce + '" disabled></div><br>';
-                      		$lot += '<div>이력서 : <a href="${contextPath }/tutorCareer/' +  tutor.tutor_career_file + '">';
-                      		$lot += tutor.tutor_career_file + '</a></div><hr>';
+                      		$lot += '<div>이력서 : <a href="${contextPath }/tutorCareer/' + tutor.tutor_career_file + '">';
+                      		let career = tutor.tutor_career_file;
+                      		$lot += career.substring(career.indexOf("_", 0) + 1, career.length) + '</a></div><hr>';
                       		$lot += '<div>SNS 링크 : <a href="' + tutor.tutor_link + '">' + tutor.tutor_link + '</a></div><br>';
                       		$lot += '<button class="modal_close">닫기</button></div><div class="modal_layer"></div></div>'
                     	});
@@ -283,9 +406,9 @@
                     url: "${contextPath}/admin/tutor/list/Y",
                     method: "GET",
                     success: function(bean){
-                    	let $lot = '<div class="scroll-section"><table class="table"><thead><tr>';
+                    	let $lot = '<div class="scroll-section"><h2>Shall We? 강사 목록</h2><hr><table class="table"><thead><tr>';
                     	$lot += '<th>순서</th><th>강사 사진</th><th>아이디</th><th>회원 이름</th><th>강사 별명</th>';
-                    	$lot += '<th>전문 분야</th><th>강의 목록</th><th>점수</th><th>관리하기</th></tr></thead><tbody>';
+                    	$lot += '<th>전문 분야</th><th>강의 목록</th><th>점수</th></tr></thead><tbody>';
                     	
                     	let $map = bean.tutorCategoryMap;
                     	
@@ -308,7 +431,7 @@
                     		
                     		$lot += '<td><button class="tutor_lecture" value="' + tutorId + '">강의 목록 보기</button></td>';
                     		$lot += '<td>' + tutor.tutor_score + '</td>';
-                    		$lot += '<td><button class="tutor_edit">관리하기</button></td></tr>';
+//                     		$lot += '<td><button class="tutor_edit">관리하기</button></td></tr>';
                     		
                     		// 상세정보용 모달창
                     		$lot += '<div class="modal_slot ' + tutorId + '"><div class="modal_content">';
@@ -327,8 +450,9 @@
                       		$lot += '</div><hr>';
                       		
                       		$lot += '<div>자기소개<br><input class="single-input" value="' + tutor.tutor_introduce + '" disabled></div><br>';
-                      		$lot += '<div>이력서 : <a href="${contextPath }/tutorCareer/' +  tutor.tutor_career_file + '">';
-                      		$lot += tutor.tutor_career_file + '</a></div><hr>';
+                      		$lot += '<div>이력서 : <a href="${contextPath }/tutorCareer/' + tutor.tutor_career_file + '">';
+                      		let career = tutor.tutor_career_file;
+                      		$lot += career.substring(career.indexOf("_", 0) + 1, career.length) + '</a></div><hr>';
                       		$lot += '<div>SNS 링크 : <a href="' + tutor.tutor_link + '">' + tutor.tutor_link + '</a></div><br>';
                       		$lot += '<button class="modal_close">닫기</button></div><div class="modal_layer"></div></div>'
                     	});
@@ -361,7 +485,7 @@
             			let $tutor_Lecture = '<div class="modal-add"><div class="modal-content">';
             			$tutor_Lecture += '<h3>' + lectures[0].tutor.tutor_nickname + '강사의 강의목록</h3><hr>';
             			$tutor_Lecture += '<table class="table">';
-            			$tutor_Lecture += '<tr><thead><th>순서</th><th>강의번호</th><th>강의명</th><th>상태</th></tr></thead>';
+            			$tutor_Lecture += '<thead><tr><th>순서</th><th>강의번호</th><th>강의명</th><th>상태</th></tr></thead>';
            				$tutor_Lecture += '<tbody>';
             		
             			lectures.forEach(function(lec, index){
@@ -630,7 +754,33 @@
             
             // 회원 상세정보 보기
             $cont.on("click", ".member-detail", function(){
-            	alert("회원 상세정보 창 띄워주기");
+            	let $memberModal = '<div class="modal-add"><div class="modal-content">';
+//     			$memberModal += '<h3>' + historyList[0].member.member_name + ' 회원의 수강목록</h3><hr>';
+    			$memberModal += '<table class="table">';
+    			$memberModal += '<thead><tr><th>순서</th><th>강의번호</th><th>강의명</th><th>상태</th><th>신청/취소일</th></tr>';
+   				$memberModal += '</thead><tbody>';
+    		
+//    				historyList.forEach(function(history, index){
+//     				let idx = index + 1;
+//     				let lecture = history.lecture;
+//     				$memberModal += '<tr class="lecture-detail" value="' + lecture.lecture_id + '">';
+//     				$memberModal += '<td>' + idx + '</td>';
+//     				$memberModal += '<td>' + lecture.lectureCategory.lecture_category_name + '</td>';
+//     				let state = lecture.lecture_state;
+//     				$memberModal += '<td>'+ state +'</td>';
+//     				if (state == "신청")
+//     					$memberModal += '<td>' + lecture.payment_dt + '</td>';
+//    					else
+//     					$memberModal += '<td>' + lecture.cancel_dt + '</td>';
+   						
+//     				$memberModal += '</tr>';
+//     			});
+    			
+    			$memberModal += '</tbody></table><button class="modal-close">닫기</button></div>';
+    			$memberModal += '<div class="modal-layer"></div></div>';
+    			
+    			let cont = $cont.html() + $historyModal;
+    			$cont.html(cont);
             	return false;
             });
             
@@ -745,14 +895,14 @@
                     	modal += '<div><span class="reason-modal-tutor">' + lectureDetail.lecture.tutor.tutor_nickname;
                     	modal += '</span>강사의<span class="reason-modal-tutor">' + lectureDetail.lecture.lecture_title;
                     	modal += '</span>강의<span class="reason-modal-tutor">' + reasonType + '</span>';
-            			modal += '</div>';
+            			modal += '</div><hr>';
             			if (reasonType == "취소사유" || reasonType == "취소정보"){
 	            			modal += '<h4>사유 :</h4><input class="reject-detail" disabled value="';
             				modal += lectureDetail.lecture_cancel_reason + '"></input>';
             			}
            				else{
             				modal += '<div>반려적용 일 : ' + lectureDetail.lecture_reject_dt + '</div><br>';
-           					modal += '<div>반려 키워드 : ' + lectureDetail.lecture_reject_category + '</div><br>';
+           					modal += '<div>반려 키워드 : ' + lectureDetail.rejectCategory.reject_category_value + '</div><br>';
 	            			modal += '<h4>사유 :</h4><input class="reject-detail" disabled value="';
             				modal += lectureDetail.lecture_reject_reason + '"></input><br>';
            				}
@@ -790,7 +940,7 @@
             		url: "${contextPath}/admin/faq/list",
             		method: "GET",
             		success: function(faqList){
-            			let $lot = '<button class="faq-insert-modal">FAQ 추가하기</button><br>';
+            			let $lot = '<h2>설정 - FAQ 관리</h2><hr><button class="faq-insert-modal">FAQ 추가하기</button><br>';
             			$lot += '<table class="table"><thead><tr><th>번호</th><th>질문</th><th>답변</th><th>관리</th><th>삭제</th></tr></thead>';
             			$lot += '<tbody>';
 						
@@ -965,6 +1115,7 @@
                 </a>
                 <ul class="tog">
                     <li><a class="member">회원목록</a></li>
+                    <li><a class="ban-member">정지회원목록</a></li>
                 </ul>
               </li>
 

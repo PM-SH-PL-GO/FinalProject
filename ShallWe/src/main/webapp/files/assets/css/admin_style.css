@@ -152,7 +152,7 @@ hr{
     border-color: #dddddd;
     text-align: center;
     width: 85%;
-    height: 100%
+    height: 85%
 }
 
 .table th{
@@ -173,6 +173,11 @@ hr{
 .table tr.member-detail:hover{
 	background-color: #a8ffec;
 }
+
+.table tr.member-history:hover{
+	background-color: #a8ffec;
+}
+
 
 .table td{
     text-align: center;
@@ -294,4 +299,34 @@ input[id ="reject-detail"]{
 	overflow: scroll;
     width: 100%;
     height: 100%;
+}
+
+form[id=faq-insert]{
+	height: 70%;
+}
+
+div.faq-add{
+	height: 30%;	
+}
+
+.faq-question{
+	width: 50%;
+    height: 20%;
+    position: fixed;
+}
+
+.faq-answer{
+	width: 50%;
+    height: 20%;
+    position: fixed;		
+}
+
+.faq-insert{
+	margin-left: 75%;
+    margin-top: 20px;
+}
+
+.faq-modal-close{
+	margin-left: 1%;
+    margin-top: 20px;
 }

@@ -48,12 +48,11 @@ public class AdminController {
 	 * @author jun6
 	 * @return 전체회원 목록
 	 */
-	@RequestMapping(value = "/member", method = RequestMethod.GET)
-	public ResponseEntity<List<Member>> memberList() {
+	@RequestMapping(value = "/member/list/{enabled}", method = RequestMethod.GET)
+	public ResponseEntity<List<Member>> memberList(@PathVariable(name = "enabled") int enabled) {
 		try {
-			List<Member> memberList = adminService.showAllMember();
+			List<Member> memberList = adminService.showAllMember(enabled);
 			if (memberList != null && memberList.size() != 0) {
-				System.out.println(memberList);
 				return ResponseEntity.status(HttpStatus.OK).body(memberList);
 			}else
 				return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(null);
@@ -62,7 +61,13 @@ public class AdminController {
 		}
 		
 	}
-
+	
+	/**
+	 * 회원 상태 변경하기(정지시키기, 복구시키기)
+	 * @param member_id
+	 * @param map
+	 * @return
+	 */
 	@PatchMapping(value = "/member/{memberId}")
 	public ResponseEntity<String> deleteMember(@PathVariable(name = "memberId") String member_id, @RequestBody Map<String, String> map){
 		try {
@@ -75,27 +80,29 @@ public class AdminController {
 		}
 	}
 	
-	/////////////////////////강사 관리////////////////////////////
-	
 	/**
-	 * 전체 회원 목록 조회
+	 * 특정 회원의 수강 목록 가져오기
 	 * @author jun6
-	 * @return 전체회원 목록
+	 * @param member_id
+	 * @return
 	 */
-	@RequestMapping(value = "/userList", method = RequestMethod.GET)
-	public ResponseEntity<List<Member>> userList() {
-		try {
-			List<Member> memberList = adminService.showAllMember();
-			if (memberList != null && memberList.size() != 0) {
-				System.out.println(memberList);
-				return ResponseEntity.status(HttpStatus.OK).body(memberList);
-			}else
-				return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(null);
-		}catch(FindException e) {
-			return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(null);
-		}
+	@GetMapping(value = "/member/history/list/{memberId}")
+	public ResponseEntity<List<MemberLectureHistory>> showMemberHistory(@PathVariable(name = "memberId") String member_id){
+		List<MemberLectureHistory> historyList = null;
 		
+		try {
+			historyList = adminService.showMemberLectureHistory(member_id);
+			
+			if(historyList != null)
+				return ResponseEntity.status(HttpStatus.OK).body(historyList);
+			else
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(historyList);
+		}catch(FindException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(historyList);
+		}
 	}
+	
+	/////////////////////////강사 관리////////////////////////////
 	
 	/**
 	 * 예비강사/ 전체강사 목록 가져오기
@@ -224,7 +231,7 @@ public class AdminController {
 		try {
 			adminService.updateLectureStatusByIdAndStatus(map);
 			return ResponseEntity.status(HttpStatus.OK).body("{ \"success\" : \"정상적으로 " + map.get("status") + " 처리하였습니다\"}");
-		}catch(ModifyException e) {
+		}catch(Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"errMsg\" : \"설정에 실패하였습니다\"}");
 		}

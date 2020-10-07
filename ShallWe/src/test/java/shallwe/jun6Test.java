@@ -28,7 +28,7 @@ public class jun6Test {
 //	@Test
 	@DisplayName("memberdao")
 	void a() throws FindException {
-		memberDAO.selectAllMember();
+//		memberDAO.selectAllMember();
 	}
 	
 	@Test

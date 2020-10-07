@@ -151,12 +151,12 @@ public class SangHtest {
 		favorite_list.add(favorite2);
 		favorite_list.add(favorite3);
 		
-		try {
-			memberDAO.updateFavorites(member_id, favorite_list);
-		} catch (ModifyException e) {
+//		try {
+//			memberDAO.updateFavorites(member_id, favorite_list);
+//		} catch (ModifyException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//			e.printStackTrace();
+//		}
 	}
 	
 //	@Test

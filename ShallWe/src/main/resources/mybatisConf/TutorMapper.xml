@@ -50,6 +50,15 @@
 		</choose>
 	</select>
 	
+	<!-- admin(jun6) : 강의번호로 강사 email 가져오기 -->
+	<select id="selectTutorEmailByLectureId" parameterType="String" resultType="String">
+		SELECT member_email
+		FROM member me
+			JOIN tutor tu ON (me.member_id = tu.tutor_id)
+			JOIN lecture lec ON (tu.tutor_category_id = lec.lecture_category_id AND tu.tutor_id = lec.lecture_tutor_id)
+		WHERE lec.lecture_id = #{lecture_id}
+	</select>
+	
 	<resultMap type="LectureCategory" id="lectureCategory" autoMapping="true">
 		<id property="lecture_category_id" column="tutor_category_id"/>
 		<result property="lecture_category_name" column="category_name"/>

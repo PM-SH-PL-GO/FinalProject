@@ -262,14 +262,14 @@ public class MemberDAO {
 	 * @return 전체 회원 목록
 	 * @throws FindException
 	 */
-	public List<Member> selectAllMember() throws FindException{
+	public List<Member> selectAllMember(int enabled) throws FindException{
 		SqlSession session = null;
 		List<Member> memberList = new ArrayList<>();
 		List<MemberInfoBean> beanList = new ArrayList<>();
 		
 		try {
 			session = sqlSessionFactory.openSession();
-			beanList = session.selectList("MemberMapper.selectAllMember");
+			beanList = session.selectList("MemberMapper.selectAllMember", enabled);
 			
 			for (MemberInfoBean bean : beanList) {
 				Member member = new Member();
@@ -277,7 +277,7 @@ public class MemberDAO {
 				member.setMember_name(bean.getMemberName());
 				member.setMember_email(bean.getMemberEmail());
 				member.setMember_phone(bean.getMemberPhone());
-				member.setMemeber_sex(bean.getMemberSex());
+				member.setMember_sex(bean.getMemberSex());
 				member.setTutor_YN(bean.getTutorYN());
 				
 				List<LectureCategory> lectureList = new ArrayList<>();

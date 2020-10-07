@@ -59,4 +59,27 @@ public class MemberLectureHistoryDAO {
 		
 		return historyList;
 	}
+	
+	/**
+	 * 특정 회원의 수강 목록 조회
+	 * @param member_id
+	 * @return
+	 * @throws FindException
+	 */
+	public List<MemberLectureHistory> selectHistroyByMemberId(String member_id) throws FindException{
+		SqlSession session = null;
+		List<MemberLectureHistory> historyList = new ArrayList<>();
+		
+		try {
+			session = sqlSessionFactory.openSession();
+			historyList = session.selectList("MemberLectureHistoryMapper.selectHistroyByMemberId", member_id);
+		}catch(DataAccessException e) {
+			e.printStackTrace();
+			throw new FindException("조회 중 에러가 발생했습니다");
+		}finally {
+			session.close();
+		}
+		
+		return historyList;
+	}
 }

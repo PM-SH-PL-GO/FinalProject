@@ -48,7 +48,6 @@
 		<result column="member_phone" property="memberPhone"/>
 		<result column="member_sex" property="memberSex"/>
 		<result column="tutor_yn" property="tutorYN"/>
-		<result column="enabled" property="enabled"/>
 	<association property="favorite1" javaType="LectureCategory" autoMapping="true">
 		<id column="fav1id" property="lecture_category_id"/> 
 		<result column="fav1name" property="lecture_category_name"/>
@@ -154,9 +153,9 @@
 										  SYSDATE)
 	</insert>
 
-<!-- admin(jun6) : 전체 회원 목록 조회 -->
-	<select id="selectAllMember" resultMap="MemberInfoMap">
-		SELECT m.member_id , m.member_pwd, m.member_name, m.member_sex, m.member_email, m.member_phone, m.tutor_YN, m.enabled,
+<!-- admin(jun6) : 전체 회원 목록 조회(정지, 정상회원) -->
+	<select id="selectAllMember" parameterType="Integer" resultMap="MemberInfoMap">
+		SELECT m.member_id , m.member_pwd, m.member_name, m.member_sex, m.member_email, m.member_phone, m.tutor_YN,
 				lc1.category_id fav1Id, lc1.category_name fav1Name
 	            ,lc2.category_id fav2Id, lc2.category_name fav2Name
 	            ,lc3.category_id fav3Id, lc3.category_name fav3Name
@@ -164,7 +163,7 @@
 		JOIN lecture_category lc1 ON(m.member_favorite1=lc1.category_id)LEFT OUTER
 	    JOIN lecture_category lc2 ON(m.member_favorite2=lc2.category_id)LEFT OUTER
 	    JOIN lecture_category lc3 ON(m.member_favorite3=lc3.category_id)
-	    ORDER BY m.enabled DESC
+	    WHERE m.enabled = #{enabled}
 	</select>
 
 </mapper>
