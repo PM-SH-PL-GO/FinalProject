@@ -74,10 +74,10 @@ public class HomeController {
 //	public void myinfo(Locale locale, Model model) {
 //		System.out.println("myinfo");
 //	}
-	@RequestMapping(value = "/myinfoModi", method = RequestMethod.GET)
-	public void myinfoModi(Locale locale, Model model) {
-		System.out.println("myinfo");
-	}
+//	@RequestMapping(value = "/myinfoModi", method = RequestMethod.GET)
+//	public void myinfoModi(Locale locale, Model model) {
+//		System.out.println("myinfo");
+//	}
 	
 	@RequestMapping(value = "/wishlist", method = RequestMethod.GET)
 	public void wishlist(Locale locale, Model model) {
@@ -106,4 +106,8 @@ public class HomeController {
 		System.out.println("myinfoTutorInfo");
 	}
 	
+	@RequestMapping(value="/foot",method = RequestMethod.GET)
+	public void foot(Locale locale, Model model) {
+		System.out.println("foot");
+	}
 }

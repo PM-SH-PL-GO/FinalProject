@@ -6,27 +6,44 @@
 <c:set value="${lectDetail.lecture}" var="lecture" />
 <fmt:formatDate var="startDt" value="${lecture.lecture_start_dt}"
 	pattern="yyyy-MM-dd" />
+<fmt:parseDate var="startDat" value="${startDt}" pattern="yyyy-MM-dd" />
+<fmt:parseNumber value="${startDat.time/(1000*60*60*24)}"
+	integerOnly="true" var="startDate" />
+	
 <fmt:formatDate var="endDt" value="${lecture.lecture_end_dt}"
 	pattern="yyyy-MM-dd" />
 <fmt:parseDate var="endDat" value="${endDt}" pattern="yyyy-MM-dd" />
 <fmt:parseNumber value="${endDat.time/(1000*60*60*24)}"
 	integerOnly="true" var="endDate" />
+${m.cancel_dt}
 <c:set var="eqlectidtrue" value="false" />
 <c:forEach items="${mlthlist}" var="ml" varStatus="i">
 	<c:set var="m" value="${mlthlist[i.index]}" />
-	<c:if test="${m.lecture.lecture_id eq lecture.lecture_id}" var="lleq" />
+	<c:if test="${m.lecture.lecture_id eq lecture.lecture_id && empty m.cancel_dt}" var="lleq" />
 	<c:if test="${m.lecture.lecture_id ne lecture.lecture_id}" var="llne" />
 </c:forEach>
 
+<c:set var="tutoreq" value="true"/>
 <c:forEach items="${lectlist}" var="lectl" varStatus="i">
 	<c:set var="lecl" value="${lectlist[i.index]}"/>
 	<c:forEach items="${tutorlist}" var="tl" varStatus="i">
 		<c:set var="t" value="${tutorlist[i.index]}"/>
-		
-		<c:if test="${lecl.tutor.member.member_id}"/>
+		<c:if test="${lecl.lecture_id eq lecture.lecture_id && tutorlist[0].member.member_id eq lecl.tutor.member.member_id}">
+			<c:set var="tutoreq" value="false"/>
+		</c:if>
 	</c:forEach>
 </c:forEach>
-${tutorlist}
+<c:set var="lecseq" value="true"/>
+<c:forEach items="${wishlist}" var="wil" varStatus="i">
+	<c:set var="wi" value="${wishlist[i.index]}"/>
+	<c:forEach items="${wi}" var="lecs" varStatus="j">
+		<c:set var="le" value="${lecs[j.index]}"/>
+		<c:if test="${lecs[j.index].lecture_id eq lecture.lecture_id}">
+			<c:set var="lecseq" value="false"/>
+		</c:if>
+	</c:forEach>
+</c:forEach>
+
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 <head>
@@ -236,12 +253,12 @@ $(document).ready(function() {
 									pattern="#,###" />
 								원
 							</h3>
-							<c:if test="${endDate-nowDate>=0}">
-								<c:if test="${empty m.lecture.lecture_id}">
+							<c:if test="${endDate-nowDate>=0 && startDate-nowDate>=0}">
+								<c:if test="${empty m.lecture.lecture_id && tutoreq}">
 									<a href="#" id="applyBtn"
 										class="genric-btn primary-border mt-10">신청</a>
 								</c:if>
-								<c:if test="${llne}">
+								<c:if test="${llne && tutoreq}">
 									<a href="#" id="applyBtn"
 										class="genric-btn primary-border mt-10">신청</a>
 								</c:if>
@@ -249,8 +266,10 @@ $(document).ready(function() {
 									<a href="#" id="cancelBtn"
 										class="genric-btn primary-border mt-10">결제취소</a>
 								</c:if>
+								<c:if test="${lecseq}">
 								<a href="#" id="favoriteLectureBtn"
 									class="genric-btn primary-border mt-10">찜하기</a>
+								</c:if>
 							</c:if>
 							<div class="d-flex mt-10">
 								<h3 class="mr-10">수강일시:</h3>
@@ -311,3 +330,4 @@ $(document).ready(function() {
 
 </body>
 </html>
+<jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include>

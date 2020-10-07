@@ -8,7 +8,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="x-ua-compatible" content="ie=edge">
-<title>강의 등록</title>
+<title>강의신청</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" type="image/x-icon"
@@ -106,26 +106,27 @@
 		<div class="whole-wrap mt-100">
 			<div class="container box_1170">
 				<div class="section-top-border">
-					<h3 class="mb-30">강의 등록</h3>
+					<h3 class="mb-30">강의신청</h3>
 					<div class="row">
 						<div class="col-md-12 mt-sm-20">
 							<form id="formLectureRegistration"
 								${pageContext.request.contextPath}/updatetNoticePro.do"
 								method="post"
 								enctype="multipart/form-data" name="noticeForm">
+								<h4 class="mt-10">강의 사진</h4>
 								<img id="preImage"
 									src="${pageContext.request.contextPath}/files/lecture/${noticeVO.lectureImgFile}"
 									width="300px" alt="" class="img-fluid d-block"> <input
 									type="file" id="lectureImgFile" name="lecture_img"
 									class="mt-10" accept="imags/*">
-								<h6 class="mt-10">강의 제목</h6>
+								<h4 class="mt-10">강의 제목</h4>
 								<div class="mt-10">
 									<input type="text" value="제목ㅎ" name="lecture.lecture_title"
 										placeholder="몇글자 이내" onfocus="this.placeholder = ''"
 										onblur="this.placeholder = '몇글자 이내'" required
 										class="single-input" id="lectureTitle">
 								</div>
-								<h6 class="mt-10">카테고리</h6>
+								<h4 class="mt-10">카테고리</h4>
 								<div class="form-select col-md-4 mt-10">
 									<select id="lectCate"
 										name="lecture.lectureCategory.lecture_category_id">
@@ -136,7 +137,7 @@
 										value="${tutorlist[0].member.member_id}" />
 									</select>
 								</div>
-								<h6 class="mt-10">강의 소개</h6>
+								<h4 class="mt-10">강의 소개</h4>
 								<div class="mt-10">
 									<textarea class="single-textarea" id="lectureIntro"
 										name="lecture_introduce" style="height: 300px;"
@@ -145,7 +146,7 @@
 										강의 소개
 										</textarea>
 								</div>
-								<h6 class="mt-10">교육 과정</h6>
+								<h4 class="mt-10">교육 과정</h4>
 								<div class="mt-10">
 									<textarea class="single-textarea" id="curiculum"
 										name="lecture_curriculum" style="height: 300px;"
@@ -154,7 +155,7 @@
 										교육과정
 										</textarea>
 								</div>
-								<h6 class="mt-10">강의 장소</h6>
+								<h4 class="mt-10">강의 장소</h4>
 								<div class="input-group-icon d-flex mt-10">
 									<div class="icon">
 										<i class="fa fa-globe" aria-hidden="true"></i>
@@ -163,7 +164,7 @@
 										placeholder="장소" onfocus="this.placeholder = ''"
 										onblur="this.placeholder = '장소'" required class="single-input">
 								</div>
-								<h6 class="mt-10">강의 날짜</h6>
+								<h4 class="mt-10">강의 날짜</h4>
 								<div class="d-flex mt-10">
 									<div class="d-block">
 										<h6 class="mt-10 col-md-5">시작일</h6>
@@ -177,7 +178,7 @@
 											value="2020-10-10" class="single-input" id="lastDate">
 									</div>
 								</div>
-								<h6 class="mt-10">인원</h6>
+								<h4 class="mt-10">인원</h4>
 								<div class="d-flex mt-10">
 									<input type="text" name="lecture.lecture_min" value="1"
 										id="pMin" placeholder="최소" onfocus="this.placeholder = ''"
@@ -188,21 +189,21 @@
 										onblur="this.placeholder = '최대'" required
 										class="single-input col-md-1">
 								</div>
-								<h6 class="mt-10">준비물</h6>
+								<h4 class="mt-10">준비물</h4>
 								<div class="mt-10">
 									<input type="text" name="lecture_prepared" value="준비물"
 										placeholder="몇글자 이내" onfocus="this.placeholder = ''"
 										onblur="this.placeholder = '몇글자 이내'" required
 										class="single-input-primary" id="prepared">
 								</div>
-								<h6 class="mt-10">유의사항</h6>
+								<h4 class="mt-10">유의사항</h4>
 								<div class="mt-10">
 									<input type="text" name="lecture_caution" value="유의"
 										placeholder="몇글자 이내" onfocus="this.placeholder = ''"
 										onblur="this.placeholder = '몇글자 이내'" required
 										class="single-input-accent" id="caution">
 								</div>
-								<h6 class="mt-10">금액</h6>
+								<h4 class="mt-10">금액</h4>
 								<div class="mt-10 d-flex">
 									<input type="text" name="lecture.lecture_price" value="10"
 										placeholder="10000" onfocus="this.placeholder = ''"
@@ -210,12 +211,12 @@
 										class="single-input-accent col-md-2" id="price">
 									<h5 class="mt-10">원</h5>
 								</div>
-								<h6 class="mt-10">첨부파일등록</h6>
+								<h4 class="mt-10">첨부파일등록</h4>
 								<input type="file" id="lectureCFile" name="lecture_filename"
 									class="mt-10" accept="imags/*">
 								<div class="mt-70">
 									<input type="button" class="genric-btn primary-border"
-										id="insertBtn" value="등록">
+										id="insertBtn" value="신청">
 								</div>
 								<input type="hidden" name="lecture.lecture_state" value="승인대기" />
 							</form>
@@ -276,3 +277,4 @@
 </body>
 
 </html>
+<jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include>

@@ -211,8 +211,7 @@ public class UploadController {
 		Member member = new Member();
 		member.setMember_id(tutor_id);
 		tutor.put("tutor_id", tutor_id);		
-		String tutor_img = saveFile(tutor_img1);
-		
+		String tutor_img = saveFile(tutor_img1);		
 		String tutor_career_file = craeerFiles(tutor_career_file1);
 		
 		tutor1.setMember(member);

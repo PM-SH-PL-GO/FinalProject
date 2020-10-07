@@ -63,3 +63,4 @@ td.lecture_id , td.tutor_id, td.lectureCategoryId {
 	</c:forEach>
 	</tbody>
 </table>
+<jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include>

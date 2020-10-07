@@ -355,6 +355,6 @@ $(document).ready(function() {
 		<!-- end of md_content -->
 	</div>
 	<!-- end of modal -->
-
 </body>
 </html>
+<jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include>

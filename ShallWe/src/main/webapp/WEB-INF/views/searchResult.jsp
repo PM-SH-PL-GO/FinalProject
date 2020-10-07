@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <c:set var="lectureList" value="${requestScope['list']}"/>
+<c:set var="loginUser" value="${requestScope['loginUser']}"/>
 
 <style>
 .left_menu {
@@ -68,8 +69,16 @@
 		var $lectureLike = $('span.insertCart');
 		$lectureLike.on('click', function(e){
 			let lecture_code = $(this).find('input[name=lecture_code]').val();
-			console.log(lecture_code);
+			let loginUesr = $(this).find('input[name=loginUesr]').val();
 			var url = '${contextPath}/member/wishlist/addWish?lecture_id='+lecture_code;
+
+			// 로그인 안한 사용자 찜목록 기능 이용 방지
+			if ( loginUesr == "" ) {
+				if(confirm("로그인 후 사용가능한 기능입니다. 로그인 하시겠습니까?")){
+					location.href = "${contextPath}/userLogin";
+				} return false;
+			}; 
+			
 			if(confirm("찜목록에 추가 하시겠습니까?")){
 				$.ajax( { 
 					url : '${contextPath}/member/wishlist/addWish'
@@ -180,8 +189,8 @@
 				<c:forEach items="${lectureList}" var="lecture" varStatus="stats">
 					<c:forEach items="resultList.Lecture" var="lec" varStatus="lec_count">
 					<div class="col">
-						<div class="properties pb-20" style="padding-top:10px; height:420px; box-shadow : 2px 2px 5px #999; text-align: center;">
-							<div class="properties__card" style="cursor: pointer;">
+						<div class="properties pb-20" style="padding-top:10px; box-shadow : 2px 2px 5px #999; text-align: center; padding-bottom: 20px;">
+							<div class="properties__card" style="cursor: pointer; height: 420px;">
 								<a href="#"><img src="${contextPath}/assets/img/gallery/properties3.png" alt="강의사진"></a><br/><br/>
 								<div class="properties__caption">
 									<c:if test="${lecture.lecture_current eq lecture.lecture_max}" >
@@ -203,13 +212,15 @@
 									</h4>
 									<h4><label>강사명: </label>${lecture.tutor.tutor_nickname}</h4>
 									<h4><label>현재인원:</label> ${lecture.lecture_current} <label>/최대인원: </label> ${lecture.lecture_max}</h4>
+									<h4><label>카테고리:</label> ${lecture.lectureCategory.lecture_category_name}
 								</div>
 								<h3 style="text-align: center"><fmt:formatNumber value="${lecture.lecture_price}" pattern="#,###원"/>
 								<c:if test="${lecture.lecture_current ne lecture.lecture_max}" >
 									<span class="insertCart" style="text-align: left">
 										<img class="shoppingCartImg"  style="cursor: pointer;" src="${contextPath}/assets/img/elements/shopping-cart.png"
 											width="30px" alt="강의찜하기" title="강의찜하기">
-										<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>								
+										<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>
+										<input type="hidden" name="loginUesr" value="${loginUser}"/>
 									</span>
 								</c:if>
 								</h3>
@@ -226,3 +237,4 @@
 	</main>
 </body>
 </html>
+<jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include>

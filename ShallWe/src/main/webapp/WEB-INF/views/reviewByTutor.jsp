@@ -38,3 +38,4 @@
 		</c:forEach>
 	</c:forEach>
 </div>
+<jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include>
