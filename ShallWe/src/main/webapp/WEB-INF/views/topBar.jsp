@@ -64,8 +64,8 @@ cursor: pointer;
 #tutorSetBtn{
 color: white;
 }
-#myInfoTutorInfo{
-color: white;
+.myInfoTutorInfo{
+color: white !important;
 }
 .menu-wrapper{
 margin-left:5%;
@@ -108,11 +108,12 @@ $(function(){
 					if(data=='N'){
 						topbarBtnData = "<a class=\"btn\" id=\"tutorSetBtn\">강사 등록</a>"
 					}else{
-						topbarBtnData = "<a class=\"btn\" id=\"myInfoTutorInfo\">강사회원입니다.</a>"
+						topbarBtnData = "<a class=\"btn myInfoTutorInfo\">강사회원입니다.</a>"
 						tutorInfoBtn += "<a>강사정보</a>"
 						tutorInfoBtn += "<ul class=\"submenu side\" >"
-						tutorInfoBtn += "<li><a id =\"myInfoTutorInfo\" class=\"community\">내 강사 정보보기</a></li>"
-						tutorInfoBtn += "<li><a id =\"mytutorLecture\" class=\"community\">내 강사 강의신청</a></li></ul>"
+						tutorInfoBtn += "<li><a class=\"community myInfoTutorInfo\">내 강사 정보보기</a></li>"
+						tutorInfoBtn += "<li><a class=\"community myInfoTutorLecture\">내 강의 목록</a></li>"
+						tutorInfoBtn += "<li><a class=\"community addLecture\">강의신청</a></li></ul>"
 					}
 					$topbarBtn.html(topbarBtnData);	
 					$tutorInfoBtn.html(tutorInfoBtn);
@@ -145,12 +146,6 @@ $(function(){
 		}
 	});
 	//----------강의등록 버튼 CLICK END---------	
-	
-	//----------강사 강의등록 버튼 CLICK START---------		
-	$("#tutorOrLecture").on("click","#tutorLectureBtn",function(){
-		location.href = "${contextPath}/lectures/tutorLecture";		
-	});
-	//----------강사 강의등록 버튼 CLICK END---------		
 	
 	//----------스터디게시판 CLICK START---------	
 	$("#studBoard").click(function(){
@@ -188,14 +183,26 @@ $(function(){
 	});
 	//----------내 강의보기 CLICK END---------	
 	
+	//----------내  강사정보보기(버튼) CLICK START---------	
+	$(".myInfoTutorInfo").click(function(){
+		location.href = "${contextPath}/tutor/showTutor";
+	});
+	//----------내 강사정보보기(버튼) CLICK END---------	
+	
 	//----------내  강사정보보기 CLICK START---------	
-	$("#myInfoTutorInfo").click(function(){
+	$("#tutorInfoBtn").on("click",".myInfoTutorInfo",function(){
 		location.href = "${contextPath}/tutor/showTutor";
 	});
 	//----------내 강사정보보기 CLICK END---------	
 	
+	//----------내 강사 강의목록 CLICK START---------	
+	$("#tutorInfoBtn").on("click",".myInfoTutorLecture",function(){
+		location.href = "${contextPath}/lectures/tutorLecture";	
+	});
+	//----------내 강사 강의목록 CLICK END---------	
+	
 	//----------내  강사정보보기 CLICK START---------	
-	$("#mytutorLecture").click(function(){
+	$("#tutorInfoBtn").on("click",".addLecture",function(){
 		location.href = "${contextPath}/lectures/insert";
 	});
 	//----------내 강사정보보기 CLICK END---------	
