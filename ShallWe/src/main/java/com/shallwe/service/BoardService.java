@@ -158,18 +158,6 @@ public class BoardService {
 		studyBoardDAO.delete(board_id);
 	}
 
-	/**
-	 * 게시글 보기
-	 * @author 박성운
-	 * @param 게시글 번호
-	 * @return 번호로 조회된 게시글
-	 * @throws RemoteException
-	 */	
-	public StudyBoard detail(int board_id) throws FindException {
-		StudyBoard studyBoard = studyBoardDAO.selectByNo(board_id);
-		return studyBoard;
-		
-	}
 	
 	// FreeBoard Service Start
 	
