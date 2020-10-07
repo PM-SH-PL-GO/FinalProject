@@ -311,6 +311,7 @@ public class LectureController {
 		try {
 			tutorlist = tutoser.showTutorInfo(id);
 			mnv.addObject("tutorlist", tutorlist);
+			System.out.println("강사!"+tutorlist);
 			mnv.setViewName("/lectureDetail");
 		} catch (FindException e1) {
 			e1.printStackTrace();
