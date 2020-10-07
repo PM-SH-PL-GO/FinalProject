@@ -167,7 +167,7 @@ $(function(){
 	
 	//----------내 정보보기 CLICK START---------	
 	$("#myInfo").click(function(){
-		location.href = "${contextPath}/myinfoTutorInfo";
+		location.href = "${contextPath}/member/myinfo";
 	});
 	//----------내 정보보기 CLICK END---------	
 

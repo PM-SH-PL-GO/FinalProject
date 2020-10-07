@@ -133,11 +133,11 @@ $(function(){
 					<div class="category-img text-center" id="category">
 					<h1 style="margin-top: 4%;">카테고리별로 검색해보세요!</h1>
 						<a id="IT"> <img src="assets/img/gallery/category_icon1.png"></a>
-						<a id="취미"> <img src="assets/img/gallery/category_icon2.png"></a> 
+						<a id="언어"> <img src="assets/img/gallery/category_icon2.png"></a> 
 						<a id="마케팅"> <img src="assets/img/gallery/category_icon3.png"></a> 
 						<a id="디자인"> <img src="assets/img/gallery/category_icon4.png"></a><br>
-						<a id="사진"> <img src="assets/img/gallery/category_icon6.png"></a>
-						<a id="회계"> <img src="assets/img/gallery/category_icon7.png"></a> 
+						<a id="실무역량"> <img src="assets/img/gallery/category_icon6.png"></a>
+						<a id="비즈니스컨설팅"> <img src="assets/img/gallery/category_icon7.png"></a> 
 						<a id="음악"> <img src="assets/img/gallery/category_icon8.png"></a>
 						<a id="스포츠"> <img src="assets/img/gallery/category_icon9.png"></a>
 					</div>
