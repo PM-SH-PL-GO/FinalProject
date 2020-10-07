@@ -328,7 +328,8 @@ public class LectureController {
 	
 	@RequestMapping(value = "/search", method = {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView search(@RequestParam(value="searchKey", required=false) String searchKeyParam
-							 , @RequestParam(value="searchText", required=false)String searchText) {
+							 , @RequestParam(value="searchText", required=false)String searchText
+							 , HttpSession session ) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		
 		if ( searchKeyParam == null ) {
@@ -344,7 +345,9 @@ public class LectureController {
 		map.put("searchText", searchText);
 		
 		ModelAndView modelAndView = new ModelAndView();
-
+		String member_id = (String)session.getAttribute("loginInfo");
+		modelAndView.addObject("loginUser", member_id);
+		
 		List<Lecture> list = new ArrayList<Lecture>();
 		try {
 			list = service.searchLecture(map);

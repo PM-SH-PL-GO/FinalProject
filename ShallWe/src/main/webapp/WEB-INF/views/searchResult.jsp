@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <c:set var="lectureList" value="${requestScope['list']}"/>
+<c:set var="loginUser" value="${requestScope['loginUser']}"/>
 
 <style>
 .left_menu {
@@ -68,8 +69,16 @@
 		var $lectureLike = $('span.insertCart');
 		$lectureLike.on('click', function(e){
 			let lecture_code = $(this).find('input[name=lecture_code]').val();
-			console.log(lecture_code);
+			let loginUesr = $(this).find('input[name=loginUesr]').val();
 			var url = '${contextPath}/member/wishlist/addWish?lecture_id='+lecture_code;
+
+			// 로그인 안한 사용자 찜목록 기능 이용 방지
+			if ( loginUesr == "" ) {
+				if(confirm("로그인 후 사용가능한 기능입니다. 로그인 하시겠습니까?")){
+					location.href = "${contextPath}/userLogin";
+				} return false;
+			}; 
+			
 			if(confirm("찜목록에 추가 하시겠습니까?")){
 				$.ajax( { 
 					url : '${contextPath}/member/wishlist/addWish'
@@ -210,7 +219,8 @@
 									<span class="insertCart" style="text-align: left">
 										<img class="shoppingCartImg"  style="cursor: pointer;" src="${contextPath}/assets/img/elements/shopping-cart.png"
 											width="30px" alt="강의찜하기" title="강의찜하기">
-										<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>								
+										<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>
+										<input type="hidden" name="loginUesr" value="${loginUser}"/>
 									</span>
 								</c:if>
 								</h3>
