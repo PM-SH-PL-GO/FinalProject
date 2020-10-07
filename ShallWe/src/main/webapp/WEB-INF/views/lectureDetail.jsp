@@ -18,14 +18,15 @@
 	<c:if test="${m.lecture.lecture_id ne lecture.lecture_id}" var="llne" />
 </c:forEach>
 
-<c:forEach items="${tutorlist}" var="tl" varStatus="i">
-	<c:set var="t" value="${tutorlist[i.index]}"/>
-</c:forEach>
-
 <c:forEach items="${lectlist}" var="lectl" varStatus="i">
-		<c:set var="lecl" value="${lectlist[i.index]}"/>
-		${lecl.tutor}
+	<c:set var="lecl" value="${lectlist[i.index]}"/>
+	<c:forEach items="${tutorlist}" var="tl" varStatus="i">
+		<c:set var="t" value="${tutorlist[i.index]}"/>
+		
+		<c:if test="${lecl.tutor.member.member_id}"/>
+	</c:forEach>
 </c:forEach>
+${tutorlist}
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 <head>

@@ -157,7 +157,7 @@
 		</association>
 		<association property="tutor" javaType="Tutor"
 			autoMapping="true">
-			<id property="member.member_id" column="member_id" />
+			<id property="member.member_id" column="lecture_tutor_id" />
 			<association property="member" javaType="Member"
 				autoMapping="true">
 			</association>
@@ -172,9 +172,9 @@
 		,
 		le.lecture_start_dt,
 		le.lecture_end_dt, le.lecture_max,
-		le.lecture_current
-		,
-		tu.tutor_nickname
+		le.lecture_current,
+		tu.tutor_nickname,
+		le.lecture_tutor_id
 		FROM lecture le
 		JOIN tutor tu ON
 		(tu.tutor_id =
