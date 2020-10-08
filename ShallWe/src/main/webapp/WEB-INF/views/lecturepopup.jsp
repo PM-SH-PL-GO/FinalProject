@@ -216,7 +216,6 @@ $(document).ready(function() {
 	<script src="/shallwe/assets/js/hover-direction-snake.min.js"></script>
 
 	<!-- contact js -->
-	<script src="/shallwe/assets/js/contact.js"></script>
 	<script src="/shallwe/assets/js/jquery.form.js"></script>
 	<script src="/shallwe/assets/js/jquery.validate.min.js"></script>
 	<script src="/shallwe/assets/js/mail-script.js"></script>

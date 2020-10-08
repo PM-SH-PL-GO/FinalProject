@@ -144,10 +144,10 @@ $(function(){
 								<div class="properties__cardseo">
 									<div name="gotoDe" style="cursor: pointer;"
 										value="${lecture.lecture_id}">
-										<div class="properties__imgseo overlay1">
+										<div class="properties__imgseo overlay1"
+											style="position: relative; padding-top: 66.66%; overflow: hidden;">
 											<img src="/shallwe/lecture/${lecture.lecture_img}" alt=""
-												style="cursor: pointer;">
-
+												style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; max-width: 100%; height: auto;">
 										</div>
 										<div class="properties__caption">
 											<h3>
@@ -163,15 +163,14 @@ $(function(){
 									</div>
 									<div
 										class="properties__footer d-flex justify-content-between align-items-center">
-										<h3>
+										<h1>
 											<fmt:formatNumber value="${lecture.lecture_price}"
 												pattern="#,###" />
 											원
-										</h3>
+										</h1>
 										<div class="heart lecture_cancle">
-											<img src="/shallwe/assets/img/gallery/cancel.png"
-												width="30px" alt="수강취소" title="수강취소"> <input
-												type="hidden" name="lectureId" value="${lecture.lecture_id}">
+											<div style="cursor: pointer; background-color: #00dbd5; border-radius: 10px; color: white; padding: 8px;">수강취소</div>
+											<input type="hidden" name="lectureId" value="${lecture.lecture_id}">
 										</div>
 									</div>
 								</div>
@@ -216,8 +215,10 @@ $(function(){
 								<div class="properties__cardseo">
 									<div name="gotoDeend" style="cursor: pointer;"
 										value="${lecture.lecture_id}">
-										<div class="properties__imgseo overlay1">
-											<img src="/shallwe/lecture/${lecture.lecture_img}" alt="">
+										<div class="properties__imgseo overlay1"
+											style="position: relative; padding-top: 66.66%; overflow: hidden;">
+											<img src="/shallwe/lecture/${lecture.lecture_img}" alt=""
+												style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; max-width: 100%; height: auto;">
 										</div>
 										<div class="properties__caption">
 											<h3>
@@ -233,11 +234,11 @@ $(function(){
 									</div>
 									<div
 										class="properties__footer d-flex justify-content-between align-items-center">
-										<h3>
+										<h1>
 											<fmt:formatNumber value="${lecture.lecture_price}"
 												pattern="#,###" />
 											원
-										</h3>
+										</h1>
 										<c:set var="eqfalse" value="true"/>
 										<c:set var="eqtrue" value="false"/>
 										<c:forEach items="${relist}" var="rl" varStatus="i">
@@ -250,18 +251,16 @@ $(function(){
 											</c:if>
 										</c:forEach>
 										<c:if test="${empty rlecture_id || eqfalse}">
-											<div class="heart reviewAdd"">
-												<img src="/shallwe/assets/img/gallery/performance.png"
-													width="30px" alt="강사후기등록" title="강사후기등록"> <input
-													type="hidden" name="lectureId"
+											<div class="heart reviewAdd">
+													<div style="cursor: pointer; background-color: #00dbd5; border-radius: 10px; color: white; padding: 8px;">후기등록</div>
+													<input type="hidden" name="lectureId"
 													value="${lecture.lecture_id}">
 											</div>
 										</c:if>
 										<c:if test="${eqtrue}">
-											<div class="heart reviewRemove"">
-												<img src="/shallwe/assets/img/gallery/performance.png"
-													width="30px" alt="강사후기삭제" title="강사후기삭제"> <input
-													type="hidden" name="lectureId"
+											<div class="heart reviewRemove">
+													<div style="cursor: pointer; background-color: #00dbd5; border-radius: 10px; color: white; padding: 8px;">후기삭제</div>
+													<input type="hidden" name="lectureId"
 													value="${lecture.lecture_id}">
 											</div>
 										</c:if>
@@ -313,7 +312,6 @@ $(function(){
 	<script src="/shallwe/assets/js/hover-direction-snake.min.js"></script>
 
 	<!-- contact js -->
-	<script src="/shallwe/assets/js/contact.js"></script>
 	<script src="/shallwe/assets/js/jquery.form.js"></script>
 	<script src="/shallwe/assets/js/jquery.validate.min.js"></script>
 	<script src="/shallwe/assets/js/mail-script.js"></script>
