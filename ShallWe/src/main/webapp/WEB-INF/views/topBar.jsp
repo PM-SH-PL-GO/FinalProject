@@ -104,16 +104,23 @@ $(function(){
 		}else{
 			$.ajax({
 				url:"${contextPath}/member/tutorYN"
-				,success:function(data){
-					if(data=='N'){
-						topbarBtnData = "<a class=\"btn\" id=\"tutorSetBtn\">강사 등록</a>"
+				,success:function(tutor){
+					if(tutor.length==0){
+						topbarBtnData = "<a class=\"btn\" id=\"tutorSetBtn\">강사 등록</a>"						
 					}else{
-						topbarBtnData = "<a class=\"btn myInfoTutorInfo\">강사회원입니다.</a>"
-						tutorInfoBtn += "<a>강사정보</a>"
-						tutorInfoBtn += "<ul class=\"submenu side\" >"
-						tutorInfoBtn += "<li><a class=\"community myInfoTutorInfo\">내 강사 정보보기</a></li>"
-						tutorInfoBtn += "<li><a class=\"community myInfoTutorLecture\">내 강의 목록</a></li>"
-						tutorInfoBtn += "<li><a class=\"community addLecture\">강의신청</a></li></ul>"
+						console.log(tutor[0].member.tutor_YN);
+							tutorInfoBtn += "<a>강사정보</a>"
+							tutorInfoBtn += "<ul class=\"submenu side\" >"
+							tutorInfoBtn += "<li><a class=\"community myInfoTutorInfo\">내 강사 정보보기</a></li>"
+							tutorInfoBtn += "<li><a class=\"community myInfoTutorLecture\">내 강의 목록</a></li>"
+							tutorInfoBtn += "<li><a class=\"community addLecture\">강의신청</a></li></ul>"
+							console.log("알려줘요4!"+tutor[0].member.tutor_YN);
+							if(tutor[0].member.tutor_YN=='Y'){
+								topbarBtnData = "<a class=\"btn myInfoTutorInfo\">강사회원입니다.</a>"
+
+							}else{
+								topbarBtnData = "<a class=\"btn\" id=\"tutorSetBtn\">예비강사입니다.</a>"
+							}
 					}
 					$topbarBtn.html(topbarBtnData);	
 					$tutorInfoBtn.html(tutorInfoBtn);
