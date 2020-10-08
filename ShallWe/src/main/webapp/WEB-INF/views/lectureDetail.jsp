@@ -203,7 +203,7 @@ $(document).ready(function() {
 	<main>
 		<!--? Start Align Area -->
 		<div class="whole-wrap mt-100">
-			<div class="container  box_1170">
+			<div class="container box_1170">
 				<div class="section-top-border">
 					<div class="row">
 						<div class="col-md-3"
