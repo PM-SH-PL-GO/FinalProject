@@ -83,7 +83,7 @@ top: -17px!important;
 background: #00b3ad!important;
 }
 .col-lg-8{
-max-width: 85%;
+max-width: 95%;
 }
 .col-sm-6{
 padding-left: 0px;

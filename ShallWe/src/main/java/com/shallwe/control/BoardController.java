@@ -146,7 +146,6 @@ public class BoardController {
 	 */	
 	@RequestMapping("/detail/{boardIdVal}")
 	public ModelAndView detail(@PathVariable int boardIdVal) {
-		System.out.println("보드아이디발??"+boardIdVal);
 		ModelAndView mnv = new ModelAndView();
 		StudyBoard board;
 		try {
@@ -278,10 +277,13 @@ public class BoardController {
 	public ResponseEntity<Integer> updateBoard(StudyBoard sb, HttpSession session, MultipartFile boardUpload, String studyBoard_content) {
 		System.out.println(1);
 		Member member = new Member();
+//		String studyBoard_fileName ="";
+		String studyBoard_fileName =null;
 		String memberId = (String)session.getAttribute("loginInfo");
 		member.setMember_id(memberId);
-		String studyBoard_fileName = saveFile(boardUpload);
-		System.out.println(2);
+		if(boardUpload !=null) {
+			studyBoard_fileName = saveFile(boardUpload);
+		}
 		try {
 			sb.setMember(member);
 			sb.setStudyBoard_fileName(studyBoard_fileName);

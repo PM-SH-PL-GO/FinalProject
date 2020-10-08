@@ -93,7 +93,7 @@ public class StudyBoardDAO {
 	public void update(StudyBoard board) throws ModifyException {
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
-		session.update("StudyBoardMapper.update", board);
+			session.update("StudyBoardMapper.update", board);
 			if(board.getMember().getMember_id()==null) {
 				throw new ModifyException("수정할 데이터가 없습니다.");
 			}
