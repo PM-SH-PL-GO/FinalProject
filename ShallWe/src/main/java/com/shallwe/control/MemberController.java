@@ -36,9 +36,11 @@ import com.shallwe.model.ReviewBean;
 import com.shallwe.service.LectureService;
 import com.shallwe.service.MemberSerivce;
 import com.shallwe.service.ReviewService;
+import com.shallwe.service.TutorService;
 import com.shallwe.vo.Lecture;
 import com.shallwe.vo.LectureCategory;
 import com.shallwe.vo.Review;
+import com.shallwe.vo.Tutor;
 
 import lombok.extern.log4j.Log4j;
 
@@ -52,6 +54,8 @@ public class MemberController {
 	// 회원 : 내 정보 조회/수정, 강의 조회/신청/삭제
 	@Autowired
 	MemberSerivce service;
+	@Autowired
+	TutorService tutorService;
 	
 	@Autowired
 	LectureService lectureService;
@@ -147,15 +151,15 @@ public class MemberController {
 	
 	//강사 여부 확인하기
 	@RequestMapping("/tutorYN")
-	public ResponseEntity<String> myInfo(HttpSession session){
+	public ResponseEntity<List<Tutor>> tutorYN(HttpSession session){
 		String member_id = (String)session.getAttribute("loginInfo");
+		List<Tutor> t =null;
 		try {
-			MemberInfoBean mib = service.findById(member_id);
-			String YN = mib.getTutorYN();
-			return ResponseEntity.status(HttpStatus.OK).body(YN);
+			 t = tutorService.showTutorInfo(member_id);
+				return ResponseEntity.status(HttpStatus.OK).body(t);
 		} catch (FindException e) {
 			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("null");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(t);
 		}
 		
 	}

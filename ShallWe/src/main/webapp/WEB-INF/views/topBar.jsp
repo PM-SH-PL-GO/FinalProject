@@ -83,7 +83,7 @@ top: -17px!important;
 background: #00b3ad!important;
 }
 .col-lg-8{
-max-width: 85%;
+max-width: 95%;
 }
 .col-sm-6{
 padding-left: 0px;
@@ -104,16 +104,23 @@ $(function(){
 		}else{
 			$.ajax({
 				url:"${contextPath}/member/tutorYN"
-				,success:function(data){
-					if(data=='N'){
-						topbarBtnData = "<a class=\"btn\" id=\"tutorSetBtn\">강사 등록</a>"
+				,success:function(tutor){
+					if(tutor.length==0){
+						topbarBtnData = "<a class=\"btn\" id=\"tutorSetBtn\">강사 등록</a>"						
 					}else{
-						topbarBtnData = "<a class=\"btn myInfoTutorInfo\">강사회원입니다.</a>"
-						tutorInfoBtn += "<a>강사정보</a>"
-						tutorInfoBtn += "<ul class=\"submenu side\" >"
-						tutorInfoBtn += "<li><a class=\"community myInfoTutorInfo\">내 강사 정보보기</a></li>"
-						tutorInfoBtn += "<li><a class=\"community myInfoTutorLecture\">내 강의 목록</a></li>"
-						tutorInfoBtn += "<li><a class=\"community addLecture\">강의신청</a></li></ul>"
+						console.log(tutor[0].member.tutor_YN);
+							tutorInfoBtn += "<a>강사정보</a>"
+							tutorInfoBtn += "<ul class=\"submenu side\" >"
+							tutorInfoBtn += "<li><a class=\"community myInfoTutorInfo\">내 강사 정보보기</a></li>"
+							tutorInfoBtn += "<li><a class=\"community myInfoTutorLecture info\">내 강의 목록</a></li>"
+							tutorInfoBtn += "<li><a class=\"community addLecture\">강의신청</a></li></ul>"
+							console.log("알려줘요4!"+tutor[0].member.tutor_YN);
+							if(tutor[0].member.tutor_YN=='Y'){
+								topbarBtnData = "<a class=\"btn myInfoTutorInfo\">강사회원입니다.</a>"
+
+							}else{
+								topbarBtnData = "<a class=\"btn\" id=\"tutorSetBtn\">예비강사입니다.</a>"
+							}
 					}
 					$topbarBtn.html(topbarBtnData);	
 					$tutorInfoBtn.html(tutorInfoBtn);
@@ -197,13 +204,23 @@ $(function(){
 	
 	//----------내 강사 강의목록 CLICK START---------	
 	$("#tutorInfoBtn").on("click",".myInfoTutorLecture",function(){
+		var $topbarBtn = $('#tutorSetBtn').html();
+		if($topbarBtn=="예비강사입니다."){
+			alert("강사 승인 대기 상태입니다. 강사 승인 후 이용가능합니다.");
+		}else{
 		location.href = "${contextPath}/lectures/tutorLecture";	
+		}
 	});
 	//----------내 강사 강의목록 CLICK END---------	
 	
 	//----------내  강사정보보기 CLICK START---------	
 	$("#tutorInfoBtn").on("click",".addLecture",function(){
+		var $topbarBtn = $('#tutorSetBtn').html();
+		if($topbarBtn=="예비강사입니다."){
+			alert("강사 승인 대기 상태입니다. 강사 승인 후 이용가능합니다.");
+		}else{		
 		location.href = "${contextPath}/lectures/insert";
+		}
 	});
 	//----------내 강사정보보기 CLICK END---------	
 

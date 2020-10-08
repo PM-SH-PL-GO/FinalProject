@@ -44,7 +44,11 @@
 	
 	<!-- 게시글 수정 -->
 	<update id="update" parameterType="StudyBoard">
-		update STUDYBOARD set studyboard_title= #{studyBoard_title},studyboard_content=#{studyBoard_content}, studyboard_filename=#{studyBoard_fileName}, studyboard_write_dt=sysdate
+		update STUDYBOARD set studyboard_title= #{studyBoard_title},studyboard_content=#{studyBoard_content}, 
+		<if test="studyBoard_fileName != null">
+		studyboard_filename=#{studyBoard_fileName}, 
+		</if>
+		studyboard_write_dt=sysdate
 		where studyboard_id = #{studyBoard_id}
 	</update>
 	

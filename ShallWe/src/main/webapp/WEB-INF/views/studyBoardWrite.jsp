@@ -1,5 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!doctype html>
 <html class="no-js" lang="zxx">
 <head>
@@ -34,6 +35,10 @@
 	color: #00dbd5;
 	text-transform: uppercase;
 	cursor: pointer
+}
+a#fileLoad {
+	color: black;
+	outline: medium none
 }
 </style>
 <script type="text/javascript"
@@ -130,8 +135,6 @@ $(function() {
 	<section class="blog_area single-post-area section-padding">
 		<div class="row slider-height1">
 			<div class="col-lg-8 posts-list" style="margin-left : auto; margin-right: auto ">
-				<div class="col-sm-6">
-				</div>
 				<div class="col-lg-8">
 					<h2 class="contact-title">글쓰기</h2>
 					<form class="form-contact contact_form" id="writeForm" method="post" enctype="multipart/form-data">
@@ -153,8 +156,10 @@ $(function() {
 							</div>
 							<div class="col-sm-6">
 								<div class="form-group">
-									<input class="form-control valid" id="fileLoad" type="file" placeholder="파일첨부"
-										value="${sb.studyBoard_fileName}">
+								<c:if test="${not empty sb.studyBoard_fileName}">
+								<h3>변경할 파일을 선택해주세요.<br>기존파일 : ${fn:substringAfter(sb.studyBoard_fileName,'_')}</h3>
+								</c:if>
+									<input class="form-control valid" id="fileLoad" type="file" placeholder="파일첨부">
 								</div>
 							</div>
 						</div>
