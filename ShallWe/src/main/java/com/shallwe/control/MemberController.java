@@ -293,11 +293,6 @@ public class MemberController {
 	@RequestMapping(value = "/reviewList", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView selectReviewList(String tutor_id , String category_id) throws AddException {
-		if ( tutor_id == null && "".equals(tutor_id) ) {
-			tutor_id = "member3";
-		} else if (category_id == null && "".equals(category_id)) {
-			category_id = "MA";
-		}
 		List<Review> list = new ArrayList<Review>();
 		ModelAndView modelAndView = new ModelAndView();
 		Map<String, String> map = new HashMap<String, String>();
