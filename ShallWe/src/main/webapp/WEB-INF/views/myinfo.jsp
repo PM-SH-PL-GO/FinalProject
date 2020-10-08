@@ -11,15 +11,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 $(document).ready(function() {
-	// 내가 수강하고 있는 강의 목록보기 
-	var bodyObj = $('.myinfobody');
-	$.ajax({ 
-		url : '${contextPath}/lectures/myinfoLectureList'
-		, method : "GET"
-		, success : function (responseData) {
-		
-		}
-	}); // end of ajax
 
 	// 내정보 수정하기 버튼 클릭 이벤트
 	var $myinfoModiBtnObj = $('#myinfoModi');
@@ -33,10 +24,10 @@ $(document).ready(function() {
 	
 	// 강의상세보기
 	var trObj = $('tr.lecture');
-	trObj.click(function e () {
-		let lecture_code = $(this).find('input[name=lecture_id]').val();
-		var url = '${contextPath}/lectures/detail?lecture_id='+lecture_code;
-		location.href = url;
+	trObj.on('click', function(e){
+		var lecture_code = $(this).find('td.lecture_title>input[name=lecture_code]').val();
+// 		var url = '${contextPath}/lectures/detail?lecture_id='+lecture_code;
+// 		location.href = url;
 	});
 	
 }); // end of load();
@@ -80,8 +71,8 @@ $(document).ready(function() {
                                 <div class="properties properties2 mb-30">
                                     <div class="properties__card">
                                             <table class="type1">
-											<tr><th><label>이름 :</label></th><td>${myInfo.memberName}</td></tr>                                            
-											<tr><th><label>이메일 :</label></th><td>${myInfo.memberEmail}</td></tr>                                            
+											<tr><th><label>이름:</label></th><td>${myInfo.memberName}</td></tr>
+											<tr><th><label>이메일:</label></th><td>${myInfo.memberEmail}</td></tr>                                            
 											<tr><th><label>H.P :</label></th><td>${myInfo.memberPhone}</td></tr>                                            
 											<tr><th><label>관심분야1 :</label></th><td>${myInfo.favorite1.lecture_category_name}</td></tr>                                            
 											<tr><th><label>관심분야2 :</label></th><td>${myInfo.favorite2.lecture_category_name}</td></tr>                                            
@@ -112,8 +103,9 @@ $(document).ready(function() {
 											</tr>
 										<c:forEach items="${lectureList}" var="lecture" varStatus="status">
 											<tr class="lecture" style="cursor: pointer;>
-												<input type='hidden' name="lecture_id" value="${lecture.lecture_id}">
-												<td class="lecture_title">${lecture.lecture_title}</td>
+												<td class="lecture_title">${lecture.lecture_title}
+												<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>
+												</td>
 												<td class="lecture_start_dt"><fmt:formatDate value="${lecture.lecture_start_dt}" pattern="yyyy-MM-dd"/></td>
 												<td class="lecture_end_dt"><fmt:formatDate value="${lecture.lecture_end_dt}" pattern="yyyy-MM-dd"/></td>
 											</tr>
