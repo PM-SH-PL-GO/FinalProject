@@ -19,20 +19,20 @@
     <link rel="shortcut icon" type="image/x-icon" href="/shallwe/assets/img/favicon.ico">
 
 	<!-- CSS here -->
-	<link rel="stylesheet" href="/shallwe/assets/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/owl.carousel.min.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/slicknav.css">
-    <link rel="stylesheet" href="/shallwe/assets/css/flaticon.css">
-    <link rel="stylesheet" href="/shallwe/assets/css/progressbar_barfiller.css">
-    <link rel="stylesheet" href="/shallwe/assets/css/gijgo.css">
-    <link rel="stylesheet" href="/shallwe/assets/css/animate.min.css">
-    <link rel="stylesheet" href="/shallwe/assets/css/animated-headline.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/magnific-popup.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/fontawesome-all.min.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/themify-icons.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/slick.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/nice-select.css">
-	<link rel="stylesheet" href="/shallwe/assets/css/style.css">
+	<link rel="stylesheet" href="${contextPath}/assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="${contextPath}/assets/css/owl.carousel.min.css">
+	<link rel="stylesheet" href="${contextPath}/assets/css/slicknav.css">
+    <link rel="stylesheet" href="${contextPath}/assets/css/flaticon.css">
+    <link rel="stylesheet" href="${contextPath}/assets/css/progressbar_barfiller.css">
+    <link rel="stylesheet" href="${contextPath}/assets/css/gijgo.css">
+    <link rel="stylesheet" href="${contextPath}/assets/css/animate.min.css">
+    <link rel="stylesheet" href="${contextPath}/assets/css/animated-headline.css">
+	<link rel="stylesheet" href="${contextPath}/assets/css/magnific-popup.css">
+	<link rel="stylesheet" href="${contextPath}/assets/css/fontawesome-all.min.css">
+	<link rel="stylesheet" href="${contextPath}/assets/css/themify-icons.css">
+	<link rel="stylesheet" href="${contextPath}/assets/css/slick.css">
+	<link rel="stylesheet" href="${contextPath}/assets/css/nice-select.css">
+	<link rel="stylesheet" href="${contextPath}/assets/css/style.css">
 	<style>
 .menu-wrapper
 {float:left;}
@@ -107,16 +107,14 @@ $(function(){
 					if(tutor.length==0){
 						topbarBtnData = "<a class=\"btn\" id=\"tutorSetBtn\">강사 등록</a>"						
 					}else{
-						console.log(tutor[0].member.tutor_YN);
 							tutorInfoBtn += "<a>강사정보</a>"
 							tutorInfoBtn += "<ul class=\"submenu side\" >"
 							tutorInfoBtn += "<li><a class=\"community myInfoTutorInfo\">내 강사 정보보기</a></li>"
 							tutorInfoBtn += "<li><a class=\"community myInfoTutorLecture info\">내 강의 목록</a></li>"
 							tutorInfoBtn += "<li><a class=\"community addLecture\">강의신청</a></li></ul>"
-							console.log("알려줘요4!"+tutor[0].member.tutor_YN);
+							// 에러나요...ㅎ_ㅎ
 							if(tutor[0].member.tutor_YN=='Y'){
 								topbarBtnData = "<a class=\"btn myInfoTutorInfo\">강사회원입니다.</a>"
-
 							}else{
 								topbarBtnData = "<a class=\"btn\" id=\"tutorSetBtn\">예비강사입니다.</a>"
 							}
