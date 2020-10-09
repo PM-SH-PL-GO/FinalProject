@@ -9,6 +9,7 @@
 .left_menu {
 	padding-left: 120px;
 	width: 30%;
+	height:70%;
 	float: left;
 }
 
@@ -18,6 +19,7 @@
 .right_menu { 
 	padding-right: 120px;
 	width: 100%;
+	height:100%;
 }
 
 </style>
@@ -99,28 +101,13 @@
 </script>
 </head>
 <body>
-    <!-- topbar Start -->
+	<!-- topbar Start -->
 	<div class="topMenu">
 		<jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
 	</div>
-    <!-- topbar End -->
+	<!-- topbar End -->
 	<main>
-		<!--? Hero Start -->
-		<div class="slider-area2">
-			<div
-				class="slider-height3  hero-overly hero-bg4 d-flex align-items-center">
-				<div class="container">
-					<div class="row">
-						<div class="col-xl-12">
-							<div class="hero-cap2 pt-20 text-center">
-								<h2>강의 카테고리 검색 결과</h2>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
+	<div class="listing-area pt-150"/>
 		<!--카테고리 내 검색-->
 		<section class="left_menu">
 <!-- 		<section class="left_menu section-padding"> -->
@@ -132,7 +119,7 @@
 								<!-- searchKey = {"all", "tutor_name", "lecture_title" , "category" }; -->
 								<select class="nice-select" id="searchKey" style="font-weight: bold; font-size: large; text-align: center;">
 <!-- 								<select class="nice-select" id="searchKey" style="font-weight: bold; font-size: large;"> -->
-									<option value="0" class="option">전체 검색</option>\
+									<option value="0" class="option">전체 검색</option>
 									<option value="1" class="option">강사 이름</option>
 									<option value="2" class="option">강의명</option>
 									<option value="3" class="option">카테고리명</option>
@@ -183,7 +170,7 @@
 			<div class="container">
 				<div class="row">
 				<c:if test="${lectureList.size() ==  0}" >
-					<span style="font-weight: bold; color:red; font-size:40px; text-align:center; padding:20px;">조회된 강의가 없습니다! 다시 검색해주세요~</span>
+					<span class="resarch_result">조회된 강의가 없습니다! 다시 검색해주세요~</span>
 				</c:if>
 				<!-- single start -->
 				<c:forEach items="${lectureList}" var="lecture" varStatus="stats">
@@ -191,7 +178,9 @@
 					<div class="col">
 						<div class="properties pb-20" style="padding-top:10px; box-shadow : 2px 2px 5px #999; text-align: center; padding-bottom: 20px;">
 							<div class="properties__card" style="cursor: pointer; height: 420px;">
-								<a href="#"><img src="${contextPath}/assets/img/gallery/properties3.png" alt="강의사진"></a><br/><br/>
+								<a href="#"><img src="${contextPath}/lecture/${lecture.lecture_img}" alt="강의사진"
+									style="height: 180px; width:300px; "/>
+								</a><br/><br/>
 								<div class="properties__caption">
 									<c:if test="${lecture.lecture_current eq lecture.lecture_max}" >
 										<h2><span style="background-color: red; color: white;font-size: large; padding: 2.5px;">정원초과</span></h2>
@@ -231,10 +220,10 @@
 					<!-- single end -->		
 					</c:forEach>
 				</c:forEach>
+				
 			</div>
 			</div>
 		</section>
 	</main>
 </body>
 </html>
-<%-- <jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include> --%>

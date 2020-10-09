@@ -7,6 +7,29 @@
 
 <!doctype html>
 <head>
+<style>
+
+.myinfoLecture  {
+  text-align: center;
+  margin: 50px auto 0;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  text-align: center;
+  padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+  text-align: center;
+  background-color: #3BABE4;
+  color: white;
+}
+
+</style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
@@ -25,9 +48,9 @@ $(document).ready(function() {
 	// 강의상세보기
 	var trObj = $('tr.lecture');
 	trObj.on('click', function(e){
-		var lecture_code = $(this).find('td.lecture_title>input[name=lecture_code]').val();
-// 		var url = '${contextPath}/lectures/detail?lecture_id='+lecture_code;
-// 		location.href = url;
+		var lecture_code = $(this).find('input[name=lecture_code]').val();
+ 		var url = '${contextPath}/lectures/detail?lecture_id='+lecture_code;
+ 		location.href = url;
 	});
 	
 }); // end of load();
@@ -70,16 +93,19 @@ $(document).ready(function() {
                                 <!-- Single -->
                                 <div class="properties properties2 mb-30">
                                     <div class="properties__card">
-                                            <table class="type1">
-											<tr><th><label>이름:</label></th><td>${myInfo.memberName}</td></tr>
-											<tr><th><label>이메일:</label></th><td>${myInfo.memberEmail}</td></tr>                                            
-											<tr><th><label>H.P :</label></th><td>${myInfo.memberPhone}</td></tr>                                            
-											<tr><th><label>관심분야1 :</label></th><td>${myInfo.favorite1.lecture_category_name}</td></tr>                                            
-											<tr><th><label>관심분야2 :</label></th><td>${myInfo.favorite2.lecture_category_name}</td></tr>                                            
-											<tr><th><label>관심분야3 :</label></th><td>${myInfo.favorite3.lecture_category_name}</td></tr>                                            
-                                            </table>
+                                       <table class="type1">
+                                        <colgroup>
+									   		<col width="30%"></col>
+									   	</colgroup>
+                                        <tr><th><label>이름</label></th><td>${myInfo.memberName}</td></tr>
+                                        <tr><th><label>이메일</label></th><td>${myInfo.memberEmail}</td></tr>
+										<tr><th><label>H.P </label></th><td>${myInfo.memberPhone}</td></tr>                                            
+										<tr><th><label>관심분야1 </label></th><td>${myInfo.favorite1.lecture_category_name}</td></tr>                                            
+										<tr><th><label>관심분야2 </label></th><td>${myInfo.favorite2.lecture_category_name}</td></tr>                                            
+										<tr><th><label>관심분야3 </label></th><td>${myInfo.favorite3.lecture_category_name}</td></tr>                                            
+                                       </table>
                                     <div class="btn_center">
-                                    	<button class="btn" id="myinfoModi" style="cursor: pointer; background: #00dbd5; padding-bottom: 5px; ">내 정보 수정</button>
+                                    	<a id="myinfoModi" class="btn">내 정보 수정</a>
                                     </div>
                                     </div>
                                 </div>
@@ -89,7 +115,7 @@ $(document).ready(function() {
                                 <div class="properties properties2 mb-30">
                                     <div class="properties__card">
                                         <h3 style="text-align :center">최근 학습중인 강의들</h3>
-                                        	<table "text-align :center">
+                                        	<table class="myinfoLecture">
                                         	<thead>
                                        	   	<colgroup>
 										   		<col width="50%"></col>
@@ -98,18 +124,19 @@ $(document).ready(function() {
 										   	</colgroup>
                                 			<tr>
 												<th class="lecture_title">강의제목</th>
-												<th class="lecture_start_dt">강의시작날짜</th>
-												<th class="lecture_end_dt">강의종료날짜</th>
+												<th class="lecture_start_dt">강의시작</th>
+												<th class="lecture_end_dt">강의종료</th>
 											</tr>
-										<c:forEach items="${lectureList}" var="lecture" varStatus="status">
-											<tr class="lecture" style="cursor: pointer;>
-												<td class="lecture_title">${lecture.lecture_title}
-												<input type="hidden" name="lecture_code" value="${lecture.lecture_id}"/>
-												</td>
+											</thead>
+											<tbody>
+											<c:forEach items="${lectureList}" var="lecture" end="5" varStatus="status">
+											<tr class="lecture" style="cursor: pointer;">
+												<input type="hidden" value="${lecture.lecture_id}" name="lecture_code" />
+												<td class="lecture_title">${lecture.lecture_title}</td>
 												<td class="lecture_start_dt"><fmt:formatDate value="${lecture.lecture_start_dt}" pattern="yyyy-MM-dd"/></td>
 												<td class="lecture_end_dt"><fmt:formatDate value="${lecture.lecture_end_dt}" pattern="yyyy-MM-dd"/></td>
 											</tr>
-										</c:forEach>
+											</c:forEach>
 										</table>
                                     </div>
                                 </div>
