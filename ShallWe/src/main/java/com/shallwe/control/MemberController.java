@@ -252,67 +252,67 @@ public class MemberController {
       String member_id = (String)session.getAttribute("loginInfo");
       Lecture lecture = new Lecture();
 
-      try {
-         lecture = lectureService.searchLectureByLectureId(lecture_id);
-      
-      } catch (FindException e) {
-         e.printStackTrace();
-      }
-      ModelAndView modelAndView = new ModelAndView();
-      modelAndView.addObject("lecture", lecture);
-      modelAndView.addObject("member_id", member_id);
-      modelAndView.setViewName("/reviewAdd");
-      
-      return modelAndView;
-   }
-   
-   // 강의 후기 등록 비즈니스 로직
-   // 고수정 : 후기 등록
-   @RequestMapping(value = "/reviewAddmethod", method = RequestMethod.POST)
-   @ResponseBody
-   public ModelAndView insertReview(HttpSession session, @RequestBody ReviewBean reviewBean ) throws AddException {
-      if ( reviewBean.getMemberId() == null ) {
-         String memberId = (String)session.getAttribute("loginInfo");
-         reviewBean.setMemberId(memberId);
-      } 
-      
-      ModelAndView modelAndView = new ModelAndView();
-      try {
-         reviewService.insertReview(reviewBean);
-         modelAndView.setViewName("/reviewAdd");
-         
-      } catch (AddException e) {
-         e.printStackTrace();
-         modelAndView.addObject("errMsg", e.getMessage());
-      }
-      return modelAndView;
-   }
-   
-   
-   //--- review 강사별, 카테고리별 후기 조회
-   @RequestMapping(value = "/reviewList", method = RequestMethod.GET)
-   @ResponseBody
-   public ModelAndView selectReviewList(String tutor_id , String category_id) throws AddException {
-      List<Review> list = new ArrayList<Review>();
-      ModelAndView modelAndView = new ModelAndView();
-      Map<String, String> map = new HashMap<String, String>();
-      map.put("tutor_id", tutor_id);
-      map.put("category_id", category_id);
-      try {
-         list = reviewService.selectReview(map);
-         modelAndView.addObject("list", list);
-         modelAndView.setViewName("/reviewList");
-         
-      } catch (FindException e) {
-         e.printStackTrace();
-      }
-      return modelAndView;
-   }
-   
-   //--- member별 review 조회
-   @RequestMapping(value = "/memberReviewList", method = RequestMethod.GET)
-   @ResponseBody
-   public ModelAndView selectMemberReviewLsist(HttpSession session) throws AddException {
+		try {
+			lecture = lectureService.searchLectureByLectureId(lecture_id);
+		
+		} catch (FindException e) {
+			e.printStackTrace();
+		}
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("lecture", lecture);
+		modelAndView.addObject("member_id", member_id);
+		modelAndView.setViewName("/reviewAdd");
+		
+		return modelAndView;
+	}
+	
+	// 강의 후기 등록 비즈니스 로직
+	// 고수정 : 후기 등록
+	@RequestMapping(value = "/reviewAddmethod", method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView insertReview(HttpSession session, @RequestBody ReviewBean reviewBean ) throws AddException {
+		if ( reviewBean.getMemberId() == null ) {
+			String memberId = (String)session.getAttribute("loginInfo");
+			reviewBean.setMemberId(memberId);
+		} 
+		
+		ModelAndView modelAndView = new ModelAndView();
+		try {
+			reviewService.insertReview(reviewBean);
+			modelAndView.setViewName("/reviewAdd");
+			
+		} catch (AddException e) {
+			e.printStackTrace();
+			modelAndView.addObject("errMsg", e.getMessage());
+		}
+		return modelAndView;
+	}
+	
+	
+	//--- review 강사별, 카테고리별 후기 조회
+	@RequestMapping(value = "/reviewList", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView selectReviewList(String tutor_id , String category_id) throws AddException {
+		List<Review> list = new ArrayList<Review>();
+		ModelAndView modelAndView = new ModelAndView();
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("tutor_id", tutor_id);
+		map.put("category_id", category_id);
+		try {
+			list = reviewService.selectReview(map);
+			modelAndView.addObject("list", list);
+			modelAndView.setViewName("/reviewList");
+			
+		} catch (FindException e) {
+			e.printStackTrace();
+		}
+		return modelAndView;
+	}
+	
+	//--- member별 review 조회
+	@RequestMapping(value = "/memberReviewList", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView selectMemberReviewLsist(HttpSession session) throws AddException {
 
       String member_id = (String)session.getAttribute("loginInfo");
       List<Review> list = new ArrayList<Review>();
