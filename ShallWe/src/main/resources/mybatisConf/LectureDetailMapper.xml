@@ -108,7 +108,7 @@
 				WHERE ld.lecture_id = #{lecture_id}
 			</when>
 			<when test="rejectOrCancel == 'cancel_reason'">
-				SELECT ld.lecture_cancel_reason, tu.tutor_nickname, lec.lecture_title,
+				SELECT ld.lecture_cancel_reason, tu.tutor_nickname, lec.lecture_title
 				FROM lecture_detail ld
 				    JOIN lecture lec ON (ld.lecture_id = lec.lecture_id and ld.lecture_category_id = lec.lecture_category_id)
 				    JOIN tutor tu ON(lec.lecture_tutor_id = tu.tutor_id and lec.lecture_category_id = tu.tutor_category_id)
