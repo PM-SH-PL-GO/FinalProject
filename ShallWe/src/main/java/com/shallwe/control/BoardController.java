@@ -82,7 +82,6 @@ public class BoardController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		return mnv;
 		
 	}
@@ -193,8 +192,6 @@ public class BoardController {
 		File saveFile = new File(UPLOAD_PATH,saveName);
 		try {
 			file.transferTo(saveFile);
-			//업로드 파일에 saveFile이라는 껍데기 입힘
-			System.out.println("파일크기:" + saveFile.length() + "파일사이즈:" + file.getSize());
 			
 		} catch (IllegalStateException e) {
 			//즉 브라우져에 보낼 데이터를 버퍼에 쓴 이후로는 redirect나 forward를 할수 없을떄 일어난다(forward나 redirect)
@@ -275,9 +272,7 @@ public class BoardController {
 	@RequestMapping(value = "/updateBoard", method = RequestMethod.POST)
 	@Transactional
 	public ResponseEntity<Integer> updateBoard(StudyBoard sb, HttpSession session, MultipartFile boardUpload, String studyBoard_content) {
-		System.out.println(1);
 		Member member = new Member();
-//		String studyBoard_fileName ="";
 		String studyBoard_fileName =null;
 		String memberId = (String)session.getAttribute("loginInfo");
 		member.setMember_id(memberId);

@@ -872,7 +872,6 @@
 	//             				$(".lecture-list").trigger("click")
 	//             			}
 	//            				else
-            				console.log(xhttr.state);
             		}
             		
             	});
@@ -1154,4 +1153,4 @@
       </div>
   </body>
 </html>
-<jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include>
+<%-- <jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include> --%>

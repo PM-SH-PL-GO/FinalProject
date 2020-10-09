@@ -19,7 +19,6 @@ public class HomeController {
 
 	@RequestMapping({"/index", "/"})
 	public String admin() {
-		System.out.println("index 입장");
 		return "/index";
 	}
 
@@ -35,10 +34,6 @@ public class HomeController {
 			model.addAttribute("logout", "Login error check your accout");
 	}
 	
-//	@RequestMapping(value = "/studyBoard", method = RequestMethod.GET)
-//	public void studyBoard(Locale locale, Model model) {
-//		System.out.println("studyBoard coming11");
-//	}
 	
 	@RequestMapping(value = "/studyBoardWrite", method = RequestMethod.GET)
 	public void studyBoardWrite(Locale locale, Model model) {
@@ -50,10 +45,6 @@ public class HomeController {
 		System.out.println("studyBoardDetail coming");
 	}
 	
-//	@RequestMapping(value = "/faq", method = RequestMethod.GET)
-//	public void faq(Locale locale, Model model) {
-//		System.out.println("faq coming");
-//	}
 	@RequestMapping(value = "/userLogin", method = RequestMethod.GET)
 	public void uerLogin(Locale locale, Model model) {
 		System.out.println("userLogin");
@@ -70,14 +61,6 @@ public class HomeController {
 	public void topBar(Locale locale, Model model) {
 		System.out.println("topBar");
 	}
-//	@RequestMapping(value = "/myinfo", method = RequestMethod.GET)
-//	public void myinfo(Locale locale, Model model) {
-//		System.out.println("myinfo");
-//	}
-//	@RequestMapping(value = "/myinfoModi", method = RequestMethod.GET)
-//	public void myinfoModi(Locale locale, Model model) {
-//		System.out.println("myinfo");
-//	}
 	
 	@RequestMapping(value = "/wishlist", method = RequestMethod.GET)
 	public void wishlist(Locale locale, Model model) {

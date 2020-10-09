@@ -66,8 +66,6 @@ public class UploadController {
 			try {
 				
 				file.transferTo(saveFile);
-				//업로드 파일에 saveFile이라는 껍데기 입힘
-				System.out.println("파일크기:" + saveFile.length() + "파일사이즈:" + file.getSize());
 				
 			} catch (IllegalStateException e) {
 				//즉 브라우져에 보낼 데이터를 버퍼에 쓴 이후로는 redirect나 forward를 할수 없을떄 일어난다(forward나 redirect)
@@ -77,10 +75,6 @@ public class UploadController {
 				e.printStackTrace();
 			}
 	
-		log.info( "이 업로드한 파일은" +file);
-		log.info("이 업로드된 파일이다" + saveName);
-		log.info("업로드된 파일의 경로는 " + uploadPath);
-		
 		return saveName;
 		
 	}
@@ -95,8 +89,6 @@ public class UploadController {
 		try {
 			
 			files.transferTo(saveFile);
-			//업로드 파일에 saveFile이라는 껍데기 입힘
-			System.out.println("파일크기:" + saveFile.length() + "파일사이즈:" + files.getSize());
 			
 		} catch (IllegalStateException e) {
 			//즉 브라우져에 보낼 데이터를 버퍼에 쓴 이후로는 redirect나 forward를 할수 없을떄 일어난다(forward나 redirect)
@@ -106,9 +98,6 @@ public class UploadController {
 			e.printStackTrace();
 		}
 
-	log.info( "이 업로드한 파일은" +files);
-	log.info("이 업로드된 파일이다" + saveName);
-	log.info("업로드된 파일의 경로는 " + uploadPath);
 	
 	return saveName;
 	
@@ -120,10 +109,8 @@ public class UploadController {
 	@ResponseBody
 	public ResponseEntity<Byte[]> showPdf(String fileName)throws IOException{
 		
-		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + fileName);
 		
 		String path = realPath + fileName;
-		log.info("sfsfsdfs@@@@@@@@@@@@@@@@@@@@@@@@: " + path);
 		
 		File file =  new File((path));
 		FileInputStream fis = new FileInputStream(file);
@@ -158,9 +145,6 @@ public class UploadController {
 											 ) 
 											  throws AddException{
 		
-		System.out.println("jsp넘어온 데이터:" + tutor);
-		log.info("이미지파일:" + tutor_img1);
-		log.info("이력서파일:" + tutor_career_file1);
 		
 		String tutor_id = (String)session.getAttribute("loginInfo");
 
@@ -204,8 +188,6 @@ public class UploadController {
 											 @RequestParam Map<String,Object> tutor
 											)throws ModifyException{
 		
-		System.out.println("jsp넘어온 데이터:" + tutor);
-		log.info("이미지파일:" + tutor_img1);
 		
 		String tutor_id = (String)session.getAttribute("loginInfo");	
 		Member member = new Member();
@@ -246,7 +228,6 @@ public class UploadController {
 		String tutor_img = saveFile(tutor_img1);
 		
 		tutor.setMember(member);
-		log.info("@@@@@@@@@@@@@@@@@강사 정보:" + tutor);
 		tutor.setTutor_img(tutor_img);
 		response.setContentType("text/html; charset=UTF-8");
 		

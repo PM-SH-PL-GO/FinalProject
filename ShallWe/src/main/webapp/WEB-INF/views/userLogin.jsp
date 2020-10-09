@@ -463,7 +463,6 @@ input.submit {
 				   ,data:{member_name:$idValCheck,member_email:$mailCheck}
 				   ,success:function(data){
 						let responseObj = JSON.parse(data)
-						console.log(data);
 						if(responseObj.status == 'success'){
 							 
 									alert("임시비밀번호가 발급되었습니다");

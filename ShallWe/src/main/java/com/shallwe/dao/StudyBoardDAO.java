@@ -32,7 +32,6 @@ public class StudyBoardDAO {
 	 * @return 조회된 게시글
 	 */
 	public List<StudyBoard> selectAll(Map<String, Object> map) throws FindException{
-		System.out.println("selectAllDAO");
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
 		List<StudyBoard> list = session.selectList("StudyBoardMapper.selectAll", map);

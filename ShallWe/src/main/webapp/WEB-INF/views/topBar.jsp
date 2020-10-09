@@ -104,10 +104,10 @@ $(function(){
 			$.ajax({
 				url:"${contextPath}/member/tutorYN"
 				,success:function(tutor){
+					console.log(tutor);
 					if(tutor.length==0){
 						topbarBtnData = "<a class=\"btn\" id=\"tutorSetBtn\">강사 등록</a>"						
 					}else{
-						console.log(tutor[0].member.tutor_YN);
 							tutorInfoBtn += "<a>강사정보</a>"
 							tutorInfoBtn += "<ul class=\"submenu side\" >"
 							tutorInfoBtn += "<li><a class=\"community myInfoTutorInfo\">내 강사 정보보기</a></li>"

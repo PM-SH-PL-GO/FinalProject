@@ -98,7 +98,6 @@ $(document).ready(function() {
 		, data : {"tutor_id": "${lecture.tutor.member.member_id}",
 				  "category_id":"${lecture.lectureCategory.lecture_category_id}"}
 		, success : function (responseData) {
-			console.log(responseData);
 			$reviewAreaObj.append(responseData);
 		}
 	}); // end of ajax
@@ -371,4 +370,4 @@ $(document).ready(function() {
 
 </body>
 </html>
-<jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include>
+<%-- <jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include> --%>

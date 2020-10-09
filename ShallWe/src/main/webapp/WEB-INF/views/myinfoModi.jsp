@@ -43,7 +43,6 @@ $(document).ready(function() {
 			favorite_list.push($(this).val());
 
 			for ( var i=0; i < favorite_list.size(); i++; ) {
-				console.log(favorite_list[i]);
 			}
 // 			for(check in favorite_list){
 // 				$('#favorite1').val(checkArray[0]);
@@ -231,4 +230,4 @@ $(document).ready(function() {
 	</footer>
 </body>
 </html>
-<jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include>
+<%-- <jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include> --%>

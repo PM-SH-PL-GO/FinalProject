@@ -158,7 +158,6 @@ $(function(){
 					   ,data:{member_name:$nameVal,member_email:$emailVal}
 					   ,success:function(data){
 							let responseObj = JSON.parse(data)
-							console.log(data);
 							if(responseObj.status == 'success'){
 								 
 										alert("이메일이 전송되었습니다.");
@@ -202,4 +201,4 @@ $(function(){
       </form>
     </body>
 </html>
-<jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include>
+<%-- <jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include> --%>

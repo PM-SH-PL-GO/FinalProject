@@ -249,7 +249,6 @@ $(function(){
 				location.reload();
 			}
 		});
-		console.log($replyIdVal);
 		
 	});
 	//----------댓글 삭제 버튼 CLICK END---------	
@@ -360,4 +359,4 @@ function subString(fileName){
 <jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
     </body>
 </html>
-<jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include>
+<%-- <jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include> --%>

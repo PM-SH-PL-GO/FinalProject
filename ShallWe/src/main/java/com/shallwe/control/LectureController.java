@@ -134,7 +134,6 @@ public class LectureController {
 		String tutor_id = (String) session.getAttribute("loginInfo");
 		try {
 			tutorlist = tutoser.showTutorInfo(tutor_id);
-			System.out.println("테스트"+tutorlist);
 			mnv.setViewName("/lectureRegistration");
 			mnv.addObject("tutorlist", tutorlist);
 		} catch (FindException e) {
@@ -323,7 +322,6 @@ public class LectureController {
 	
 	@RequestMapping(value = "/searchResult", method = RequestMethod.GET)
 	public void searchResult() {
-		System.out.println("searchResult.jsp  호출");
 	}
 	
 	@RequestMapping(value = "/search", method = {RequestMethod.GET, RequestMethod.POST})
