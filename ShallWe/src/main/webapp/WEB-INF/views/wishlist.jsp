@@ -103,6 +103,10 @@
    #productClear{background-color:gray; color:#fff; font-weight:bold; font-size:12pt;} /*선택상품주문 button*/
    
    .aa:hover{cursor:pointer;} /*구매상품*/
+.header-area {
+	min-height: unset;
+	background-color: white;
+}
 </style>
 <!-- <script type="text/javascript" src="/JqueryStudy/js/jquery-3.3.1.min.js"></script> -->
 <!-- <script type="text/javascript"> -->
@@ -110,102 +114,107 @@
 <!-- </script> -->
 </head>
 <body class="wishbody">
-   <div id="frame">
-      
-         <div id="frame2">
-            <span style="font-size: 16pt; font-weight: bold;">찜목록  </span>
-            <span class="home"> 홈 > 찜목록</span>
-            <span> </span>
-         </div>
-         <br/>
-         
-         <!-- ì  í  ì  ë³´ í  ì ´ë¸  -->
-         <div>
-            <table class="calculation1">
-            <thead>
-               <tr>
-               <th colspan="10" style = "text-align: left; padding-left: 10px;"><h3>일반상품  (${requestScope.wishListVal.size()})</h3></th>
-               </tr>
-               <tr>
-                  <th><input type="checkbox" name="checkbox" id="check"/></th>
-                  <th><span>이미지 </span></th>
-                  <th style="width:400px; text-align:center"><span>강의정보</span></th>
-                  <th style="width:100px; text-align:center"><span>강사명</span></th>
-                  <th style="width:50px">판매가 </th>            
-                  <th>선택  </th>   
-               </tr>
-               </thead>
-               
-            <tbody id="calculation1tbody">
-          	<c:set var="priceSum" value="0"/>
-            <c:if test="${not empty requestScope.wishListVal}">
-               	<c:forEach var="item" items="${requestScope.wishListVal}" varStatus="status">
-                  <c:forEach var="lecture" items="${item.lecs}" varStatus="rows">
-               <tr class="calculation1_tbody_tr1" style="height: 90px; background-color: #fff;">
-                  <td style="text-align: left; text-align:center; border-right:none;">
-                     <input type="checkbox" id="cbtr1${status.index}" name="checkbox"/>
-                     <input type="hidden" class="buypd${status.index}" value="${lecture.lecture_id}"/>
-                  </td>
-                  <td style="border-left: none; border-right: none;"><img style="width: 80%;" src="/shallwe/lecture/${lecture.lecture_img}"></td>
-                  
-                  <td style="text-align: left; padding-left:10px; border-left:none; font-weight: bold;">${lecture.lecture_title}</td>
-                  
-                  <td style="text-align: center; padding-left:10px; font-weight: bold;">${lecture.tutor.member.member_name}</td>
-                  
-                  <td><span style="padding-left: 10px;" class="lecture_price">${lecture.lecture_price}</span>원  </td>
-				
-                  <td class="orderBtn">
-                     <button class="bttn default orderGobtn" style="border-radius:3px; width:90px; margin-bottom: 3px; font-size:11px; background-color: #264d73;color:#fff; font-weight:bold;">강의결제하기</button>
-                     <button class="bttn default btndelete" style="border-radius:3px; width:90px; margin-bottom: 3px; font-size:11px; " value="${lecture.lecture_id}">x삭제</button>
-                     <input type="hidden" class="lecture_id" name="lecture_id" value="${lecture.lecture_id}"/>
-                  </td>
-               </tr>
-<%--                   <c:if test="${empty requestScope.wishListVal}"> --%>
-<!--                      <tr id="noproduct" style="background-color: #fff;"> -->
-<!--                      <td colspan="10" style="font-size: 20pt; color: gray;"><span>찜목록에 등록된 상품이 없습니다</span></td>  -->
-<!--                      </tr> -->
-<%--                   </c:if> --%>
-					<c:set var="priceSum" value="${priceSum+lecture.lecture_price}"/>
-                </c:forEach>
-               </c:forEach>                           
-            </c:if>
-            </tbody>
-         
-            </table>
-            
-            <div style="border:solid 1px #e0e0eb; padding: 15px 0;">
-            <img src="/shallwe/assets/img/elements/icon.png" style= "exclamation:before content=''; display: inline-block; margin:0 5px 0 13px; width:15px; height:14px; no-repeat: -336px -5px;vertical-align:-2px;">
-<!--                <img src="/shallwe/assets/img/elements/primary-check.png" style ="margin-left: 5px; position: relative;"> -->
-               <span style="font-size: 10pt; color :gray;">할인 적용 금액은 주문서 작성의 결제예정금액에서 확인 가능합니다</span>
-            </div>
-         </div>
-         <div style="margin:10px 0;">
-         
-            <button class="bttn default deleteAll btnfloat2">찜목록 비우기</button>
-            <span class="clearboth"></span>
-         </div>            
-         <br/><br/>
-         
-         <!--결제 예정금액 테이블 -->
-         
-         <table class="calculation2">
-            <tr>
-               <th style="text-align:center; width:100px">총 주문금액</th>
-            </tr>
-            <tr style="background-color:#fff;">
-               <td style="padding: 22px 0;"><span class="price"><c:out value="${priceSum}"/></span>원 </td>
-            </tr>
-         </table>            
-         <br/><br/>
-         
-         <div align="center">
-            <button class="bttn default footerbtn backbtn" id="footerbtn">이전화면</button>
-            <span class="clearboth"></span>
-         </div>         
-         <br/><br/><br/><br/><br/>
-         
-      
-      
+	<div class="topMenu">
+		<jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
+	</div>
+	<div class="listing-area pt-150">
+	   <div id="frame">
+	      
+	         <div id="frame2">
+	            <span style="font-size: 16pt; font-weight: bold;">찜목록  </span>
+	            <span class="home"> 홈 > 찜목록</span>
+	            <span> </span>
+	         </div>
+	         <br/>
+	         
+	         <!-- ì  í  ì  ë³´ í  ì ´ë¸  -->
+	         <div>
+	            <table class="calculation1">
+	            <thead>
+	               <tr>
+	               <th colspan="10" style = "text-align: left; padding-left: 10px;"><h3>일반상품  (${requestScope.wishListVal.size()})</h3></th>
+	               </tr>
+	               <tr>
+	                  <th><input type="checkbox" name="checkbox" id="check"/></th>
+	                  <th><span>이미지 </span></th>
+	                  <th style="width:400px; text-align:center"><span>강의정보</span></th>
+	                  <th style="width:100px; text-align:center"><span>강사명</span></th>
+	                  <th style="width:50px">판매가 </th>            
+	                  <th>선택  </th>   
+	               </tr>
+	               </thead>
+	               
+	            <tbody id="calculation1tbody">
+	          	<c:set var="priceSum" value="0"/>
+	            <c:if test="${not empty requestScope.wishListVal}">
+	               	<c:forEach var="item" items="${requestScope.wishListVal}" varStatus="status">
+	                  <c:forEach var="lecture" items="${item.lecs}" varStatus="rows">
+	               <tr class="calculation1_tbody_tr1" style="height: 90px; background-color: #fff;">
+	                  <td style="text-align: left; text-align:center; border-right:none;">
+	                     <input type="checkbox" id="cbtr1${status.index}" name="checkbox"/>
+	                     <input type="hidden" class="buypd${status.index}" value="${lecture.lecture_id}"/>
+	                  </td>
+	                  <td style="border-left: none; border-right: none;"><img style="width: 80%;" src="/shallwe/lecture/${lecture.lecture_img}"></td>
+	                  
+	                  <td style="text-align: left; padding-left:10px; border-left:none; font-weight: bold;">${lecture.lecture_title}</td>
+	                  
+	                  <td style="text-align: center; padding-left:10px; font-weight: bold;">${lecture.tutor.member.member_name}</td>
+	                  
+	                  <td><span style="padding-left: 10px;" class="lecture_price">${lecture.lecture_price}</span>원  </td>
+					
+	                  <td class="orderBtn">
+	                     <button class="bttn default orderGobtn" style="border-radius:3px; width:90px; margin-bottom: 3px; font-size:11px; background-color: #264d73;color:#fff; font-weight:bold;">강의결제하기</button>
+	                     <button class="bttn default btndelete" style="border-radius:3px; width:90px; margin-bottom: 3px; font-size:11px; " value="${lecture.lecture_id}">x삭제</button>
+	                     <input type="hidden" class="lecture_id" name="lecture_id" value="${lecture.lecture_id}"/>
+	                  </td>
+	               </tr>
+	<%--                   <c:if test="${empty requestScope.wishListVal}"> --%>
+	<!--                      <tr id="noproduct" style="background-color: #fff;"> -->
+	<!--                      <td colspan="10" style="font-size: 20pt; color: gray;"><span>찜목록에 등록된 상품이 없습니다</span></td>  -->
+	<!--                      </tr> -->
+	<%--                   </c:if> --%>
+						<c:set var="priceSum" value="${priceSum+lecture.lecture_price}"/>
+	                </c:forEach>
+	               </c:forEach>                           
+	            </c:if>
+	            </tbody>
+	         
+	            </table>
+	            
+	            <div style="border:solid 1px #e0e0eb; padding: 15px 0;">
+	            <img src="/shallwe/assets/img/elements/icon.png" style= "exclamation:before content=''; display: inline-block; margin:0 5px 0 13px; width:15px; height:14px; no-repeat: -336px -5px;vertical-align:-2px;">
+	<!--                <img src="/shallwe/assets/img/elements/primary-check.png" style ="margin-left: 5px; position: relative;"> -->
+	               <span style="font-size: 10pt; color :gray;">할인 적용 금액은 주문서 작성의 결제예정금액에서 확인 가능합니다</span>
+	            </div>
+	         </div>
+	         <div style="margin:10px 0;">
+	         
+	            <button class="bttn default deleteAll btnfloat2">찜목록 비우기</button>
+	            <span class="clearboth"></span>
+	         </div>            
+	         <br/><br/>
+	         
+	         <!--결제 예정금액 테이블 -->
+	         
+	         <table class="calculation2">
+	            <tr>
+	               <th style="text-align:center; width:100px">총 주문금액</th>
+	            </tr>
+	            <tr style="background-color:#fff;">
+	               <td style="padding: 22px 0;"><span class="price"><c:out value="${priceSum}"/></span>원 </td>
+	            </tr>
+	         </table>            
+	         <br/><br/>
+	         
+	         <div align="center">
+	            <button class="bttn default footerbtn backbtn" id="footerbtn">이전화면</button>
+	            <span class="clearboth"></span>
+	         </div>         
+	         <br/><br/><br/><br/><br/>
+	         
+	      
+	      
+	   </div>
    </div>
    <script>
 //    ------------------체크박스 선택 Start-----------------------------------
