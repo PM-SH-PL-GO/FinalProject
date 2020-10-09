@@ -104,7 +104,7 @@ $(document).ready(function() {
 	}); // end of ajax
 	
 	// 강의신청, 강의결제페이지 호출
-	var $applyBtnObj = $('#applyBtn');
+	var $applyBtnObj = $('div[name=applyBtn]');
 	$applyBtnObj.on("click", function() {
 		$.ajax({
 			url: "${contextPath}/member/insertMemberLectureHistory"
@@ -116,14 +116,14 @@ $(document).ready(function() {
 					alert("강의 신청이 정상적으로 되었습니다.");
 				} else {
 					alert("강의 신청에 실패했습니다.");
-					$("#applyBtn").focus();
+					$("div[name=applyBtn]").focus();
 				}
 			} 
 		}); 
 	}); // end of 강의신청, 강의결제페이지 호출 
 
 	// 강의결제취소, 강의결제취소 처리
-	var $cancelBtnObj = $('#cancelBtn');
+	var $cancelBtnObj = $('div[name=cancelBtn]');
 	$cancelBtnObj.on("click", function() {
 		$.ajax({
 			url: "${contextPath}/member/updateMemberLectureHistory"
@@ -134,7 +134,7 @@ $(document).ready(function() {
 					alert("강의 결제 취소가 정상적으로 처리 되었습니다.");
 				} else {
 					alert("강의 결제 취소가 실패했습니다.");
-					$("#applyBtn").focus();
+					$("div[name=cancelBtn]").focus();
 				}
 			} 
 		}); 
@@ -207,21 +207,21 @@ $(document).ready(function() {
 				<div class="section-top-border">
 					<div class="row">
 						<div class="col-md-3"
-							style="padding: 20px; background-color: rgba(0, 219, 73, 0.8); border-radius: 20px 40px 60px 80px;">
+							style="padding: 20px; background-color: rgba(0, 153, 148, 0.7); border-radius: 20px 40px 60px 80px; box-shadow: 0px 6px 6px 2px rgba(2, 25, 65, 0.08);">
 							<img src="/shallwe/lecture/${lecture.lecture_img}" alt=""
 								class="img-fluid" style="border-radius: 20px 40px 60px 80px;">
 						</div>
 						<div class="col-md-8 mt-sm-20"
-							style="margin-left: 6px; padding: 20px; background-color: rgba(0, 219, 73, 0.8); border-radius: 60px 60px 60px 60px;">
+							style="margin-left: 6px; padding: 20px; background-color: rgba(0, 153, 148, 0.7); border-radius: 60px 60px 60px 60px; box-shadow: 0px 6px 6px 2px rgba(2, 25, 65, 0.08);">
 							<h2 class="mb-20"
 								style="margin-left: 50px; margin-top: 10px; font-weight: bold; color: white;">${lecture.lecture_title}</h2>
 							<div class="d-flex">
 								<h3 class="mr-10 mb-9"
 									style="margin-left: 50px; line-height: 98%; color: white;">
-									상태: ${lecture.lecture_state}<br>
-									<br>장소: ${lectDetail.lecture_location}<br>
-									<br>인원: ${lecture.lecture_current}/${lecture.lecture_max}<br>
-									<br>카테고리: ${lecture.lectureCategory.lecture_category_id}
+									상태: ${lecture.lecture_state}<br> <br>장소:
+									${lectDetail.lecture_location}<br> <br>인원:
+									${lecture.lecture_current}/${lecture.lecture_max}<br> <br>카테고리:
+									${lecture.lectureCategory.lecture_category_id}
 								</h3>
 							</div>
 						</div>
@@ -251,58 +251,61 @@ $(document).ready(function() {
 					<div class="row">
 						<div class="col-md-8">
 							<h3 class="mb-30 mt-30" " id="introduce"
-								style="padding: 10px; background-color: #00dbd5; font-weight: bold; color: white;">강의
+								style="padding: 10px; background-color: #00dbd5; font-weight: bold; color: white; box-shadow: 0px 6px 6px 2px rgba(2, 25, 65, 0.08);">강의
 								소개</h3>
 							<p>${lectDetail.lecture_introduce}</p>
 							<h3 class="mb-30 mt-30" id="curriculum"
-								style="padding: 10px; background-color: #00dbd5; font-weight: bold; color: white;">교육
+								style="padding: 10px; background-color: #00dbd5; font-weight: bold; color: white; box-shadow: 0px 6px 6px 2px rgba(2, 25, 65, 0.08);">교육
 								과정</h3>
 							<ul class="unordered-list">${lectDetail.lecture_curriculum}
 							</ul>
 							<h3 class="mb-30 mt-30" id="prepared"
-								style="padding: 10px; background-color: #00dbd5; font-weight: bold; color: white;">준비물</h3>
+								style="padding: 10px; background-color: #00dbd5; font-weight: bold; color: white; box-shadow: 0px 6px 6px 2px rgba(2, 25, 65, 0.08);">준비물</h3>
 							<p>${lectDetail.lecture_prepared}</p>
 							<h3 class="mb-30 mt-30" id="caution"
-								style="padding: 10px; background-color: #00dbd5; font-weight: bold; color: white;">유의사항</h3>
+								style="padding: 10px; background-color: #00dbd5; font-weight: bold; color: white; box-shadow: 0px 6px 6px 2px rgba(2, 25, 65, 0.08);">유의사항</h3>
 							<p>${lectDetail.lecture_caution}</p>
 						</div>
-						<div class="col-md-4">
-							<div id="floatMenu" style="position: absolute; top:-56%; border-radius: 20px; border: 1px solid #dedede; padding: 20px; background-color: white; z-index: 999">
+						<div class="col-md-3" style="margin-left: 24px;">
+							<div id="floatMenu"
+								style="position: absolute; top: -52%; border-radius: 20px; border: 1px solid #dedede; padding: 20px; background-color: white; z-index: 100; box-shadow: 0px 6px 6px 2px rgba(2, 25, 65, 0.08);">
 								<img src="/shallwe/tutorImages/${lecture.tutor.tutor_img}"
 									alt="" class="img-fluid" style="border-radius: 20px;">
 								<div class="d-flex mt-10">
-									<h3 class="mr-10">강사: ${lecture.tutor.tutor_nickname}</h3>
+									<h4 class="mr-10">강사: ${lecture.tutor.tutor_nickname}</h4>
 								</div>
 								<div class="d-flex mt-10">
-									<h3 class="mr-10">강사평점: ${lecture.tutor.tutor_score}</h3>
+									<h4 class="mr-10">강사평점: ${lecture.tutor.tutor_score}</h4>
 								</div>
 								<div class="d-flex mt-10">
-									<h3 class="mr-10">수강일시: ${startDt}~${endDt}</h3>
+									<h4 class="mr-10">
+										수강일시: ${startDt}<br>&nbsp;~&nbsp;${endDt}
+									</h4>
 								</div>
-								<h3 class="mt-20">
+								<h4 class="mt-20">
+									강의가격:&nbsp;
 									<fmt:formatNumber value="${lecture.lecture_price}"
 										pattern="#,###" />
 									원
-								</h3>
+								</h4>
 								<c:if test="${endDate-nowDate>=0 && startDate-nowDate>=0}">
 									<c:if test="${empty m.lecture.lecture_id && tutoreq}">
-										<a href="#" id="applyBtn"
-											class="genric-btn primary-border mt-10">신청</a>
+										<div name="applyBtn" class="mt-10"
+											style="text-align: center; cursor: pointer; background-color: #00dbd5; border-radius: 10px; color: white; padding: 8px;">강의신청</div>
 									</c:if>
 									<c:if test="${llne && tutoreq}">
-										<a href="#" id="applyBtn"
-											class="genric-btn primary-border mt-10">신청</a>
+										<div name="applyBtn" class="mt-10"
+											style="text-align: center; cursor: pointer; background-color: #00dbd5; border-radius: 10px; color: white; padding: 8px;">강의신청</div>
 									</c:if>
 									<c:if test="${lleq}">
-										<a href="#" id="cancelBtn"
-											class="genric-btn primary-border mt-10">결제취소</a>
+										<div name="cancelBtn" class="mt-10"
+											style="text-align: center; cursor: pointer; background-color: #00dbd5; border-radius: 10px; color: white; padding: 8px;">결제취소</div>
 									</c:if>
 									<c:if test="${tutoreq}">
-										<a href="#" id="favoriteLectureBtn"
-											class="genric-btn primary-border mt-10">찜하기</a>
+										<div id="favoriteLectureBtn" class="mt-10"
+											style="text-align: center; cursor: pointer; background-color: #00dbd5; border-radius: 10px; color: white; padding: 8px;">찜하기</div>
 									</c:if>
 								</c:if>
-								
 							</div>
 						</div>
 						<div class="col-md-12">
@@ -356,7 +359,6 @@ $(document).ready(function() {
 	<script src="/shallwe/assets/js/hover-direction-snake.min.js"></script>
 
 	<!-- contact js -->
-	<script src="/shallwe/assets/js/contact.js"></script>
 	<script src="/shallwe/assets/js/jquery.form.js"></script>
 	<script src="/shallwe/assets/js/jquery.validate.min.js"></script>
 	<script src="/shallwe/assets/js/mail-script.js"></script>

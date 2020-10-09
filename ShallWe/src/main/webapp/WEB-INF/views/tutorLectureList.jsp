@@ -56,7 +56,7 @@ $(function(){
     	location.href = "${contextPath}/lectures/detail?lecture_id=" +letidendValue;
     	return false;
     });
-	$cont.on("click", "img[name=openCancelre]", 
+	$cont.on("click", "div[name=openCancelre]", 
 		function showPopup(frm) { 
 		let letidimgValue = $(this).attr("value");
 		windowObj = window.open("tutorcancelLecture?lecture_id="+letidimgValue, "강의 취소 요청", "width=500px, height=500px, left=100, top=50"); 
@@ -103,10 +103,10 @@ $(function(){
 								<div class="properties__cardseo">
 									<div name="gotoDe" style="cursor: pointer;"
 										value="${lecture.lecture_id}">
-										<div class="properties__imgseo overlay1">
+										<div class="properties__imgseo overlay1"
+											style="position: relative; padding-top: 66.66%; overflow: hidden;">
 											<img src="/shallwe/lecture/${lecture.lecture_img}" alt=""
-												style="cursor: pointer;">
-
+												style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; max-width: 100%; height: auto;">
 										</div>
 										<div class="properties__caption">
 											<h3>${lecture.lecture_title}</h3>
@@ -120,15 +120,15 @@ $(function(){
 									</div>
 									<div
 										class="properties__footer d-flex justify-content-between align-items-center">
-										<h3>
+										<h1>
 											<fmt:formatNumber value="${lecture.lecture_price}"
 												pattern="#,###" />
 											원
-										</h3>
+										</h1>
 										<div class="heart">
-											<img name="openCancelre"
-												src="/shallwe/assets/img/gallery/cancel.png" width="30px"
-												alt="강의취소요청" title="강의취소요청" value="${lecture.lecture_id}" onclick="showPopup();">
+											<div name="openCancelre" value="${lecture.lecture_id}"
+												onclick="showPopup();"
+												style="cursor: pointer; background-color: #00dbd5; border-radius: 10px; color: white; padding: 8px;">강의취소</div>
 										</div>
 									</div>
 								</div>
@@ -171,8 +171,10 @@ $(function(){
 								<div class="properties__cardseo">
 									<div name="gotoDeend" style="cursor: pointer;"
 										value="${lecture.lecture_id}">
-										<div class="properties__imgseo overlay1">
-											<img src="/shallwe/lecture/${lecture.lecture_img}" alt="">
+										<div class="properties__imgseo overlay1"
+											style="position: relative; padding-top: 66.66%; overflow: hidden;">
+											<img src="/shallwe/lecture/${lecture.lecture_img}" alt=""
+												style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; max-width: 100%; height: auto;">
 										</div>
 										<div class="properties__caption">
 											<h3>
@@ -188,11 +190,11 @@ $(function(){
 									</div>
 									<div
 										class="properties__footer d-flex justify-content-between align-items-center">
-										<h3>
+										<h1>
 											<fmt:formatNumber value="${lecture.lecture_price}"
 												pattern="#,###" />
 											원
-										</h3>
+										</h1>
 									</div>
 								</div>
 							</div>
@@ -239,7 +241,6 @@ $(function(){
 	<script src="/shallwe/assets/js/hover-direction-snake.min.js"></script>
 
 	<!-- contact js -->
-	<script src="/shallwe/assets/js/contact.js"></script>
 	<script src="/shallwe/assets/js/jquery.form.js"></script>
 	<script src="/shallwe/assets/js/jquery.validate.min.js"></script>
 	<script src="/shallwe/assets/js/mail-script.js"></script>

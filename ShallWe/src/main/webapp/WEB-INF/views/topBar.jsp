@@ -88,7 +88,6 @@ max-width: 95%;
 .col-sm-6{
 padding-left: 0px;
 }
-
 </style>
 <script>
 $(function(){
@@ -249,7 +248,7 @@ $(function(){
 <body>
   <!-- topbar Start -->
   <header>
-        <div class="header-area header-transparent">
+        <div class="header-area header-transparent" style="z-index: 999">
 			<div class="main-header header-sticky">
 				<div class="container-fluid">
 					<div
