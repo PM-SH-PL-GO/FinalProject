@@ -10,7 +10,6 @@ $(function(){
 	var $leftMenuObj = $("section.left_menu");
 	var $navObj = $leftMenuObj.find('nav.sidebar');
 	
-	console.log($navObj);
 	$(".sidebar").toggleClass("show");
 });
 

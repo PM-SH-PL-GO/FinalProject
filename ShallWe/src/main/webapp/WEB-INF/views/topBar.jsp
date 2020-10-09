@@ -104,6 +104,7 @@ $(function(){
 			$.ajax({
 				url:"${contextPath}/member/tutorYN"
 				,success:function(tutor){
+					console.log(tutor);
 					if(tutor.length==0){
 						topbarBtnData = "<a class=\"btn\" id=\"tutorSetBtn\">강사 등록</a>"						
 					}else{

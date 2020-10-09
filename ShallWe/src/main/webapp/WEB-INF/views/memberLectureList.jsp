@@ -323,4 +323,4 @@ $(function(){
 
 </body>
 </html>
-<jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include>
+<%-- <jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include> --%>

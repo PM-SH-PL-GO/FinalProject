@@ -149,4 +149,4 @@ $(function(){
 <jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 </body>
 </html>
-<jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include>
+<%-- <jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include> --%>

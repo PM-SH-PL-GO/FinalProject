@@ -105,7 +105,6 @@ $(document).ready(function() {
 			/*------------review입력창 후기 입력시 글자수세기   start------------------*/
 			var $cancelFormObj = $("form#commentForm");
 			var $cancelCommentObj = $cancelFormObj.find("textarea#cancelcomment");
-			console.log($cancelCommentObj);
 			$cancelCommentObj.focus();
 			// review content 남은 글자수
 			$cancelCommentObj.keydown(function(e) {
@@ -227,4 +226,4 @@ $(document).ready(function() {
 
 </body>
 </html>
-<jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include>
+<%-- <jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include> --%>

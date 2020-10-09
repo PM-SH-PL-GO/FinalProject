@@ -124,7 +124,6 @@ public class TutorDAO {
 		
 		try {
 			session.delete("TutorMapper.deltutor",tutor);
-			System.out.println("@@@@@@@@@@@@@@@@@@@@@@@: " + tutor);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RemoveException(e.getMessage());
@@ -142,7 +141,6 @@ public class TutorDAO {
 		try {
 			
 			dellTutor(tutor);
-			System.out.println("@@@@@@@@@@@@@@@@@@@@@@:" + tutor.get("tutor_id"));
 			insertTutor(tutor1,category);
 				
 		} catch (AddException e) {

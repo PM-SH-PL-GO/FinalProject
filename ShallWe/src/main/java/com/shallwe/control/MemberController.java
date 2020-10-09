@@ -62,7 +62,6 @@ public class MemberController {
 	//회원가입get방식 : 상하
 	@RequestMapping(value = "signup", method = RequestMethod.GET)
 	public String getSignup(Locale locale, Model model)throws Exception {
-		System.out.println("get signup controller connected");
 		
 		return "/signup";
 	}

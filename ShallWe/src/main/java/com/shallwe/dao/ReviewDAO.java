@@ -31,7 +31,6 @@ public class ReviewDAO {
 		try {
 			// DB와의 연결
 			session = sqlSessionFactory.openSession();
-			System.out.println("insertReview reviewBean:" + reviewBean);
 			result = session.insert("ReviewMapper.insertReivew", reviewBean);
 //			session.selectList("LectureMapper.tutorMyClassList", "member1");
 			if ( result == 0  ) {

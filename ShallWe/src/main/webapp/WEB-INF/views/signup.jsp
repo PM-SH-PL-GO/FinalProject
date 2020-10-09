@@ -183,7 +183,6 @@
 						memberEmail = memEmail+"@"+memDomain;
 						$("#memberEmail").val(memberEmail);
 						
-						console.log("회원가입중.....");
 						$.ajax({
 							url:"/shallwe/member/signup",
 							type:"POST",
@@ -205,7 +204,7 @@
 	</script>
 </body>
 </html>
-<jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include>
+<%-- <jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include> --%>
 
 
 

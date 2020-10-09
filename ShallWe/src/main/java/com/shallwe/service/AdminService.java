@@ -181,7 +181,6 @@ public class AdminService {
 			memberDAO.insertTutorReject(tutorReject);
 			cancelCat += " • " + cat + "\r\n";
 			
-			System.out.println(cat);
 		}
 		
 		MemberInfoBean bean = memberDAO.selectById(tutor_id);

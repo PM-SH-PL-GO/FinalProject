@@ -166,7 +166,6 @@ $(function(){
 	//----------스터디 게시판 검색 button CLICK  START---------		
 	$("button#search-btn").click(function(){
 		$searchVal = $("#searchBar").val()
-		console.log($searchVal);
 		if($searchVal==""){
 			alert("키워드를 입력해주세요");
 			return;
@@ -353,4 +352,4 @@ function nameMasking(str){
 
 </body>
 </html>
-<jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include>
+<%-- <jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include> --%>

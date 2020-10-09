@@ -185,7 +185,6 @@ $(function(){
  				   		  member_temporary:$temporary}
 		   		  	
 				   ,success:function(data){
-					   console.log(data)
 					   let responseObj = JSON.parse(data);
 					   if(responseObj.status == 'success'){
 						   
@@ -250,4 +249,4 @@ $(function(){
       </form>
     </body>
 </html>
-<jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include>
+<%-- <jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include> --%>

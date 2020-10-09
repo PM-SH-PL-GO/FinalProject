@@ -33,7 +33,6 @@ public class MemberSerivce {
 	}
 	//멤버 아이디 찾기:경찬
 	public String memberIdCheck(Map<String,Object> member)throws FindException{
-		//System.out.println("서비스멤버이름:" + member.get("member_email"));
 		return memberDao.IdCheck(member);
 	
 	}

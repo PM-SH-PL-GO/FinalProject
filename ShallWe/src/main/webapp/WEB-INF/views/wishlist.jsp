@@ -280,7 +280,6 @@
 			,method:'GET'
 			,success: function(responseData){
 				location.reload();
-// console.log(location.href);
 			}
 		});
       }
@@ -333,4 +332,4 @@
    </script>
 </body>
 </html>
-<jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include>
+<%-- <jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include> --%>
