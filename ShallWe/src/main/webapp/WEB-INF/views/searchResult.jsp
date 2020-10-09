@@ -9,6 +9,7 @@
 .left_menu {
 	padding-left: 120px;
 	width: 30%;
+	height:70%;
 	float: left;
 }
 
@@ -18,6 +19,7 @@
 .right_menu { 
 	padding-right: 120px;
 	width: 100%;
+	height:100%;
 }
 
 </style>
@@ -99,11 +101,11 @@
 </script>
 </head>
 <body>
-    <!-- topbar Start -->
+	<!-- topbar Start -->
 	<div class="topMenu">
 		<jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
 	</div>
-    <!-- topbar End -->
+	<!-- topbar End -->
 	<main>
 		<!--? Hero Start -->
 		<div class="slider-area2">
@@ -183,7 +185,7 @@
 			<div class="container">
 				<div class="row">
 				<c:if test="${lectureList.size() ==  0}" >
-					<span style="font-weight: bold; color:red; font-size:40px; text-align:center; padding:20px;">조회된 강의가 없습니다! 다시 검색해주세요~</span>
+					<span class="resarch_result">조회된 강의가 없습니다! 다시 검색해주세요~</span>
 				</c:if>
 				<!-- single start -->
 				<c:forEach items="${lectureList}" var="lecture" varStatus="stats">
@@ -191,7 +193,7 @@
 					<div class="col">
 						<div class="properties pb-20" style="padding-top:10px; box-shadow : 2px 2px 5px #999; text-align: center; padding-bottom: 20px;">
 							<div class="properties__card" style="cursor: pointer; height: 420px;">
-								<a href="#"><img src="${contextPath}/assets/img/gallery/properties3.png" alt="강의사진"></a><br/><br/>
+								<a href="#"><img src="${contextPath}/assets/img/gallery/${lecture.lecture_img}" alt="강의사진"></a><br/><br/>
 								<div class="properties__caption">
 									<c:if test="${lecture.lecture_current eq lecture.lecture_max}" >
 										<h2><span style="background-color: red; color: white;font-size: large; padding: 2.5px;">정원초과</span></h2>
@@ -237,4 +239,3 @@
 	</main>
 </body>
 </html>
-<jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include>
