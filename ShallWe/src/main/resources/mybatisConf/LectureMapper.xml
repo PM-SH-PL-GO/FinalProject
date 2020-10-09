@@ -93,6 +93,7 @@
 		lec.LECTURE_CATEGORY_ID =
 		lecd.LECTURE_CATEGORY_ID)
 		WHERE lec.LECTURE_STATE = '승인'
+		AND lecture_start_dt> SYSDATE
 		AND (
 		<choose>
 			<when test="searchKey == 'all'">

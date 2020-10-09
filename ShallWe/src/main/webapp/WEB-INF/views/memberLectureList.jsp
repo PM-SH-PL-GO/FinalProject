@@ -69,19 +69,21 @@ $(function(){
 	// 강사후기삭제 버튼 클릭시 발생 이벤트
 	$("div.reviewRemove").on('click', function (e) { 
 		var $lectureId = $(this).find('input[name=lectureId]').val();
-		$.ajax({
-		    url: "${contextPath}/member/removeReview"
-		    , method : 'GET'
-		    , data : {"lecture_id" : $lectureId}
-		    , success : function ( responseData ) {
-		  	  if( responseData == 'success') {
-		  		  alert("후기삭제 성공!");
-		  	  } else {
-		  		  alert("후기삭제 실패!")
-		  	  }
-		   	 location.reload();
-		    }
-		}); // end of ajax
+		if ( confirm("정말로 후기를 삭제하시겠습니까?") ) {
+			$.ajax({
+			    url: "${contextPath}/member/removeReview"
+			    , method : 'GET'
+			    , data : {"lecture_id" : $lectureId}
+			    , success : function ( responseData ) {
+			  	  if( responseData == 'success') {
+			  		  alert("후기삭제 성공!");
+			  	  } else {
+			  		  alert("후기삭제 실패!")
+			  	  }
+			   	 location.reload();
+			    }
+			}); // end of ajax
+ 		}
 	}); // end of 강사 후기 삭제
 
 	// 강의결제취소 이벤트
