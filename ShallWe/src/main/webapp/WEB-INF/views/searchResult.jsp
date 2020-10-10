@@ -4,6 +4,8 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <c:set var="lectureList" value="${requestScope['list']}"/>
 <c:set var="loginUser" value="${requestScope['loginUser']}"/>
+<jsp:useBean id="today" class="java.util.Date" />
+<fmt:formatDate var="systemDate" value="${today}" pattern="yyyy-MM-dd" />
 
 <style>
 .left_menu {
@@ -185,7 +187,7 @@
 									<c:if test="${lecture.lecture_current eq lecture.lecture_max}" >
 										<h2><span style="background-color: red; color: white;font-size: large; padding: 2.5px;">정원초과</span></h2>
 									</c:if>
-									<c:if test="${lecture.lecture_current ne lecture.lecture_max}" >
+									<c:if test="${lecture.lecture_current ne lecture.lecture_max &&  lecture.lecture_start_dt > systemDate}" >
 										<span style="background-color: #3BABE4; color: white; font-size: large;  padding: 2.5px;">신청가능</span>
 									</c:if>
 									<h3>

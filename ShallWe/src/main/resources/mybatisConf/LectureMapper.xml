@@ -113,7 +113,7 @@
 				CATEGORY_NAME LIKE '%' || #{searchText} || '%'
 			</when>
 		</choose>
-		)
+		) ORDER BY lecture_title ASC
 
 	</select>
 	
