@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"    pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <!doctype html>
 <html class="no-js" lang="zxx">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>DirectoryListing</title>
+    <title>Shallwe-강사정보보기</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="manifest" href="site.webmanifest">
@@ -177,7 +178,7 @@ $(function(){
 											<tr><th>관심분야 :</th><td>IT</td><td>스포츠</td></tr>                                            
                                             </table>
                                     <div class="btn_center">
-                                    	<a href="http://localhost/shallwe/myinfoModi" class="infobutton">내 정보 수정</a>
+                                    	<a href="${contextPath }/myinfoModi" class="infobutton">내 정보 수정</a>
                                     </div>
                                     </div>
                                 </div>

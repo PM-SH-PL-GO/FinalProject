@@ -64,13 +64,13 @@ public class MemberController {
    ReviewService reviewService;
    
    //회원가입get방식 : 상하
-   @RequestMapping(value = "signup", method = RequestMethod.GET)
+   @RequestMapping(value = "/signup", method = RequestMethod.GET)
    public String getSignup(Locale locale, Model model)throws Exception {
       
       return "/signup";
    }
    // 회원가입post방식: 상하
-   @RequestMapping(value = "signup", method = RequestMethod.POST)
+   @RequestMapping(value = "/signup", method = RequestMethod.POST)
    @ResponseBody
    public String postSignup(MemberInfoBean mib) throws AddException {
       Logger.info("post sign up controller connected");

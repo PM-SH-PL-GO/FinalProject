@@ -6,7 +6,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>강사신청 정보 수정</title>
+    <title>Shallwe-강사신청 정보 수정</title>
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
     <script 
@@ -310,6 +310,14 @@ $(function(){
                 readURL(this);
             });
 
+            // 강사 소개 멘트 자수 제한
+            $('textarea#coment').on('keyup', function() {
+				if($(this).val().length > 300) {
+			alert("글자수는 300자로 이내로 제한됩니다.");
+					$(this).val($(this).val().substring(0, 300));
+				}
+			});
+            
 			//url 유효성검
         	let checkUrl = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
 			let $msgUrl = $('span.checkUrl');
@@ -392,7 +400,7 @@ $(function(){
 				   ,success:function(){
 				
 					alert("강사등록 신청을 수정되었습니다");
-					location.href = "http://localhost/shallwe/"
+					location.href = "${contextPath}"
 								 
 				
 					} // end of success
@@ -505,7 +513,7 @@ $(function(){
           <br />
             
           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="HO">
-          <label class="light" for="design">HOBBY 취미</label>
+          <label class="light" for="design">Language 언어</label>
           <br />
             
           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="MA">
@@ -517,15 +525,15 @@ $(function(){
            <br />
            
            <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="CA">
-          <label class="light" for="business">Employment 취업</label>
+          <label class="light" for="business">Career 실무역량</label>
            <br />
            
            <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="BU">
-          <label class="light" for="business">Business 비지니스</label>
+          <label class="light" for="business">Business 비지니스 컨설팅</label>
            <br />
          
            <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="LE">
-          <label class="light" for="business">Learning 학습</label>
+          <label class="light" for="business">Music 음악</label>
           <br />
           
            <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="SP"> 

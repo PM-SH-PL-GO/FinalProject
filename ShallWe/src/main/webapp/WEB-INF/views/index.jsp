@@ -7,83 +7,9 @@
 <head>
 <meta charset="utf-8">
 <link rel="shortcut icon" type="image/x-icon" href="${contextPath}/assets/img/favicon.ico">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  
-<style>
-.menu-wrapper {
-	float: left;
-}
-
-.mr-40 {
-	margin-left: 20px
-}
-
-.mr-40 {
-	text-align: center;
-}
-
-.header-btns a i {
-	vertical-align: bottom;
-}
-
-.header-area .menu-wrapper .main-menu ul li a i {
-	font-size: 50px
-}
-
-.header-area {
-/* 	box-shadow: 0 2px 4px 0 hsla(0, 0%, 80.8%, .5); */
-	min-height: unset;
-	background-color: white;
-}
-
-.btn {
-	background: #00dbd5;
-}
-
-.btn::before {
-	background: #009994;
-}
-
-.category-img {
-	margin-top: 3%;
-}
-div img{
-cursor: pointer;
-}
-#searchBtn{
-cursor: pointer;
-}
-div.menu-wrapper .d-flex .align-items-center .justify-content-between{
-margin-right: 10%;
-}
-.hero-bg1{
-text-align: center;
-}
-</style>
-<script>
-
-$(function(){
-	//----------강의 검색 CLICK START---------	
-	$('#searchBtn').click(function(){
-		var $searchText = $('#searchText').val()
-		var $searchKey = $('#select').val()
-        var url = '${contextPath}/lectures/search?searchKey='+$searchKey+'&searchText='+$searchText ;
-        location.href = url;
-	});
-	//----------강의 검색 CLICK END---------
-	
-	//----------카테고리검색 CLICK START---------	
-	$('#category a').click(function(){
-		var $searchText = $(this).attr("id");
-		var $searchKey = 3
-        var url = '${contextPath}/lectures/search?searchKey='+$searchKey+'&searchText='+$searchText ;
-        location.href = url;
-	});
-	//----------카테고리검색 CLICK END---------	
-});
-
-</script>
+<link rel="stylesheet" href="${contextPath}/assets/css/index.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"/>
+<script src="${contextPath}/js/index.js"/>
 </head>
 <body>
 	<header>

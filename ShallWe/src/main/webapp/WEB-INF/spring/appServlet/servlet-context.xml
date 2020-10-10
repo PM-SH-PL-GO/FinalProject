@@ -54,7 +54,7 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	
+	<resources mapping="/js/**" location="/files/assets/js/"/>
 	
 <!-- spring context(engine, container) 내에 선언한 component류 @들 검색해주는 친구 -->		
 	<context:component-scan base-package="com.shallwe.control" />

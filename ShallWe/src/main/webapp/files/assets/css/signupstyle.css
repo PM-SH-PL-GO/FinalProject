@@ -61,7 +61,7 @@ input[type="radio"] + label { font-size: 14px; color:#222; line-height: 27px; pa
 input[type="radio"] + label:before { content: ""; display: inline-block; margin: 0 8px 0 0; width: 14px; height: 13px; background: url("/shallwe/assets/img/elements/icon.png") no-repeat -2px -60px;}
 input[type="radio"]:checked + label:before { background-position:-20px -60px ;}
 
-.btn_center { text-align: center;}
+.btn_center { text-align: center; cursor: pointer;}
 label + .btn_center { padding: 65px 0 0;}
 .btn_type1 { display: inline-block; width: 120px; height:45px; background: #00dbd5; text-align: center; line-height: 45px; color:#fff; font-size: 13px; border:1px solid #ccc;}
 .btn_type2 { display: inline-block; width: 120px; height:45px; background: #fff; text-align: center; line-height: 45px; color:#000000; font-size: 13px; border:1px solid #ccc;}

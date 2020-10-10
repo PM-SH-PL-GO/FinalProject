@@ -334,7 +334,7 @@ $(function(){
 		   ,mehod: "POST"
 		   ,success: function(data){		   
 			alert("강사신청을취소하셨습니다.");
-			location.href = "http://localhost/shallwe/"
+			location.href = "${contextPath}"
 		
 		   }//end of success
 		});//end of ajax 
@@ -361,7 +361,7 @@ $(function(){
 
 	$('a#ModifyTutor').click(function(){
 			
-			let $url = "/shallwe/tutor/showUpdateTutor";
+			let $url = "${contextPath}/tutor/showUpdateTutor";
 		    location.href= $url;
 		
 		});
@@ -465,7 +465,7 @@ $(function(){
      		<c:if test="${not empty t.tutorReject.reject_reason}">
          	<span></span>
          	</c:if> 
-         	<c:if test="${empty t.tutorReject.reject_reason}">
+         	<c:if test="${empty t.tutorReject.reject_reason and t.member.tutor_YN eq 'N'}">
          	 <a href="#" class="action-button shadow animate blue" id="ModifyTutor">신청정보확인수정</a>	
          	 <a href="#" class="action-button shadow animate blue" id="cancleTutor">강사신청취소</a>
           	</c:if> 
