@@ -205,6 +205,17 @@
 					}				
 					//-------------------------이메일 선택 옵션 End-------------------------
 
+					//-------------------------체크박스 갯수 제한 Start---------------------- 
+					$("input[type='checkbox']").on('click',function(e){
+					var $chkCnt = $("input:checkbox[name='favorites']:checked").length;
+						if($chkCnt > 3){
+						$(this).attr("checked",false)
+					$("input:checkbox[name='favorites']:checked").prop('checked', false);
+						alert("관심분야는 최대 3개 까지 선택가능합니다");
+					}
+					});
+					//-------------------------체크박스 갯수제한 End------------------------
+					
 					//------------------------- 회원가입 Start-------------------------					
 					function signUp(){
 						var chkidpw= /^[a-z](?=.*[0-9]).{4,15}$/;
