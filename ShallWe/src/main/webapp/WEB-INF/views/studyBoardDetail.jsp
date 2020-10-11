@@ -11,6 +11,7 @@
 <c:set var="loginId" value="${sessionScope.loginInfo}"/>
 <c:set var="boardId" value="${studyBoard.member.member_id}"/>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+<link rel="shortcut icon" type="image/x-icon" href="${contextPath}/assets/img/favicon.ico">
 <fmt:formatDate var="resultDt" value="${studyBoard.studyBoard_write_dt}" pattern="yyyy-MM-dd"/>
     <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -87,6 +88,16 @@ cursor: pointer !important;
 /* .blog_details a:hover{ */
 
 /* } */
+.text-uppercase.reply{
+font-size: 14px;
+}
+p#comment{
+text-indent: 1em;
+}
+#textCount{
+float: right;
+margin-right: 25px;
+}
 </style>
 <script>
 function formatDate(date) { 
@@ -121,8 +132,8 @@ $(function(){
 				replyPageData += "	<div class=\"reply-btn\">"
 				replyPageData += "			<a class=\"text-uppercase ca\">"+formatDate(studyReply.studyreply_dt)+"</a>"
 			if("${loginId}" == studyReply.member.member_id){
-				replyPageData += "<nav>			<a class=\"text-uppercase\" id=\"replyUpdate\">수정하기</a>" 
-				replyPageData += "			<a class=\"text-uppercase\" id=\"replyDelete\">삭제하기</a></nav>"
+				replyPageData += "<nav>			<a class=\"text-uppercase reply\" id=\"replyUpdate\">수정   |</a>" 
+				replyPageData += "			<a class=\"text-uppercase reply\" id=\"replyDelete\">삭제</a></nav>"
 			}
 				replyPageData += "	</div>"
 				replyPageData += "</div>"
@@ -200,7 +211,7 @@ $(function(){
 
 		var $replyBtn = $(this).parents('.reply-btn');
 		var replyBtnData = ""
-			replyBtnData += "<a class=\"btn-reply text-uppercase\" id=\"replyUpdateWrite\">등록</a>" 
+			replyBtnData += "<a class=\"btn-reply text-uppercase\" id=\"replyUpdateWrite\">등록   |</a>" 
 			replyBtnData += "<a class=\"btn-reply text-uppercase\" id=\"replyCancel\">취소</a>"
 		$commentClass.html(replytextData);
 		$replyBtn.html(replyBtnData);
@@ -252,6 +263,24 @@ $(function(){
 		
 	});
 	//----------댓글 삭제 버튼 CLICK END---------	
+	
+	
+		//----------글쓰기 내용 글자수 세기 START---------
+	var $commentForm = $("form#commentForm");
+	var $replyCommentObj = $commentForm.find("textarea#replyText");
+	$replyCommentObj.focus();
+	// review content 남은 글자수
+	$replyCommentObj.keydown(function(e) {
+		var content = $(this).val();
+		var count = 600 - content.length;
+		if (content.length > 600) {
+			$(this).val($(this).val().substring(0, 600));
+			count = 0;
+		}
+		$('#textCount').html("남은 글자수: " + count + "/600자");
+	});
+	
+			//----------글쓰기 내용 글자수 세기 END---------
 	
 });
 	//---------  날짜 데이터 변경  START---------
@@ -336,6 +365,7 @@ function subString(fileName){
 						</div>
 						<div class="comment-form">
 							<h4>댓글 쓰기</h4>
+							<span id ="textCount">남은 글자수: 600/600자</span>
 							<form class="form-contact comment_form" id="commentForm">
 									<div class="col-12">
 										<div class="form-group">
@@ -356,7 +386,5 @@ function subString(fileName){
 			</div>
 	</section>
 	<!-- Blog Area End -->
-<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
     </body>
 </html>
-<%-- <jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include> --%>

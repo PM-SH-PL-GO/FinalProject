@@ -3,6 +3,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
 <c:set var="loginId" value="${sessionScope.loginInfo}"/>
+<link rel="shortcut icon" type="image/x-icon" href="${contextPath}/assets/img/favicon.ico">
+
 <!doctype html>
 <html class="no-js" lang="zxx">
 <head>
@@ -352,4 +354,3 @@ function nameMasking(str){
 
 </body>
 </html>
-<%-- <jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include> --%>

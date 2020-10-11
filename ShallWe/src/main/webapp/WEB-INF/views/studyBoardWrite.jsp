@@ -1,5 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }"/>
+<link rel="shortcut icon" type="image/x-icon" href="${contextPath}/assets/img/favicon.ico">
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!doctype html>
 <html class="no-js" lang="zxx">
@@ -182,7 +183,5 @@ $(function() {
 		</div>
 	</section>
 </main>
-<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 </body>
 </html>
-<%-- <jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include> --%>
