@@ -87,10 +87,18 @@
            	<label id="tutor_introduce">강사한마디:</label>
            	<li>${t.tutor_introduce}</li><br />
            	<label id ="tutor_yn">강사등록여부:</label>
-           	<li>${t.member.tutor_YN}</li>
+           	<c:if test="${t.member.tutor_YN eq 'Y'}">
+	           	<li>승인</li>
+           	</c:if>
+           	<c:if test="${t.member.tutor_YN eq 'N' && empty t.tutorReject.reject_reason}">
+	           	<li>승인대기</li>
+           	</c:if>
+           	<c:if test="${t.member.tutor_YN eq 'N' && not empty t.tutorReject.reject_reason}">
+	           	<li>반려</li><br>
+	           	<label id ="tutor_reject">강사반려여부:</label>
+	           	<li>${t.tutorReject.reject_reason}</li>
+           	</c:if>
            	<br />
-           	<label id ="tutor_reject">강사반려여부:</label>
-           	<li>${t.tutorReject.reject_reason}</li>
             </p>
           </div>
               </c:forEach>

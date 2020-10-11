@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TutorReject {
-	private Tutor tutor;
 	private RejectCategory rejectCategory;
 	private String reject_reason;
 	private Date reject_dt;

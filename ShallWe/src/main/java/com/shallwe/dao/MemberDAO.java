@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.naming.directory.ModificationItem;
-
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,7 @@ import com.shallwe.exception.RemoveException;
 import com.shallwe.model.MemberInfoBean;
 import com.shallwe.vo.LectureCategory;
 import com.shallwe.vo.Member;
-import com.shallwe.vo.TutorReject;
+import com.shallwe.vo.Tutor;
 
 
 @Repository
@@ -234,12 +232,12 @@ public class MemberDAO {
 	 * @param tutorReject
 	 * @throws AddException
 	 */
-	public void insertTutorReject(TutorReject tutorReject) throws AddException{
+	public void insertTutorReject(Tutor tutor) throws AddException{
 		SqlSession session = null;
 		
 		try {
 			session = sqlSessionFactory.openSession();
-			session.insert("MemberMapper.rejectPretutor", tutorReject);
+			session.insert("MemberMapper.rejectPretutor", tutor);
 		}catch(DataAccessException e) {
 			throw new AddException("설정 중 에러가 발생했습니다");
 		}finally {

@@ -160,27 +160,27 @@ public class AdminService {
 		category = category.replaceAll(" ", "");
 		String[] catArr = category.split("<br>");
 		
-		TutorReject tutorReject = new TutorReject();
-		RejectCategory rejectCategory = new RejectCategory();
-		rejectCategory.setReject_category_id(reject_category_id);
 		Tutor tutor = new Tutor();
 		Member member = new Member();
 		member.setMember_id(tutor_id);
-		tutor.setMember(member);
-		tutorReject.setReject_reason(reject_reason);
-		tutorReject.setTutor(tutor);
-		
-		String cancelCat = "";
 
+		TutorReject tutorReject = new TutorReject();
+		RejectCategory rejectCategory = new RejectCategory();
+		rejectCategory.setReject_category_id(reject_category_id);
+		tutorReject.setRejectCategory(rejectCategory);
+		tutorReject.setReject_reason(reject_reason);
+		
+		tutor.setMember(member);
+		tutor.setTutorReject(tutorReject);
+		String cancelCat = "";
+		
 		for (String cat : catArr) {
 			LectureCategory lectureCategory = new LectureCategory();
 			lectureCategory.setLecture_category_name(cat);
 			tutor.setLectureCategory(lectureCategory);
-			tutorReject.setRejectCategory(rejectCategory);
 			
-			memberDAO.insertTutorReject(tutorReject);
+			memberDAO.insertTutorReject(tutor);
 			cancelCat += " • " + cat + "\r\n";
-			
 		}
 		
 		MemberInfoBean bean = memberDAO.selectById(tutor_id);

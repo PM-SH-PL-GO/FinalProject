@@ -143,13 +143,13 @@
 	</update>
 	
 <!-- admin(jun6) : 예비강사 반려 -->
-	<insert id="rejectPretutor" parameterType="TutorReject" statementType="CALLABLE">
+	<insert id="rejectPretutor" parameterType="Tutor">
 		INSERT INTO tutor_reject VALUES(#{tutor.member.member_id},
 										 (select category_id
 	                                            from lecture_category
 	                                            where category_name = #{tutor.lectureCategory.lecture_category_name}),
-										 #{rejectCategory.reject_category_id},
-										 #{reject_reason},
+										 #{tutorReject.rejectCategory.reject_category_id},
+										 #{tutorReject.reject_reason},
 										  SYSDATE)
 	</insert>
 
