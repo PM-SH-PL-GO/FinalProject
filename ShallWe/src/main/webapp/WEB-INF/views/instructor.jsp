@@ -1,21 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
- 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <!DOCTYPE html>
 <!-- Created By CodingNepal -->
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Animated Sidebar Menu | CodingLab</title>
+    <title>Shallwe-강사등록</title>
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
-    
-    <script 
-	  src="https://code.jquery.com/jquery-3.5.1.min.js"
-	  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
-	  crossorigin="anonymous"> </script>
-   <script src=https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js></script>
-  
 <style>
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,100,900);
 *{
@@ -224,7 +218,6 @@ label.light {
   text-shadow: 0 1px 0 rgba(255,255,255,0.2);
   border-radius: 100%;
 }
-
 @media screen and (min-width: 480px) {
 
   .cer {
@@ -291,153 +284,13 @@ label.light {
 	margin-top: -1050px;
 
 }
-
 </style>
-<script>
-$(function(){
-	
-        	function readURL(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-                    reader.onload = function(e) {
-                        $('#select_img').attr('src', e.target.result);
-                    }
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-
-            $("input[name=tutor_img1]").change(function() {
-                readURL(this);
-            });
-
-			//url 유효성검
-        	let checkUrl = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
-			let $msgUrl = $('span.checkUrl');
-			$msgUrl.hide();
-			//url end
-			
-			//체크 갯수 유효성 검사
-			$("input[type='checkBox']").on('click',function(e){
-				let $checkCnt = $("input:checkbox[name='lectureCategory.lecture_category_id']:checked").length;
-				if($checkCnt > 3){
-					$(this).attr("checked",false)
-					$("input:checkbox[name='lectureCategory.lecture_category_id']:checked").prop('checked', false);
-					alert("전공분야는 최대 3개 까지 선택가능합니다");
-					}
-				});
-			//체크 갯수 유효성 검사 end
-			
-			 //---------버튼시작-------------------\\ 
-			$('button#addTutor').click(function(e){
-				
-				//파일 업로드 formdata  
-				 let form = $('#fileUpload')[0];
-	             let formData = new FormData(form);
-                 formData.append("tutor_img1", $("input[name=tutor_img1]")[0].files[0]);
-                 formData.append("tutor_career_file1", $("input[name=tutor_career_file1]")[0].files[0]);
-                 //파일 업로드 formdata end 
-               	
-               // 최종 submit 버튼
-                let $tutor = confirm('강사등록을 원하십니까?');
-                //닉네임 벨류값
-                let $nickName = $('input#nickName').val();
-                // 이미지 벨류값
-                let $fileCheck = $("input[name=tutor_img1]").val();
-                //커리어 파일 벨류값
-              	let $careerCheck = $("input[name=tutor_career_file1]").val();
-            		// 체크된 값을 넘김  
-            	let totalChecked = 0;
-				let tutor_category_id = [];
-    	        $("input:checkbox[type='checkbox']:checked").each(function (index) {
-    	        	tutor_category_id.push($(this).val());
-    	        	
-    	    	   });  // 체크된 값을 넘김 end
-    	        
-    	        
-				// url 유효성 검사 
-				let $urlCheck = $('input#link').val();
-
-				//서버통신 시작
-				if(checkUrl.test($urlCheck) == false){
-					
-					 $('input#link').select();
-					alert("주소양식을 맞춰주세요");
-					return false;
-					// url 유효성 검사 end
-
-					//체크 갯수제한 두기
-					} else if($fileCheck == ""){
-						alert(" 이미지를 올려주세요");
-						return false;
-
-					
-					}else if($careerCheck == ""){
-						alert("커리어 파일(PDF)을확인해주세요");
-						return false;
-						
-					} else if($nickName == ''){
-						alert("닉네임을 입력해주세요");
-						return false;
-							
-					}else if($tutor == true){ 
-					
-				
-					$.ajax({
-					
-					url:'/shallwe/upload/addTutor'
-				   ,method:"POST"
-				   ,processData: false
-				   ,contentType: false
-				   ,data: formData
-				   ,success:function(){
-
-					alert("강사등록 신청이 완료되었습니다");
-					location.href = "/shallwe/"
-								 
-				
-					} // end of success
-  		 		 }); // end of ajax
-				} else {
-					alert("등록이 취소되었습니다");
-					location.reload();
-					e.preventDefault();
-
-				} // end of confirm
-				return false;
-	});// tutor_add end of click
-	
-	 //---------버튼 end-------------------\\ 
-    //닉네임중복 확인  
-			$('input.checkNickName').click(function(){
-			let $tutor_nickName = $('input#nickName').val();
-				
-					$.ajax({
-
-						url:'tutor/checkNickName'
-					   ,method:"POST"
-					   ,data:{tutor_nickName:$tutor_nickName}
-					   ,success: function(data){
-						   
-					   		if(data != 0){
-					   			
-						   		alert("중복된아이디입니다");
-						   		
-						   		} else if(data == 0){
-						   			
-									$("input.checkNickName").attr("value","사용가능합니다");
-									alert("사용가능한 아이디입니다");
-							   		
-							   		}
-
-						   }//end of success
-						
-					});// end of ajax
-				return false;
-				});//end of Nicknameclick
-
-});    
-
-</script>
+    <script 
+	  src="https://code.jquery.com/jquery-3.5.1.min.js"
+	  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+	  crossorigin="anonymous"> </script>
+   <script src=https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js></script>
+   <script src="${contextPath}/js/instructor.js"></script>
   </head>
   <jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include> 
   <body>
@@ -488,8 +341,8 @@ $(function(){
           <label class="light" for="development">IT 정보기술</label>
           <br />
             
-          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="HO">
-          <label class="light" for="design">HOBBY 취미</label>
+          <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="LA">
+          <label class="light" for="design">Language 언어</label>
           <br />
             
           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="MA">
@@ -501,15 +354,15 @@ $(function(){
            <br />
            
            <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="CA">
-          <label class="light" for="business">Employment 취업</label>
+          <label class="light" for="business">Career 실무역량</label>
            <br />
            
            <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="BU">
           <label class="light" for="business">Business 비지니스</label>
            <br />
          
-           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="LE">
-          <label class="light" for="business">Learning 학습</label>
+           <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="MU">
+          <label class="light" for="business">Music 음악</label>
           <br />
           
            <input type="checkbox" id="classCheck" name ="lectureCategory.lecture_category_id" value="SP"> 

@@ -33,66 +33,9 @@
 <link rel="stylesheet" href="/shallwe/assets/css/slick.css">
 <link rel="stylesheet" href="/shallwe/assets/css/nice-select.css">
 <link rel="stylesheet" href="/shallwe/assets/css/style.css">
+<link rel="stylesheet" href="${contextPath}/assets/css/lecturepopup.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<style>
-.md_top {
-	padding: 1em;
-	display: inline;
-}
-
-button {
-	all: unset;
-	background-color: #990000;
-	color: white;
-	padding: 15px 25px;
-	border-radius: 6px;
-	cursor: pointer;
-	float: right;
-}
-
-.modal {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.md_content {
-	width: 500px;
-	min-width: 315px;
-	height: 500px;
-	position: inherit;
-	background-color: white;
-	text-align: center;
-	border-radius: 6px;
-	overflow: auto;
-}
-
-h1 {
-	margin: 0;
-	padding: 5px;
-}
-
-.modal_text {
-	padding: 16px;
-}
-
-textarea {
-	width: 100%;
-	padding: 12px 20px;
-	box-sizing: border-box;
-	border: 2px solid #ccc;
-	border-radius: 4px;
-	background-color: #f8f8f8;
-	font-size: 16px;
-	resize: none;
-}
-</style>
 </head>
 <script>
 $(document).ready(function() {

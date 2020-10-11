@@ -31,14 +31,13 @@ $(function(){
 		
 		let id = $(this).attr("id");
 		$iframe = $("iframe");
-		 let url = "${contextPath}/upload/pdf.do?tutor_id=" + $pdf + "&fileName=" + id;	
+		 let url = "/shallwe/upload/pdf.do?tutor_id=" + $pdf + "&fileName=" + id;	
 		 $iframe.attr("src", url).show();
 			
 		});
 
 	$('a#ModifyTutor').click(function(){
-			
-			let $url = "${contextPath}/tutor/showUpdateTutor";
+			let $url = "/shallwe/tutor/showUpdateTutor";
 		    location.href= $url;
 		
 		});

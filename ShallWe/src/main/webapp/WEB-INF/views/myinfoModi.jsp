@@ -42,7 +42,7 @@ $(document).ready(function() {
 		$("input[name=favorites]:checked").each(function(){
 			favorite_list.push($(this).val());
 
-			for ( var i=0; i < favorite_list.size(); i++; ) {
+			for ( var i=0; i < favorite_list.size(); i++ ) {
 			}
 // 			for(check in favorite_list){
 // 				$('#favorite1').val(checkArray[0]);

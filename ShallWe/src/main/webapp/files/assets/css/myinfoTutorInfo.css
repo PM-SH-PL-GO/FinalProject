@@ -1,0 +1,29 @@
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.center button {
+  margin: 12px;
+}
+button{
+  border: 0;
+  border-radius: 12px;
+  padding: 16px;
+  text-transform: uppercase;
+  animation: fadeout 0.2s ease-out;
+  font-weight: bold;
+  color: white;
+  filter: brightness(85%);
+  outline: none;
+}
+button:hover{
+  animation: fadein 0.2s ease-in;
+  filter: brightness(100%);
+}
+
+#acceptBtn {
+  background-color: #20b358;
+}

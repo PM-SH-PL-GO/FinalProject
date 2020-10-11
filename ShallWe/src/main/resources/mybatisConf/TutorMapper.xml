@@ -31,19 +31,19 @@
 <!-- jun6 : 예비/전체 강사 list 출력 -->
 	<select id="selectAllTutor" parameterType="String" resultMap="tutor">
 		<choose>
-			<when test="value == 'Y'">
+			<when test="_parameter.equals('Y')">
 				SELECT tu.*, lc.category_name, me.member_name
 				FROM tutor tu
 				    JOIN member me ON (tu.tutor_id = me.member_id)
 				    JOIN lecture_category lc ON (tu.tutor_category_id = lc.category_id)
-				WHERE me.tutor_YN = #{value}
+				WHERE me.tutor_YN = #{_parameter}
 			</when>
 			<otherwise>
 				SELECT tu.*, lc.category_name, me.member_name
 				FROM tutor tu
 				    JOIN member me ON (tu.tutor_id = me.member_id)
 				    JOIN lecture_category lc ON (tu.tutor_category_id = lc.category_id)
-				WHERE me.tutor_YN = #{value}
+				WHERE me.tutor_YN = #{_parameter}
 					AND tu.tutor_id NOT IN (SELECT tutor_id
 											FROM tutor_reject)
 			</otherwise>

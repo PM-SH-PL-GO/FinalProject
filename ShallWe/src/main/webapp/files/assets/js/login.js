@@ -81,7 +81,7 @@ $(function(){
 			} */ else {
 
 				$.ajax({
-					url:"${contextPath}/member/memberLogin"
+					url:"/shallwe/member/memberLogin"
 				   ,method:"POST"
 				   ,data:{member_id:$idVal,member_pwd:$pwdVal}
 				   ,success:function(data){
@@ -187,13 +187,13 @@ $(function(){
 
 //아이디 찾기 페이지 이동
 		 $("input#idCheck").click(function(){
-			let $url = "${contextPath}/idCheck";
+			let $url = "/shallwe/idCheck";
 			location.href = $url;
 		 });
 
 // 회원가입 페이지 이동
 	$("#signup").click(function(){
-		loation.href = "${contextPath}/member/signup";
+		loation.href = "/shallwe/member/signup";
 	});
 		
 		

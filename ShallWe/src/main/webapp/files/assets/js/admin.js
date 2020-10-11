@@ -24,7 +24,7 @@ $(function(){
     // 회원목록 선택시
     $(".member").on("click", function(){
         $.ajax({
-            url: "${contextPath}/admin/member/list/1",
+            url: "/shallwe/admin/member/list/1",
             method: "GET",
             success: function(members){
             	let $memberList = '<div class="scroll-section"><h2>회원 목록</h2><hr>';
@@ -81,7 +81,7 @@ $(function(){
     	let memberId = $(this).attr("value");
     	
     	$.ajax({
-    		url: "${contextPath}/admin/member/history/list/" + memberId,
+    		url: "/shallwe/admin/member/history/list/" + memberId,
     		method: "GET",
     		success: function(historyList){
     			let $historyModal = '<div class="modal-add"><div class="modal-content">';
@@ -136,7 +136,7 @@ $(function(){
     // 정지 회원 목록보기
     $(".ban-member").on("click", function(){
         $.ajax({
-            url: "${contextPath}/admin/member/list/0",
+            url: "/shallwe/admin/member/list/0",
             method: "GET",
             success: function(members){
             	let $memberList = '<div class="scroll-section"><h2>정지 회원 목록</h2><hr>';
@@ -197,7 +197,7 @@ $(function(){
     		status = 1;
     		
     	$.ajax({
-    		url: "${contextPath}/admin/member/" + $memberId,
+    		url: "/shallwe/admin/member/" + $memberId,
     		method: "PATCH",
     		data: JSON.stringify({enabled : status}),
     		dataType: "json",
@@ -219,7 +219,7 @@ $(function(){
 			// 예비강사목록 선택시
     $(".pre-tutor").on("click", function(){
         $.ajax({
-            url: "${contextPath}/admin/tutor/list/N",
+            url: "/shallwe/admin/tutor/list/N",
             method: "GET",
             success: function(bean){
             	let $lot = '<div class="scroll-section"><h2>예비 강사 목록</h2><hr><table class="table"><thead><tr>';
@@ -234,7 +234,7 @@ $(function(){
                		let $catList = $map[tutorId];
                		
             		$lot += '<tr class="modal_show ' + tutorId + '" value="' + tutorId + '"><td>' + idx + '</td>';
-            		$lot += '<td><img src="${contextPath}/tutorImages/' + tutor.tutor_img + '"></td>';
+            		$lot += '<td><img src="/shallwe/tutorImages/' + tutor.tutor_img + '"></td>';
             		$lot += '<td>' + tutorId + '</td>';
             		$lot += '<td>' + tutor.member.member_name + '</td>';
             		$lot += '<td>' + tutor.tutor_nickname + '</td>';
@@ -253,7 +253,7 @@ $(function(){
               		$lot += '<div>이름 : ' + tutor.member.member_name + '</div>'
               		$lot += '<div>아이디 : ' + tutor.member.member_id + '</div>'
               		$lot += '<h5>강사 사진</h5><br>';
-              		$lot += '<div><img class="tutor-detail-img" src="${contextPath}/tutorImages/';
+              		$lot += '<div><img class="tutor-detail-img" src="/shallwe/tutorImages/';
               		$lot += tutor.tutor_img + '"></div><br>';
               		$lot += '<div>닉네임 : ' + tutor.tutor_nickname + '</div>'
               		$lot += '<div>신청 분야<br>';
@@ -265,7 +265,7 @@ $(function(){
               		$lot += '</div><hr>';
               		
               		$lot += '<div>자기소개<br><input class="single-input" value="' + tutor.tutor_introduce + '" disabled></div><br>';
-              		$lot += '<div>이력서 : <a href="${contextPath }/tutorCareer/' + tutor.tutor_career_file + '">';
+              		$lot += '<div>이력서 : <a href="/shallwe/tutorCareer/' + tutor.tutor_career_file + '">';
               		let career = tutor.tutor_career_file;
               		$lot += career.substring(career.indexOf("_", 0) + 1, career.length) + '</a></div><hr>';
               		$lot += '<div>SNS 링크 : <a href="' + tutor.tutor_link + '">' + tutor.tutor_link + '</a></div><br>';
@@ -316,7 +316,7 @@ $(function(){
 			
             	$.ajax({
             		dataType: "json",
-            		url: "${contextPath}/admin/tutor/status/" + tutorId,
+            		url: "/shallwe/admin/tutor/status/" + tutorId,
             		method: "PATCH",
             		data: JSON.stringify({category : catString}),
             		contentType: 'application/json-patch+json; charset=utf-8',
@@ -326,7 +326,7 @@ $(function(){
             		},
             		error: function(xhttr){
             			if (xhttr.status == 200)
-            				location.replace('${contextPath}/login');
+            				location.replace('/shallwe/login');
             			else
             				alert(xhttr.status);
             		}
@@ -368,7 +368,7 @@ $(function(){
     	let catString = $("td[class=" + tutorId + "-cat-td]").html();	// lecture category
     	
     	$.ajax({
-    		url: "${contextPath}/admin/tutor/status/" + tutorId,
+    		url: "/shallwe/admin/tutor/status/" + tutorId,
     		method: "POST",
     		data: {reject_category_id : rejectId, reject_reason : rejectReason, category : catString},
     		dataType: "json",
@@ -388,7 +388,7 @@ $(function(){
     // 전체 강사목록 선택시
     $(".tutor-list").on("click", function(){
         $.ajax({
-            url: "${contextPath}/admin/tutor/list/Y",
+            url: "/shallwe/admin/tutor/list/Y",
             method: "GET",
             success: function(bean){
             	let $lot = '<div class="scroll-section"><h2>Shall We? 강사 목록</h2><hr><table class="table"><thead><tr>';
@@ -403,7 +403,7 @@ $(function(){
                		let $catList = $map[tutorId];
                		
             		$lot += '<tr class="modal_show ' + tutorId + '" value="' + tutorId + '"><td>' + idx + '</td>';
-            		$lot += '<td><img src="${contextPath}/tutorImages/' + tutor.tutor_img + '"></td>';
+            		$lot += '<td><img src="/shallwe/tutorImages/' + tutor.tutor_img + '"></td>';
             		$lot += '<td>' + tutorId + '</td>';
             		$lot += '<td>' + tutor.member.member_name + '</td>';
             		$lot += '<td>' + tutor.tutor_nickname + '</td>';
@@ -424,7 +424,7 @@ $(function(){
               		$lot += '<div>이름 : ' + tutor.member.member_name + '</div>'
               		$lot += '<div>아이디 : ' + tutor.member.member_id + '</div>'
               		$lot += '<h5>강사 사진</h5><br>';
-              		$lot += '<div><img class="tutor-detail-img" src="${contextPath}/tutorImages/' + tutor.tutor_img + '"></div><br>';
+              		$lot += '<div><img class="tutor-detail-img" src="/shallwe/tutorImages/' + tutor.tutor_img + '"></div><br>';
               		$lot += '<div>닉네임 : ' + tutor.tutor_nickname + '</div>'
               		$lot += '<div>신청 분야 :';
               		$catList.forEach(function(category, index){
@@ -435,7 +435,7 @@ $(function(){
               		$lot += '</div><hr>';
               		
               		$lot += '<div>자기소개<br><input class="single-input" value="' + tutor.tutor_introduce + '" disabled></div><br>';
-              		$lot += '<div>이력서 : <a href="${contextPath }/tutorCareer/' + tutor.tutor_career_file + '">';
+              		$lot += '<div>이력서 : <a href="/shallwe/tutorCareer/' + tutor.tutor_career_file + '">';
               		let career = tutor.tutor_career_file;
               		$lot += career.substring(career.indexOf("_", 0) + 1, career.length) + '</a></div><hr>';
               		$lot += '<div>SNS 링크 : <a href="' + tutor.tutor_link + '">' + tutor.tutor_link + '</a></div><br>';
@@ -464,7 +464,7 @@ $(function(){
     $cont.on("click", ".tutor_lecture", function(){
     	let $tutorId = $(this).attr("value");
     	$.ajax({
-    		url: "${contextPath}/admin/tutor/lecture/" + $tutorId,
+    		url: "/shallwe/admin/tutor/lecture/" + $tutorId,
     		method: "GET",
     		success: function(lectures){
     			let $tutor_Lecture = '<div class="modal-add"><div class="modal-content">';
@@ -518,7 +518,7 @@ $(function(){
     // 강의목록 선택시
     $(".lecture-list").on("click", function(){
         $.ajax({
-            url: "${contextPath}/admin/lecture/list",
+            url: "/shallwe/admin/lecture/list",
             method: "GET",
             success: function(lectures){
             	let preparedCnt = 0;
@@ -565,7 +565,7 @@ $(function(){
             			preparedCnt++;
             			prepared += '<tr class="lecture-detail" value="' + lectureId + '"><td>';
             			prepared += lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
-            			prepared += '<td><img src="${contextPath}/lecture/' + lecture.lecture_img + '"></td>';
+            			prepared += '<td><img src="/shallwe/lecture/' + lecture.lecture_img + '"></td>';
             			prepared += '<td>' + lecture.lectureCategory.lecture_category_name + '</td>';
             			prepared += '<td>' + lecture.lecture_title + '</td>';
             			prepared += '<td>' + lecture.lecture_price + '원</td>';
@@ -583,7 +583,7 @@ $(function(){
             			processCnt++;
             			process += '<tr class="lecture-detail" value="' + lectureId + '"><td>';
             			process += lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
-            			process += '<td><img src="${contextPath}/lecture/' + lecture.lecture_img + '"></td>';
+            			process += '<td><img src="/shallwe/lecture/' + lecture.lecture_img + '"></td>';
             			process += '<td>' + lecture.lectureCategory.lecture_category_name + '</td>';
             			process += '<td>' + lecture.lecture_title + '</td>';
             			process += '<td>' + lecture.lecture_price + '원</td>';
@@ -599,7 +599,7 @@ $(function(){
             			finishCnt++;
             			finish += '<tr class="lecture-detail" value="' + lectureId + '"><td>';
             			finish += lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
-            			finish += '<td><img src="${contextPath}/lecture/' + lecture.lecture_img + '"></td>';
+            			finish += '<td><img src="/shallwe/lecture/' + lecture.lecture_img + '"></td>';
             			finish += '<td>' + lecture.lectureCategory.lecture_category_name + '</td>';
             			finish += '<td>' + lecture.lecture_title + '</td>';
             			finish += '<td>' + lecture.lecture_price + '원</td>';
@@ -616,7 +616,7 @@ $(function(){
             			cancelRequestCnt++;
             			cancelRequest += '<tr class="lecture-detail" value="' + lectureId + '"><td>';
             			cancelRequest += lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
-            			cancelRequest += '<td><img src="${contextPath}/lecture/' + lecture.lecture_img + '"></td>';
+            			cancelRequest += '<td><img src="/shallwe/lecture/' + lecture.lecture_img + '"></td>';
             			cancelRequest += '<td>' + lecture.lectureCategory.lecture_category_name + '</td>';
             			cancelRequest += '<td>' + lecture.lecture_title + '</td>';
             			cancelRequest += '<td>' + lecture.lecture_price + '원</td>';
@@ -637,7 +637,7 @@ $(function(){
             			cancelCnt++;
             			cancel += '<tr class="lecture-detail" value="' + lecture.lecture_id + '"><td>'
             			cancel += lecture.lectureCategory.lecture_category_id + idNumber + '</td>';
-            			cancel += '<td><img src="${contextPath}/lecture/' + lecture.lecture_img + '"></td>';
+            			cancel += '<td><img src="/shallwe/lecture/' + lecture.lecture_img + '"></td>';
             			cancel += '<td>' + lecture.lectureCategory.lecture_category_name + '</td>';
             			cancel += '<td>' + lecture.lecture_title + '</td>';
             			cancel += '<td>' + lecture.lecture_price + '원</td>';
@@ -691,7 +691,7 @@ $(function(){
     // 강의 상세정보 보기 (새창 띄우기)
     $cont.on("click", ".lecture-detail", function(){
     	let $lectureId = $(this).attr("value");
-    	window.open("${contextPath}/lectures/detail?lecture_id=" + $lectureId, "_blank");
+    	window.open("/shallwe/lectures/detail?lecture_id=" + $lectureId, "_blank");
     	
     	return false;
     });
@@ -701,7 +701,7 @@ $(function(){
 		let lectureId = $(this).attr("value");
 		
 		$.ajax({
-			url: "${contextPath}/admin/history/" + lectureId,
+			url: "/shallwe/admin/history/" + lectureId,
 			method: "GET",
 			success: function(historyList){
 				let historyModal = '<div class="modal-add"><div class="modal-content">';
@@ -782,7 +782,7 @@ $(function(){
 // 	            		beforeSend : function(xhr){
 // 	            			xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");		
 // 	            		},																		
-        		url: "${contextPath}/admin/lecture/status/" + approve,
+        		url: "/shallwe/admin/lecture/status/" + approve,
         		method: "PATCH",
         		contentType: 'application/json-patch+json; charset=utf-8',
         		data: JSON.stringify({ status : $tatus }),
@@ -793,7 +793,7 @@ $(function(){
         		},
         		error: function(xhttr){
 // 	            			if (xhttr.status == 200)
-// 	            				location.replace('${contextPath}/login');
+// 	            				location.replace('/shallwe/login');
 // 	            			else
         				alert(xhttr.errMsg);
         		}
@@ -843,7 +843,7 @@ $(function(){
 //             		beforeSend : function(xhr){
 //             			xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");		
 //             		},
-    		url: "${contextPath}/admin/lecture/status/" + $lectureId,
+    		url: "/shallwe/admin/lecture/status/" + $lectureId,
     		method: "PATCH",
     		contentType: "application/json-patch+json; charset=utf-8;",
 			data : JSON.stringify({"status" : "반려", "reject_category" : $reject_category, "reject_reason" : $reject_reason }),
@@ -853,7 +853,7 @@ $(function(){
     		},
     		error: function(xhttr){
 //             			if (xhttr.status == 200){
-//             				location.replace('${contextPath}/login');
+//             				location.replace('/shallwe/login');
 //             				$(".lecture-list").trigger("click")
 //             			}
 //            				else
@@ -871,7 +871,7 @@ $(function(){
     	let reasonType = $(this).html();		// 취소사유인지 반려사유인지
 
     	$.ajax({
-    		url: "${contextPath}/admin/reason/" + lectureId,
+    		url: "/shallwe/admin/reason/" + lectureId,
     		method: "GET",
     		data: { rejectOrCancel : reasonType },
     		success: function(lectureDetail){
@@ -912,7 +912,7 @@ $(function(){
     // 종료된 강의 후기보기
     $cont.on("click", ".lecture-review", function(){
     	let $lectureId = $(this).attr("value");
-    	let win = window.open("${contextPath}/lectures/detail?lecture_id=" + $lectureId, "_blank");
+    	let win = window.open("/shallwe/lectures/detail?lecture_id=" + $lectureId, "_blank");
     	win.window.scrollTo(0, 800);
     	return false;
     });
@@ -921,7 +921,7 @@ $(function(){
     // FAQ 조회
     $(".faq").on("click", function(){
     	$.ajax({
-    		url: "${contextPath}/admin/faq/list",
+    		url: "/shallwe/admin/faq/list",
     		method: "GET",
     		success: function(faqList){
     			let $lot = '<h2>설정 - FAQ 관리</h2><hr><button class="faq-insert-modal">FAQ 추가하기</button><br>';
@@ -972,7 +972,7 @@ $(function(){
 //             		beforeSend : function(xhr){
 //             			xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
 // 					},
-    		url:"${contextPath}/admin/faq",
+    		url:"/shallwe/admin/faq",
     		method:"POST",
     		data: faq,
     		success: function(data){
@@ -993,7 +993,7 @@ $(function(){
     	let $faqId = $(this).attr("value");
     	
     	$.ajax({
-    		url: "${contextPath}/admin/faq/" + $faqId,
+    		url: "/shallwe/admin/faq/" + $faqId,
     		method: "GET",
     		success: function(faq){
     			let $lot = '<div class="modal-add"><div class="modal-content">';
@@ -1029,7 +1029,7 @@ $(function(){
 //             		beforeSend : function(xhr){
 //         			xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");		
 //         			},
-    		url:"${contextPath}/admin/faq/" + $faqId,
+    		url:"/shallwe/admin/faq/" + $faqId,
     		method: "PUT",
     		contentType: "application/json; charset=utf-8;",
     		data: faq,
@@ -1054,7 +1054,7 @@ $(function(){
 			
 			$.ajax({
 				dataType: "json",
-        		url:"${contextPath}/admin/faq/" + $faqId,
+        		url:"/shallwe/admin/faq/" + $faqId,
         		method:"DELETE",
         		success: function(data){
         			alert(data.success);

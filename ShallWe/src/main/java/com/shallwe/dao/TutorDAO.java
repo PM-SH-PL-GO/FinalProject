@@ -32,6 +32,7 @@ public class TutorDAO {
 	public List<Tutor> selectAllTutor(String YN) throws FindException{
 		List<Tutor> tutorList = new ArrayList<>();
 		SqlSession session = null;
+		System.out.println("///////////////////////////" + YN + "//////////////////////////////////");
 		try {
 			session = sqlSessionFactory.openSession();
 			tutorList = session.selectList("TutorMapper.selectAllTutor", YN);
