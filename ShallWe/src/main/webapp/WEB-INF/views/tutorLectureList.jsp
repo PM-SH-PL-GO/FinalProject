@@ -57,9 +57,9 @@ $(function(){
     	return false;
     });
 	$cont.on("click", "div[name=openCancelre]", 
-		function showPopup(frm) { 
+		function showPopup() { 
 		let letidimgValue = $(this).attr("value");
-		windowObj = window.open("tutorcancelLecture?lecture_id="+letidimgValue, "강의 취소 요청", "width=500px, height=500px, left=100, top=50"); 
+		windowObj = window.open("tutorcancelLecture?lecture_id="+letidimgValue, "강의 취소 요청", "width=550px, height=500px, left=100, top=50"); 
 
 		return false;
 		});
@@ -110,10 +110,10 @@ $(function(){
 										</div>
 										<div class="properties__caption">
 											<h3>${lecture.lecture_title}</h3>
-											<h6>${startDt}~${endDt}</h6>
-											<h6>${tutor.tutor_nickname}</h6>
-											<h6>현재인원: ${lecture.lecture_current} / 최대인원:
-												${lecture.lecture_max}</h6>
+											<h5>${startDt}~${endDt}</h5>
+											<h5>강사이름: ${tutor.tutor_nickname}</h5>
+											<h5>현재인원: ${lecture.lecture_current} / 최대인원:
+												${lecture.lecture_max}</h5>
 										</div>
 										<input type="hidden" name="listlecture_id"
 											value="${lecture.lecture_id}" />
@@ -180,10 +180,10 @@ $(function(){
 											<h3>
 												<a href="#">${lecture.lecture_title}</a>
 											</h3>
-											<h6>${startDt}~${endDt}</h6>
-											<h6>${tutor.tutor_nickname}</h6>
-											<h6>현재인원: ${lecture.lecture_current} / 최대인원:
-												${lecture.lecture_max}</h6>
+											<h5>${startDt}~${endDt}</h5>
+											<h5>강사이름: ${tutor.tutor_nickname}</h5>
+											<h5>수강인원: ${lecture.lecture_current} / 최대인원:
+												${lecture.lecture_max}</h5>
 										</div>
 										<input type="hidden" name="listendlecture_id"
 											value="${lecture.lecture_id}" />

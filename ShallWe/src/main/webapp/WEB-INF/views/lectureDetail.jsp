@@ -221,8 +221,8 @@ $(document).ready(function() {
 								<h3 class="mr-10 mb-9"
 									style="margin-left: 50px; line-height: 98%; color: white;">
 									상태: ${lecture.lecture_state}<br> <br>장소:
-									${lectDetail.lecture_location}<br> <br>인원:
-									${lecture.lecture_current}/${lecture.lecture_max}<br> <br>카테고리:
+									${lectDetail.lecture_location}<br> <br>현재인원:
+									 ${lecture.lecture_current} / 최대인원: ${lecture.lecture_max}<br> <br>카테고리:
 									${lecture.lectureCategory.lecture_category_id}
 								</h3>
 							</div>
