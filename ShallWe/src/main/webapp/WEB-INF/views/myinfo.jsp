@@ -38,11 +38,10 @@ $(document).ready(function() {
 	// 내정보 수정하기 버튼 클릭 이벤트
 	var $myinfoModiBtnObj = $('#myinfoModi');
 	$myinfoModiBtnObj.on('click', function (e) {
-		let url = "${contextPath}/myinfoModi";
-		alert("준비중인 기능입니다. ㅠ_ㅠ");
-// 		if ( confirm("내 정보를 수정하시겠습니까?") ) {
-// 			location.href=url;
-// 		}
+		let url = "${contextPath}/member/myinfoModi";
+		if ( confirm("내 정보를 수정하시겠습니까?") ) {
+			location.href=url;
+		}
 	}); // end of 내강의 수정 event
 	
 	// 강의상세보기

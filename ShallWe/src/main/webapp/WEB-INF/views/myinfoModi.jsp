@@ -1,6 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <c:set var="myInfo" value="${requestScope['myInfo']}"/>
 <!doctype html>
@@ -36,13 +38,24 @@ $(document).ready(function() {
 		// 비밀번호 변경 시
 		var memberPassword = $('input[type=password]').val();
 
-
+		
+// 		//-------------------------체크박스 갯수 제한 Start---------------------- 
+// 		$("input[type='checkbox']").on('click',function(e){
+// 		var $chkCnt = $("input:checkbox[name='favorites']:checked").length;
+// 			if($chkCnt > 3){
+// 			$(this).attr("checked",false)
+// 		$("input:checkbox[name='favorites']:checked").prop('checked', false);
+// 			alert("관심분야는 최대 3개 까지 선택가능합니다");
+// 		}
+// 		});
+// 		//-------------------------체크박스 갯수제한 End------------------------
+		
 		// 선호 하는 분야 변경 시
 		var favorite_list = new Array();
 		$("input[name=favorites]:checked").each(function(){
 			favorite_list.push($(this).val());
 
-			for ( var i=0; i < favorite_list.size(); i++; ) {
+			for (var i=0; i < favorite_list.size(); i++) {
 				console.log(favorite_list[i]);
 			}
 // 			for(check in favorite_list){
@@ -85,9 +98,8 @@ $(document).ready(function() {
 	<div class="topMenu">
 		<jsp:include page="/WEB-INF/views/topBar.jsp"></jsp:include>
 	</div>
-	<a href="#contents" class="skip">본문바로가기</a>
 	<main>
-
+	<div class="listing-area pt-150">
         <div class="contents">
             <h2 class="h2">내 정보 보기</h2>
             <p>배움에는 나이가 없다. 혼자보단 둘, 둘보다는 셋, 함께 배우시겠습니까? Shall We?</p>
@@ -103,12 +115,6 @@ $(document).ready(function() {
 				</colgroup>
 				<tbody>
 				<tr>
-					<th>상태</th>
-					<td>
-						<span style="height:20px; text-align:center;font-size:17px; background-color:red; color:white; margin-right:20px;">회원</span><span>강사</span>
-					</td>
-				</tr>
-				<tr>
 					<th><span>필수입력</span>이름</th>
 					<td>
 					 	<input type="text" value="${myInfo.memberName}" readonly>
@@ -117,13 +123,13 @@ $(document).ready(function() {
 				<tr>
 					<th><span>필수입력</span>성별</th>
 					<td>
-					<c:if test="${myinfo.memberSex eq 'M'}" >
-						<input type="radio" id="ra1_1" name="ras" checked><label for="ra1_1">남성</label>
-						<input type="radio" id="ra1_2" name="ras"><label for="ra1_2">여성</label>
+					<c:if test="${myInfo.memberSex == 'M'}" >
+						<input type="text" id="ra1_1" name="ras" readonly><label for="ra1_1">남성</label>
+						<input type="text" id="ra1_2" name="ras" readonly><label for="ra1_2">여성</label>
 					</c:if>
-					<c:if test="${myinfo.memberSex eq 'F'}" >
-						<input type="radio" id="ra1_1" name="ras"><label for="ra1_1">남성</label>
-						<input type="radio" id="ra1_2" name="ras" checked><label for="ra1_2">여성</label>
+					<c:if test="${myInfo.memberSex == 'F'}" >
+						<input type="text" id="ra1_1" name="ras" readonly><label for="ra1_1">남성</label>
+						<input type="text" id="ra1_2" name="ras" readonly><label for="ra1_2">여성</label>
 					</c:if>
 					</td>
 				</tr>
@@ -131,7 +137,7 @@ $(document).ready(function() {
 				<tr>
 					<th><span>필수입력</span>아이디</th>
 					<td>
-						<input type="text" value="${myinfo.memberId}" readonly>
+						<input type="text" value="${myInfo.memberId}" readonly>
 					</td>
 				</tr>
 				<tr>
@@ -144,31 +150,31 @@ $(document).ready(function() {
 				<tr>
 					<th><span>필수입력</span>비밀번호 확인</th>
 					<td>
-						<input type="password" value= "${myinfo.memberPwd}" style="width:300px;">
+						<input type="password" value= "${myInfo.memberPwd}" style="width:300px;">
 					</td>
 				</tr>
 				<tr>
 					<th><span>필수입력</span>이메일 주소</th>
 					<td>
-						<input id="memEmail" name="memberEmail1" value= "{fn:substringBefore(myinfo.memberEmail, '@')}"type="text" style="width:210px;" pattern="[a-zA-Z0-9]*" required>
+						<input id="memEmail" name="memberEmail1" value= "${fn:substringBefore(myInfo.memberEmail, '@')}" type="text" style="width:210px;" pattern="[a-zA-Z0-9]*" required>
 						@
 						<input id="domain" name="memberEmail2" type="text" style="width:194px; background:#DCDCDC" readonly pattern="[a-z]+[.]+[a-z]+[.]*[a-z]*" required>
 
 						<c:choose>
-							<c:when test = "{fn:substringAfter(myinfo.memberEmail,'@')" eq "gmail.com">
+							<c:when test = "${fn:substringAfter(myInfo.memberEmail,'@') == 'gmail.com'}">
 								<option value="gmail.com" selected>gmail.com</option>
 							</c:when>
-							<c:when test = "{fn:substringAfter(myinfo.memberEmail,'@')" eq "naver.com">
+							<c:when test = "${fn:substringAfter(myInfo.memberEmail,'@') == 'naver.com'}">
 								<option value="naver.com" selected>naver.com</option>
 							</c:when>
-							<c:when test = "{fn:substringAfter(myinfo.memberEmail,'@')" eq "daum.net">
+							<c:when test = "${fn:substringAfter(myInfo.memberEmail,'@') == 'daum.net'}">
 								<option value="daum.net" selected>daum.net</option>
 							</c:when>
-							<c:when test = "{fn:substringAfter(myinfo.memberEmail,'@')" eq "yahoo.com">
+							<c:when test = "${fn:substringAfter(myInfo.memberEmail,'@') == 'yahoo.com'}">
 								<option value="yahoo.com" selected>yahoo.com</option>
 							</c:when>
 							<c:otherwise>
-								<option value="{fn:substringAfter(myinfo.memberEmail,'@')">{fn:substringAfter(myinfo.memberEmail,'@')</option>
+								<option value="${fn:substringAfter(myInfo.memberEmail,'@')}">{fn:substringAfter(myInfo.memberEmail,'@')}</option>
          					</c:otherwise>
 						</c:choose>
 
@@ -222,6 +228,7 @@ $(document).ready(function() {
                 <a href="${contextPath}/" class="btn_type2">취소</a>
             </div>
         </div>
+       </div>
 	</main>
 	<footer>
 		<div class="clear">
