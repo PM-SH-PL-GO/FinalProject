@@ -9,7 +9,7 @@
 <title>Shallwe-로그인</title>
 <link rel="shortcut icon" type="image/x-icon" href="${contextPath}/assets/img/favicon.ico">
 <link rel="styleshee" href=https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css>
-<link rel="stylesheet" href="${contextPath}/asset/css/login.css">
+<link rel="stylesheet" href="${contextPath}/assets/css/login.css">
 <script
   src="https://code.jquery.com/jquery-3.5.1.min.js"
   integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
