@@ -120,11 +120,9 @@
 <!-- 	#{favorite1.lecture_category_id}, #{favorite2.lecture_category_id}, #{favorite3.lecture_category_id} 
 #{memberPhone}-->
 <!-- member(SH) : 아이디 중복체크 -->	
-	<select id="checkDuplId" resultType="MemberInfoBean">
-	select member_id from member
-	<if test="memberId!=null">
-	where member_id=#{memberId};
-	</if>
+	<select id="signUpCheckId" resultType="int">
+		select count(*) from member
+		where member_id=#{memberId}
 	</select>
 
 

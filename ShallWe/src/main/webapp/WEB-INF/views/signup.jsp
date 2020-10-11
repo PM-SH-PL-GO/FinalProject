@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"    pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+ <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <!doctype html>
 <html lang="ko">
 <head>
@@ -18,7 +19,8 @@
             <ol class="step">
             </ol>
             
-		<form id="signupform" method="post" onsubmit="return submitCheck(signupform);">
+		<form name ="signupform" id="signupform" method="post">
+				<input value="0" name="idCheckResult" type="hidden"> 
 		
             <h3 class="h3">회원정보</h3>
           	<table class="type1">
@@ -31,27 +33,24 @@
 					<tr>
 					<th><span>필수입력</span>아이디</th>
 						<td>
-							<input name="memberId" type="text" style="width:300px;" maxlength="15" autocomplete="off" pattern="[a-z0-9]" title="아이디 중복체크 해 주세요" required onkeyup="idCheckInit(signupform);">
-							<input class="memberId" name="idCheckResult" type="hidden"> 
-							<a onclick="idCheck(signupform)" class="btn_type3">아이디 중복확인</a>
-							<span class="exclamation">영어 소문자 + 숫자 조합으로 해주세요</span>
-							<p id="usableid" style="color:red; font-weight:bold">사용 가능한 아이디 입니다</p>
-							<p id="unusableid"style="color:red; font-weight:bold">이미 등록된 아이디 입니다</p>
+							<input id="memberId" name="memberId" type="text" style="width:300px;" maxlength="15" autocomplete="off" pattern="[a-z](?=.*[0-9]).{4,15}" title="아이디 중복체크 해 주세요" required onkeyup="idCheckInit(signupform);">
+							<button onclick="idCheck(signupform)" value="N" id="idCheckBtn" class="btn_type3">아이디 중복확인</button>
+							<span class="exclamation">영어 소문자 + 숫자 조합으로 해주세요 (13자리까지 가능)</span>
 						</td>
 					</tr>
 				
 					<tr>
 					<th><span>필수입력</span>비밀번호</th>
 						<td>
-						<input id="mPassword" name="memberPwd" type="password" style="width:300px;" maxlength="15" autocomplete="off" pattern="[a-z0-9]" title="영어 소문자 +숫자 조합으로 해주세요" required>
-						<span class="exclamation">비밀번호는 4~10자리로, 영어소문자+숫자 조합으로 입력해주시기 바랍니다.</span>
+						<input id="memberPwd" name="memberPwd" type="password" style="width:300px;" maxlength="15" autocomplete="off" pattern="[a-z](?=.*[0-9]).{4,15}" title="영어 소문자 +숫자 조합으로 해주세요" required>
+						<span class="exclamation">비밀번호는 4~12자리로, 영어소문자+숫자 조합으로 입력해주시기 바랍니다.</span>
 						</td>
 					</tr>
 			
 					<tr>
 						<th><span>필수입력</span>비밀번호 확인</th>
 						<td>
-						<input id="mPasswordCheck" name="memberPwdCheck" type="password" style="width:300px;" maxlength="15" autocomplete="off" pattern="[a-z0-9]" title="영어 소문자 +숫자 조합으로 해주세요" required>
+						<input id="memberPwdCheck" name="memberPwdCheck" type="password" style="width:300px;" maxlength="15" autocomplete="off" pattern="[a-z](?=.*[0-9]).{4,15}" title="영어 소문자 +숫자 조합으로 해주세요" required>
 						</td>
 					</tr>
 					
@@ -66,14 +65,14 @@
 					<tr>
 						<th><span>필수입력</span>이름</th>
 						<td>
-							<input name="memberName" type="text" style="width:150px;" maxlength="5" autocomplete="off" pattern="[가-힣a-zA-Z]" required>
+							<input id="memberName" name="memberName" type="text" style="width:150px;" maxlength="5" autocomplete="off" pattern="[가-힣a-zA-Z]" required>
 						</td>
 					</tr>
 					
 					<tr>
 						<th><span>필수입력</span>이메일 주소</th>
 						<td>
-							<input id="memEmail" name="memberEmail1" type="text" style="width:210px;" pattern="[a-zA-Z0-9]*" required>
+							<input id="memberEmail1" name="memberEmail1" type="text" style="width:210px;" pattern="[a-zA-Z0-9]*" required>
 							@
 							<input id="domain" name="memberEmail2" type="text" style="width:194px; background:#DCDCDC" readonly pattern="[a-z]+[.]+[a-z]+[.]*[a-z]*" required>
 							<select id="select_domain" name="select_domain" onchange="InsertTitle(this.value)">
@@ -99,8 +98,8 @@
 							<option value = "018">018</option>
 							<option value = "019">019</option>
 							</select>
-							<input id="mPhone1" name="memberPhone2" type="text" style="width:150px;" maxlength="4" pattern="[0-9]" title="숫자를 입력하세요" required>
-						 	<input id="mPhone2" name="memberPhone3" type="text" style="width:150px;" maxlength="4" pattern="[0-9]" title="숫자를 입력하세요" required>
+							<input id="memberPhone2" name="memberPhone2" type="text" style="width:150px;" maxlength="4" pattern="[0-9]" title="숫자를 입력하세요" required>
+						 	<input id="memberPhone3" name="memberPhone3" type="text" style="width:150px;" maxlength="4" pattern="[0-9]" title="숫자를 입력하세요" required>
 							<input id="memberPhone" name="memberPhone" type="hidden" value="">
 						</td>
 					</tr>	
@@ -131,121 +130,64 @@
         </form>
         </div>
 	</main>
-	<footer>
-		<div class="clear">
-			<div class="left">
-			</div>
-		</div>
-	</footer>
 	<script>
+						//아이디와 패스워드가 적합한지 검사할 정규식
+						var chkidpw=/^[a-z](?=.*[0-9]).{4,15}$/;
+						var memid = $("#memberId");
+						var mempwd= $("#memberPwd");
+						var email1= $("#memberEmail1");
+						var domain= $("#domain");
+						
+						function check(aaa,what,message){
+							if(aaa.test(what.value)){
+								return true;
+							}
+							alert(message);
+							what.value="";
+							what.focus();
+						}
+						
 					//-------------------------아이디 중복 유무 검사 Start-------------------------
 						function idCheck(signupform){
-							//-----------------아이디 입력 확인-----------------
-							if(form.memberId.value==""){
-								alert("아이디 중복확인 해 주세요");
-								form.memberId.focus();
-								return;
+								var chkidpw= /^[a-z](?=.*[0-9]).{4,15}$/;
+								var memberId=$("#memberId").val();
+								
+							if(memberId!=null || memberId!=""){
+								if(!chkidpw.test(memberId)){
+									alert("아이디는 4~13자리의 영문소문자와 숫자를 혼합해 입력해 주세요");
+									return false;
+								}else{
+									$.ajax({
+										url:"/shallwe/member/checkId",
+										type:"post",
+										dataType:"json",
+										data:{"memberId" : $("#memberId").val()},
+										success : function(responseData){
+											if(responseData==1){
+												alert("중복된 아이디 입니다.");
+											}else if(responseData==0){
+												$("#idCheckBtn").attr("value", "Y");
+												alert("사용 가능한 아이디 입니다");
+											}
+										}
+									})
+								}
+							}else{
+									alert("아이디를 입력해 주세요");
+									signupform.memberId.focus();
+									return;
 							}
-							
-							//-----------------입력 아이디 유효성 검사-----------------
-							if(!isID(form.memberId)){
-								alert("아이디가 적절하지 않습니다.\n 영문자와 숫자만 사용해 주세요.");
-								return;
-							}
-							
-							//--------------아이디 중복 유무 검사 및 결과를 출력하는 팝업창 생성------------
-							var url="idCheck.jsp?memberId="+form.memberId.value;
-							window.open(url, "아이디중복확인", "width=300, height=200, left=450, top200");
+						
 						}
 					//-------------------------아이디 중복 유무 검사End-------------------------				
-
 					
 					//--------------아이디 입력태그에서 키보드를 누른경우 호출되는 함수--------------
 					//-->아이디 입력값이 변경되었으므로  idCheckResult 폼변수의 값을 0으로 초기화
 							function idCheckInit(signupform){
-								if(form.idCheckResult.value=="1"){
-									form.idCheckResult.value="0";
+								if(signupform.idCheckResult.value=="1"){
+									signupform.idCheckResult.value="0";
 								}
 							}
-							
-							function submitCheck(signupform){
-								if(is_null_field(signupform)){
-									return false;
-								}
-								
-								if(form.idCheckResult.value=="0"){
-									alert("아이디 중복확인을 반드시 확인해 주세요");
-									return false;
-								}
-								
-								if(!isID(form.memberId)){
-									alert("아이디가 적절하지 않습니다.\n영문자와 숫자만 사용해 주세요.");
-									return false;
-								}
-								
-								if(!isSame(form.memberPwd, form.memberPwdCheck)){
-									alert("비밀번호와 재입력이 일치하지 않습니다..");
-									return false;
-								}
-								return true;
-							}
-							
-							function is_null_field(signupform){
-								if(is_null_field(form.memberId.value) || is_space(form.memberId_value)){
-									alert("아이디를 입력하여 주세요.");
-									form.memberId.focus();
-									return true;
-								}
-								
-								if(is_null(form.memberPwd.value) || is_space(form.memberPwd.value)){
-									alert("비밀번호를 입력하여 주세요.");
-									form.memberPwd.focus();
-									return true;
-								}
-								
-								if(is_null(form.memberName.value) || is_space(form.memberName.value)){
-									alert("이름을 입력하여 주세요");
-									focus.memberName.focus();
-									return true;
-								}
-								
-								if(is_null(form.memberEmail1.value) || is_space(form.memberEmail1.value)){
-									alert("이메일을 입력하여 주세요");
-									focus.memberEmail1.focus();
-									return true;
-								}
-
-								if(is_null(form.memberEmail2.value) || is_space(form.memberEmail2.value)){
-									alert("도메인을 입력하여 주세요");
-									focus.memberEmail2.focus();
-									return true;
-								}
-								
-								if(is_null(form.memberPhone1.value) || is_space(form.memberPhone1.value)){
-									alert("통신사 번호를 설정하여 주세요");
-									focus.memberPhone1.focus();
-									return true;
-								}
-
-								if(is_null(form.memberPhone2.value) || is_space(form.memberPhone2.value)){
-									alert("핸드폰 번호를 설정하여 주세요");
-									focus.memberPhone2.focus();
-									return true;
-								}
-								
-								if(is_null(form.memberPhone3.value) || is_space(form.memberPhone3.value)){
-									alert("핸드폰 번호를 설정하여 주세요");
-									focus.memberPhone3.focus();
-									return true;
-								}
-								
-								
-							}
-							
-						
-							
-								
-	
 					
 					//-------------------------이메일 선택 옵션 Start-------------------------
 					function InsertTitle(str) {
@@ -262,12 +204,66 @@
 						}
 					}				
 					//-------------------------이메일 선택 옵션 End-------------------------
-					
 
-					
 					//------------------------- 회원가입 Start-------------------------					
 					function signUp(){
+						var chkidpw= /^[a-z](?=.*[0-9]).{4,15}$/;
+						var mempwd= $("#memberPwd");
+						var memchkpwd =$("#memberPwdCheck");
+						var email1= $("#memberEmail1");
+						var domain= $("#domain");
 						var checkArray = new Array();
+						
+						if(signupform.memberPwd.value=="" || signupform.memberPwd.value==null){
+							alert("비밀번호를 입력하세요");
+							signupform.memberPwd.focus();
+						}
+						if(!chkidpw.test(signupform.memberPwd.value)){
+							alert("비밀번호는 4~12자리 영문 소문자와 숫자로만 입력해 주세요");
+							signupform.memberPwd.focus();
+							return false;
+						}
+						if(!chkidpw.test(signupform.memberPwdCheck.value)){
+							alert("비밀번호는 4~12자리 영문 소문자와 숫자로만 입력해 주세요");
+							signupform.memberPwdCheck.focus();
+							return false;
+						}
+					
+						if(signupform.memberPwd.value != memberPwdCheck.value){
+							alert("비밀번호가 일치하지 않습니다");
+							signupform.memberPwdCheck.focus();
+							return false;
+						}
+				
+						if(signupform.memberName.value==""){
+							alert("이름을 입력해 주세요");
+							signupform.memberName.focus();
+							return false;
+						}
+
+						if(signupform.memberEmail1.value==""){
+							alert("이메일을 입력해 주세요.");
+							email1.focus();
+							return false;
+						}
+						
+						if(signupform.domain.value==""){
+							alert("도메인을 입력해 주세요.");
+							signupform.domain.focus();
+							return false;
+						}
+						if(signupform.memberPhone2.value==""){
+							alert("핸드폰 번호를 입력해 주세요");
+							signupform.memberPhone2.focus();
+							return false;
+						}
+
+						if(signupform.memberPhone3.value==""){
+							alert("핸드폰 번호를 입력해 주세요");
+							signupform.memberPhone3.focus();
+							return false;
+						}
+						 	
 						$("input[name=favorites]:checked").each(function(){
 							checkArray.push($(this).val());
 
@@ -289,8 +285,11 @@
 						var memberEmail = null; 
 						memberEmail = memEmail+"@"+memDomain;
 						$("#memberEmail").val(memberEmail);
-						
 						console.log("회원가입중.....");
+						if(("#idCheckBtn").value==0){
+							alert("아이디 중복체크 해주세요")
+						}else{
+					
 						$.ajax({
 							url:"/shallwe/member/signup",
 							type:"POST",
@@ -305,6 +304,7 @@
 							}
 						})
 									return false;
+						}
 					}
 					//------------------------- 회원가입 End-------------------------	
 					
