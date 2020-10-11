@@ -104,7 +104,7 @@ $(function(){
 				   ,success:function(){
 				
 					alert("강사등록 신청을 수정되었습니다");
-					location.href = "${contextPath}"
+					location.href = "/shallwe"
 								 
 				
 					} // end of success

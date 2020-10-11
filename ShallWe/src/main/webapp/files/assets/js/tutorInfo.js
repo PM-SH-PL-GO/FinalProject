@@ -11,7 +11,7 @@ $(function(){
 		   ,mehod: "POST"
 		   ,success: function(data){		   
 			alert("강사신청을취소하셨습니다.");
-			location.href = "${contextPath}"
+			location.href = "/shallwe"
 		
 		   }//end of success
 		});//end of ajax 
