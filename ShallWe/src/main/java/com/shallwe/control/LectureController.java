@@ -10,16 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +26,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
-import com.shallwe.exception.RemoveException;
 import com.shallwe.exception.ModifyException;
 import com.shallwe.service.LectureService;
 import com.shallwe.service.ReviewService;
@@ -48,8 +43,6 @@ import lombok.extern.log4j.Log4j;
 @Controller
 @RequestMapping(value = "/lectures/*")
 public class LectureController {
-	private static final Logger Logger = LoggerFactory.getLogger(MemberController.class);
-
 	// 회원 : 강의 검색, 강의 세부정보 조회
 	// 강사 : 강의 등록/수정/취소, 등록한 강의 조회
 	@Autowired

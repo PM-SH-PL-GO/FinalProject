@@ -1,20 +1,13 @@
 package com.shallwe.control;
 
 import java.util.ArrayList;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.net.ssl.SSLEngineResult.Status;
-import javax.security.auth.message.callback.PrivateKeyCallback.Request;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +31,6 @@ import com.shallwe.service.MemberSerivce;
 import com.shallwe.service.ReviewService;
 import com.shallwe.service.TutorService;
 import com.shallwe.vo.Lecture;
-import com.shallwe.vo.LectureCategory;
 import com.shallwe.vo.Review;
 import com.shallwe.vo.Tutor;
 
@@ -48,9 +40,6 @@ import lombok.extern.log4j.Log4j;
 @RequestMapping(value = "/member/*")
 @Log4j
 public class MemberController {
-   
-   private static final Logger Logger = LoggerFactory.getLogger(MemberController.class);
-   
    // 회원 : 내 정보 조회/수정, 강의 조회/신청/삭제
    @Autowired
    MemberSerivce service;
@@ -66,14 +55,12 @@ public class MemberController {
    //회원가입get방식 : 상하
    @RequestMapping(value = "/signup", method = RequestMethod.GET)
    public String getSignup(Locale locale, Model model)throws Exception {
-      log.info("/////////////////////////////////go to signup.jsp////////////////////////////");
-      return "/signup";
+      return "signup";
    }
    // 회원가입post방식: 상하
    @RequestMapping(value = "/signup", method = RequestMethod.POST)
    @ResponseBody
    public String postSignup(MemberInfoBean mib) throws AddException {
-      Logger.info("post sign up controller connected");
       service.memberJoin(mib);
       return "success";
    }
@@ -118,12 +105,7 @@ public class MemberController {
    //멤버로그아웃:경찬
    @RequestMapping(value="/memberLogout",method=RequestMethod.POST)
    public ResponseEntity<String> memberLogout(HttpSession session) {
-      
-      ModelAndView modelAndView = new ModelAndView();
-      
       session.removeAttribute("loginInfo");
-      
-      
       return ResponseEntity.status(HttpStatus.OK).body("로그아웃성공");
    
    }

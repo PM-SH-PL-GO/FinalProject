@@ -10,7 +10,7 @@
 <link rel="stylesheet" type="text/css" href="/shallwe/assets/css/signupstyle.css">
 <link rel="shortcut icon" type="image/x-icon" href="${contextPath}/assets/img/favicon.ico">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="${contextPath }/js/signup.js"/>
+<script src="${contextPath }/js/signup.js"></script>
 </head>
 <body>
 	<a href="#contents" class="skip">본문바로가기</a>

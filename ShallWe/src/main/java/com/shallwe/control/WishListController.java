@@ -33,8 +33,6 @@ import lombok.extern.log4j.Log4j;
 @Controller
 @RequestMapping(value = "/member/*")
 public class WishListController {
-	private static final Logger Logger = LoggerFactory.getLogger(MemberController.class);
-
 	// 회원 : 강의 검색, 강의 세부정보 조회
 	// 강사 : 강의 등록/수정/취소, 등록한 강의 조회
 	@Autowired
@@ -48,7 +46,6 @@ public class WishListController {
 	@RequestMapping(value = "wishlist")
 	public String WishView(HttpSession session, Model model) throws FindException {
 		String member_id = (String) session.getAttribute("loginInfo");
-		//String member_id = "member2"; 
 		List<Lecture> wishall = new ArrayList<>();
 		try {
 			wishall = service.findWishListById(member_id);
@@ -56,7 +53,6 @@ public class WishListController {
 			return "/wishlist";
 		} catch (FindException e) {
 			e.printStackTrace();
-			Logger.info("error");
 			return "fail";
 		}
 
@@ -66,7 +62,6 @@ public class WishListController {
 	@RequestMapping(value="wishlist/addWish")
 	public ModelAndView addWish(@RequestParam(value="lecture_id")String lecture_id, HttpSession session, Model model) throws AddException{
 		String member_id = (String)session.getAttribute("loginInfo");
-		//String member_id ="member1";
 		
 		ModelAndView  modelAndView = new ModelAndView();
 		// lecture_id 로 lecture 객체 조회
@@ -99,7 +94,6 @@ public class WishListController {
 	@ResponseBody
 	public ResponseEntity<String> delete(@RequestParam(value="lecture_id")String lecture_id, HttpSession session){
 		String member_id = (String)session.getAttribute("loginInfo");
-//		String member_id = "member2";
 		if(member_id!=null) {
 			Map<String, Object>map = new HashMap<String, Object>();
 			map.put("member_id", member_id);
@@ -120,7 +114,6 @@ public class WishListController {
 	@ResponseBody	
 	public ResponseEntity<String> deleteAllWishList(HttpSession session) {
 		String member_id = (String)session.getAttribute("loginInfo");
-//		String member_id = "member2"; 
 		if(member_id!=null) {
 			try {
 				service.deleteAllWishList(member_id);

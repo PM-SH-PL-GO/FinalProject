@@ -14,9 +14,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.tomcat.util.net.ApplicationBufferHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,7 +33,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.shallwe.exception.AddException;
 import com.shallwe.exception.FindException;
 import com.shallwe.exception.ModifyException;
-import com.shallwe.exception.RemoveException;
 import com.shallwe.model.BoardPageBean;
 import com.shallwe.service.BoardService;
 import com.shallwe.service.FaqService;
@@ -50,9 +45,6 @@ import com.shallwe.vo.StudyBoard;
 @Controller
 @RequestMapping(value = "/board/*")
 public class BoardController {
-	private static final long serialVersionUID = 1L;
-	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
-	
 	@Autowired
 	BoardService service;
 	@Autowired
@@ -94,11 +86,10 @@ public class BoardController {
 	@RequestMapping("/list/{currentPage}")
 	@ResponseBody
 	public ResponseEntity<BoardPageBean<StudyBoard>> list(@PathVariable(value = "currentPage",required = false) Integer cp, HttpSession session){
-		ModelAndView mnv = new ModelAndView();
 		int currentPage = 1;
-		if(cp != null) {
+		if(cp != null) 
 			currentPage = cp;
-		}
+		
 		BoardPageBean<StudyBoard> pb = null;
 		try {
 			BoardPageBean<StudyBoard> oldPb=(BoardPageBean<StudyBoard>)session.getAttribute("pb");
@@ -197,7 +188,6 @@ public class BoardController {
 			//즉 브라우져에 보낼 데이터를 버퍼에 쓴 이후로는 redirect나 forward를 할수 없을떄 일어난다(forward나 redirect)
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return saveName;
@@ -327,15 +317,12 @@ public class BoardController {
 	// 게시글 등록 페이지로 이동
 	@RequestMapping(value="/freewrite", method=RequestMethod.GET)
 	public String freeWriteGET() {
-		logger.info("write GET.....");
 		return "board/freeBoardWrite";
 	}
 	
 	// 게시글 등록 처리
 	@RequestMapping(value="/freewrite", method=RequestMethod.POST)
 	public String freeWritePOST(FreeBoard freeboard, RedirectAttributes redirectAttributes)throws AddException {
-		logger.info("write POST.....");
-		logger.info(freeboard.toString());
 		service.insertFreeBoard(freeboard);
 		redirectAttributes.addFlashAttribute("msg", "registrySuccess");
 		return "redirect:/board/freeboard";
@@ -344,7 +331,6 @@ public class BoardController {
 	// 목록 페이지로 이동
 	@RequestMapping(value="freeboard", method=RequestMethod.GET)
 	public String freeList(Model model) throws Exception{
-		logger.info("FreeBoard list.....");
 		model.addAttribute("freeboard", service.listAll());
 		return "board/freeBoard";
 	}
@@ -352,7 +338,6 @@ public class BoardController {
 	// 게시글 읽기 페이지로 이동
 	@RequestMapping(value="/read", method=RequestMethod.GET)
 	public String freeRead(@RequestParam("freeboard_id")int freeboard_id, Model model)throws FindException{
-		logger.info("FreeBoard read.....");
 		model.addAttribute("freeboard", service.read(freeboard_id));
 		return "board/freeBoardRead";
 	}
@@ -360,7 +345,6 @@ public class BoardController {
 	// 게시글 수정 페이지 이동
 	@RequestMapping(value="freemodify", method=RequestMethod.GET)
 	public String freeModifyGET(@RequestParam("freeboard_id")int freeboard_id, Model model)throws FindException{
-		logger.info("FreeBoard modifyGET.....");
 		model.addAttribute("freeboard",service.read(freeboard_id));
 		return "board/freeBoardModi";
 	}
@@ -368,7 +352,6 @@ public class BoardController {
 	// 게시글 수정 처리
 	@RequestMapping(value="freemodify", method=RequestMethod.POST)
 	public String freeModifyPOST(FreeBoard freeboard, RedirectAttributes redirectAttributes)throws ModifyException{
-		logger.info("FreeBoard modifyPOST......");
 		service.updateFreeBoard(freeboard);
 		redirectAttributes.addFlashAttribute("msg", "modifySuccess");
 		return "redirect:/board/freeboard";
@@ -377,7 +360,6 @@ public class BoardController {
 	// 게시글 삭제 처리
 	@RequestMapping(value="freedelete", method=RequestMethod.GET)
 	public String freeDelete(@RequestParam("freeboard_id")int freeboard_id, RedirectAttributes redirectAttributes)throws Exception{
-		logger.info("FreeBoard delete......");
 		service.deleteFreeBoard(freeboard_id);
 		redirectAttributes.addFlashAttribute("msg", "deleteSuccess");
 		return "redirect:/board/freeboard";
