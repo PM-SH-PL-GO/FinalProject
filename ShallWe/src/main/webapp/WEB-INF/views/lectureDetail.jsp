@@ -311,10 +311,11 @@ $(document).ready(function() {
 						<div class="col-md-12">
 							<h3 class="mb-30 mt-30" id="filename"
 								style="padding: 10px; font-weight: bold;">첨부파일</h3>
+								
 							<c:set var="fileName"
-								value="${fn:split(studyBoard.studyBoard_fileName, '_')}" />
+								value="${fn:split(lectDetail.lecture_fileName, '_')}" />
 							<a style="-webkit-text-fill-color: #00dbd5 !important;"
-								href="${contextPath}/lectures/download?fileName=${lectDetail.lecture_fileName}">${fn:substringAfter(lectDetail.lecture_fileName,'_')}</a>
+								href="${contextPath}/lectures/download?fileName=${lectDetail.lecture_fileName}">${lectDetail.lecture_fileName}</a>
 							<!-- 후기영역 -->
 							<div class="mb-30 mt-30" id="reviewArea"></div>
 						</div>
