@@ -49,6 +49,7 @@
 .btn{
 background : #00dbd5;
 font-size: 16px;
+color: white !important;
 }
 .btn::before {
 	background: #009994;
@@ -117,7 +118,7 @@ $(function(){
 							if(tutor[0].member.tutor_YN=='Y'){
 								topbarBtnData = "<a class=\"btn myInfoTutorInfo\">강사회원입니다.</a>"
 							}else{
-								topbarBtnData = "<a class=\"btn\" id=\"tutorSetBtn\">예비강사입니다.</a>"
+								topbarBtnData = "<a class=\"btn\">예비강사입니다.</a>"
 							}
 					}
 					$topbarBtn.html(topbarBtnData);	
