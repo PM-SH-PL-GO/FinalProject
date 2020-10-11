@@ -69,26 +69,32 @@ public class MemberController {
 	// 회원가입post방식: 상하
 	@RequestMapping(value = "signup", method = RequestMethod.POST)
 	@ResponseBody
-	public String postSignup(MemberInfoBean mib) throws AddException {
+	public String postSignup(MemberInfoBean mib) throws Exception {
 		Logger.info("post sign up controller connected");
-		service.memberJoin(mib);
-		return "success";
+		int result =  service.signUpCheckId(mib);
+		try {
+			if(result==1) {
+				return "fail";
+			}else if(result==0) {
+				service.memberJoin(mib);
+			}
+			}catch(Exception e) {
+				throw new RuntimeException();
+			}
+			return "success";
 	}
 
-//	//아이디 중복체크: 상하
-//	public int memberChkId(MemberInfoBean mib) {
-//		int result = 0;
-//		String col = null;
-//		col="memberId";
-//		MemberInfoBean userIdCheck = service.getMemberId(mib.getMemberId(), col);
-//		if(userIdCheck != null) {
-//			result=2;
-//		}
-////		if(result<2) {
-////			result=service.memberJoin(mib);
-////		}
-//		return result;
-//	}
+	//아이디 중복체크: 상하
+	@RequestMapping(value="checkId", method = RequestMethod.POST)
+	@ResponseBody
+	public int signUpCheckId(MemberInfoBean mib)throws Exception{
+		// null인지 아닌지.
+//		MemberInfoBean mib = new MemberInfoBean(); 
+		int result = service.signUpCheckId(mib);
+		
+		return result;
+	}
+	
 	@ResponseBody
 	//멤버로그인:경찬
 	@RequestMapping(value="/memberLogin",method=RequestMethod.POST)

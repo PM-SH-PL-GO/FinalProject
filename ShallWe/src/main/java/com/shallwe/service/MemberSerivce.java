@@ -60,11 +60,12 @@ public class MemberSerivce {
 			memberDao.joinMember(mib);
 	}
 	
-	//멤버 아이디중복검사 : 상하
-	public MemberInfoBean getMemberId(String usertyped,String col) {
-		return memberDao.getMemberId(usertyped,col);
+	//아이디 중복체크 : 상하
+	public int signUpCheckId(MemberInfoBean mib) throws Exception {
+		int result = memberDao.signUpCheckId(mib);
+		return result;
 	}
-
+	
 	//내 정보 보기:상하 
 	public MemberInfoBean findById(String memberId)throws FindException{ 
 		return memberDao.selectById(memberId);
