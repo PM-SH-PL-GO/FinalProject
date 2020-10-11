@@ -156,10 +156,10 @@ $(function(){
 											<h3>
 												<a href="#">${lecture.lecture_title}</a>
 											</h3>
-											<h6>${startDt}~${endDt}</h6>
-											<h6>${tutor.tutor_nickname}</h6>
-											<h6>현재인원: ${lecture.lecture_current} / 최대인원:
-												${lecture.lecture_max}</h6>
+											<h5>${startDt}~${endDt}</h5>
+											<h5>강사이름: ${tutor.tutor_nickname}</h5>
+											<h5>현재인원: ${lecture.lecture_current} / 최대인원:
+												${lecture.lecture_max}</h5>
 										</div>
 										<input type="hidden" name="listlecture_id"
 											value="${lecture.lecture_id}" />
@@ -227,10 +227,10 @@ $(function(){
 											<h3>
 												<a href="#">${lecture.lecture_title}</a>
 											</h3>
-											<h6>${startDt}~${endDt}</h6>
-											<h6>${tutor.tutor_nickname}</h6>
-											<h6>현재인원: ${lecture.lecture_current} / 최대인원:
-												${lecture.lecture_max}</h6>
+											<h5>${startDt}~${endDt}</h5>
+											<h5>강사이름: ${tutor.tutor_nickname}</h5>
+											<h5>수강인원: ${lecture.lecture_current} / 최대인원:
+												${lecture.lecture_max}</h5>
 										</div>
 										<input type="hidden" name="listendlecture_id"
 											value="${lecture.lecture_id}" />
