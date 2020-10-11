@@ -97,7 +97,7 @@ public class EmailController {
 	public ModelAndView pwdCheck(@RequestParam Map<String,Object>member,ModelMap model) {
 		
 		ModelAndView modelAndView = new ModelAndView();
-		String url = "http://localhost/shallwe/";
+		String url = "http://13.124.152.158/shallwe/";
 		String member_name = (String)member.get("member_name");
 		String member_email = (String)member.get("member_email");
 		try {

@@ -141,7 +141,7 @@ $(function(){
 
 				 $.ajax({
 						
-						url:"${contextPath}/email/pwdEmailCheck"
+						url:"/shallwe/email/pwdEmailCheck"
 					   ,method:'POST'
 					   ,data:{member_name:$idValCheck,member_email:$mailCheck}
 					   ,success:function(data){
@@ -168,7 +168,7 @@ $(function(){
 		     
 		     $.ajax({
 					
-					url:"${contextPath}/email/randomPwd"
+					url:"/shallwe/email/randomPwd"
 				   ,method:'POST'
 				   ,data:{member_name:$idValCheck,member_email:$mailCheck}
 				   ,success:function(data){
@@ -195,6 +195,4 @@ $(function(){
 	$("#signup").click(function(){
 		loation.href = "/shallwe/member/signup";
 	});
-		
-		
  });

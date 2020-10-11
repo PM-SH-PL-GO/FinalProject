@@ -66,7 +66,7 @@ public class MemberController {
    //회원가입get방식 : 상하
    @RequestMapping(value = "/signup", method = RequestMethod.GET)
    public String getSignup(Locale locale, Model model)throws Exception {
-      
+      log.info("/////////////////////////////////go to signup.jsp////////////////////////////");
       return "/signup";
    }
    // 회원가입post방식: 상하
