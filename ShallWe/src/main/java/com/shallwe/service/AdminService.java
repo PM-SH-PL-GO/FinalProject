@@ -183,6 +183,11 @@ public class AdminService {
 			cancelCat += " • " + cat + "\r\n";
 		}
 		
+		Map<String, String> map = new HashMap<>();
+		map.put("status", "N");
+		map.put("id", tutor_id);
+		memberDAO.updateTutorState(map);
+		
 		MemberInfoBean bean = memberDAO.selectById(tutor_id);
 		
 		

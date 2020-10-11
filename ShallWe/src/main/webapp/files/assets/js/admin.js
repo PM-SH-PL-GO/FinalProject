@@ -885,7 +885,7 @@ $(function(){
     				modal += lectureDetail.lecture_cancel_reason + '"></input>';
     			}
    				else{
-    				modal += '<div>반려적용 일 : ' + lectureDetail.lecture_reject_dt + '</div><br>';
+    				modal += '<div>반려적용 일 : ' + formatDate(lectureDetail.lecture_reject_dt) + '</div><br>';
    					modal += '<div>반려 키워드 : ' + lectureDetail.rejectCategory.reject_category_value + '</div><br>';
         			modal += '<h4>사유 :</h4><input class="reject-detail" disabled value="';
     				modal += lectureDetail.lecture_reject_reason + '"></input><br>';

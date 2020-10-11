@@ -45,21 +45,21 @@ public class MemberDAO {
 		}
 	}
 	
-	// 아이디 중복체크 
-	public MemberInfoBean getMemberId(String usertyped,String col) {
-		SqlSession session = null;
-		Map<String, Object>map = new HashMap<String, Object>();
+	// 아이디 중복체크 : 상하
+	public int signUpCheckId(MemberInfoBean mib)throws FindException{
+		SqlSession session=null;
+		int result= 0;
 		try {
-			session = sqlSessionFactory.openSession();
-			if(col.equals("memberId")) {
-				map.put("memberId", usertyped);
-			}
-		}catch(Exception e) {
-			e.getMessage();
+			
+		session = sqlSessionFactory.openSession();
+		result= session.selectOne("MemberMapper.signUpCheckId", mib);
+		
+		}catch(DataAccessException e) {
+			e.printStackTrace();
 		}finally {
 			session.close();
 		}
-		return session.selectOne("MemberMapper.checkId", usertyped);
+		return result;
 	}
 	
 	// 내 정보 보기(수강생) : 상하

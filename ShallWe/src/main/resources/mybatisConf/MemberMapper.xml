@@ -84,34 +84,6 @@
 	UPDATE member set member_phone = #{memberPhone} where member_id = #{memberId}
 	</update>
 
-	
-<!-- 	<resultMap type="Member" id ="updateCategoFav"> -->
-<!-- 		<id property= "member_id" column="member_id"/> -->
-<!-- 		<collection property="favorite_list" javaType="LectureCategory" autoMapping="true" resultMap="lecca"> -->
-<!-- 		</collection> -->
-<!-- 	</resultMap> -->
-<!-- 	<resultMap type="LectureCategory" id="lecca" autoMapping="true"> -->
-<!-- 		<id property= "lecture_category_id1" column="fav1"/> -->
-<!-- 		<id property= "lecture_category_id2" column="fav2"/> -->
-<!-- 		<id property= "lecture_category_id3" column="fav3"/> -->
-	
-<!-- 	</resultMap> -->
-<!-- 	<update id="updateFavorites" parameterType="Map"> -->
-<!-- 	UPDATE member set member_favorite1 = #{favorite_list.favorite1.lecture_category_id},  -->
-<!-- 					  member_favorite2 = #{favorite_list.favorite2.lecture_category_id}, -->
-<!-- 					  member_favorite3 = #{favorite_list.favorite3.lecture_category_id}  -->
-<!-- 	WHERE member_id = #{member_id} -->
-<!-- 	</update> -->
-
-<!-- ==================================================================	 -->
-
-<!-- 	<update id="updateFavorites" parameterType="Map" resultMap="updateCategoFav"> -->
-<!-- 	UPDATE member set member_favorite1 fav1 = #{favorite_list.lecture_category_id1},  -->
-<!-- 					  member_favorite2 fav2 = #{favorite_list.lecture_category_id2}, -->
-<!-- 					  member_favorite3 fav3 = #{favorite_list.lecture_category_id3}  -->
-<!-- 	WHERE member_id = #{member_id} -->
-<!-- 	</update> -->
-
 <!-- member(SH) : 회원가입 -->	
 	<insert id="joinMember" parameterType="MemberInfoBean">
 	INSERT INTO member(member_id, member_pwd, member_name, member_email, member_phone, member_favorite1, member_favorite2, member_favorite3, member_sex, tutor_yn, enabled)
@@ -120,11 +92,9 @@
 <!-- 	#{favorite1.lecture_category_id}, #{favorite2.lecture_category_id}, #{favorite3.lecture_category_id} 
 #{memberPhone}-->
 <!-- member(SH) : 아이디 중복체크 -->	
-	<select id="checkDuplId" resultType="MemberInfoBean">
-	select member_id from member
-	<if test="memberId!=null">
-	where member_id=#{memberId}
-	</if>
+	<select id="signUpCheckId" resultType="int">
+		select count(*) from member
+		where member_id=#{memberId}
 	</select>
 
 
@@ -135,7 +105,7 @@
 		WHERE member_id = #{member_id}
 	</update>
 
-<!-- admin(jun6) : 예비강사 승인 -->
+<!-- admin(jun6) : 예비강사 승인/반려 -->
 	<update id="updateTutorState" parameterType="map">
 		UPDATE member
 	 	SET tutor_yn = #{status}
@@ -143,15 +113,16 @@
 	</update>
 	
 <!-- admin(jun6) : 예비강사 반려 -->
-	<insert id="rejectPretutor" parameterType="Tutor">
-		INSERT INTO tutor_reject VALUES(#{tutor.member.member_id},
-										 (select category_id
-	                                            from lecture_category
-	                                            where category_name = #{tutor.lectureCategory.lecture_category_name}),
-										 #{tutorReject.rejectCategory.reject_category_id},
-										 #{tutorReject.reject_reason},
-										  SYSDATE)
-	</insert>
+	<update id="rejectPretutor" parameterType="Tutor">
+		UPDATE tutor_reject
+		SET reject_category_id = #{tutorReject.rejectCategory.reject_category_id},
+		    reject_reason = #{tutorReject.reject_reason},
+			reject_dt = SYSDATE
+		WHERE tutor_id = #{tutor.member.member_id}
+		AND tutor_category_id = (SELECT category_id
+                                 FROM lecture_category
+                                 WHERE category_name = #{tutor.lectureCategory.lecture_category_name})
+	</update>
 
 <!-- admin(jun6) : 전체 회원 목록 조회(정지, 정상회원) -->
 	<select id="selectAllMember" parameterType="Integer" resultMap="MemberInfoMap">

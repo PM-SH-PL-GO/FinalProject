@@ -45,167 +45,176 @@ public class MemberController {
    MemberSerivce service;
    @Autowired
    TutorService tutorService;
-   
    @Autowired
    LectureService lectureService;
-
    @Autowired
    ReviewService reviewService;
-   
-   //회원가입get방식 : 상하
-   @RequestMapping(value = "/signup", method = RequestMethod.GET)
-   public String getSignup(Locale locale, Model model)throws Exception {
-      return "signup";
-   }
-   // 회원가입post방식: 상하
-   @RequestMapping(value = "/signup", method = RequestMethod.POST)
-   @ResponseBody
-   public String postSignup(MemberInfoBean mib) throws AddException {
-      service.memberJoin(mib);
-      return "success";
-   }
+	
+	//회원가입get방식 : 상하
+	@RequestMapping(value = "signup", method = RequestMethod.GET)
+	public String getSignup(Locale locale, Model model)throws Exception {
+		return "/signup";
+	}
+	// 회원가입post방식: 상하
+	@RequestMapping(value = "signup", method = RequestMethod.POST)
+	@ResponseBody
+	public String postSignup(MemberInfoBean mib) throws Exception {
+		int result =  service.signUpCheckId(mib);
+		try {
+			if(result==1) {
+				return "fail";
+			}else if(result==0) {
+				service.memberJoin(mib);
+			}
+			}catch(Exception e) {
+				throw new RuntimeException();
+			}
+			return "success";
+	}
 
-//   //아이디 중복체크: 상하
-//   public int memberChkId(MemberInfoBean mib) {
-//      int result = 0;
-//      String col = null;
-//      col="memberId";
-//      MemberInfoBean userIdCheck = service.getMemberId(mib.getMemberId(), col);
-//      if(userIdCheck != null) {
-//         result=2;
-//      }
-////      if(result<2) {
-////         result=service.memberJoin(mib);
-////      }
-//      return result;
-//   }
-   @ResponseBody
-   //멤버로그인:경찬
-   @RequestMapping(value="/memberLogin",method=RequestMethod.POST)
-   public ModelAndView memberLogin(HttpSession session, @RequestParam(value="member_id")String member_id,
-                                           @RequestParam(value="member_pwd")String member_pwd
-                                       ) {
-      ModelAndView modelAndView = new ModelAndView();
-      
-      try {
-         
-         service.memberLogin(member_id, member_pwd);
-         session.setAttribute("loginInfo", member_id);
-         modelAndView.setViewName("/success");
-         modelAndView.addObject("status","success");
-         
-      } catch (FindException e) {
-         
-         modelAndView.setViewName("/fail");
-         modelAndView.addObject("errMsg",e.getMessage());
-         e.printStackTrace();
-      }
-      return modelAndView;
-   }
-   //멤버로그아웃:경찬
-   @RequestMapping(value="/memberLogout",method=RequestMethod.POST)
-   public ResponseEntity<String> memberLogout(HttpSession session) {
-      session.removeAttribute("loginInfo");
-      return ResponseEntity.status(HttpStatus.OK).body("로그아웃성공");
-   
-   }
-   
-   //비밀번호체인지(로그인x)
-   @RequestMapping(value="/changePassword",method=RequestMethod.POST)
-   public ModelAndView changePassword(@RequestParam Map<String,Object>member,Model model) {
-      
-      ModelAndView modelAndView = new ModelAndView();
-      try {
-         
-         service.changePwd(member);
-         modelAndView.setViewName("/success");
-         
-      } catch (ModifyException e) {
-         modelAndView.setViewName("/fail");
-         modelAndView.addObject("errMsg",e.getMessage());
-         e.printStackTrace();
-      }
-      
-      return modelAndView;
-      
-   }
-   
-   //강사 여부 확인하기
-   @RequestMapping("/tutorYN")
-   public ResponseEntity<List<Tutor>> tutorYN(HttpSession session){
-      String member_id = (String)session.getAttribute("loginInfo");
-      List<Tutor> t =null;
-      try {
-          t = tutorService.showTutorInfo(member_id);
-            return ResponseEntity.status(HttpStatus.OK).body(t);
-      } catch (FindException e) {
-         e.printStackTrace();
-         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(t);
-      }
-      
-   }
-   
-   // myInfo 정보 조회
-   @RequestMapping(value = "/myinfo", method = RequestMethod.GET)
-   public ModelAndView myinfo(HttpSession session) {
-      ModelAndView modelAndView = new ModelAndView();
-      String member_id = (String)session.getAttribute("loginInfo");
-      modelAndView.addObject("member_id", member_id);
-      
-      // 나의 강의 목록 조회
-      List<Lecture> lectureList = new ArrayList<>();
-      try {
-         lectureList = lectureService.selectLectureListByMemberId(member_id);
-         modelAndView.addObject("lectureList", lectureList);
-      } catch (FindException e) {
-         e.printStackTrace();
-      }
-      
-      // myInfo
-      MemberInfoBean myInfo = new MemberInfoBean();
-      try {
-         myInfo = service.findById(member_id);
-         modelAndView.addObject("myInfo", myInfo);
-         log.info(myInfo);
-         
-      } catch (FindException e) {
-         e.printStackTrace();
-      } finally {
-         modelAndView.setViewName("/myinfo");
-      }
-      return modelAndView;
-   }
-   
-   // member 정보 수정 화면 정보에 데이터 보내기
-   @RequestMapping(value = "/myinfoModi", method = RequestMethod.GET)
-   public ModelAndView myinfoModi(HttpSession session) {
-      ModelAndView modelAndView = new ModelAndView();
-      String member_id = (String)session.getAttribute("loginInfo");
-      modelAndView.addObject("member_id", member_id);
-      
-      // myInfo
-      MemberInfoBean myInfo = new MemberInfoBean();
-      try {
-         myInfo = service.findById(member_id);
-         modelAndView.addObject("myInfo", myInfo);
-         log.info(myInfo);
-         
-      } catch (FindException e) {
-         e.printStackTrace();
-      } finally {
-         modelAndView.setViewName("/myinfoModi");
-      }
-      return modelAndView;
-   }
-   
-   // member 정보 수정 비즈니스로직 처리
-   @RequestMapping(value = "/myinfoModify", method = RequestMethod.GET)
-   public ModelAndView myinfoModify(HttpSession session , @RequestParam (value="memberPhone", required=false) String memberPhone
-         , @RequestParam (value="memberEmail" , required=false) String memberEmail
-         , @RequestParam (value="memberPassword" , required=false) String memberPassword
-         , @RequestParam (value="favorite_list" , required=false) Map<String, String> favorite_list) {
-      
-      String memberId = (String)session.getAttribute("loginInfo");
+	//아이디 중복체크: 상하
+	@RequestMapping(value="checkId", method = RequestMethod.POST)
+	@ResponseBody
+	public int signUpCheckId(MemberInfoBean mib)throws Exception{
+		// null인지 아닌지.
+//		MemberInfoBean mib = new MemberInfoBean(); 
+		int result = service.signUpCheckId(mib);
+		
+		return result;
+	}
+	
+	@ResponseBody
+	//멤버로그인:경찬
+	@RequestMapping(value="/memberLogin",method=RequestMethod.POST)
+	public ModelAndView memberLogin(HttpSession session, @RequestParam(value="member_id")String member_id,
+														 @RequestParam(value="member_pwd")String member_pwd
+												   ) {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		try {
+			
+			service.memberLogin(member_id, member_pwd);
+			session.setAttribute("loginInfo", member_id);
+			modelAndView.setViewName("/success");
+			modelAndView.addObject("status","success");
+			
+		} catch (FindException e) {
+			
+			modelAndView.setViewName("/fail");
+			modelAndView.addObject("errMsg",e.getMessage());
+			e.printStackTrace();
+		}
+		return modelAndView;
+	}
+	//멤버로그아웃:경찬
+	@RequestMapping(value="/memberLogout",method=RequestMethod.POST)
+	public ResponseEntity<String> memberLogout(HttpSession session) {
+		
+		ModelAndView modelAndView = new ModelAndView();
+		
+		session.removeAttribute("loginInfo");
+		
+		
+		return ResponseEntity.status(HttpStatus.OK).body("로그아웃성공");
+	
+	}
+	
+	//비밀번호체인지(로그인x)
+	@RequestMapping(value="/changePassword",method=RequestMethod.POST)
+	public ModelAndView changePassword(@RequestParam Map<String,Object>member,Model model) {
+		
+		ModelAndView modelAndView = new ModelAndView();
+		try {
+			
+			service.changePwd(member);
+			modelAndView.setViewName("/success");
+			
+		} catch (ModifyException e) {
+			modelAndView.setViewName("/fail");
+			modelAndView.addObject("errMsg",e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return modelAndView;
+		
+	}
+	
+	//강사 여부 확인하기
+	@RequestMapping("/tutorYN")
+	public ResponseEntity<String> myInfo(HttpSession session){
+		String member_id = (String)session.getAttribute("loginInfo");
+		try {
+			MemberInfoBean mib = service.findById(member_id);
+			String YN = mib.getTutorYN();
+			return ResponseEntity.status(HttpStatus.OK).body(YN);
+		} catch (FindException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("null");
+		}
+		
+	}
+	
+	// myInfo 정보 조회
+	@RequestMapping(value = "/myinfo", method = RequestMethod.GET)
+	public ModelAndView myinfo(HttpSession session) {
+		ModelAndView modelAndView = new ModelAndView();
+		String member_id = (String)session.getAttribute("loginInfo");
+		modelAndView.addObject("member_id", member_id);
+		
+		// 나의 강의 목록 조회
+		List<Lecture> lectureList = new ArrayList<>();
+		try {
+			lectureList = lectureService.selectLectureListByMemberId(member_id);
+			modelAndView.addObject("lectureList", lectureList);
+		} catch (FindException e) {
+			e.printStackTrace();
+		}
+		
+		// myInfo
+		MemberInfoBean myInfo = new MemberInfoBean();
+		try {
+			myInfo = service.findById(member_id);
+			modelAndView.addObject("myInfo", myInfo);
+			log.info(myInfo);
+			
+		} catch (FindException e) {
+			e.printStackTrace();
+		} finally {
+			modelAndView.setViewName("/myinfo");
+		}
+		return modelAndView;
+	}
+	
+	// member 정보 수정 화면 정보에 데이터 보내기
+	@RequestMapping(value = "/myinfoModi", method = RequestMethod.GET)
+	public ModelAndView myinfoModi(HttpSession session) {
+		ModelAndView modelAndView = new ModelAndView();
+		String member_id = (String)session.getAttribute("loginInfo");
+		modelAndView.addObject("member_id", member_id);
+		
+		// myInfo
+		MemberInfoBean myInfo = new MemberInfoBean();
+		try {
+			myInfo = service.findById(member_id);
+			modelAndView.addObject("myInfo", myInfo);
+			log.info(myInfo);
+			
+		} catch (FindException e) {
+			e.printStackTrace();
+		} finally {
+			modelAndView.setViewName("/myinfoModi");
+		}
+		return modelAndView;
+	}
+	
+	// member 정보 수정 비즈니스로직 처리
+	@RequestMapping(value = "/myinfoModify", method = RequestMethod.GET)
+	public ModelAndView myinfoModify(HttpSession session , @RequestParam (value="memberPhone", required=false) String memberPhone
+			, @RequestParam (value="memberEmail" , required=false) String memberEmail
+			, @RequestParam (value="memberPassword" , required=false) String memberPassword
+			, @RequestParam (value="favorite_list" , required=false) Map<String, String> favorite_list) {
+		
+		String memberId = (String)session.getAttribute("loginInfo");
 
       try {
          if (memberPhone != null) {

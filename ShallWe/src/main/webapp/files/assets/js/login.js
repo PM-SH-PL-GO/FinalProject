@@ -1,198 +1,176 @@
-$(function(){
-
-	 $('.btn-enregistrer').click(function() {
-		 
-		   $('.connexion').addClass('remove-section');
-		 	$('.enregistrer').removeClass('active-section');
-		   $('.btn-enregistrer').removeClass('active');
-		   $('.btn-connexion').addClass('active');
-		 });
-
-		 $('.btn-connexion').click(function() {
-		   $('.connexion').removeClass('remove-section');
-		 	$('.enregistrer').addClass('active-section');	
-		   $('.btn-enregistrer').addClass('active');
-		   $('.btn-connexion').removeClass('active');
-		 });
-		 
-// 	아이디 입력란 유효성 검사 //
-	
-	//아이디 비밀번호 에러 메세지//
-		let $msgMail = $("span.mailR");
-		let $msgPwd = $("span.pwdChk");
-		let $msgId = $("span.idR");
-		let $msgIdFor = $("span.idFor");
+		//아이디와 패스워드가 적합한지 검사할 정규식
+		var chkidpw=/^[a-z](?=.*[0-9]).{4,15}$/;
+		var memid = $("#memberId");
+		var mempwd= $("#memberPwd");
+		var email1= $("#memberEmail1");
+		var domain= $("#domain");
 		
-   // 정규식 아이디 비밀번호 체크
-		let nameR = /^[가-힣]{2,16}$/;
-	    let idR = /^([a-z0-9_]){4,16}$/;
-	    let pwdR = /^[a-zA-Z0-9!@#$%^&*?_~]{4,16}$/;
-	    let mailR= /^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/i;
-	    let telR =/^01([0|1|6|7|8|9])?([0-9]{3,4})?([0-9]{4})$/;
-
-
-		$("input#userName").keypress(function(e){
-			
-			
-			localStorage.test;
-			localStorage.getItem('userName');
-			
-			});
-
-
-		$("input#userName").focus(function(){
-			
-			 let $saveId = $('input#userName').val();
-			 localStorage.test = $saveId;
-			 localStorage.setItem('userName',$saveId);
-			 
-			 
-			});
-//로그인-------
-			
-		 $('input#signin').click(function(){
-			 
-			 let $idVal = $("input#userName").val();
-			 let $pwdVal = $("input#userPassword").val();
-			 
-			  
-			if($("input#userName").val() == "") {
-				$("span#one_help").slideDown(2000); //0.1초 동안 슬라이드로 내려오면서 보이기
-				$("span#one_help").slideUp(2000); //0.1초 동안 슬라이드로 올라가면서 감추기
-				$("span#one_help").css("color","red"); 
-				return false;
-				
-			} else if(idR.test($idVal) == false){
-			//아이디 [영어/숫자/언더바 사용가능/4~16자] 맞지 않으면 에러메세지
-				$("input#userName").select();
-				$msgId.show();
-				
-			} else if($("input#userPassword").val()== ""){
-				 
-				$("span#one_Password").slideDown(1000); //0.1초 동안 슬라이드로 내려오면서 보이기
-				$("span#one_Password").slideUp(2000); //0.1초 동안 슬라이드로 올라가면서 감추기
-				$("span#one_Password").css("color","red"); 
-				return false;
-				//유효성 검사 (지우면 안됌)
-			} /* else if(pwdR.test(pwdVal) == false){
-				// 비밀번호 맞지 않으면 비밀번호가 일치하지 않습니다 에러메세지 
-				$("input#userPassword").select();
-				$msgPwd.show();
-			} */ else {
-
-				$.ajax({
-					url:"/shallwe/member/memberLogin"
-				   ,method:"POST"
-				   ,data:{member_id:$idVal,member_pwd:$pwdVal}
-				   ,success:function(data){
-					   
-					   let responseObj = JSON.parse(data);
-					   if(responseObj.status == "success"){
-						   
-						   alert('로그인성공');
-						   let $url = "/shallwe/";
-						   location.href= $url;
-						   
-						   } else{
-							   
-							   alert("로그인실패");
-							   location.reload();
-							   
-						   }
-					   }//end of success
-					});// end of ajax
-				}//end of else
-		 }); // end of click
-
-//로그인-------END----------------
-		 
-// 		 비밀번호 찾기 이메일
-		 
-		 $("input#Password").click(function(){
-			 
-			 let $idValCheck = $("input#idInsert").val();
-		     let $mailCheck = $("input#emailInsert").val();
-		    		 
-			 
-			 if($("input#idInsert").val()==""){
-				
-				 $("span#one_id").slideDown(2000);
-				 $("span#one_id").slideUp(2000);
-				 $("span#one_id").css("color","red");
-				 
-				 // 유효성 떄문에 놔둔것이니 지우지 말아주세요
-			 }/*  else if(idR.test($idValCheck) == false){
-				 
-				 $("input#idInsert").select();
-				 $msgIdFor.show();
-				 
-			
-			 } */ else if($("input#emailInsert").val()==""){
+		function check(aaa,what,message){
+			if(aaa.test(what.value)){
+				return true;
+			}
+			alert(message);
+			what.value="";
+			what.focus();
+		}
 		
-				 $("span#one_email").slideDown(2000);
-				 $("span#one_email").slideUp(2000);
-				 $("span#one_email").css("color","red");
-				 
-			 } else if(mailR.test($mailCheck) == false){
-				 
-				 $("input#emailInsert").select();
-				 $msgMail.show();
-			 } else {
-
-				 $.ajax({
-						
-						url:"/shallwe/email/pwdEmailCheck"
-					   ,method:'POST'
-					   ,data:{member_name:$idValCheck,member_email:$mailCheck}
-					   ,success:function(data){
-							let responseObj = JSON.parse(data)
-							
-							if(responseObj.status == 'success'){
-								 
-										alert("이메일이 전송되었습니다.");
-										location.href = "/shallwe/userLogin";
-									
-							}else{
-		
-								alert("정보를 다시 입력해주세요");
+	//-------------------------아이디 중복 유무 검사 Start-------------------------
+		function idCheck(signupform){
+				var chkidpw= /^[a-z](?=.*[0-9]).{4,15}$/;
+				var memberId=$("#memberId").val();
+				
+			if(memberId!=null || memberId!=""){
+				if(!chkidpw.test(memberId)){
+					alert("아이디는 4~13자리의 영문소문자와 숫자를 혼합해 입력해 주세요");
+					return false;
+				}else{
+					$.ajax({
+						url:"/shallwe/member/checkId",
+						type:"post",
+						dataType:"json",
+						data:{"memberId" : $("#memberId").val()},
+						success : function(responseData){
+							if(responseData==1){
+								alert("중복된 아이디 입니다.");
+							}else if(responseData==0){
+								$("#idCheckBtn").attr("value", "Y");
+								alert("사용 가능한 아이디 입니다");
+							}
 						}
-				      }	//end of success 
-				   });// end of ajax
-				 } //end of else
-		 }); //end of email click
-
-		// 임시비밀번호발급
-		 $("input#RandomPassword").click(function(){
-			 let $idValCheck = $("input#idInsert").val();
-		     let $mailCheck = $("input#emailInsert").val();
-		     
-		     $.ajax({
-					
-					url:"/shallwe/email/randomPwd"
-				   ,method:'POST'
-				   ,data:{member_name:$idValCheck,member_email:$mailCheck}
-				   ,success:function(data){
-						let responseObj = JSON.parse(data)
-						if(responseObj.status == 'success'){
-							 
-									alert("임시비밀번호가 발급되었습니다");
-						}else{
+					})
+				}
+			}else{
+					alert("아이디를 입력해 주세요");
+					signupform.memberId.focus();
+					return;
+			}
+		
+		}
+	//-------------------------아이디 중복 유무 검사End-------------------------				
 	
-							alert("정보를 다시 입력해주세요");
-					}
-			      }	//end of success
-			   });// end of ajax
-			 });//end of click 
+	//--------------아이디 입력태그에서 키보드를 누른경우 호출되는 함수--------------
+	//-->아이디 입력값이 변경되었으므로  idCheckResult 폼변수의 값을 0으로 초기화
+			function idCheckInit(signupform){
+				if(signupform.idCheckResult.value=="1"){
+					signupform.idCheckResult.value="0";
+				}
+			}
+	
+	//-------------------------이메일 선택 옵션 Start-------------------------
+	function InsertTitle(str) {
+		if(str !=""){
+			document.getElementById("domain").value = str;
+			document.getElementById("domain").readOnly = true;
+			document.getElementById("domain").style.background = "#DCDCDC";
+		}else{
+			document.getElementById("domain").value = "";
+			document.getElementById("domain").readOnly = false;
+			document.getElementById("domain").style.background = "#FFFFFF";
+			document.getElementById("domain").focus();
+			
+		}
+	}				
+	//-------------------------이메일 선택 옵션 End-------------------------
 
+	//------------------------- 회원가입 Start-------------------------					
+	function signUp(){
+		var chkidpw= /^[a-z](?=.*[0-9]).{4,15}$/;
+		var mempwd= $("#memberPwd");
+		var memchkpwd =$("#memberPwdCheck");
+		var email1= $("#memberEmail1");
+		var domain= $("#domain");
+		var checkArray = new Array();
+		
+		if(signupform.memberPwd.value=="" || signupform.memberPwd.value==null){
+			alert("비밀번호를 입력하세요");
+			signupform.memberPwd.focus();
+		}
+		if(!chkidpw.test(signupform.memberPwd.value)){
+			alert("비밀번호는 4~12자리 영문 소문자와 숫자로만 입력해 주세요");
+			signupform.memberPwd.focus();
+			return false;
+		}
+		if(!chkidpw.test(signupform.memberPwdCheck.value)){
+			alert("비밀번호는 4~12자리 영문 소문자와 숫자로만 입력해 주세요");
+			signupform.memberPwdCheck.focus();
+			return false;
+		}
+	
+		if(signupform.memberPwd.value != memberPwdCheck.value){
+			alert("비밀번호가 일치하지 않습니다");
+			signupform.memberPwdCheck.focus();
+			return false;
+		}
 
-//아이디 찾기 페이지 이동
-		 $("input#idCheck").click(function(){
-			let $url = "/shallwe/idCheck";
-			location.href = $url;
-		 });
+		if(signupform.memberName.value==""){
+			alert("이름을 입력해 주세요");
+			signupform.memberName.focus();
+			return false;
+		}
 
-// 회원가입 페이지 이동
-	$("#signup").click(function(){
-		location.href = "/shallwe/member/signup";
-	});
- });
+		if(signupform.memberEmail1.value==""){
+			alert("이메일을 입력해 주세요.");
+			email1.focus();
+			return false;
+		}
+		
+		if(signupform.domain.value==""){
+			alert("도메인을 입력해 주세요.");
+			signupform.domain.focus();
+			return false;
+		}
+		if(signupform.memberPhone2.value==""){
+			alert("핸드폰 번호를 입력해 주세요");
+			signupform.memberPhone2.focus();
+			return false;
+		}
+
+		if(signupform.memberPhone3.value==""){
+			alert("핸드폰 번호를 입력해 주세요");
+			signupform.memberPhone3.focus();
+			return false;
+		}
+		 	
+		$("input[name=favorites]:checked").each(function(){
+			checkArray.push($(this).val());
+
+			for(check in checkArray){
+			$('#favorite1').val(checkArray[0]);
+			$('#favorite2').val(checkArray[1]);
+			$('#favorite3').val(checkArray[2]);
+			};
+		});
+		var memPhone = null;
+		var memPhone1 = $("#memberPhone1").val(); 
+		var memPhone2 = $("input[name=memberPhone2]").val(); 
+		var memPhone3 =  $("input[name=memberPhone3]").val();
+		memPhone =  memPhone1+memPhone2+memPhone3;
+		$("#memberPhone").val(memPhone);
+		
+		var memEmail = $("#memEmail").val();
+		var memDomain = $("#domain").val();
+		var memberEmail = null; 
+		memberEmail = memEmail+"@"+memDomain;
+		$("#memberEmail").val(memberEmail);
+		console.log("회원가입중.....");
+		if(("#idCheckBtn").value==0){
+			alert("아이디 중복체크 해주세요")
+		}else{
+	
+		$.ajax({
+			url:"/shallwe/member/signup",
+			type:"POST",
+			data:$("#signupform").serialize(),
+			success:function(response){
+				if(response=="success"){
+					alert("반갑습니다. 회원가입이 완료되었습니다.^^");
+					location.href= "/shallwe";
+				}else if(response!="success"){
+					alert("뭔가잘못되었습니다");
+				}
+			}
+		})
+					return false;
+		}
+	}
+	//------------------------- 회원가입 End-------------------------
