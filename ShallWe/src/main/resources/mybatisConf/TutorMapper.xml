@@ -45,7 +45,8 @@
 				    JOIN lecture_category lc ON (tu.tutor_category_id = lc.category_id)
 				WHERE me.tutor_YN = #{_parameter}
 					AND tu.tutor_id NOT IN (SELECT tutor_id
-											FROM tutor_reject)
+											FROM tutor_reject
+											WHERE reject_reason IS NOT NULL)
 			</otherwise>
 		</choose>
 	</select>

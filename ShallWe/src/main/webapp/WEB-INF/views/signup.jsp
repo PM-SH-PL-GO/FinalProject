@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"    pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:set var="contextPath" value="${pageContext.request.contextPath }" />
+ <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 <!doctype html>
 <html lang="ko">
 <head>
@@ -13,125 +13,124 @@
 <script src="${contextPath }/js/signup.js"></script>
 </head>
 <body>
-	<a href="#contents" class="skip">본문바로가기</a>
-	<main>
+   <a href="#contents" class="skip">본문바로가기</a>
+   <main>
         <div class="contents">
             <h2 class="h2">회원가입</h2>
             <p>배움에는 나이가 없다. 혼자보단 둘, 둘보다는 셋, 함께 배우시겠습니까? Shall We?</p>
             <ol class="step">
             </ol>
             
-		<form id="signupform" method="post">
-		
+      <form name ="signupform" id="signupform" method="post" onsubmit="return submitCheck(signupform);">
+            <input value="0" name="idCheckResult" type="hidden"> 
+      
             <h3 class="h3">회원정보</h3>
-          	<table class="type1">
-          	<caption></caption>
-				<colgroup>
-				<col style="width:170px;">
-				<col>
-				</colgroup>
-				<tbody>
-					<tr>
-					<th><span>필수입력</span>아이디</th>
-					<td>
-						<input name="memberId" type="text" style="width:300px;" maxlength="15" autocomplete="off" pattern="[a-z0-9]" title="아이디 중복체크 해 주세요" required>
-						<a class="btn_type3">아이디 중복확인</a>
-						<span class="exclamation">영어 소문자 + 숫자 조합으로 해주세요</span>
-						<p id="usableid" style="color:red; font-weight:bold">사용 가능한 아이디 입니다</p>
-						<p id="unusableid"style="color:red; font-weight:bold">이미 등록된 아이디 입니다</p>
-					</td>
-				</tr>
-				
-				<tr>
-					<th><span>필수입력</span>성별</th>
-					<td>
-						<input type="radio" id="ra1_1" name="memberSex" required value="M"><label for="ra1_1">남성</label>
-						<input type="radio" id="ra1_2" name="memberSex" required value="F"><label for="ra1_2">여성</label>
-					</td>
-				</tr>
-				
-				<tr>
-					<th><span>필수입력</span>이름</th>
-					<td>
-						<input name="memberName" type="text" style="width:150px;" maxlength="5" autocomplete="off" pattern="[가-힣a-zA-Z]" required>
-					</td>
-				</tr>
-				
-				<tr>
-					<th><span>필수입력</span>비밀번호</th>
-					<td>
-					<input id="mPassword" name="memberPwd" type="password" style="width:300px;" maxlength="15" autocomplete="off" pattern="[a-z0-9]" title="영어 소문자 +숫자 조합으로 해주세요" required>
-					<span class="exclamation">비밀번호는 4~10자리로, 영어소문자+숫자 조합으로 입력해주시기 바랍니다.</span>
-					</td>
-				</tr>
-				<tr>
-					<th><span>필수입력</span>비밀번호 확인</th>
-					<td>
-					<input id="mPasswordCheck" name="memberPwdCheck" type="password" style="width:300px;" maxlength="15" autocomplete="off" pattern="[a-z0-9]" title="영어 소문자 +숫자 조합으로 해주세요" required>
-					</td>
-				</tr>
-				<tr>
-					<th><span>필수입력</span>이메일 주소</th>
-					<td>
-						<input id="memEmail" name="memberEmail1" type="text" style="width:210px;" pattern="[a-zA-Z0-9]*" required>
-						@
-						<input id="domain" name="memberEmail2" type="text" style="width:194px; background:#DCDCDC" readonly pattern="[a-z]+[.]+[a-z]+[.]*[a-z]*" value="gmail.com" required>
-<!-- 						<select id="select_domain" name="select_domain" onchange="InsertTitle(this.value)"> -->
-<!-- 							<option value="gmail.com">gmail.com</option> -->
-<!-- 							<option value="naver.com">naver.com</option> -->
-<!-- 							<option value="daum.net">daum.net</option> -->
-<!-- 							<option value="yahoo.com">yahoo.com</option> -->
-<!-- 							<option value="">==직접입력==</option> -->
-<!-- 						</select> -->
-						<input id="memberEmail" name="memberEmail" type="hidden">
-					</td>
-				</tr>
-				
-				<tr>
-					<th><span>필수입력</span>휴대폰번호</th>
-					<td>
-						<select id="memberPhone1" name="memberPhone1">
-						<option value = "010">010</option>
-						<option value = "011">011</option>
-						<option value = "016">016</option>
-						</select>
-						<input id="mPhone1" name="memberPhone2" type="text" style="width:150px;" maxlength="4" pattern="[0-9]" title="숫자를 입력하세요" required>
-					 	<input id="mPhone2" name="memberPhone3" type="text" style="width:150px;" maxlength="4" pattern="[0-9]" title="숫자를 입력하세요" required>
-						<input id="memberPhone" name="memberPhone" type="hidden" value="">
-					</td>
-				</tr>	
-				<tr>
-					<th>선호하는 분야</th>
-					<td>
-						<input type="checkbox" id="chk1_1" name="favorites" class="type2" value="IT"><label for="chk1_1">IT</label>
-						<input type="checkbox" id="chk1_2" name="favorites" class="type2" value="LA"><label for="chk1_2">언어</label>
-						<input type="checkbox" id="chk1_3" name="favorites" class="type2" value="MA"><label for="chk1_3">마케팅</label>
-						<input type="checkbox" id="chk1_4" name="favorites" class="type2" value="DE"><label for="chk1_4">디자인</label>
-						<input type="checkbox" id="chk1_5" name="favorites" class="type2" value="CA"><label for="chk1_5">실무역량</label>
-						<input type="checkbox" id="chk1_6" name="favorites" class="type2" value="BU"><label for="chk1_6">비즈니스 컨설팅</label>
-						<input type="checkbox" id="chk1_7" name="favorites" class="type2" value="MU"><label for="chk1_7">음악</label>
-						<input type="checkbox" id="chk1_8" name="favorites" class="type2" value="SP"><label for="chk1_8">스포츠</label>
-						<input type="hidden" id="favorite1" name="favorite1.lecture_category_id" value=""> 
-						<input type="hidden" id="favorite2" name="favorite2.lecture_category_id" value=""> 
-						<input type="hidden" id="favorite3" name="favorite3.lecture_category_id" value=""> 
-						<span class="exclamation">최대 3개의 중복선택이 가능합니다.</span>
-					</td>
-				</tr>	
-					
-				</tbody>
-          	</table>
+             <table class="type1">
+             <caption></caption>
+            <colgroup>
+            <col style="width:170px;">
+            <col>
+            </colgroup>
+            <tbody>
+               <tr>
+               <th><span>필수입력</span>아이디</th>
+                  <td>
+                     <input id="memberId" name="memberId" type="text" style="width:300px;" maxlength="15" autocomplete="off" pattern="[a-z](?=.*[0-9]).{4,15}" title="아이디 중복체크 해 주세요" required onkeyup="idCheckInit(signupform);">
+                     <button onclick="idCheck(signupform)" value="N" id="idCheckBtn" class="btn_type3">아이디 중복확인</button>
+                     <span class="exclamation">영어 소문자 + 숫자 조합으로 해주세요 (13자리까지 가능)</span>
+                  </td>
+               </tr>
+            
+               <tr>
+               <th><span>필수입력</span>비밀번호</th>
+                  <td>
+                  <input id="memberPwd" name="memberPwd" type="password" style="width:300px;" maxlength="15" autocomplete="off" pattern="[a-z](?=.*[0-9]).{4,15}" title="영어 소문자 +숫자 조합으로 해주세요" required>
+                  <span class="exclamation">비밀번호는 4~12자리로, 영어소문자+숫자 조합으로 입력해주시기 바랍니다.</span>
+                  </td>
+               </tr>
+         
+               <tr>
+                  <th><span>필수입력</span>비밀번호 확인</th>
+                  <td>
+                  <input id="memberPwdCheck" name="memberPwdCheck" type="password" style="width:300px;" maxlength="15" autocomplete="off" pattern="[a-z](?=.*[0-9]).{4,15}" title="영어 소문자 +숫자 조합으로 해주세요" required>
+                  </td>
+               </tr>
+               
+               <tr>
+                  <th><span>필수입력</span>성별</th>
+                  <td>
+                     <input type="radio" id="ra1_1" name="memberSex" required value="M"><label for="ra1_1">남성</label>
+                     <input type="radio" id="ra1_2" name="memberSex" required value="F"><label for="ra1_2">여성</label>
+                  </td>
+               </tr>
+               
+               <tr>
+                  <th><span>필수입력</span>이름</th>
+                  <td>
+                     <input id="memberName" name="memberName" type="text" style="width:150px;" maxlength="5" autocomplete="off" pattern="[가-힣a-zA-Z]" required>
+                  </td>
+               </tr>
+               
+               <tr>
+                  <th><span>필수입력</span>이메일 주소</th>
+                  <td>
+                     <input id="memberEmail1" name="memberEmail1" type="text" style="width:210px;" pattern="[a-zA-Z0-9]*" required>
+                     @
+                     <input id="domain" name="memberEmail2" type="text" style="width:194px; background:#DCDCDC" readonly pattern="[a-z]+[.]+[a-z]+[.]*[a-z]*" required>
+                     <select id="select_domain" name="select_domain" onchange="InsertTitle(this.value)">
+                        <option>:::선택하세요:::</option>
+                        <option value="gmail.com">gmail.com</option>
+                        <option value="naver.com">naver.com</option>
+                        <option value="daum.net">daum.net</option>
+                        <option value="yahoo.com">yahoo.com</option>
+                        <option value="">:::직접입력:::</option>
+                     </select>
+                     <input id="memberEmail" name="memberEmail" type="hidden">
+                  </td>
+               </tr>
+               
+               <tr>
+                  <th><span>필수입력</span>휴대폰번호</th>
+                  <td>
+                     <select id="memberPhone1" name="memberPhone1">
+                     <option value = "010">010</option>
+                     <option value = "011">011</option>
+                     <option value = "016">016</option>
+                     <option value = "017">017</option>
+                     <option value = "018">018</option>
+                     <option value = "019">019</option>
+                     </select>
+                     <input id="memberPhone2" name="memberPhone2" type="text" style="width:150px;" maxlength="4" pattern="[0-9]" title="숫자를 입력하세요" required>
+                      <input id="memberPhone3" name="memberPhone3" type="text" style="width:150px;" maxlength="4" pattern="[0-9]" title="숫자를 입력하세요" required>
+                     <input id="memberPhone" name="memberPhone" type="hidden" value="">
+                  </td>
+               </tr>   
+               <tr>
+                  <th>선호하는 분야</th>
+                  <td>
+                     <input type="checkbox" id="chk1_1" name="favorites" class="type2" value="IT"><label for="chk1_1">IT</label>
+                     <input type="checkbox" id="chk1_2" name="favorites" class="type2" value="HO"><label for="chk1_2">취미</label>
+                     <input type="checkbox" id="chk1_3" name="favorites" class="type2" value="MA"><label for="chk1_3">마케팅</label>
+                     <input type="checkbox" id="chk1_4" name="favorites" class="type2" value="DE"><label for="chk1_4">디자인</label>
+                     <input type="checkbox" id="chk1_5" name="favorites" class="type2" value="CA"><label for="chk1_5">취업</label>
+                     <input type="checkbox" id="chk1_6" name="favorites" class="type2" value="BU"><label for="chk1_6">영업</label>
+                     <input type="checkbox" id="chk1_7" name="favorites" class="type2" value="LE"><label for="chk1_7">학습</label>
+                     <input type="checkbox" id="chk1_8" name="favorites" class="type2" value="SP"><label for="chk1_8">스포츠</label>
+                     <input type="hidden" id="favorite1" name="favorite1.lecture_category_id" value=""> 
+                     <input type="hidden" id="favorite2" name="favorite2.lecture_category_id" value=""> 
+                     <input type="hidden" id="favorite3" name="favorite3.lecture_category_id" value=""> 
+                     <span class="exclamation">최대 3개의 중복선택이 가능합니다.</span>
+                  </td>
+               </tr>   
+               
+            </tbody>
+             </table>
             <div class="btn_center">
                 <a class="btn_type1" type="submit" onclick="signUp()">회원가입</a>
-                <a href="${contextPath}" class="btn_type2">취소</a>
+                <a href="/shallwe" class="btn_type2">취소</a>
             </div>
         </form>
         </div>
-	</main>
-	<footer>
-		<div class="clear">
-			<div class="left">
-			</div>
-		</div>
-	</footer>
+   </main>
 </body>
 </html>
