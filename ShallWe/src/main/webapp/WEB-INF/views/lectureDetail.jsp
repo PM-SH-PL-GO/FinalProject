@@ -15,14 +15,21 @@
 <fmt:parseDate var="endDat" value="${endDt}" pattern="yyyy-MM-dd" />
 <fmt:parseNumber value="${endDat.time/(1000*60*60*24)}"
 	integerOnly="true" var="endDate" />
-${m.cancel_dt}
+
 <c:set var="eqlectidtrue" value="false" />
+<c:set var="eqlectidfalse" value="true" />
 <c:forEach items="${mlthlist}" var="ml" varStatus="i">
 	<c:set var="m" value="${mlthlist[i.index]}" />
 	<c:if
+		test="${m.lecture.lecture_id eq lecture.lecture_id}"
+		var="lleq">
+		<c:set var="eqlectidfalse" value="false" />
+	</c:if>
+	<c:if
 		test="${m.lecture.lecture_id eq lecture.lecture_id && empty m.cancel_dt}"
-		var="lleq" />
-	<c:if test="${m.lecture.lecture_id ne lecture.lecture_id}" var="llne" />
+		var="lleq">
+		<c:set var="eqlectidtrue" value="true" />
+	</c:if>
 </c:forEach>
 
 <c:set var="tutoreq" value="true" />
@@ -37,16 +44,17 @@ ${m.cancel_dt}
 	</c:forEach>
 </c:forEach>
 <c:set var="lecseq" value="true" />
-<%-- <c:forEach items="${wishlist}" var="wil" varStatus="i"> --%>
-<%-- 	<c:set var="wi" value="${wishlist[i.index]}"/> --%>
-<%-- 	<c:forEach items="${wi}" var="lecs" varStatus="j"> --%>
-<%-- 		<c:set var="le" value="${lecs[j.index]}"/> --%>
-<%-- 		<c:if test="${lecs[j.index].lecture_id eq lecture.lecture_id}"> --%>
-<%-- 			<c:set var="lecseq" value="false"/> --%>
-<%-- 		</c:if> --%>
-<%-- 	</c:forEach> --%>
-<%-- </c:forEach> --%>
-
+<c:set var="lecsne" value="false" />
+<c:forEach items="${wishlist}" var="wil" varStatus="i">
+	<c:set var="wi" value="${wishlist[i.index]}"/>
+	<c:forEach items="${wi.lecs}" var="wilecs" varStatus="j">
+	<c:set var="wilec" value="${wi.lecs[j.index]}"/>
+	<c:if test="${wilec.lecture_id eq lecture.lecture_id}">
+	<c:set var="lecseq" value="false" />
+	<c:set var="lecsne" value="true" />
+	</c:if>
+	</c:forEach>
+</c:forEach>
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 <head>
@@ -114,9 +122,11 @@ $(document).ready(function() {
 				let responseObj = JSON.parse(responseData);
 				if (responseObj.status == "success") {
 					alert("강의 신청이 정상적으로 되었습니다.");
+					location.reload();
 				} else {
 					alert("강의 신청에 실패했습니다.");
 					$("div[name=applyBtn]").focus();
+					location.reload();
 				}
 			} 
 		}); 
@@ -132,9 +142,11 @@ $(document).ready(function() {
 			, success: function(responseData) {
 				if (responseData == "success") {
 					alert("강의 결제 취소가 정상적으로 처리 되었습니다.");
+					location.reload();
 				} else {
 					alert("강의 결제 취소가 실패했습니다.");
 					$("div[name=cancelBtn]").focus();
+					location.reload();
 				}
 			} 
 		}); 
@@ -159,15 +171,6 @@ $(document).ready(function() {
 		}
 	}); // end of 찜목록 추가 요청
 	
-	let letidValue = $("input[name=listlecture_id]").val();
-	$("div[name=gotoDe]").click(function(){
-		location.href = "${contextPath}/lectures/detail?lecture_id=" +letidValue;		
-	});
-
-	let letidendValue = $("input[name=listendlecture_id]").val();
-	$("div[name=gotoDeend]").click(function(){
-		location.href = "${contextPath}/lectures/detail?lecture_id=" +letidendValue;		
-	});
 	$(document).ready(function() {
 
 		// 기존 css에서 플로팅 배너 위치(top)값을 가져와 저장한다.
@@ -288,22 +291,27 @@ $(document).ready(function() {
 										pattern="#,###" />
 									원
 								</h4>
-								<c:if test="${endDate-nowDate>=0 && startDate-nowDate>=0}">
-									<c:if test="${empty m.lecture.lecture_id && tutoreq}">
+								<c:if
+									test="${endDate-nowDate>=0 && startDate-nowDate>=0 && tutoreq}">
+									<c:if test="${empty m.lecture.lecture_id}">
 										<div name="applyBtn" class="mt-10"
 											style="text-align: center; cursor: pointer; background-color: #00dbd5; border-radius: 10px; color: white; padding: 8px;">강의신청</div>
 									</c:if>
-									<c:if test="${llne && tutoreq}">
+									<c:if test="${eqlectidfalse}">
 										<div name="applyBtn" class="mt-10"
 											style="text-align: center; cursor: pointer; background-color: #00dbd5; border-radius: 10px; color: white; padding: 8px;">강의신청</div>
 									</c:if>
-									<c:if test="${lleq}">
+									<c:if test="${eqlectidtrue}">
 										<div name="cancelBtn" class="mt-10"
-											style="text-align: center; cursor: pointer; background-color: #00dbd5; border-radius: 10px; color: white; padding: 8px;">결제취소</div>
+											style="text-align: center; cursor: pointer; background-color: #00dbd5; border-radius: 10px; color: white; padding: 8px;">수강취소</div>
 									</c:if>
-									<c:if test="${tutoreq}">
+									<c:if test="${lecseq}">
 										<div id="favoriteLectureBtn" class="mt-10"
 											style="text-align: center; cursor: pointer; background-color: #00dbd5; border-radius: 10px; color: white; padding: 8px;">찜하기</div>
+									</c:if>
+									<c:if test="${lecsne}">
+										<div onclick="location.href='${contextPath}/member/wishlist'" class="mt-10"
+											style="text-align: center; cursor: pointer; background-color: #00dbd5; border-radius: 10px; color: white; padding: 8px;">찜목록가기</div>
 									</c:if>
 								</c:if>
 							</div>
@@ -311,7 +319,7 @@ $(document).ready(function() {
 						<div class="col-md-12">
 							<h3 class="mb-30 mt-30" id="filename"
 								style="padding: 10px; font-weight: bold;">첨부파일</h3>
-								
+
 							<c:set var="fileName"
 								value="${fn:split(lectDetail.lecture_fileName, '_')}" />
 							<a style="-webkit-text-fill-color: #00dbd5 !important;"

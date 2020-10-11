@@ -94,6 +94,7 @@ $(function(){
 			, data : {"lecture_id" : $lectureId}
 			, success : function (responseData) {
 				alert("강의 취소 처리 되었습니다.");
+				location.reload();
 			}
 		}); 
 	}); // end of 강의결제취소 버튼
