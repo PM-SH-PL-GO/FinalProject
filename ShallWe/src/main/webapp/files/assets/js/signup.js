@@ -163,7 +163,6 @@
       var memberEmail = null; 
       memberEmail = memEmail+"@"+memDomain;
       $("#memberEmail").val(memberEmail);
-      console.log("회원가입중.....");
       if(("#idCheckBtn").value==0){
          alert("아이디 중복체크 해주세요")
       }else{

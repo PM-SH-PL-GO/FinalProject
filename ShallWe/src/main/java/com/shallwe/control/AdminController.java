@@ -80,6 +80,25 @@ public class AdminController {
 		}
 	}
 	
+	
+	/**
+	 * 특정 회원 정보 조회
+	 * @author jun6
+	 * @param member_id
+	 * @return
+	 */
+	@GetMapping(value = "/member/{memberId}")
+	public ResponseEntity<Member> memberInfo(@PathVariable(name = "memberId") String member_id){
+		try {
+			Member member = adminService.showMemberInfoById(member_id);
+			return ResponseEntity.status(HttpStatus.OK).body(member);
+		}catch(FindException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+	}
+	
+	
 	/**
 	 * 특정 회원의 수강 목록 가져오기
 	 * @author jun6

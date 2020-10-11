@@ -72,6 +72,7 @@
     JOIN lecture_category lc2 ON(m.member_favorite2=lc2.category_id)LEFT OUTER
     JOIN lecture_category lc3 ON(m.member_favorite3=lc3.category_id)
 	where member_id= #{memberId}<!-- #{memberId} -->
+		AND m.enabeld = 1
 	</select>
 	
 	<update id="updatePassword" parameterType="Map">
@@ -118,10 +119,10 @@
 		SET reject_category_id = #{tutorReject.rejectCategory.reject_category_id},
 		    reject_reason = #{tutorReject.reject_reason},
 			reject_dt = SYSDATE
-		WHERE tutor_id = #{tutor.member.member_id}
+		WHERE tutor_id = #{member.member_id}
 		AND tutor_category_id = (SELECT category_id
                                  FROM lecture_category
-                                 WHERE category_name = #{tutor.lectureCategory.lecture_category_name})
+                                 WHERE category_name = #{lectureCategory.lecture_category_name})
 	</update>
 
 <!-- admin(jun6) : 전체 회원 목록 조회(정지, 정상회원) -->

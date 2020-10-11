@@ -72,8 +72,5 @@
 			</div>
 		</div>
 	</main>
-	<!--  메인 헤더쪽 사진, 검색 , 카테고리 포함 end -->
-<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 </body>
 </html>
-<%-- <jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include> --%>

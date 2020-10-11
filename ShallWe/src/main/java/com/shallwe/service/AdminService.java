@@ -57,6 +57,28 @@ public class AdminService {
 		return memberDAO.selectAllMember(enabled);
 	}
 	
+	public Member showMemberInfoById(String member_id) throws FindException{
+		MemberInfoBean bean = memberDAO.selectById(member_id);
+		Member member = new Member();
+		member.setMember_email(bean.getMemberEmail());
+		member.setMember_id(bean.getMemberId());
+		member.setMember_name(bean.getMemberName());
+		member.setMember_phone(bean.getMemberPhone());
+		member.setMember_sex(bean.getMemberSex());
+		if (bean.getTutorYN().equals("Y"))
+			member.setTutor_YN("O");
+		else
+			member.setTutor_YN("X");
+
+		List<LectureCategory> list = new ArrayList<>();
+		list.add(bean.getFavorite1());
+		list.add(bean.getFavorite2());
+		list.add(bean.getFavorite3());
+		
+		member.setFavorite_list(list);
+		
+		return member;
+	}
 	
 	/**
 	 * 회원 유효성 변동(정지/복구)

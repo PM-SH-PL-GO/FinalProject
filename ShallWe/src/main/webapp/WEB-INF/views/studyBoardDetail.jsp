@@ -385,6 +385,5 @@ function subString(fileName){
 				</div>
 			</div>
 	</section>
-	<!-- Blog Area End -->
     </body>
 </html>

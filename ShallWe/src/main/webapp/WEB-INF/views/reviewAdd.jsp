@@ -357,4 +357,3 @@ $(document).ready(function() {
 	<!-- end of modal -->
 </body>
 </html>
-<%-- <jsp:include page="/WEB-INF/views/foot.jsp"></jsp:include> --%>

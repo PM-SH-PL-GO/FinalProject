@@ -28,7 +28,7 @@ $(function(){
             method: "GET",
             success: function(members){
             	let $memberList = '<div class="scroll-section"><h2>회원 목록</h2><hr>';
-            	$memberList += '<table class="table"><thead>'
+            	$memberList += '<table class="table-main"><thead>'
             	$memberList += "<tr><th>순서</th><th>아이디</th><th>이름</th><th>이메일</th><th>연락처</th>";
             	$memberList += '<th>관심분야1</th><th>관심분야2</th><th>관심분야3</th><th>성별</th>';
             	$memberList += '<th>강사여부</th><th>정지조치</th></tr></thead>';
@@ -62,7 +62,7 @@ $(function(){
                 $cont.html($memberList);
             },
             error: function(){
-            	let $memberList = '<div class="scroll-section"><table class="table"><thead>';
+            	let $memberList = '<div class="scroll-section"><h2>회원 목록</h2><hr><table class="table-main"><thead>';
             	$memberList += "<tr><th>순서</th><th>아이디</th><th>이름</th><th>이메일</th><th>연락처</th>";
             	$memberList += '<th>관심분야1</th><th>관심분야2</th><th>관심분야3</th><th>성별</th><th>강사여부</th><th>정지조치</th></tr></thead>';
             	$memberList += '<tbody><tr><td colspan="11">목록이 비어있습니다</td></tr>'
@@ -86,7 +86,7 @@ $(function(){
     		success: function(historyList){
     			let $historyModal = '<div class="modal-add"><div class="modal-content">';
     			$historyModal += '<h3>' + historyList[0].member.member_name + ' 회원의 수강목록</h3><hr>';
-    			$historyModal += '<table class="table">';
+    			$historyModal += '<table class="table-main">';
     			$historyModal += '<thead><tr><th>순서</th><th>강의번호</th><th>강의명</th><th>상태</th><th>신청/취소일</th></tr>';
    				$historyModal += '</thead><tbody>';
     		
@@ -111,8 +111,8 @@ $(function(){
     				$historyModal += '</tr>';
     			});
     			
-    			$historyModal += '</tbody></table><button class="modal-close">닫기</button></div>';
-    			$historyModal += '<div class="modal-layer"></div></div>';
+    			$historyModal += '</tbody></table><div class="modal-button"><button class="modal-close">닫기</button></div>';
+    			$historyModal += '</div><div class="modal-layer"></div></div>';
     			
     			let cont = $cont.html() + $historyModal;
     			$cont.html(cont);
@@ -122,8 +122,8 @@ $(function(){
     			$historyModal += '<table class="table">';
     			$historyModal += '<thead><tr><th>순서</th><th>강의번호</th><th>강의명</th><th>상태</th><th>신청/취소일</th></tr>';
     			$historyModal += '<tbody><tr colspan="5"><td>신청 목록이 없습니다</td></tr>';
-    			$historyModal += '</tbody></table><button class="modal-close">닫기</button></div>';
-    			$historyModal += '<div class="modal-layer"></div></div>';
+    			$historyModal += '</tbody></table><div class="modal-button"><button class="modal-close">닫기</button></div>';
+    			$historyModal += '</div><div class="modal-layer"></div></div>';
     			
     			let cont = $cont.html() + $historyModal;
     			$cont.html(cont);
@@ -140,7 +140,7 @@ $(function(){
             method: "GET",
             success: function(members){
             	let $memberList = '<div class="scroll-section"><h2>정지 회원 목록</h2><hr>';
-            	$memberList += '<table class="table"><thead>'
+            	$memberList += '<table class="table-main"><thead>'
             	$memberList += "<tr><th>순서</th><th>아이디</th><th>이름</th><th>이메일</th><th>연락처</th>";
             	$memberList += '<th>관심분야1</th><th>관심분야2</th><th>관심분야3</th><th>성별</th><th>강사여부</th><th>정지조치</th></tr></thead>';
             	$memberList += '<tbody>'
@@ -173,7 +173,7 @@ $(function(){
                 $cont.html($memberList);
             },
             error: function(){
-            	let $memberList = '<div class="scroll-section"><table class="table"><thead>';
+            	let $memberList = '<div class="scroll-section"><h2>정지 회원 목록</h2><hr><table class="table-main"><thead>';
             	$memberList += "<tr><th>순서</th><th>아이디</th><th>이름</th><th>이메일</th><th>연락처</th>";
             	$memberList += '<th>관심분야1</th><th>관심분야2</th><th>관심분야3</th><th>성별</th><th>강사여부</th><th>정지조치</th></tr></thead>';
             	$memberList += '<tbody><tr><td colspan="11">목록이 비어있습니다</td></tr>'
@@ -222,7 +222,7 @@ $(function(){
             url: "/shallwe/admin/tutor/list/N",
             method: "GET",
             success: function(bean){
-            	let $lot = '<div class="scroll-section"><h2>예비 강사 목록</h2><hr><table class="table"><thead><tr>';
+            	let $lot = '<div class="scroll-section"><h2>예비 강사 목록</h2><hr><table class="table-main"><thead><tr>';
             	$lot += '<th>순서</th><th>강사 사진</th><th>아이디</th><th>회원 이름</th><th>강사 별명</th>';
             	$lot += '<th>전문 분야</th><th>승인</th><th>반려</th></tr></thead><tbody>';
             	
@@ -269,14 +269,15 @@ $(function(){
               		let career = tutor.tutor_career_file;
               		$lot += career.substring(career.indexOf("_", 0) + 1, career.length) + '</a></div><hr>';
               		$lot += '<div>SNS 링크 : <a href="' + tutor.tutor_link + '">' + tutor.tutor_link + '</a></div><br>';
-              		$lot += '<button class="modal_close">닫기</button></div><div class="modal_layer"></div></div>'
+              		$lot += '<div class="modal-button"><button class="modal_close">닫기</button>'
+              		$lot += '</div></div><div class="modal_layer"></div></div>'
             	});
             	
             	$lot += '<tbody></table></div>';
                 $cont.html($lot);
             },
             error: function(){
-            	let $lot = '<table class="table"><thead><tr>';
+            	let $lot = '<table class="table-main"><thead><tr>';
             	$lot += '<th>순서</th><th>강사 사진</th><th>아이디</th><th>회원 이름</th><th>강사 별명</th>';
             	$lot += '<th>전문 분야</th><th>세부사항</th><th>승인</th><th>반려</th></tr></thead>';
             	
@@ -347,8 +348,8 @@ $(function(){
 			rejectModal += '<label for="reject-detail">세부 사유</label><br>';
 			rejectModal += '<input id="reject-detail" name="reject-detial" placeholder="세부 내용을 작성해주세요"></input><br>';
 			
-			rejectModal += '<button class="tutor-reject" value="' + tutorId +'">반려하기</button>';
-    		rejectModal += '<button class="modal-close">닫기</button></div>';
+			rejectModal += '<div class="modal-button"><button class="tutor-reject" value="' + tutorId +'">반려하기</button>';
+    		rejectModal += '<button class="modal-close">닫기</button></div></div>';
     		rejectModal += '<div class="modal-layer"></div></div>';
     		
     		let cont = $cont.html() + rejectModal;
@@ -391,7 +392,7 @@ $(function(){
             url: "/shallwe/admin/tutor/list/Y",
             method: "GET",
             success: function(bean){
-            	let $lot = '<div class="scroll-section"><h2>Shall We? 강사 목록</h2><hr><table class="table"><thead><tr>';
+            	let $lot = '<div class="scroll-section"><h2>Shall We? 강사 목록</h2><hr><table class="table-main"><thead><tr>';
             	$lot += '<th>순서</th><th>강사 사진</th><th>아이디</th><th>회원 이름</th><th>강사 별명</th>';
             	$lot += '<th>전문 분야</th><th>강의 목록</th><th>점수</th></tr></thead><tbody>';
             	
@@ -416,7 +417,6 @@ $(function(){
             		
             		$lot += '<td><button class="tutor_lecture" value="' + tutorId + '">강의 목록 보기</button></td>';
             		$lot += '<td>' + tutor.tutor_score + '</td>';
-//                     		$lot += '<td><button class="tutor_edit">관리하기</button></td></tr>';
             		
             		// 상세정보용 모달창
             		$lot += '<div class="modal_slot ' + tutorId + '"><div class="modal_content">';
@@ -439,7 +439,8 @@ $(function(){
               		let career = tutor.tutor_career_file;
               		$lot += career.substring(career.indexOf("_", 0) + 1, career.length) + '</a></div><hr>';
               		$lot += '<div>SNS 링크 : <a href="' + tutor.tutor_link + '">' + tutor.tutor_link + '</a></div><br>';
-              		$lot += '<button class="modal_close">닫기</button></div><div class="modal_layer"></div></div>'
+              		$lot += '<div class="modal-button"><button class="modal_close">닫기</button></div>';
+              		$lot += '</div><div class="modal_layer"></div></div>'
             	});
             	
             	$lot += '</tbody></table></div>';
@@ -447,7 +448,7 @@ $(function(){
                 $cont.html($lot);
             },
             error: function(){
-            	let $lot = '<table class="table"><thead><tr>';
+            	let $lot = '<table class="table-main"><thead><tr>';
             	$lot += '<th>순서</th><th>강사 사진</th><th>아이디</th><th>회원 이름</th><th>강사 별명</th>';
             	$lot += '<th>전문 분야</th><th>강의 목록</th><th>점수</th><th>관리하기</th></tr></thead><tbody>';
             	$lot += '<tbody><tr>표시할 데이터가 업습니다</tr></tbody></table>'
@@ -486,7 +487,7 @@ $(function(){
     				$tutor_Lecture += '</tr>';
     			});
     			
-    			$tutor_Lecture += '</tbody></table><button class="modal-close">닫기</button></div>';
+    			$tutor_Lecture += '</tbody></table><div class="modal-button"><button class="modal-close">닫기</button></div></div>';
     			$tutor_Lecture += '<div class="modal-layer"></div></div>';
     			
     			let cont = $cont.html() + $tutor_Lecture;
@@ -497,7 +498,7 @@ $(function(){
     			$tutor_Lecture += '<table class="table">';
     			$tutor_Lecture += '<tr><thead><th>순서</th><th>강의번호</th><th>강의명</th><th>상태</th></tr></thead>';
    				$tutor_Lecture += '<tbody><tr>등록한 강의가 존재하지 않습니다</tr></tbody></table>'
-    			$tutor_Lecture += '<button class="modal-close">닫기</button></div>';
+    			$tutor_Lecture += '<div class="modal-button"><button class="modal-close">닫기</button></div></div>';
     			$tutor_Lecture += '<div class="tutor-lecture-layer"></div></div>';
     			let cont = $cont.html() + $tutor_Lecture;
     			$cont.html(cont);
@@ -523,31 +524,31 @@ $(function(){
             success: function(lectures){
             	let preparedCnt = 0;
             	let prepared = '<h3 class="lecture-list-title">등록 요청</h3>';
-            	prepared += '<table class="table prepared"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th>';
+            	prepared += '<table class="table-main prepared"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th>';
             	prepared += '<th>강의 가격</th><th>강의 상태</th><th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th>';
             	prepared += '<th>현재 수강 인원</th><th colspan="2">관리하기</th></tr></thead><tbody>';
             	
             	let processCnt = 0;
             	let process = '<h3 class="lecture-list-title">진행중</h3>';
-            	process += '<table class="table process"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th>';
+            	process += '<table class="table-main process"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th>';
             	process += '<th>강의 가격</th><th>강의 상태</th><th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th>';
             	process += '<th>현재 수강 인원</th></tr></thead><tbody>';
             	
             	let finishCnt = 0;
             	let finish = '<h3 class="lecture-list-title">완료</h3>';
-            	finish += '<table class="table finish"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th>';
+            	finish += '<table class="table-main finish"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th>';
             	finish += '<th>강의 가격</th><th>강의 상태</th><th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th>';
             	finish += '<th>현재 수강 인원</th><th>후기</th></tr></thead><tbody>';
             	
             	let cancelRequestCnt = 0;
             	let cancelRequest = '<h3 class="lecture-list-title">취소 요청</h3>';
-            	cancelRequest += '<table class="table cancel-Request"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th>';
+            	cancelRequest += '<table class="table-main cancel-Request"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th>';
             	cancelRequest += '<th>강의 가격</th><th>강의 상태</th><th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th>';
             	cancelRequest += '<th>현재 수강 인원</th><th>취소상세</th><th colspan="2">관리하기</th></tr></thead><tbody>';
             	
             	let cancelCnt = 0;
             	let cancel = '<h3 class="lecture-list-title">반려 / 취소</h3>';
-            	cancel += '<table class="table finish"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th>';
+            	cancel += '<table class="table-main finish"><thead><tr><th>강의 번호</th><th>강의 사진</th><th>카테고리</th><th>강의명</th>';
             	cancel += '<th>강의 가격</th><th>강의 상태</th><th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th>';
             	cancel += '<th>현재 수강 인원</th><th>사유보기</th></tr></thead><tbody>';
             	
@@ -572,9 +573,9 @@ $(function(){
             			prepared += '<td>' + lecture.lecture_state + '</td>';
             			prepared += '<td>' + start + '</td>';
             			prepared += '<td>' + end + '</td>';
-            			prepared += '<td>' + lecture.lecture_max + '</td>';
-            			prepared += '<td>' + lecture.lecture_min + '</td>';
-            			prepared += '<td>' + lecture.lecture_current + '</td>';
+            			prepared += '<td>' + lecture.lecture_max + '명</td>';
+            			prepared += '<td>' + lecture.lecture_min + '명</td>';
+            			prepared += '<td>' + lecture.lecture_current + '명</td>';
             			prepared += '<td><button class="lecture-edit" value="' + lectureId + '">승인</button></td>';
             			prepared += '<td><button class="show-reject" value="' + lectureId + '">반려</button></td>';
             			
@@ -590,10 +591,10 @@ $(function(){
             			process += '<td>' + lecture.lecture_state + '</td>';
             			process += '<td>' + start + '</td>';
             			process += '<td>' + end + '</td>';
-            			process += '<td>' + lecture.lecture_max + '</td>';
-            			process += '<td>' + lecture.lecture_min + '</td>';
+            			process += '<td>' + lecture.lecture_max + '명</td>';
+            			process += '<td>' + lecture.lecture_min + '명</td>';
             			process += '<td><button class="current" value="' + lectureId + '">';
-            			process += lecture.lecture_current + '</button></td>';
+            			process += lecture.lecture_current + '명</button></td>';
             		}else if(lecture.lecture_state == '승인' && today >= end){
             			// 완료
             			finishCnt++;
@@ -606,10 +607,10 @@ $(function(){
             			finish += '<td>' + lecture.lecture_state + '</td>';
             			finish += '<td>' + start + '</td>';
             			finish += '<td>' + end + '</td>';
-            			finish += '<td>' + lecture.lecture_max + '</td>';
-            			finish += '<td>' + lecture.lecture_min + '</td>';
+            			finish += '<td>' + lecture.lecture_max + '명</td>';
+            			finish += '<td>' + lecture.lecture_min + '명</td>';
             			finish += '<td><button class="current" value="' + lectureId + '">';
-            			finish += lecture.lecture_current + '</button></td>';
+            			finish += lecture.lecture_current + '명</button></td>';
             			finish += '<td><button class="lecture-review" value="' + lectureId + '">후기보기</button></td>';
             		}else if(lecture.lecture_state == '취소대기'){
             			// 취소 요청
@@ -623,9 +624,9 @@ $(function(){
             			cancelRequest += '<td>' + lecture.lecture_state + '</td>';
             			cancelRequest += '<td>' + start + '</td>';
             			cancelRequest += '<td>' + end + '</td>';
-            			cancelRequest += '<td>' + lecture.lecture_max + '</td>';
-            			cancelRequest += '<td>' + lecture.lecture_min + '</td>';
-            			cancelRequest += '<td>' + lecture.lecture_current + '</td>';
+            			cancelRequest += '<td>' + lecture.lecture_max + '명</td>';
+            			cancelRequest += '<td>' + lecture.lecture_min + '명</td>';
+            			cancelRequest += '<td>' + lecture.lecture_current + '명</td>';
             			cancelRequest += '<td><button class="lecture-reason" value="' + lectureId + '">취소정보</button></td>';
             			
             			if (lecture.lecture_state == '취소대기'){
@@ -644,9 +645,9 @@ $(function(){
             			cancel += '<td>' + lecture.lecture_state + '</td>';
             			cancel += '<td>' + start + '</td>';
             			cancel += '<td>' + end + '</td>';
-            			cancel += '<td>' + lecture.lecture_max + '</td>';
-            			cancel += '<td>' + lecture.lecture_min + '</td>';
-            			cancel += '<td>' + lecture.lecture_current + '</td>';
+            			cancel += '<td>' + lecture.lecture_max + '명</td>';
+            			cancel += '<td>' + lecture.lecture_min + '명</td>';
+            			cancel += '<td>' + lecture.lecture_current + '명</td>';
 
 						if (lecture.lecture_state == '취소')
             				cancel += '<td><button class="lecture-reason" value="' + lectureId + '">취소사유</button></td>';
@@ -676,7 +677,7 @@ $(function(){
             	$cont.html($lot);
             },
             error: function(){
-            	let $lot = '<table class="table"><thead><tr>';
+            	let $lot = '<table class="table-main"><thead><tr>';
 				$lot += '<th>강의 번호</th><th>강의 사진</th><th>강의명</th><th>강의 가격</th><th>강의 상태</th>';              	
 				$lot += '<th>강의 시작일</th><th>강의 종료일</th><th>최대 인원</th><th>최소 인원</th><th>현재 수강 인원</th><th>상세 정보</th>';              	
             	$lot += '</tr></thead>';
@@ -718,8 +719,8 @@ $(function(){
 						historyModal += '<td>' + history.member.member_name + '</td>';
 						historyModal += '<td>' + formatDate(history.payment_dt) + '</td></tr>';
 					});
-					historyModal += '</tbody></table><button class="modal-close">닫기</button></div>';
-					historyModal += '<div class="modal-layer"></div></div>';
+					historyModal += '</tbody></table><div class="modal-button"><button class="modal-close">닫기</button></div>';
+					historyModal += '</div><div class="modal-layer"></div></div>';
 					
 					let cont = $cont.html() + historyModal;
 					$cont.html(cont);
@@ -728,7 +729,6 @@ $(function(){
 					
 			},
 			error: function(data){
-				alert("에러에러");
 				$(".lecture-list").trigger("click");
 			}
 		});
@@ -739,33 +739,45 @@ $(function(){
     
     // 회원 상세정보 보기
     $cont.on("click", ".member-detail", function(){
-    	let $memberModal = '<div class="modal-add"><div class="modal-content">';
-//     			$memberModal += '<h3>' + historyList[0].member.member_name + ' 회원의 수강목록</h3><hr>';
-		$memberModal += '<table class="table">';
-		$memberModal += '<thead><tr><th>순서</th><th>강의번호</th><th>강의명</th><th>상태</th><th>신청/취소일</th></tr>';
-		$memberModal += '</thead><tbody>';
+    	let memberId = $(this).attr("value");
+
+    	$.ajax({
+    		url: "/shallwe/admin/member/" + memberId,
+    		method: "GET",
+    		success: function(member){
+    			let $memberModal = '<div class="modal-add"><div class="modal-content">';
+     			$memberModal += '<h3>' + member.member_name + ' 회원의 상세정보</h3><hr>';
+     			
+     			$memberModal += '<div>이름 : ' + member.member_name + '</div>'
+     			$memberModal += '<div>아이디 : ' + memberId + '</div>'
+     			$memberModal += '<div>신청 분야<br>';
+     			let leng = meber.favorite_list.length;
+     			member.favorite_list.forEach(function(favorite, index){
+     				$memberList += '<span>'+ favorite.lecture_category_name +'</span>';
+     				if (index + 1 != leng)
+     					$memberList += '<br>';
+     			});
+          		
+				$memberModal += '</div><br>';
 	
-//    				historyList.forEach(function(history, index){
-//     				let idx = index + 1;
-//     				let lecture = history.lecture;
-//     				$memberModal += '<tr class="lecture-detail" value="' + lecture.lecture_id + '">';
-//     				$memberModal += '<td>' + idx + '</td>';
-//     				$memberModal += '<td>' + lecture.lectureCategory.lecture_category_name + '</td>';
-//     				let state = lecture.lecture_state;
-//     				$memberModal += '<td>'+ state +'</td>';
-//     				if (state == "신청")
-//     					$memberModal += '<td>' + lecture.payment_dt + '</td>';
-//    					else
-//     					$memberModal += '<td>' + lecture.cancel_dt + '</td>';
+				$memberModal += '<div>이메일 : '+ member.member_email +'</div><br>';
+				$memberModal += '<div>연락처 : '+ member.member_phone +'</div><br>';
+
+				$memberModal += '<div>'+ member.member_sex +'</div><br>';
+				$memberModal += '<div>' + member.tutor_YN + '</div><br>';
+		
+				$memberModal += '<div class="modal-button"><button class="modal-close">닫기</button></div>';
+				$memberModal += '</div><div class="modal-layer"></div></div>';
 				
-//     				$memberModal += '</tr>';
-//     			});
-		
-		$memberModal += '</tbody></table><button class="modal-close">닫기</button></div>';
-		$memberModal += '<div class="modal-layer"></div></div>';
-		
-		let cont = $cont.html() + $historyModal;
-		$cont.html(cont);
+				let cont = $cont.html() + $memberModal;
+				$cont.html(cont);
+    		},
+    		error: function(){
+    			alert("정보 불러오기에 실패하였습니다");
+    		}
+    	});
+    	
+    	
     	return false;
     });
     
@@ -821,8 +833,8 @@ $(function(){
 		$lot += '<option value="etc">기타</option></select><br>';
 		$lot += '</select><br><label for="reject_reason">세부 사유</label><br>';
 		$lot += '<input id="reject_reason" name="reject_reason" placeholder="세부 내용을 작성해주세요"></input><br>';
-		$lot += '<br><button class="reject-lecture" value="' + $lectureId + '">전송</button>';
-		$lot += '<button class="modal-close">취소</button></div>';
+		$lot += '<br><div class="modal-button"><button class="reject-lecture" value="' + $lectureId + '">전송</button>';
+		$lot += '<button class="modal-close">취소</button></div></div>';
 		$lot += '<div class="modal-layer"></div></div>';
 		
 		let cont = $cont.html() + $lot;
@@ -890,7 +902,7 @@ $(function(){
         			modal += '<h4>사유 :</h4><input class="reject-detail" disabled value="';
     				modal += lectureDetail.lecture_reject_reason + '"></input><br>';
    				}
-    			modal += '<button class="modal-close">닫기</button></div>';
+    			modal += '<div class="modal-button"><button class="modal-close">닫기</button></div></div>';
     			modal += '<div class="modal-layer"></div></div>';
     			
     			let cont = $cont.html() + modal;
@@ -899,8 +911,8 @@ $(function(){
     		error: function(data){
     			let modal = '<div class="modal-add"><div class="modal-content">';
             	modal += '<div>' + reasonType + '목록을 불러오는데 실패했습니다</div>';
-    			modal += '<button class="modal-close">닫기</button></div>';
-    			modal += '<div class="modal-layer"></div></div>';
+    			modal += '<div class="modal-button"><button class="modal-close">닫기</button></div>';
+    			modal += '</div><div class="modal-layer"></div></div>';
     			let cont = $cont.html() + modal;
     			$cont.html(cont);
     		}
@@ -954,8 +966,8 @@ $(function(){
 		$lot += '<h3>FAQ 추가하기</h3><hr>';
 		$lot += '<form id="faq-insert"><div>질문 : <input class="faq-question" name="faq_question"></div><br>';
 		$lot += '<div>답변 : <input class="faq-answer" name="faq_answer"></div><br>';
-		$lot += '</form><button class="faq-insert">등록</button><button class="modal-close">닫기</button>';
-		$lot += '</div><div class="modal-layer"></div></div>';
+		$lot += '</form><div class="modal-button"><button class="faq-insert">등록</button><button class="modal-close">닫기</button>';
+		$lot += '</div></div><div class="modal-layer"></div></div>';
   		
     	let cont = $cont.html();
     	$cont.html(cont + $lot);
@@ -1002,8 +1014,8 @@ $(function(){
     			$lot += 'value="' + faq.faq_question + '"></div><br>';
     			$lot += '<div>답변 : <input class="faq_answer" name="faq_answer"';
     			$lot += 'value="' + faq.faq_answer + '"></div><br></form>';
-    			$lot += '<button class="faq-change" value="' + faq.faq_id + '">등록</button>';
-    			$lot += '<button class="modal-close">닫기</button>';
+    			$lot += '<div class="modal-button"><button class="faq-change" value="' + faq.faq_id + '">등록</button>';
+    			$lot += '<button class="modal-close">닫기</button></div>';
     			$lot += '</div><div class="modal-layer"></div></div>';
           		
             	let cont = $cont.html();

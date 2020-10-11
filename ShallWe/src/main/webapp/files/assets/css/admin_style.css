@@ -146,15 +146,30 @@ hr{
     margin-bottom: 20px;
 }
 
+.table-main{
+    border: 0.5px;
+    border-style: solid;
+    border-color: #dddddd;
+    text-align: center;
+    width: 95%;
+    height: 95%
+}
+
 .table{
     border: 0.5px;
     border-style: solid;
     border-color: #dddddd;
     text-align: center;
-    width: 85%;
-    height: 85%
+    width: 75%;
+    height: 75%
 }
 
+.table-main th{
+    text-align: center;
+    font-size: 18px;
+    background-color: #eeeeee;
+    padding: 5px;
+}
 .table th{
     text-align: center;
     font-size: 18px;
@@ -162,29 +177,50 @@ hr{
     padding: 5px;
 }
 
+.table-main tr.modal_show:hover{
+	background-color: #a8ffec;
+}
 .table tr.modal_show:hover{
 	background-color: #a8ffec;
 }
 
+.table-main tr.lecture-detail:hover{
+	background-color: #a8ffec;
+}
 .table tr.lecture-detail:hover{
 	background-color: #a8ffec;
 }
 
+.table-main tr.member-detail:hover{
+	background-color: #a8ffec;
+}
 .table tr.member-detail:hover{
 	background-color: #a8ffec;
 }
 
+.table-main tr.member-history:hover{
+	background-color: #a8ffec;
+}
 .table tr.member-history:hover{
 	background-color: #a8ffec;
 }
 
 
+.table-main td{
+    text-align: center;
+    font-size: 15px;
+    padding: 5px;
+}
 .table td{
     text-align: center;
     font-size: 15px;
     padding: 5px;
 }
 
+.table-main td img{
+    height: 80px;
+    width: 80px;
+}
 .table td img{
     height: 80px;
     width: 80px;
@@ -285,14 +321,18 @@ input[id ="reject-detail"]{
 	background: rgba(0, 0, 0, 0.5);
 	z-index: -1;
 }
-
-.modal-close{
-	margin-left: 80%;
+div.modal-button{
+	text-align: end;
+    width: 70%;
     margin-top: 20px;
 }
+
+.modal-close{
+	margin-left: 1%;
+}
 .modal_close{
-	margin-left: 80%;
-    margin-top: 20px;
+	margin-left: 1%;
+/*     margin-top: 20px; */
 }
 
 .scroll-section{
