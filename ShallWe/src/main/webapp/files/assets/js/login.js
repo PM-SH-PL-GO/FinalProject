@@ -193,6 +193,6 @@ $(function(){
 
 // 회원가입 페이지 이동
 	$("#signup").click(function(){
-		loation.href = "/shallwe/member/signup";
+		location.href = "/shallwe/member/signup";
 	});
  });
