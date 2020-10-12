@@ -139,7 +139,6 @@ public class TutorDAO {
 	//강사수정: 경찬
 	@Transactional(rollbackFor = RemoveException.class)
 	public void tutorUpdate(Map<String,Object> tutor,String[] category,Tutor tutor1) throws AddException{
-		
 	
 		try {
 			
@@ -151,9 +150,7 @@ public class TutorDAO {
 		} catch (RemoveException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
-			session.close();
-		}
+		} 
 	}
 	
 	//강사사진수정: 경찬
