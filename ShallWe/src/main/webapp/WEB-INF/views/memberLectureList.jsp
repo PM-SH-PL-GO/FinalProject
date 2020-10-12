@@ -171,10 +171,6 @@ $(function(){
 												pattern="#,###" />
 											원
 										</h1>
-										<div class="heart lecture_cancle">
-											<div style="cursor: pointer; background-color: #00dbd5; border-radius: 10px; color: white; padding: 8px;">수강취소</div>
-											<input type="hidden" name="lectureId" value="${lecture.lecture_id}">
-										</div>
 									</div>
 								</div>
 							</div>

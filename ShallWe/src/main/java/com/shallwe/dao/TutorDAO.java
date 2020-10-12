@@ -57,7 +57,7 @@ public class TutorDAO {
 		}catch(DataAccessException e) {
 			e.printStackTrace();
 			throw new FindException("검색 중 에러가 발생했습니다");
-		} finally {
+		}finally {
 			session.close();
 		}
 		return tutorEmail;

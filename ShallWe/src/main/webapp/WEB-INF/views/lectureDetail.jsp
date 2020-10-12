@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
+<link rel="shortcut icon" type="image/x-icon" href="${contextPath}/assets/img/favicon.ico">
 <c:set value="${lectDetail.lecture}" var="lecture" />
 <fmt:formatDate var="startDt" value="${lecture.lecture_start_dt}"
 	pattern="yyyy-MM-dd" />
@@ -60,7 +61,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="x-ua-compatible" content="ie=edge">
-<title>강의 상세 정보</title>
+<title>Shallwe-강의 상세 정보</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" type="image/x-icon"
@@ -85,8 +86,8 @@
 <link rel="stylesheet" href="/shallwe/assets/css/style.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
 <c:set var="now" value="<%=new java.util.Date()%>" />
+<script>
 <fmt:formatDate pattern="yyyy-MM-dd" value="${now}" />
 <fmt:parseNumber value="${now.time/(1000*60*60*24)}" integerOnly="true" var="nowDate" />
 <%-- 화면 호출시 바로 조회 해와야할 데이터 처리 영역 --%>
@@ -292,10 +293,6 @@ $(document).ready(function() {
 								</h4>
 								<c:if
 									test="${endDate-nowDate>=0 && startDate-nowDate>=0 && tutoreq}">
-									<c:if test="${empty m.lecture.lecture_id}">
-										<div name="applyBtn" class="mt-10"
-											style="text-align: center; cursor: pointer; background-color: #00dbd5; border-radius: 10px; color: white; padding: 8px;">강의신청</div>
-									</c:if>
 									<c:if test="${eqlectidfalse}">
 										<div name="applyBtn" class="mt-10"
 											style="text-align: center; cursor: pointer; background-color: #00dbd5; border-radius: 10px; color: white; padding: 8px;">강의신청</div>
