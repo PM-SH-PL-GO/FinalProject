@@ -9,8 +9,7 @@
 <link rel="shortcut icon" type="image/x-icon" href="${contextPath}/assets/img/favicon.ico">
 <link rel="stylesheet" href="${contextPath}/assets/css/index.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="${contextPath}/js/index.js"/>
-<!-- </script> -->
+<script src="${contextPath}/js/index.js"></script>
 </head>
 <body>
 	<header>
@@ -38,7 +37,7 @@
 							<form action="#" class="search-box mb-100">
 								<div class="select-form">
 									<div class="select-itms">
-										<select name="select" id="select">
+										<select class="nice-select" name="select" id="select">
 											<option value="0" class="searchOpt">전체 검색</option>
 											<option value="1" class="searchOpt">강사 닉네임 검색</option>
 											<option value="2" class="searchOpt">강의명 검색</option>
