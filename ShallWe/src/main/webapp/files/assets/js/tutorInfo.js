@@ -42,5 +42,9 @@ $(function(){
 		
 		});
 	
-	
+	$('a#updateTutor').click(function(){
+		
+		let $url = "/shallwe/tutor/showUpdateTutor";
+	    location.href= $url;
+	});
 });

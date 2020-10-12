@@ -72,7 +72,7 @@
     JOIN lecture_category lc2 ON(m.member_favorite2=lc2.category_id)LEFT OUTER
     JOIN lecture_category lc3 ON(m.member_favorite3=lc3.category_id)
 	where member_id= #{memberId}<!-- #{memberId} -->
-		AND m.enabeld = 1
+		AND m.enabled = 1
 	</select>
 	
 	<update id="updatePassword" parameterType="Map">
