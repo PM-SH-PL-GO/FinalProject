@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
+<link rel="shortcut icon" type="image/x-icon" href="${contextPath}/assets/img/favicon.ico">
 <c:set value="${lectDetail.lecture}" var="lecture" />
 <fmt:formatDate var="startDt" value="${lecture.lecture_start_dt}"
 	pattern="yyyy-MM-dd" />
