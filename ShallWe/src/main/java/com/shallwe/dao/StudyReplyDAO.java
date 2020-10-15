@@ -56,6 +56,8 @@ public class StudyReplyDAO {
 			session.update("StudyReplyMapper.update", reply);
 		}catch (Exception e) {
 			throw new ModifyException("댓글 수정에 실패했습니다.");
+		} finally {
+			session.close();
 		}
 	}
 	/**
@@ -68,6 +70,8 @@ public class StudyReplyDAO {
 			session.selectOne("StudyReplyMapper.delete", reply_id);
 		}catch (Exception e) {
 			throw new RemoteException("댓글 삭제에 실패했습니다.");
+		} finally {
+			session.close();
 		}
 	}
 	

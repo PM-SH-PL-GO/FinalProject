@@ -312,11 +312,13 @@ public class AdminService {
 			map.put("status", "취소");
 			mailContent += "3. 신청 후 강의 상태\r\n • " + status + "\r\n";
 		}
-		else
+		else if (status.equals("승인")) {
+			map.put("status", "승인");
+			mailContent += "3. 신청 후 강의 상태\r\n • " + status + "\r\n";
+		}else	
 			throw new ModifyException("승인/반려 이외의 글자가 전달되었습니다 : " + status);
 		
 		lectureDAO.updateLectureStatusByIdAndStatus(map);
-		
 		
 		sendMail("강의", mailContent, mailReceiver);
 	}

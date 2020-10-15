@@ -201,8 +201,9 @@ public class MemberDAO {
 	public String pwdCheck(Map<String,Object> member)throws FindException{
 		SqlSession session = null;
 		session = sqlSessionFactory.openSession();
-		
-		return session.selectOne("MemberMapper.pwdCheck",member);
+		String result = session.selectOne("MemberMapper.pwdCheck",member);
+		session.close();
+		return result;
 		
 	}
 	//비밀번호 변경: 경찬
@@ -210,6 +211,7 @@ public class MemberDAO {
 		SqlSession session = null;
 		session = sqlSessionFactory.openSession();
 		session.selectOne("MemberMapper.changePwd",member);
+		session.close();
 	}
 
 	
@@ -252,6 +254,7 @@ public class MemberDAO {
 		member1.put("member", member);
 		session = sqlSessionFactory.openSession();
 		session.selectOne("MemberMapper.randomPassword",member);
+		session.close();
 	}
 	
 	/**

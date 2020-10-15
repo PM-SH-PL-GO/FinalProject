@@ -93,6 +93,8 @@ public class LectureDetailDAO {
 			lectureList = session.selectList("LectureDetailMapper.selectAllLectures");
 		} catch (DataAccessException e) {
 			throw new FindException(e.getMessage());
+		} finally {
+			session.close();
 		}
 
 		if (lectureList.size() == 0)
