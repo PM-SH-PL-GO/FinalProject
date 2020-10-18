@@ -92,9 +92,11 @@
 		(lec.lecture_id = lecd.LECTURE_ID AND
 		lec.LECTURE_CATEGORY_ID =
 		lecd.LECTURE_CATEGORY_ID)
-		WHERE lec.LECTURE_STATE = '승인'
-		AND lecture_start_dt> SYSDATE
-		AND (
+		WHERE 
+<!-- 		lec.LECTURE_STATE = '승인' -->
+<!-- 		AND lecture_start_dt> SYSDATE -->
+<!-- 		AND -->
+		(
 		<choose>
 			<when test="searchKey == 'all'">
 				TUTOR_NICKNAME LIKE '%' || #{searchText} || '%'
