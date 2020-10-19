@@ -133,7 +133,8 @@ $(function(){
 	//----------강사여부 확인 LOAD END---------
 	//----------로그인 버튼 CLICK START---------
 	$("a#login").click(function(){
-		location.href = "${contextPath}/userLogin";
+// 		location.href = "${contextPath}/userLogin";
+		location.href = "${contextPath}/member/userLogin";
 	});
 	//----------로그인 버튼 CLICK END---------
 	

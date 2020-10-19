@@ -4,6 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<<<<<<< Updated upstream
 <title>Insert title here</title>
 <!-- <link rel="stylesheet" href=https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css > -->
 <!-- <link rel="stylesheet" href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css>
@@ -11,6 +12,15 @@
  -->
  <link rel="styleshee" href=https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css>
  <script
+=======
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}">
+<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}">
+<title>Shallwe-로그인</title>
+<link rel="shortcut icon" type="image/x-icon" href="${contextPath}/assets/img/favicon.ico">
+<link rel="styleshee" href=https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css>
+<link rel="stylesheet" href="${contextPath}/assets/css/login.css">
+<script
+>>>>>>> Stashed changes
   src="https://code.jquery.com/jquery-3.5.1.min.js"
   integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
   crossorigin="anonymous"></script>
@@ -498,6 +508,7 @@ input.submit {
 <!--     <p> Made with <i class="fa fa-heart"></i> by Marion Grandvincent </p></a> -->
     </div>
 <div class="content">
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	<div class="container">	
 			<div class="menu">
 				<a href="#connexion" class="btn-connexion"><h2 >로그인</h2></a>
@@ -507,12 +518,14 @@ input.submit {
 				<div class="contact-form">
 					<label >ID</label>
 					<span hidden="hidden" class="idR" style="color: red; font-size: 0.8em;"><i>[영어/숫자/언더바 사용가능/4~16자]</i></span>
-					<input placeholder="name" name="member_id" type="text" id="userName">
+					<!-- input의 name을 username으로 설정 -> secure 국롤? -->
+					<input placeholder="name" name="username" type="text" id="userName">
 					<span hidden="hidden" id="one_help">Name must be filled out!</span>
 					
 					<label >PASSWORD</label>
 					<span hidden="hidden" class="pwdChk" style="color: red; font-size: 0.8em;"><i>비밀번호가 일치하지 않습니다</i></span>
-					<input placeholder="password" name="member_pwd" type="password" id="userPassword">
+					<!-- input의 name을 password로 설정 -> secure 국롤? -->
+					<input placeholder="password" name="password" type="password" id="userPassword">
 					<span hidden="hidden" id="one_Password">Password must be filled out!</span>
 					
 					<div class="check">

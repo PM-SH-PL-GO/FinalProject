@@ -50,6 +50,7 @@ public class HomeController {
 		System.out.println("studyBoardDetail coming");
 	}
 	
+<<<<<<< Updated upstream
 //	@RequestMapping(value = "/faq", method = RequestMethod.GET)
 //	public void faq(Locale locale, Model model) {
 //		System.out.println("faq coming");
@@ -58,6 +59,12 @@ public class HomeController {
 	public void uerLogin(Locale locale, Model model) {
 		System.out.println("userLogin");
 	}
+=======
+//	@RequestMapping(value = "/userLogin", method = RequestMethod.GET)
+//	public void uerLogin(Locale locale, Model model) {
+//		System.out.println("userLogin");
+//	}
+>>>>>>> Stashed changes
 	@RequestMapping(value = "/idCheck", method = RequestMethod.GET)
 	public void idCheck(Locale locale, Model model) {
 		System.out.println("idCheck");

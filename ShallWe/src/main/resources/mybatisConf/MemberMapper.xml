@@ -5,9 +5,9 @@
 <mapper namespace="MemberMapper">
 
 	<select id="memberLogin" resultType="com.shallwe.vo.Member">
-		SELECT MEMBER_ID,MEMBER_PWD FROM MEMBER
-		WHERE MEMBER_ID = #{MEMBER_ID}
-
+		SELECT MEMBER_ID, MEMBER_PWD
+		FROM MEMBER
+		WHERE MEMBER_ID = #{MEMBER_ID} 
 	</select>
 
 	 <select id="IdCheck" parameterType="java.util.HashMap" resultType="String">

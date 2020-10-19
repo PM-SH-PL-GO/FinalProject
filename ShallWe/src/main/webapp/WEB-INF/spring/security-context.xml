@@ -5,21 +5,27 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+<!-- 비밀번호 인코더, 이거 있어야 에러 안난대요 -->
 	<bean id="bcryptPasswordEncoder"
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+<!-- 로그인 성공시 페이지 이동을 지정해주는 핸들러 -->
+	<bean id="loginSuccessHandler"
+		class="com.my.security.LoginSuccessHandler">
+	</bean>
+	
 	<security:http>
  			<!-- 로그인하지 않는 사용자도 접근 가능 -->
-		<security:intercept-url pattern="/**" access="permitAll"/>
+<!-- 		<security:intercept-url pattern="/**" access="permitAll"/> -->
 			<!-- 로그인해야만 접근 가능 -->
 <!-- 		<security:intercept-url pattern="/member/**" access="hasRole('ROLE_MEMBER')"/> -->
 			<!-- 강사등록해야만 접근 가능 -->
-<!-- 		<security:intercept-url pattern="/tutor/**" access="hasRole('ROLE_TUTOR')"/> -->
+		<security:intercept-url pattern="/tutor/**" access="hasRole('ROLE_TUTOR')"/>
 			<!-- admin만 접근 가능 -->
-<!-- 		<security:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/> -->
+		<security:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
 			
 		
-		<security:form-login/>
-<!-- 		<security:form-login login-page="/shallwe/userLogin"/> -->
+		<security:form-login authentication-success-handler-ref="loginSuccessHandler"/>
+<!-- 		<security:form-login login-page="/shallwe/member"/> -->
 
 		<!-- 에러페이지를 위한 핸들러 : 에러페이지를 커스텀 페이지로 지정해줄 수 있다 -->
 <!-- 		<security:access-denied-handler error-page="/shallwe/index"/> -->
@@ -27,21 +33,16 @@
 	
 	<security:authentication-manager>
 		
-<!-- 		<security:authentication-provider> -->
-<!-- 			<security:user-service> -->
-<!-- 				<security:user name="member1" password="{noop}pw1" authorities="ROLE_MEMBER"/> -->
-<!-- 				<security:user name="member1" password="{noop}pw1" authorities="ROLE_MEMBER, ROLE_TUTOR"/> -->
-<!-- 				<security:user name="admin" password="{noop}admin" authorities="ROLE_ADMIN"/> -->
-<!-- 			</security:user-service> -->
+		<security:authentication-provider>
 
-<!-- 			<security:jdbc-user-service data-source-ref="dataSource" -->
-<!-- 							         users-by-username-query="select member_id as username, member_pwd as password, 1 as enabled -->
-<!-- 							         						 from member -->
-<!-- 							         						 where member_id = ?" -->
-<!-- 							         authorities-by-username-query="select member_id, authority from member_auth where member_id = ?" /> -->
-<!-- 	    	<security:password-encoder ref="bcryptPasswordEncoder" />	 -->
+			<security:jdbc-user-service data-source-ref="dataSource"
+							         users-by-username-query="select member_id as username, member_pwd as password, enabled
+							         						 from member
+							         						 where member_id = ?"
+							         authorities-by-username-query="select member_id as username, authority from member_auth where member_id = ?" />
+	    	<security:password-encoder ref="bcryptPasswordEncoder" />	
 		
-<!-- 		</security:authentication-provider> -->
+		</security:authentication-provider>
 		
 	</security:authentication-manager>
 

@@ -1108,7 +1108,7 @@
           <div class="text">Shall We?</div>
           
           <ul>
-              <li><a href="${contextPath }" class="home"><i class="fas fa-home"></i>홈페이지</a></li>
+              <li><a href="${contextPath}" class="home"><i class="fas fa-home"></i>홈페이지</a></li>
               <li>
                 <a  class="a-btn"><i class="fas fa-address-book"></i>회원관리
                     <span class="fas fa-caret-down first"></span>

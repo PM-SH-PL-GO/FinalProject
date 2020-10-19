@@ -178,9 +178,8 @@ public class MemberDAO {
 		
     	try {
     		session =sqlSessionFactory.openSession();
-    		Member member = session.selectOne("MemberMapper.memberLogin",member_id);
+    		Member member = session.selectOne("MemberMapper.memberLogin", member_id);
 			if (member == null) {
-				
 				throw new FindException("예외처리:찾는아이디없음");
 			}
 			return member;

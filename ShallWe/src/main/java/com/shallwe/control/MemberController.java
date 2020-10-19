@@ -79,6 +79,7 @@ public class MemberController {
 		return "success";
 	}
 
+<<<<<<< Updated upstream
 //	//아이디 중복체크: 상하
 //	public int memberChkId(MemberInfoBean mib) {
 //		int result = 0;
@@ -93,6 +94,25 @@ public class MemberController {
 ////		}
 //		return result;
 //	}
+=======
+	@RequestMapping(value = "/userLogin", method = RequestMethod.GET)
+	public String uerLogin(Locale locale, Model model) {
+		System.out.println("userLogin");
+		return "/userLogin";
+	}
+	
+	//아이디 중복체크: 상하
+	@RequestMapping(value="checkId", method = RequestMethod.POST)
+	@ResponseBody
+	public int signUpCheckId(MemberInfoBean mib)throws Exception{
+		// null인지 아닌지.
+//		MemberInfoBean mib = new MemberInfoBean(); 
+		int result = service.signUpCheckId(mib);
+		
+		return result;
+	}
+	
+>>>>>>> Stashed changes
 	@ResponseBody
 	//멤버로그인:경찬
 	@RequestMapping(value="/memberLogin",method=RequestMethod.POST)
@@ -100,7 +120,6 @@ public class MemberController {
 														 @RequestParam(value="member_pwd")String member_pwd
 												   ) {
 		ModelAndView modelAndView = new ModelAndView();
-		
 		try {
 			
 			service.memberLogin(member_id, member_pwd);

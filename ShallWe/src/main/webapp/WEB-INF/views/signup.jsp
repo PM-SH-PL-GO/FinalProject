@@ -4,7 +4,13 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
+<<<<<<< Updated upstream
 <title>Shall We?</title>
+=======
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}">
+<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}">
+<title>Shallwe-회원가입</title>
+>>>>>>> Stashed changes
 <link rel="stylesheet" type="text/css" href="/shallwe/assets/css/signupdefault.css">
 <link rel="stylesheet" type="text/css" href="/shallwe/assets/css/signupstyle.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
